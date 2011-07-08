@@ -22,7 +22,6 @@ class TestRegisterReporter(BaseTest):
         # doing reporter registration
         return dashboard_page.navigate_to_register_reporter_page()
 
-    @SkipTest
     @attr('functional_test', 'smoke')
     def test_successful_registration_of_reporter(self):
         """
@@ -31,7 +30,7 @@ class TestRegisterReporter(BaseTest):
         """
         register_reporter_page = self.prerequisites_of_register_reporter()
         register_reporter_page.register_with(VALID_DATA)
-        time.sleep(2)
+        time.sleep(5)
         self.assertRegexpMatches(register_reporter_page.get_success_message(),
                                  fetch_(SUCCESS_MSG, from_(VALID_DATA)))
 
@@ -45,7 +44,6 @@ class TestRegisterReporter(BaseTest):
         self.assertEqual(register_reporter_page.get_error_message(),
                                  fetch_(ERROR_MSG, from_(BLANK_FIELDS)))
 
-    @SkipTest
     @attr('functional_test')
     def test_registration_of_reporter_with_existing_data(self):
         """
@@ -54,5 +52,6 @@ class TestRegisterReporter(BaseTest):
         """
         register_reporter_page = self.prerequisites_of_register_reporter()
         register_reporter_page.register_with(EXISTING_DATA)
+        time.sleep(5)
         self.assertEqual(register_reporter_page.get_error_message(),
                                  fetch_(ERROR_MSG, from_(EXISTING_DATA)))

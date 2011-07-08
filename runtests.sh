@@ -39,6 +39,10 @@ if [ "${RECREATEDB}" != "N" -a "${RECREATEDB}" != "n" ]; then
     python manage.py recreatedb
 fi
 
+if [ "${TESTCHOICE}" != "ut" ]; then
+    cp local_settings.py ../../func_tests/resources/local_settings.py
+fi 
+
 case "${TESTCHOICE}" in
 "ft")
      echo "-------- Funtional test execution Started --------"
