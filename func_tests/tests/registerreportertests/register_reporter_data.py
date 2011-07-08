@@ -18,12 +18,12 @@ BLANK_FIELDS = {NAME: "",
 
 VALID_DATA = {NAME: "Mickey Duck",
               TELEPHONE_NUMBER: "9876543210",
-              COMMUNE: "Antalaha, Antsiranana",
+              COMMUNE: "MAHAVELO, FIANARANTSOA",
               GPS: "48.955267  1.816013",
               SUCCESS_MSG: "Registration successful. Reporter identification number: rep"}
 
 EXISTING_DATA = {NAME: "Mickey Mouse",
               TELEPHONE_NUMBER: "1234567890",
-              COMMUNE: "Antalaha, Antsiranana",
+              COMMUNE: "MAHAVELO, FIANARANTSOA",
               GPS: "48.955267  1.816013",
-              SUCCESS_MSG: "Sorry, the telephone number 261333720371667 has already been registered"}
+              SUCCESS_MSG: "Sorry, the telephone number 1234567890 has already been registered"}
