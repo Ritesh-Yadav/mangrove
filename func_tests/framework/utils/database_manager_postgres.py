@@ -1,9 +1,9 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-import os
-import sys
 import psycopg2
-from framework.utils.couch_http_wrapper import CouchHttpWrapper
-from resources.functional_settings import DATABASES
+try:
+    from resources.local_settings import DATABASES
+except Exception as e:
+    print "local_settings file is not available"
 
 DEFAULT_DNS = "dbname='" + DATABASES['default']['NAME'] + "' user='" + DATABASES['default']['USER'] + "'"
 
