@@ -1,8 +1,12 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 import csv
+import pprint
+import time
 import re
 import xlrd
+from mangrove.datastore import entity
 from mangrove.errors.MangroveException import SMSParserInvalidFormatException, CSVParserInvalidHeaderFormatException, MangroveException, MultipleSubmissionsForSameCodeException, XlsParserInvalidHeaderFormatException
+from mangrove.form_model.form_model import get_form_model_by_code, ENTITY_TYPE_FIELD_CODE
 from mangrove.transport import reporter
 from mangrove.transport.submissions import  SubmissionRequest
 from mangrove.utils.types import is_empty, is_string
@@ -16,12 +20,22 @@ class Channel(object):
     XLS = "xls"
 
 
-class Request(object):
-    def __init__(self, transport, message, source, destination):
+class TransportInfo(object):
+    def __init__(self,transport, source, destination):
+        assert transport is not None
+        assert source is not None
+        assert destination is not None
         self.transport = transport
-        self.message = message
         self.source = source
         self.destination = destination
+
+
+class Request(object):
+    def __init__(self, message, transportInfo):
+        assert transportInfo is not None
+        assert message is not None
+        self.transport = transportInfo
+        self.message = message
 
 
 class Response(object):
@@ -37,23 +51,53 @@ class Response(object):
             self.short_code = submission_response.short_code
             self.processed_data = submission_response.processed_data
 
+def _short_code_not_in(entity_q_code,values):
+    return values.get(entity_q_code) is None
+
+
+def _epoch_last_three_digit():
+    epoch = long(time.time() * 100)
+    epoch_last_three_digit = divmod(epoch, 1000)[1]
+    return epoch_last_three_digit
+
+def _generate_short_code(dbm,entity_type):
+    current_count = entity.get_entity_count_for_type(dbm, entity_type)
+    entity_type_prefix = entity_type[:3]+"%s"
+    return  entity_type_prefix % (current_count+1)
+
+
+def _generate_short_code_if_registration_form(dbm, form_code, values):
+    form_model = get_form_model_by_code(dbm, form_code)
+    if form_model.is_registration_form():
+        entity_q_code = form_model.entity_question.code
+        if _short_code_not_in(entity_q_code, values):
+            values[entity_q_code] = _generate_short_code(dbm,values[ENTITY_TYPE_FIELD_CODE])
+
+
+def submit( dbm,submission_handler, transportInfo, form_code, values):
+    _generate_short_code_if_registration_form(dbm, form_code, values)
+    submission_request = SubmissionRequest(form_code=form_code, submission=values, transport=transportInfo.transport,
+                                           source=transportInfo.source, destination=transportInfo.destination)
+    submission_response = submission_handler.accept(submission_request)
+    return submission_response
+
+
 
 class SMSPlayer(object):
     def __init__(self, dbm, submission_handler):
         self.dbm = dbm
         self.submission_handler = submission_handler
 
-    def accept(self, request):
-        assert request is not None
-        assert request.source is not None
-        assert request.destination is not None
-        assert request.message is not None
-        reporters = reporter.find_reporter(self.dbm, request.source)
+    def _parse(self, request):
         sms_parser = SMSParser()
         form_code, values = sms_parser.parse(request.message)
-        submission_request = SubmissionRequest(form_code=form_code, submission=values, transport=request.transport,
-                                               source=request.source, destination=request.destination)
-        submission_response = self.submission_handler.accept(submission_request)
+        return form_code, values
+
+    def accept(self, request):
+        assert request is not None
+        reporters = reporter.find_reporter(self.dbm, request.transport.source)
+        form_code, values = self._parse(request)
+        submission_response = submit(self.dbm,self.submission_handler, request.transport, form_code, values)
         return Response(reporters=reporters, submission_response=submission_response)
 
 
@@ -115,16 +159,15 @@ class WebPlayer(object):
         self.dbm = dbm
         self.submission_handler = submission_handler
 
-    def accept(self, request):
-        assert request is not None
-        assert request.source is not None
-        assert request.destination is not None
-        assert request.message is not None
+    def _parse(self, request):
         web_parser = WebParser()
         form_code, values = web_parser.parse(request.message)
-        submission_request = SubmissionRequest(form_code=form_code, submission=values, transport=request.transport,
-                                               source=request.source, destination=request.destination)
-        submission_response = self.submission_handler.accept(submission_request)
+        return form_code, values
+
+    def accept(self, request):
+        assert request is not None
+        form_code, values = self._parse(request)
+        submission_response = submit(self.dbm,self.submission_handler, request.transport, form_code, values)
         return Response(reporters=[], submission_response=submission_response)
 
 
@@ -144,10 +187,9 @@ class CsvPlayer(object):
         responses = []
         submissions = self.parser.parse(csv_data)
         for (form_code, values) in submissions:
-            submission_request = SubmissionRequest(form_code=form_code, submission=values, transport=Channel.CSV,
-                                                   source=Channel.CSV, destination="")
             try:
-                submission_response = self.submission_handler.accept(submission_request)
+                transport_info = TransportInfo(transport=Channel.CSV, source=Channel.CSV, destination="")
+                submission_response = submit(self.dbm,self.submission_handler, transport_info, form_code, values)
                 response= Response(reporters=[],submission_response=submission_response)
                 if not submission_response.success:
                     response.errors = dict(error=submission_response.errors.values(), row=values)
@@ -211,10 +253,9 @@ class XlsPlayer(object):
         responses = []
         submissions = self.parser.parse(file_contents)
         for (form_code, values) in submissions:
-            submission_request = SubmissionRequest(form_code=form_code, submission=values, transport=Channel.XLS,
-                                                   source=Channel.XLS, destination="")
             try:
-                submission_response = self.submission_handler.accept(submission_request)
+                transport_info = TransportInfo(transport=Channel.XLS, source=Channel.XLS, destination="")
+                submission_response = submit(self.dbm,self.submission_handler, transport_info, form_code, values)
                 response= Response(reporters=[],submission_response=submission_response)
                 if not submission_response.success:
                     response.errors = dict(error=submission_response.errors.values(), row=values)
