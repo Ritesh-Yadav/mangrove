@@ -233,3 +233,7 @@ class InactiveFormModelException(MangroveException):
     def __init__(self, form_code):
         error_message = "The form_model %s is inactive" % (form_code, )
         MangroveException.__init__(self, error_message, (form_code, ))
+
+class SubmissionParseException(MangroveException):
+    def __init__(self, form_code, message):
+        MangroveException.__init__(self, message, (form_code,))
