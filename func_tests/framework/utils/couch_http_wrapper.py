@@ -12,7 +12,7 @@ def prettyPrint(s):
     print simplejson.dumps(json.loads(s.read()), sort_keys=True, indent=4)
 
 
-class CouchHttpWrapper:
+class CouchHttpWrapper(object):
     """Basic wrapper class for operations on a couchDB"""
 
     def __init__(self, host, port=5984, options=None):

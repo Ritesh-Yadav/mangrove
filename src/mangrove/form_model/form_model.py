@@ -5,7 +5,7 @@ from mangrove.datastore.datadict import get_or_create_data_dict
 from mangrove.datastore.documents import FormModelDocument, attributes
 from mangrove.errors.MangroveException import FormModelDoesNotExistsException, QuestionCodeAlreadyExistsException,\
     EntityQuestionAlreadyExistsException, MangroveException, DataObjectAlreadyExists, EntityQuestionCodeNotSubmitted,\
-    EntityTypeCodeNotSubmitted, ShortCodeTooLongException
+    EntityTypeCodeNotSubmitted, ShortCodeTooLongException, NoQuestionsSubmittedException
 from mangrove.form_model.field import TextField, GeoCodeField, HierarchyField
 from mangrove.utils.geo_utils import convert_to_geometry
 from mangrove.utils.types import is_sequence, is_string, is_empty, is_not_empty
@@ -42,6 +42,7 @@ def get_form_model_by_code(dbm, code):
     form = FormModel.new_from_doc(dbm, doc)
     return form
 
+
 class FormModel(DataObject):
     __document_class__ = FormModelDocument
 
@@ -73,7 +74,7 @@ class FormModel(DataObject):
         doc.form_code = form_code
         doc.entity_type = entity_type
         doc.type = type
-        doc.state=state
+        doc.state = state
         doc.active_languages = language
         DataObject._set_document(self, doc)
 
@@ -155,9 +156,9 @@ class FormModel(DataObject):
     def _validate_answer_for_field(self, answer, field):
         try:
             value = field.validate(answer)
-            return True, value, None
+            return True, value
         except MangroveException as e:
-            return False, e.message, e.data
+            return False, e.message
 
     def _find_code(self, answers, code):
         for key in answers:
@@ -166,10 +167,8 @@ class FormModel(DataObject):
         return None
 
     def _is_valid(self, answers):
-        success = True
         cleaned_answers = {}
         errors = {}
-        data = {}
         short_code = self._find_code(answers, self.entity_question.code)
         if self.is_registration_form():
             entity_code = self._find_code(answers, ENTITY_TYPE_FIELD_CODE)
@@ -187,24 +186,18 @@ class FormModel(DataObject):
             answer = answers[key]
             if is_empty(answer):
                 continue
-            is_valid, result, error_data = self._validate_answer_for_field(answer, field)
+            is_valid, result = self._validate_answer_for_field(answer, field)
             if is_valid:
                 cleaned_answers[field.code] = result
             else:
-                success = False
                 errors[key] = result
-                data[key] = error_data
-        return success, cleaned_answers, errors, data
+        return cleaned_answers, errors
 
     def validate_submission(self, values):
-        success, cleaned_answers, errors, data = self._is_valid(values)
-        short_code = cleaned_answers.get(self.entity_question.code)
-        if self.is_registration_form():
-            entity_type = cleaned_answers.get(ENTITY_TYPE_FIELD_CODE)
-        else:
-            entity_type = self.entity_type
-        type_hierarchy = [e_type.lower() for e_type in entity_type]
-        return FormSubmission(self, cleaned_answers, short_code, success, errors, type_hierarchy, data)
+        if values is None or len(values) == 1:
+            raise NoQuestionsSubmittedException()
+        cleaned_answers, errors = self._is_valid(values)
+        return FormSubmission(self, cleaned_answers, errors)
 
     @property
     def cleaned_data(self):
@@ -277,36 +270,44 @@ class FormModel(DataObject):
         return True if self._doc.state == attributes.TEST_STATE else False
 
     def deactivate(self):
-        self._doc.state=attributes.INACTIVE_STATE
+        self._doc.state = attributes.INACTIVE_STATE
 
     def activate(self):
-        self._doc.state=attributes.ACTIVE_STATE
+        self._doc.state = attributes.ACTIVE_STATE
 
     def set_test_mode(self):
-        self._doc.state=attributes.TEST_STATE
+        self._doc.state = attributes.TEST_STATE
 
 
 class FormSubmission(object):
     def _to_three_tuple(self):
+        return [(self.form_model.get_field_by_code(field).name, value, self.form_model.get_field_by_code(field).ddtype)
+        for (field, value) in
+        self.cleaned_data.items()]
 
-        return [(self.form_model.get_field_by_code(field).name, value, self.form_model.get_field_by_code(field).ddtype)  for (field, value) in
-                self.cleaned_data.items()]
+    def _get_answer_for(self, code):
+        for key in self._cleaned_data:
+            if key.lower() == code.lower():
+                return self._cleaned_data[key]
+        return None
 
-    def __init__(self, form_model, form_answers, short_code, success, errors, entity_type, data):
+    def __init__(self, form_model, form_answers, errors=None):
         assert errors is None or type(errors) == dict
-        assert data is None or type(data) == dict
-        assert success is not None and type(success) == bool
         assert form_answers is not None and type(form_answers) == dict
-        assert form_model is not None and isinstance(form_model, FormModel)
 
         self.form_model = form_model
         self._cleaned_data = form_answers
+        short_code = self._get_answer_for(form_model.entity_question.code)
         self.short_code = short_code.lower() if short_code is not None else None
         self.form_code = self.form_model.form_code
-        self.is_valid = success
+        self.is_valid = (errors is None or len(errors) == 0)
         self.errors = errors
-        self.entity_type = entity_type
-        self.error_data = data
+        if form_model.is_registration_form():
+            entity_type = self._get_answer_for(ENTITY_TYPE_FIELD_CODE)
+        else:
+            entity_type = self.form_model.entity_type
+        type_hierarchy = [e_type.lower() for e_type in entity_type]
+        self.entity_type = type_hierarchy
 
     @property
     def values(self):
@@ -316,13 +317,13 @@ class FormSubmission(object):
     def cleaned_data(self):
         return self._cleaned_data
 
-    def to_entity(self, dbm, create=False):
-        if create:
+    def to_entity(self, dbm):
+        if self.form_model.is_registration_form():
             location = self.cleaned_data.get(LOCATION_TYPE_FIELD_CODE)
             return entity.create_entity(dbm=dbm, entity_type=self.entity_type,
-                                 location=location,
-                                 short_code=self.short_code,
-                                 geometry=convert_to_geometry(self.cleaned_data.get(GEO_CODE)))
+                                        location=location,
+                                        short_code=self.short_code,
+                                        geometry=convert_to_geometry(self.cleaned_data.get(GEO_CODE)))
         return entity.get_by_short_code(dbm, self.short_code, self.entity_type)
 
 
@@ -345,22 +346,24 @@ def _construct_registration_form(manager):
     #Create registration questionnaire
 
     question1 = HierarchyField(name=ENTITY_TYPE_FIELD_NAME, code=ENTITY_TYPE_FIELD_CODE,
-                          label="What is associated subject type?",
-                          language="eng", ddtype=entity_id_type)
+                               label="What is associated subject type?",
+                               language="eng", ddtype=entity_id_type)
 
     question2 = TextField(name=NAME_FIELD, code=NAME_FIELD_CODE, label="What is the subject's name?",
                           defaultValue="some default value", language="eng", ddtype=name_type)
     question3 = TextField(name=SHORT_CODE_FIELD, code=SHORT_CODE, label="What is the subject's short name?",
                           defaultValue="some default value", language="eng", ddtype=name_type,
                           entity_question_flag=True)
-    question4 = HierarchyField(name=LOCATION_TYPE_FIELD_NAME, code=LOCATION_TYPE_FIELD_CODE, label="What is the subject's location?",
-                          language="eng", ddtype=location_type)
+    question4 = HierarchyField(name=LOCATION_TYPE_FIELD_NAME, code=LOCATION_TYPE_FIELD_CODE,
+                               label="What is the subject's location?",
+                               language="eng", ddtype=location_type)
     question5 = GeoCodeField(name=GEO_CODE_FIELD, code=GEO_CODE, label="What is the subject's geo code?",
                              language="eng", ddtype=geo_code_type)
     question6 = TextField(name=DESCRIPTION_FIELD, code=DESCRIPTION_FIELD_CODE, label="Describe the subject",
                           defaultValue="some default value", language="eng", ddtype=description_type)
-    question7 = TextField(name=MOBILE_NUMBER_FIELD, code=MOBILE_NUMBER_FIELD_CODE, label="What is the mobile number associated with the subject?",
+    question7 = TextField(name=MOBILE_NUMBER_FIELD, code=MOBILE_NUMBER_FIELD_CODE,
+                          label="What is the mobile number associated with the subject?",
                           defaultValue="some default value", language="eng", ddtype=mobile_number_type)
     form_model = FormModel(manager, name="reg", form_code=REGISTRATION_FORM_CODE, fields=[
-            question1, question2, question3, question4, question5, question6, question7], entity_type=["Registration"])
+        question1, question2, question3, question4, question5, question6, question7], entity_type=["Registration"])
     return form_model

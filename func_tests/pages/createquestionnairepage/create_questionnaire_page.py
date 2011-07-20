@@ -1,13 +1,9 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from time import time
-from framework.utils.common_utils import CommonUtilities, generateId
 
-from pages.page import Page
 from framework.utils.data_fetcher import *
 from pages.createquestionnairepage.create_questionnaire_locator import *
 from tests.createquestionnairetests.create_questionnaire_data import *
 from framework.utils.common_utils import *
-import time
 
 
 class CreateQuestionnairePage(Page):
@@ -152,11 +148,11 @@ class CreateQuestionnairePage(Page):
             if index > 1:
                 self.driver.find(ADD_CHOICE_LINK).click()
             self.driver.find_text_box(by_xpath(CHOICE_XPATH_LOCATOR + "[" + str(index) + "]" + CHOICE_TB_XPATH_LOCATOR)).enter_text(choice)
-            index = index + 1
+            index += 1
         choice_type = fetch_(ALLOWED_CHOICE, from_(question_data))
-        if(ONLY_ONE_ANSWER == choice_type):
+        if ONLY_ONE_ANSWER == choice_type:
             self.driver.find_radio_button(ONLY_ONE_ANSWER_RB).click()
-        elif(MULTIPLE_ANSWERS == choice_type):
+        elif MULTIPLE_ANSWERS == choice_type:
             self.driver.find_radio_button(MULTIPLE_ANSWER_RB).click()
         return self
 

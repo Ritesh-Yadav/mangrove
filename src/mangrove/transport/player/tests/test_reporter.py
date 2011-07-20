@@ -5,7 +5,7 @@ from mangrove.datastore.entity import create_entity, define_type
 from mangrove.errors.MangroveException import  NumberNotRegisteredException
 from mangrove.datastore.datadict import DataDictType
 from mangrove.form_model.form_model import MOBILE_NUMBER_FIELD, NAME_FIELD
-from mangrove.transport.reporter import find_reporter, get_short_code_from_reporter_number
+from mangrove.transport.reporter import find_reporter
 
 
 class TestReporter(TestCase):
@@ -21,7 +21,8 @@ class TestReporter(TestCase):
         define_type(self.manager, ["reporter"])
         self.phone_number_type = DataDictType(self.manager, name='Telephone Number', slug='telephone_number',
                                               primitive_type='string')
-        self.first_name_type = DataDictType(self.manager, name='First Name', slug='first_name', primitive_type='string')
+        self.first_name_type = DataDictType(self.manager, name='First Name', slug='first_name',
+                                            primitive_type='string')
         #Register Reporter
         self.register(self.manager, entity_type=["reporter"],
                       data=[(MOBILE_NUMBER_FIELD, "1234567890", self.phone_number_type),
@@ -59,6 +60,4 @@ class TestReporter(TestCase):
         self.assertTrue({NAME_FIELD: "A", MOBILE_NUMBER_FIELD: "1234567890"} in reporter_list)
         self.assertTrue({NAME_FIELD: "B", MOBILE_NUMBER_FIELD: "1234567890"} in reporter_list)
 
-    def test_should_return_short_code(self):
-        short_code = get_short_code_from_reporter_number(self.manager, "8888567890")
-        self.assertEquals("rep5", short_code)
+
