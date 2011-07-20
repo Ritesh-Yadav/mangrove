@@ -6,17 +6,17 @@ from framework.drivers.chrome_driver_wrapper import ChromeDriverWrapper
 from framework.drivers.remote_driver_wrapper import RemoteDriverWrapper
 
 
-class DriverInitializer:
+class DriverInitializer(object):
     @classmethod
-    def initialize(self, browser):
+    def initialize(cls, browser):
         """ Create Driver Wrapper"""
         print "Creating %s wrapper" % browser
         if browser == "firefox":
-            self.wrapper = FirefoxDriverWrapper()
+            cls.wrapper = FirefoxDriverWrapper()
         elif browser == "ie":
-            self.wrapper = IEDriverWrapper()
+            cls.wrapper = IEDriverWrapper()
         elif browser == "chrome":
-            self.wrapper = ChromeDriverWrapper()
+            cls.wrapper = ChromeDriverWrapper()
         elif browser == "htmlunit":
-            self.wrapper = RemoteDriverWrapper()
-        return self.wrapper.driver
+            cls.wrapper = RemoteDriverWrapper()
+        return cls.wrapper.driver

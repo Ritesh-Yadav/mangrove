@@ -7,11 +7,12 @@ from pages.loginpage.login_locator import *
 from selenium.common.exceptions import NoSuchElementException
 
 
-class DriverWrapper():
+class DriverWrapper(object):
     """
     DriverWrapper class is for creating an wrapper over traditional webdriver
      class. To do some additional function on different web elements
     """
+
     def __init__(self):
         """Create DriverWrapper"""
         self.driver = self
@@ -64,7 +65,7 @@ class DriverWrapper():
         """
         try:
             return self.driver.find_element(by=locator_dict[BY],
-                                        value=locator_dict[LOCATOR])
+                                            value=locator_dict[LOCATOR])
         except NoSuchElementException as e:
             raise e
 
@@ -79,7 +80,7 @@ class DriverWrapper():
         Return list of webelement
         """
         return self.driver.find_elements(by=locator_dict[BY],
-                                        value=locator_dict[LOCATOR])
+                                         value=locator_dict[LOCATOR])
 
     def go_to(self, url):
         """
