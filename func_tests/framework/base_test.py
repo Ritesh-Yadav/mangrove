@@ -2,6 +2,7 @@
 
 from framework.drivers.driver_initializer import DriverInitializer
 import unittest
+from tests.testsettings import close_browser_after_test
 
 
 class BaseTest(unittest.TestCase):
@@ -10,7 +11,8 @@ class BaseTest(unittest.TestCase):
 
     def tearDown(self):
         try:
-            self.driver.quit()
+            if close_browser_after_test:
+                self.driver.quit()
         except TypeError as e:
             pass
 

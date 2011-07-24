@@ -1,4 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
+from framework.exception import CouldNotLocateElementException
 
 from framework.utils.drop_down_web_element import DropDown
 from framework.utils.text_box_web_element import TextBox
@@ -67,7 +68,7 @@ class DriverWrapper(object):
             return self.driver.find_element(by=locator_dict[BY],
                                             value=locator_dict[LOCATOR])
         except NoSuchElementException as e:
-            raise e
+            raise CouldNotLocateElementException(selector=locator_dict[BY],locator=locator_dict[LOCATOR])
 
     def find_elements_(self, locator_dict):
         """
