@@ -105,22 +105,22 @@ class CreateProjectPage(Page):
         # Selecting and Deselecting SMS checkbox for devices as per given option
         if "sms" in devices:
             if not(comm_utils.is_element_present(SMS_CB_CHECKED)):
-                self.driver.find(SMS_CB).toggle()
+                self.driver.find(SMS_CB).click()
         elif comm_utils.is_element_present(SMS_CB_CHECKED):
-                self.driver.find(SMS_CB).toggle()
+                self.driver.find(SMS_CB).click()
         # Selecting and Deselecting Smart phone checkbox for devices as per
         # given option
         if "smartphone" in devices:
             if not(comm_utils.is_element_present(SMART_PHONE_CB_CHECKED)):
-                self.driver.find(SMART_PHONE_CB).toggle()
+                self.driver.find(SMART_PHONE_CB).click()
         elif comm_utils.is_element_present(SMART_PHONE_CB_CHECKED):
-                self.driver.find(SMART_PHONE_CB).toggle()
+                self.driver.find(SMART_PHONE_CB).click()
         #Selecting and Deselecting Web checkbox for devices as per given option
         if "web" in devices:
             if not(comm_utils.is_element_present(WEB_CB_CHECKED)):
-                self.driver.find(WEB_CB).toggle()
+                self.driver.find(WEB_CB).click()
         elif comm_utils.is_element_present(WEB_CB_CHECKED):
-                self.driver.find(WEB_CB).toggle()
+                self.driver.find(WEB_CB).click()
         self.driver.find(SAVE_CHANGES_BTN).click()
         return self
 

@@ -18,8 +18,7 @@ BY = "by"
 #Registration Page Locator
 ORGANIZATION_NAME_TB = by_css("input[name=organization_name]")
 ORGANIZATION_SECTOR_DD = by_css("select[name='organization_sector']")
-ORGANIZATION_ADDRESS_LINE1_TB = by_css("input[name=organization_addressline1]")
-ORGANIZATION_ADDRESS_LINE2_TB = by_css("input[name=organization_addressline2]")
+ORGANIZATION_ADDRESS_TB = by_css("input[name=organization_address]")
 ORGANIZATION_CITY_TB = by_css("input[name=organization_city]")
 ORGANIZATION_STATE_TB = by_css("input[name=organization_state]")
 ORGANIZATION_COUNTRY_TB = by_css("input[name=organization_country]")
@@ -32,6 +31,6 @@ ORGANIZATION_LAST_NAME_TB = by_css("input[name=last_name]")
 ORGANIZATION_EMAIL_TB = by_css("input[name=email]")
 ORGANIZATION_PASSWORD_TB = by_css("input[name=password1]")
 ORGANIZATION_CONFIRM_PASSWORD_TB = by_css("input[name=password2]")
-ORGANIZATION_REGISTER_BTN = by_css("input[value=Register]")
+ORGANIZATION_REGISTER_BTN = by_css("input[value='Sign Up']")
 
 ERROR_MESSAGE_LABEL = by_css("li[class~='error']")

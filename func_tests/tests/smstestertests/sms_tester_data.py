@@ -44,7 +44,7 @@ EXTRA_PLUS_IN_BTW = {SENDER: "1234567890",
 PLUS_IN_THE_BEGINNING = {SENDER: "1234567890",
               RECEIVER: "261333782943",
               SMS: "+ +cli002 +EID CID005 +NA Mr. Fessy +FA 58 +RD 17.05.2011 +BG b +SY ade",
-              ERROR_MSG: "Invalid message format. Please submit the message in the format: <Questionnaire Code><SPACE>+<Question Code><SPACE><Answer>"}
+              ERROR_MSG: "Could not parse, invalid format: + +cli002 +EID CID005 +NA Mr. Fessy +FA 58 +RD 17.05.2011 +BG b +SY ade"}
 
 UNREGISTERED_FROM_NUMBER = {SENDER: "123445567",
               RECEIVER: "261333782943",
@@ -54,7 +54,7 @@ UNREGISTERED_FROM_NUMBER = {SENDER: "123445567",
 REGISTER_REPORTER = {SENDER: "1234567890",
               RECEIVER: "261333782943",
               SMS: "REG +t Reporter +m 0123456789 +L  Jaipur +g 26.917 75.817 +N Donald Duck",
-              ERROR_MSG: "Registration successful. Subject identification number: rep\d.We received : N: Donald Duck M: 0123456789 L: Jaipur G: \(26.917, 75.817\) T: Reporter"}
+              ERROR_MSG: "Registration successful. Subject identification number: rep\d.We received : g: \(26.917, 75.817\) m: 0123456789 l: Jaipur n: Donald Duck s: rep\d t: Reporter"}
 
 REGISTER_REPORTER_FROM_UNKNOWN_NUMBER = {SENDER: "12345678453",
               RECEIVER: "261333782943",
@@ -64,7 +64,7 @@ REGISTER_REPORTER_FROM_UNKNOWN_NUMBER = {SENDER: "12345678453",
 REGISTER_NEW_SUBJECT = {SENDER: "1234567890",
               RECEIVER: "261333782943",
               SMS: "REG +T Clinic +m   123456 +l Jaipur +G 26.917 75.817 ++  +n Clinic Jaipur +S CLIJPR + ",
-              ERROR_MSG: "Registration successful. Subject identification number: clijpr.We received : G: (26.917, 75.817) M: 123456 L: Jaipur N: Clinic Jaipur S: CLIJPR T: Clinic"}
+              ERROR_MSG: "Registration successful. Subject identification number: clijpr.We received : g: (26.917, 75.817) m: 123456 l: Jaipur n: Clinic Jaipur s: CLIJPR t: Clinic"}
 
 REGISTER_EXISTING_SUBJECT_SHORT_CODE = {SENDER: "1234567890",
               RECEIVER: "261333782943",

@@ -27,3 +27,9 @@ EXISTING_DATA = {NAME: "Mickey Mouse",
               COMMUNE: "MAHAVELO, FIANARANTSOA",
               GPS: "48.955267  1.816013",
               SUCCESS_MSG: "Sorry, the telephone number 1234567890 has already been registered"}
+
+WITHOUT_LOCATION_NAME = {NAME: "Mini Mouse",
+              TELEPHONE_NUMBER: "3456734568",
+              COMMUNE: "",
+              GPS: "23.955267  45.816013",
+              SUCCESS_MSG: "Registration successful. Reporter identification number: rep"}

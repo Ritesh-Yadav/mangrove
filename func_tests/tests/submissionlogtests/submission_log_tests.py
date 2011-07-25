@@ -6,8 +6,7 @@ from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
 from pages.loginpage.login_page import LoginPage
 from pages.smstesterpage.sms_tester_page import SMSTesterPage
-from pages.submissionlogpage.submission_log_page import SubmissionLogPage
-from testdata.test_data import DATA_WINNER_SUBMISSION_LOG_PAGE, DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_LOGIN_PAGE, DATA_WINNER_HOME_PAGE
+from testdata.test_data import DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_LOGIN_PAGE, DATA_WINNER_HOME_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS, WELCOME_MESSAGE
 from tests.smstestertests.sms_tester_data import *
 from tests.submissionlogtests.submission_log_data import *

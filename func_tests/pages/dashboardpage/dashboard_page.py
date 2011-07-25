@@ -46,7 +46,7 @@ class DashboardPage(Page):
 
         Return view all projects page
          """
-        self.driver.find(VIEW_ALL_PROJECT_LINK).click()
+        self.driver.find(PROJECT_LINK).click()
         return ProjectsPage(self.driver)
 
     def navigate_to_register_subject_page(self):

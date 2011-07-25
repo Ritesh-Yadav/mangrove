@@ -26,10 +26,8 @@ class RegistrationPage(Page):
             fetch_(ORGANIZATION_NAME, from_(registration_data)))
         self.driver.find_text_box(ORGANIZATION_SECTOR_DD).enter_text(
             fetch_(ORGANIZATION_SECTOR, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_ADDRESS_LINE1_TB).enter_text(
-            fetch_(ORGANIZATION_ADDRESS_LINE1, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_ADDRESS_LINE2_TB).enter_text(
-            fetch_(ORGANIZATION_ADDRESS_LINE2, from_(registration_data)))
+        self.driver.find_text_box(ORGANIZATION_ADDRESS_TB).enter_text(
+            fetch_(ORGANIZATION_ADDRESS, from_(registration_data)))
         self.driver.find_text_box(ORGANIZATION_CITY_TB).enter_text(
             fetch_(ORGANIZATION_CITY, from_(registration_data)))
         self.driver.find_text_box(ORGANIZATION_STATE_TB).enter_text(
@@ -62,10 +60,8 @@ class RegistrationPage(Page):
             fetch_(ORGANIZATION_NAME, from_(registration_data)))
         self.driver.find_text_box(ORGANIZATION_SECTOR_DD).enter_text(
             fetch_(ORGANIZATION_SECTOR, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_ADDRESS_LINE1_TB).enter_text(
-            fetch_(ORGANIZATION_ADDRESS_LINE1, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_ADDRESS_LINE1_TB).enter_text(
-            fetch_(ORGANIZATION_ADDRESS_LINE1, from_(registration_data)))
+        self.driver.find_text_box(ORGANIZATION_ADDRESS_TB).enter_text(
+            fetch_(ORGANIZATION_ADDRESS, from_(registration_data)))
         self.driver.find_text_box(ORGANIZATION_CITY_TB).enter_text(
             fetch_(ORGANIZATION_CITY, from_(registration_data)))
         self.driver.find_text_box(ORGANIZATION_STATE_TB).enter_text(
