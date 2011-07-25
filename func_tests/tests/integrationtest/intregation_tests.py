@@ -5,13 +5,13 @@ from framework.base_test import BaseTest
 from framework.utils.common_utils import get_epoch_last_ten_digit
 from framework.utils.couch_http_wrapper import CouchHttpWrapper
 from framework.utils.data_fetcher import from_, fetch_
-from framework.utils.database_manager import DatabaseManager
+from framework.utils.database_manager_postgres import DatabaseManager
 from pages.activateaccountpage.activate_account_page import ActivateAccountPage
 from pages.addsubjecttypepage.add_subject_type_page import AddSubjectTypePage
 from pages.loginpage.login_page import LoginPage
 from nose.plugins.skip import SkipTest
 from pages.smstesterpage.sms_tester_page import SMSTesterPage
-from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_ADD_SUBJECT_TYPE, DATA_WINNER_HOME_PAGE, DATA_WINNER_SMS_TESTER_PAGE
+from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_ADD_SUBJECT_TYPE, DATA_WINNER_SMS_TESTER_PAGE
 from tests.integrationtest.intregation_data import *
 
 

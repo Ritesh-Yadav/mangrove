@@ -18,7 +18,7 @@ VALID_DATA = {PROJECT_NAME: "Clinic Morondava ", GEN_RANDOM: True,
               PROJECT_TYPE: "survey",
               SUBJECT: "clinic",
               REPORT_TYPE: "data sender work",
-              DEVICES: "sms,smartphone",
+              DEVICES: "sms",
               PAGE_TITLE: "Subjects"}
 
 VALID_DATA2 = {PROJECT_NAME: "Water Point2 Morondava ", GEN_RANDOM: True,
@@ -26,7 +26,7 @@ VALID_DATA2 = {PROJECT_NAME: "Water Point2 Morondava ", GEN_RANDOM: True,
               PROJECT_TYPE: "survey",
               SUBJECT: "waterpoint",
               REPORT_TYPE: "other subject",
-              DEVICES: "sms,smartphone",
+              DEVICES: "sms",
               PAGE_TITLE: "Questionnaire"}
 
 BLANK_FIELDS = {PROJECT_NAME: "",

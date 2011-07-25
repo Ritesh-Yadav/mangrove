@@ -3,7 +3,7 @@
 from framework.utils.data_fetcher import *
 from pages.createquestionnairepage.create_questionnaire_locator import *
 from tests.createquestionnairetests.create_questionnaire_data import *
-from framework.utils.common_utils import *
+from framework.utils.common_utils import generateId
 from pages.page import Page
 
 

@@ -1,4 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
+import time
 from nose.plugins.attrib import attr
 
 from framework.base_test import BaseTest
@@ -25,6 +26,7 @@ class TestRegistrationPage(BaseTest):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
         registration_page.register_with(EXISTING_EMAIL_ADDRESS)
+        time.sleep(5)
         self.assertEquals(registration_page.get_error_message(), fetch_(ERROR_MESSAGE,
                    from_(EXISTING_EMAIL_ADDRESS)))
 
@@ -33,6 +35,7 @@ class TestRegistrationPage(BaseTest):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
         registration_page.register_with(INVALID_EMAIL_FORMAT)
+        time.sleep(5)
         self.assertEquals(registration_page.get_error_message(),
                           fetch_(ERROR_MESSAGE, from_(INVALID_EMAIL_FORMAT)))
 
@@ -41,6 +44,7 @@ class TestRegistrationPage(BaseTest):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
         registration_page.register_with(UNMATCHED_PASSWORD)
+        time.sleep(5)
         self.assertEquals(registration_page.get_error_message(),
                           fetch_(ERROR_MESSAGE, from_(UNMATCHED_PASSWORD)))
 
@@ -49,6 +53,7 @@ class TestRegistrationPage(BaseTest):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
         registration_page.register_with(WITHOUT_ENTERING_REQUIRED_FIELDS)
+        time.sleep(5)
         self.assertEquals(registration_page.get_error_message(),
                           fetch_(ERROR_MESSAGE, from_(WITHOUT_ENTERING_REQUIRED_FIELDS)))
 
@@ -57,5 +62,6 @@ class TestRegistrationPage(BaseTest):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
         registration_page.register_with(INVALID_WEBSITE_URL)
+        time.sleep(5)
         self.assertEquals(registration_page.get_error_message(),
                           fetch_(ERROR_MESSAGE, from_(INVALID_WEBSITE_URL)))

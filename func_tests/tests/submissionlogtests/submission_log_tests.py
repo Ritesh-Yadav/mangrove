@@ -6,7 +6,7 @@ from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
 from pages.loginpage.login_page import LoginPage
 from pages.smstesterpage.sms_tester_page import SMSTesterPage
-from testdata.test_data import DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_LOGIN_PAGE, DATA_WINNER_HOME_PAGE
+from testdata.test_data import DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_LOGIN_PAGE, DATA_WINNER_DASHBOARD_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS, WELCOME_MESSAGE
 from tests.smstestertests.sms_tester_data import *
 from tests.submissionlogtests.submission_log_data import *
@@ -24,7 +24,8 @@ class TestSubmissionLog(BaseTest):
         sms_tester_page = SMSTesterPage(self.driver)
         sms_tester_page.send_sms_with(sms_data)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(MESSAGE, from_(sms_data)))
-        self.driver.go_to(DATA_WINNER_HOME_PAGE)
+        self.driver.go_to(DATA_WINNER_DASHBOARD_PAGE)
+        time.sleep(5)
         view_all_project_page = dashboard_page.navigate_to_view_all_project_page()
         time.sleep(3)
         project_overview_project = view_all_project_page.navigate_to_project_page(PROJECT_NAME)

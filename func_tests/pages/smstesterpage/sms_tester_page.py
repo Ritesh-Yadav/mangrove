@@ -43,7 +43,7 @@ class SMSTesterPage(Page):
         Return success/error message
         """
         comm_utils = CommonUtilities(self.driver)
-        comm_utils.wait_for_element(5, FLASH_MSG_LABEL)
+        comm_utils.wait_for_element(10, FLASH_MSG_LABEL)
         return self.driver.find(FLASH_MSG_LABEL).text
 
     def get_error_message(self):
@@ -54,6 +54,8 @@ class SMSTesterPage(Page):
         Return error message
         """
         error_message = ""
+        comm_utils = CommonUtilities(self.driver)
+        comm_utils.wait_for_element(10,ERROR_MESSAGE_LABEL)
         locators = self.driver.find_elements_(ERROR_MESSAGE_LABEL)
         if locators:
             for locator in locators:

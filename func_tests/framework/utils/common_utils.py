@@ -2,6 +2,7 @@
 import random
 import string
 import time
+from framework.exception import CouldNotLocateElementException
 
 from pages.page import Page
 from selenium.webdriver.common.by import By
@@ -62,7 +63,7 @@ class CommonUtilities(Page):
         try:
             locator = self.driver.find(element_locator)
             return locator
-        except NoSuchElementException:
+        except CouldNotLocateElementException:
             return False
 
 
