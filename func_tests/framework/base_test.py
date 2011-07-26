@@ -2,16 +2,17 @@
 
 from framework.drivers.driver_initializer import DriverInitializer
 import unittest
-from tests.testsettings import close_browser_after_test
+from tests.testsettings import CLOSE_BROWSER_AFTER_TEST, WAIT
 
 
 class BaseTest(unittest.TestCase):
     def setUp(self):
         self.driver = DriverInitializer.initialize("firefox")
+        self.driver.implicitly_wait(WAIT)
 
     def tearDown(self):
         try:
-            if close_browser_after_test:
+            if CLOSE_BROWSER_AFTER_TEST:
                 self.driver.quit()
         except TypeError as e:
             pass

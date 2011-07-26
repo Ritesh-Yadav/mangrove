@@ -1,4 +1,6 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 
-close_browser_after_test = True
+CLOSE_BROWSER_AFTER_TEST = True
+WAIT = 5
+
   
