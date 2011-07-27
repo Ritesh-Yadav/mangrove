@@ -20,7 +20,7 @@ VALID_DATA = {NAME: "Mickey Duck",
               TELEPHONE_NUMBER: "9876543210",
               COMMUNE: "MAHAVELO, FIANARANTSOA",
               GPS: "48.955267  1.816013",
-              SUCCESS_MSG: "Registration successful. Reporter identification number: rep"}
+              SUCCESS_MSG: "Registration successful. Unique identification number\(ID\) is: rep"}
 
 EXISTING_DATA = {NAME: "Mickey Mouse",
               TELEPHONE_NUMBER: "1234567890",
@@ -32,4 +32,4 @@ WITHOUT_LOCATION_NAME = {NAME: "Mini Mouse",
               TELEPHONE_NUMBER: "3456734568",
               COMMUNE: "",
               GPS: "23.955267  45.816013",
-              SUCCESS_MSG: "Registration successful. Reporter identification number: rep"}
+              SUCCESS_MSG: "Registration successful. Unique identification number\(ID\) is: rep"}
