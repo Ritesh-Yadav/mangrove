@@ -58,6 +58,8 @@ class DatabaseManager(object):
         'database_name' is the relative path of the database from mangrove/func_tests/framework/utils.
         This is optional field and default value is '../../../src/datawinners/mangrovedb'
         """
+        con = None
+        cur = None
         try:
             con = self.get_connection(database_name)
             cur = con.cursor()
@@ -68,8 +70,10 @@ class DatabaseManager(object):
         except Exception as e:
             print e
         finally:
-            cur.close()
-            con.close()
+            if cur:
+                cur.close()
+            if con:
+                con.close()
 
     def delete_organization_all_details(self, email, database_name=DEFAULT_DNS):
         """
@@ -80,6 +84,8 @@ class DatabaseManager(object):
         'database_name' is the relative path of the database from mangrove/func_tests/framework/utils.
         This is optional field and default value is '../../../src/datawinners/mangrovedb'
         """
+        con = None
+        cur = None
         try:
             con = self.get_connection(database_name)
             cur = con.cursor()
@@ -98,8 +104,10 @@ class DatabaseManager(object):
             con.commit()
             return organization_db_name
         finally:
-            cur.close()
-            con.close()
+            if cur:
+                cur.close()
+            if con:
+                con.close()
 
 if __name__ == "__main__":
     db = DatabaseManager()
