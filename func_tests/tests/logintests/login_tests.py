@@ -17,8 +17,7 @@ class TestLoginPage(BaseTest):
 
         dashboard_page = login_page.do_successful_login_with(VALID_CREDENTIALS)
         self.assertEqual(dashboard_page.welcome_message(),
-            fetch_(WELCOME_MESSAGE, from_(VALID_CREDENTIALS)),
-          "Login Un-successful or Welcome Message is not Present")
+            fetch_(WELCOME_MESSAGE, from_(VALID_CREDENTIALS)))
 
     @attr('functional_test')
     def test_login_with_unactivated_account_credentials(self):

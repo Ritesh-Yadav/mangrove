@@ -25,4 +25,4 @@ LOGIN_BTN = by_css("input#id_login")
 CREATE_AN_ACCOUNT_LINK = by_css("a[href='/register']")
 
 
-ERROR_MESSAGE_LABEL = by_xpath("//li[contains(@class,'error')] | //div[contains(@class,'error')]")
+ERROR_MESSAGE_LABEL = by_xpath("//ul[@class='errorlist']/..")
