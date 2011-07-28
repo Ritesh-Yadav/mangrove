@@ -33,7 +33,6 @@ class TestRegisterReporter(BaseTest):
         """
         register_reporter_page = self.prerequisites_of_register_reporter()
         register_reporter_page.register_with(VALID_DATA)
-        time.sleep(10)
         self.assertRegexpMatches(register_reporter_page.get_success_message(),
                                  fetch_(SUCCESS_MSG, from_(VALID_DATA)))
 
@@ -68,6 +67,5 @@ class TestRegisterReporter(BaseTest):
         """
         register_reporter_page = self.prerequisites_of_register_reporter()
         register_reporter_page.register_with(WITHOUT_LOCATION_NAME)
-        time.sleep(10)
         self.assertRegexpMatches(register_reporter_page.get_success_message(),
                                  fetch_(SUCCESS_MSG, from_(WITHOUT_LOCATION_NAME)))
