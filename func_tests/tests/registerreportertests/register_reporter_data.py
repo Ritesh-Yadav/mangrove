@@ -14,7 +14,7 @@ BLANK_FIELDS = {NAME: "",
                 TELEPHONE_NUMBER: "",
                 COMMUNE: "",
                 GPS: "",
-                ERROR_MSG: "Required information for registration. Please fill out at least one location field correctly.* Name This field is required.* Mobile Number This field is required."}
+                ERROR_MSG: "* Name This field is required.* Mobile Number This field is required.Enter location Please fill out at least one location field correctly.GPS: Enter Lat Long Please fill out at least one location field correctly."}
 
 VALID_DATA = {NAME: "Mickey Duck",
               TELEPHONE_NUMBER: "9876543210",
