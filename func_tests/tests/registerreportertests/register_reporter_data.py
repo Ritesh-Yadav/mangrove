@@ -33,3 +33,40 @@ WITHOUT_LOCATION_NAME = {NAME: "Mini Mouse",
               COMMUNE: "",
               GPS: "23.955267  45.816013",
               SUCCESS_MSG: "Registration successful. Unique identification number\(ID\) is: rep"}
+
+WITHOUT_GPS = {NAME: "Alladin",
+              TELEPHONE_NUMBER: "4567345683",
+              COMMUNE: "MAHAVELO",
+              GPS: "",
+              SUCCESS_MSG: "Registration successful. Unique identification number\(ID\) is: rep"}
+
+INVALID_LATITUDE_GPS = {NAME: "Invalid Latitude GPS",
+              TELEPHONE_NUMBER: "6734568345",
+              COMMUNE: "",
+              GPS: "123 90",
+              SUCCESS_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}
+
+INVALID_LONGITUDE_GPS = {NAME: "Invalid Longitude GPS",
+              TELEPHONE_NUMBER: "7345683456",
+              COMMUNE: "",
+              GPS: "23 190",
+              SUCCESS_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}
+
+INVALID_GPS = {NAME: "Invalid GPS",
+              TELEPHONE_NUMBER: "7345683456",
+              COMMUNE: "",
+              GPS: "23; 10",
+              SUCCESS_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}
+
+INVALID_GPS_WITH_COMMA = {NAME: "Invalid GPS",
+              TELEPHONE_NUMBER: "7345683456",
+              COMMUNE: "",
+              GPS: "23,10",
+              SUCCESS_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}
+
+
+WITH_UNICODE_IN_GPS = {NAME: "Unicode in GPS",
+              TELEPHONE_NUMBER: "5673456834",
+              COMMUNE: "",
+              GPS: "23º 45",
+              SUCCESS_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}
