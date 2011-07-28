@@ -24,5 +24,5 @@ COMMUNE_TB = by_css("input#id_location")
 GPS_TB = by_css("input#id_geo_code")
 
 REGISTER_BTN = by_css("input#id_register_button")
-ERROR_MESSAGE_LABEL = by_xpath("//li[contains(@class,'error')] | //div[contains(@class,'error')]")
+ERROR_MESSAGE_LABEL = by_xpath("//ul[@class='errorlist']/.. | //div[@id='error_messages']")
 FLASH_MESSAGE_LABEL = by_xpath("//div[@class='success-message-box' and @id='flash-message']")

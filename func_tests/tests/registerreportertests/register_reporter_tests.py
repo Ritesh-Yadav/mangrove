@@ -10,7 +10,7 @@ from pages.loginpage.login_page import LoginPage
 from pages.registerreporterpage.register_reporter_page import ReporterRegistrationPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_CREATE_DATA_SENDERS
 from tests.logintests.login_data import VALID_CREDENTIALS
-from tests.registerreportertests.register_reporter_data import VALID_DATA, SUCCESS_MSG, BLANK_FIELDS, ERROR_MSG, EXISTING_DATA, WITHOUT_LOCATION_NAME
+from tests.registerreportertests.register_reporter_data import *
 
 
 class TestRegisterReporter(BaseTest):
@@ -24,7 +24,7 @@ class TestRegisterReporter(BaseTest):
         # doing reporter registration
         self.driver.go_to(DATA_WINNER_CREATE_DATA_SENDERS)
         return ReporterRegistrationPage(self.driver)
-
+    @SkipTest
     @attr('functional_test', 'smoke')
     def test_successful_registration_of_reporter(self):
         """
@@ -35,7 +35,7 @@ class TestRegisterReporter(BaseTest):
         register_reporter_page.register_with(VALID_DATA)
         self.assertRegexpMatches(register_reporter_page.get_success_message(),
                                  fetch_(SUCCESS_MSG, from_(VALID_DATA)))
-
+    @SkipTest
     @attr('functional_test')
     def test_registration_of_reporter_without_entering_data(self):
         """
@@ -46,7 +46,7 @@ class TestRegisterReporter(BaseTest):
         time.sleep(5)
         self.assertEqual(register_reporter_page.get_error_message(),
                                  fetch_(ERROR_MSG, from_(BLANK_FIELDS)))
-
+    @SkipTest
     @attr('functional_test')
     def test_registration_of_reporter_with_existing_data(self):
         """
@@ -58,14 +58,73 @@ class TestRegisterReporter(BaseTest):
         time.sleep(5)
         self.assertEqual(register_reporter_page.get_error_message(),
                                  fetch_(ERROR_MSG, from_(EXISTING_DATA)))
-
+    @SkipTest
     @attr('functional_test')
     def test_registration_of_reporter_without_location_name(self):
         """
-        Function to test the registration of reporter with given existing
-        details e.g. first name, last name, telephone number and commune
+        Function to test the registration of reporter without giving location name
         """
         register_reporter_page = self.prerequisites_of_register_reporter()
         register_reporter_page.register_with(WITHOUT_LOCATION_NAME)
         self.assertRegexpMatches(register_reporter_page.get_success_message(),
                                  fetch_(SUCCESS_MSG, from_(WITHOUT_LOCATION_NAME)))
+
+    @attr('functional_test')
+    def test_registration_of_reporter_without_gps(self):
+        """
+        Function to test the registration of reporter with invalid GPS
+        """
+        register_reporter_page = self.prerequisites_of_register_reporter()
+        register_reporter_page.register_with(WITHOUT_GPS)
+        self.assertRegexpMatches(register_reporter_page.get_success_message(),
+                                 fetch_(SUCCESS_MSG, from_(WITHOUT_GPS)))
+
+    @attr('functional_test')
+    def test_registration_of_reporter_with_invalid_gps(self):
+        """
+        Function to test the registration of reporter with invalid GPS
+        """
+        register_reporter_page = self.prerequisites_of_register_reporter()
+        register_reporter_page.register_with(INVALID_GPS)
+        self.assertRegexpMatches(register_reporter_page.get_error_message(),
+                                 fetch_(ERROR_MSG, from_(INVALID_GPS)))
+
+    @attr('functional_test')
+    def test_registration_of_reporter_with_invalid_latitude_gps(self):
+        """
+        Function to test the registration of reporter with invalid GPS
+        """
+        register_reporter_page = self.prerequisites_of_register_reporter()
+        register_reporter_page.register_with(INVALID_LATITUDE_GPS)
+        self.assertRegexpMatches(register_reporter_page.get_error_message(),
+                                 fetch_(ERROR_MSG, from_(INVALID_LATITUDE_GPS)))
+
+    @attr('functional_test')
+    def test_registration_of_reporter_with_invalid_longitude_gps(self):
+        """
+        Function to test the registration of reporter with invalid GPS
+        """
+        register_reporter_page = self.prerequisites_of_register_reporter()
+        register_reporter_page.register_with(INVALID_LONGITUDE_GPS)
+        self.assertRegexpMatches(register_reporter_page.get_error_message(),
+                                 fetch_(ERROR_MSG, from_(INVALID_LONGITUDE_GPS)))
+
+    @attr('functional_test')
+    def test_registration_of_reporter_with_unicode_in_gps(self):
+        """
+        Function to test the registration of reporter with invalid GPS
+        """
+        register_reporter_page = self.prerequisites_of_register_reporter()
+        register_reporter_page.register_with(WITH_UNICODE_IN_GPS)
+        self.assertRegexpMatches(register_reporter_page.get_error_message(),
+                                 fetch_(ERROR_MSG, from_(WITH_UNICODE_IN_GPS)))
+
+    @attr('functional_test')
+    def test_registration_of_reporter_with_invalid_gps_with_comma(self):
+        """
+        Function to test the registration of reporter with invalid GPS
+        """
+        register_reporter_page = self.prerequisites_of_register_reporter()
+        register_reporter_page.register_with(INVALID_GPS_WITH_COMMA)
+        self.assertRegexpMatches(register_reporter_page.get_error_message(),
+                                 fetch_(ERROR_MSG, from_(INVALID_GPS_WITH_COMMA)))
