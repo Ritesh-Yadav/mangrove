@@ -21,5 +21,5 @@ BY = "by"
 WELCOME_MESSAGE_LABEL = by_css("span.welcome")
 REGISTER_REPORTER_LINK = by_css("a[href='/entity/datasender/create']")
 CREATE_PROJECT_LINK = by_css("a[href='/project/wizard/create']")
-REGISTER_SUBJECT_LINK = by_css("a[href='/entity/subject/create']")
+REGISTER_SUBJECT_LINK = by_css("li>a[href='/entity/subjects/']")
 PROJECT_LINK = by_css("li>a[href='/project/']")

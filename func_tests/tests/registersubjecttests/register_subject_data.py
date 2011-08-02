@@ -7,29 +7,108 @@ SHORT_NAME = "short_name"
 AUTO_GENERATE = "auto_generate"
 NAME = "name"
 LOCATION = "location"
-GEO_CODE = "geo_code"
+GPS = "geo_code"
 DESCRIPTION = "description"
 MOBILE_NUMBER = "mobile_number"
 SUCCESS_MSG = "message"
 ERROR_MSG = "message"
 
-
-VALID_DATA = {ENTITY_TYPE: "Clinic",
-              SHORT_NAME: "CLI",
-              AUTO_GENERATE: "True",
+VALID_DATA = {ENTITY_TYPE: "clinic",
+              SHORT_NAME: "cli",
+              AUTO_GENERATE: True,
               NAME: "Clinic Monodova",
               LOCATION: "Monodova",
-              GEO_CODE: "47.411631 28.369885",
+              GPS: "47.411631 28.369885",
               DESCRIPTION: "This is a clinic in monodova",
               MOBILE_NUMBER: "34567890",
-              SUCCESS_MSG: "Thank You for your submission. The short code is - "}
+              SUCCESS_MSG: "Registration successful. Unique identification number\(ID\) is: "}
 
-EXISTING_SHORT_CODE = {ENTITY_TYPE: "Clinic",
-              SHORT_NAME: "CID001",
-              AUTO_GENERATE: "false",
-              NAME: "Clinic Amparaky",
-              LOCATION: "Amparaky",
-              GEO_CODE: "-19.316667 46.633333",
-              DESCRIPTION: "This is a clinic in Amparaky",
+AUTO_GENERATE_FALSE = {ENTITY_TYPE: "clinic",
+              SHORT_NAME: "cli",
+              AUTO_GENERATE: False,
+              NAME: "Clinic Monodova",
+              LOCATION: "Monodova",
+              GPS: "47.411631 28.369885",
+              DESCRIPTION: "This is a clinic in monodova",
               MOBILE_NUMBER: "34567890",
-              ERROR_MSG: "Entity with short code = CLI001 already exists."}
+              SUCCESS_MSG: "Registration successful. Unique identification number\(ID\) is: "}
+
+EXISTING_SHORT_CODE = {ENTITY_TYPE: "clinic",
+                       SHORT_NAME: "CID001",
+                       AUTO_GENERATE: False,
+                       NAME: "Clinic Amparaky",
+                       LOCATION: "Amparaky",
+                       GPS: "-19.316667 46.633333",
+                       DESCRIPTION: "This is a clinic in Amparaky",
+                       MOBILE_NUMBER: "34567890",
+                       ERROR_MSG: "Entity with Unique Identification Number (ID) = cid001 already exists."}
+
+WITHOUT_LOCATION_NAME = {ENTITY_TYPE: "waterpoint",
+                         NAME: "WaterPoint Without Location",
+                         SHORT_NAME: "wat",
+                         AUTO_GENERATE: True,
+                         MOBILE_NUMBER: "3456734568",
+                         LOCATION: "",
+                         GPS: "23.955267  45.816013",
+                         DESCRIPTION: "This is a WaterPoint Without Location",
+                         SUCCESS_MSG: "Registration successful. Unique identification number\(ID\) is: "}
+
+WITHOUT_GPS = {ENTITY_TYPE: "clinic",
+               NAME: "Alladin",
+               SHORT_NAME: "cli",
+               AUTO_GENERATE: True,
+               MOBILE_NUMBER: "4567345683",
+               LOCATION: "MAHAVELO",
+               GPS: "",
+               DESCRIPTION: "This is a clinic in MAHAVELO",
+               SUCCESS_MSG: "Registration successful. Unique identification number\(ID\) is: cli"}
+
+INVALID_LATITUDE_GPS = {ENTITY_TYPE: "clinic",
+                        NAME: "Invalid Latitude GPS",
+                        SHORT_NAME: "cli",
+                        AUTO_GENERATE: True,
+                        MOBILE_NUMBER: "6734568345",
+                        LOCATION: "",
+                        GPS: "123 90",
+                        DESCRIPTION: "This is a clinic with Invalid Latitude GPS",
+                        ERROR_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}
+
+INVALID_LONGITUDE_GPS = {ENTITY_TYPE: "clinic",
+                         NAME: "Invalid Longitude GPS",
+                         SHORT_NAME: "cli",
+                         AUTO_GENERATE: True,
+                         MOBILE_NUMBER: "7345683456",
+                         LOCATION: "",
+                         GPS: "23 190",
+                         DESCRIPTION: "This is a clinic with Invalid Longitude GPS",
+                         ERROR_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}
+
+INVALID_GPS = {ENTITY_TYPE: "clinic",
+               NAME: "Invalid GPS with Semi-Colon",
+               SHORT_NAME: "cli",
+               AUTO_GENERATE: True,
+               MOBILE_NUMBER: "7345683456",
+               LOCATION: "",
+               GPS: "23; 10",
+               DESCRIPTION: "This is a clinic with Invalid GPS with Semi-Colon",
+               ERROR_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}
+
+INVALID_GPS_WITH_COMMA = {ENTITY_TYPE: "clinic",
+                          NAME: "Invalid GPS With Comma",
+                          SHORT_NAME: "cli",
+                          AUTO_GENERATE: True,
+                          MOBILE_NUMBER: "7345683456",
+                          LOCATION: "",
+                          GPS: "23,10",
+                          DESCRIPTION: "This is a clinic with Invalid GPS With Comma",
+                          ERROR_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}
+
+WITH_UNICODE_IN_GPS = {ENTITY_TYPE: "clinic",
+                       NAME: "Unicode in GPS",
+                       SHORT_NAME: "cli",
+                       AUTO_GENERATE: True,
+                       MOBILE_NUMBER: "5673456834",
+                       LOCATION: "",
+                       GPS: "23º 45",
+                       DESCRIPTION: "This is a clinic with Unicode in GPS",
+                       ERROR_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}

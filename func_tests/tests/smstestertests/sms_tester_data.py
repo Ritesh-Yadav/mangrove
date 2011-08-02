@@ -54,7 +54,7 @@ UNREGISTERED_FROM_NUMBER = {SENDER: "123445567",
 REGISTER_REPORTER = {SENDER: "1234567890",
               RECEIVER: "261333782943",
               SMS: "REG +t Reporter +m 0123456789 +L  Jaipur +g 26.917 75.817 +N Donald Duck",
-              ERROR_MSG: "Registration successful. Unique identification number\(ID\) is: rep\d.We received : g: 26.917,75.817 m: 0123456789 l: Jaipur n: Donald Duck s: rep\d t: Reporter"}
+              ERROR_MSG: "Registration successful. Unique identification number\(ID\) is: rep\d.We received : g: 26.917,75.817 m: 0123456789 l: jaipur n: Donald Duck s: rep\d t: Reporter"}
 
 REGISTER_REPORTER_FROM_UNKNOWN_NUMBER = {SENDER: "12345678453",
               RECEIVER: "261333782943",
@@ -64,7 +64,7 @@ REGISTER_REPORTER_FROM_UNKNOWN_NUMBER = {SENDER: "12345678453",
 REGISTER_NEW_SUBJECT = {SENDER: "1234567890",
               RECEIVER: "261333782943",
               SMS: "REG +T Clinic +m   123456 +l Jaipur +G 26.917 75.817 ++  +n Clinic Jaipur +S CLIJPR + ",
-              ERROR_MSG: "Registration successful. Unique identification number(ID) is: clijpr.We received : g: 26.917,75.817 m: 123456 l: Jaipur n: Clinic Jaipur s: CLIJPR t: Clinic"}
+              ERROR_MSG: "Registration successful. Unique identification number(ID) is: clijpr.We received : g: 26.917,75.817 m: 123456 l: jaipur n: Clinic Jaipur s: CLIJPR t: Clinic"}
 
 REGISTER_EXISTING_SUBJECT_SHORT_CODE = {SENDER: "1234567890",
               RECEIVER: "261333782943",

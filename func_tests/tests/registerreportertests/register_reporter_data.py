@@ -52,13 +52,13 @@ INVALID_LONGITUDE_GPS = {NAME: "Invalid Longitude GPS",
               GPS: "23 190",
               SUCCESS_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}
 
-INVALID_GPS = {NAME: "Invalid GPS",
+INVALID_GPS = {NAME: "Invalid GPS with Semi-Colon",
               TELEPHONE_NUMBER: "7345683456",
               COMMUNE: "",
               GPS: "23; 10",
               SUCCESS_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}
 
-INVALID_GPS_WITH_COMMA = {NAME: "Invalid GPS",
+INVALID_GPS_WITH_COMMA = {NAME: "Invalid GPS With Comma",
               TELEPHONE_NUMBER: "7345683456",
               COMMUNE: "",
               GPS: "23,10",
