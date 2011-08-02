@@ -1,0 +1,37 @@
+{% extends 'layout_application.html' %}
+{% block page_title %}Add A Subject{% endblock %}
+{% block section_title %} Add A Subject {% endblock %}
+
+{% load dw_tabs %}
+{% block body %}
+{% activetab "main_nav" "subjects" %}
+{{ block.super }}
+{% endblock %}
+
+{% block page_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="/media/css/plugins/jquery_autocomplete/jquery.autocomplete.css" media="screen">
+{% endblock %}
+
+
+{% block page_scss %}
+    {{ block.super }}
+    <link href="/media/css/scss/section_register_entity.scss" rel="stylesheet" />
+
+{% endblock %}
+
+{% block page_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="/media/javascript/jquery_autocomplete/jquery.autocomplete.js"></script>
+    <script type="text/javascript" src="/media/javascript/project/register_entity_validation.js"></script>
+    <script type="text/javascript" src="/media/javascript/admin/register_entity.js"></script>
+    <script type="text/javascript" src="/media/javascript/entity/create_type.js"></script>
+    <script type="text/javascript" src="/media/javascript/csrf_token_handler.js"></script>
+
+{% endblock %}
+{% block content%}
+    <div class="add_entity_form">
+
+            {% include 'subject_form.html' %}
+    </div>
+{% endblock %}

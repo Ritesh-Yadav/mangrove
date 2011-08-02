@@ -1,0 +1,67 @@
+#container_header_wizard {
+  height: 37px;
+  overflow: hidden;
+  background: url("/media/images/application_header_bg.gif") repeat top left; }
+
+#container_header_application {
+  height: 74px;
+  overflow: hidden;
+  background: url("/media/images/hedaer_app_bg.gif") repeat top left; }
+
+#container_content, #container_wizard {
+  overflow: hidden;
+  min-height: 600px;
+  background: #e8eff6 url("/media/images/application_bg.gif") repeat-x top left; }
+  #container_content .content, #container_wizard .content {
+    min-height: 550px;
+    background: #FFFFFF;
+    border: 1px solid #cccccc;
+    padding: 20px; }
+  #container_content .wizard_content, #container_wizard .wizard_content {
+    margin-top: 50px;
+    padding: 0px; }
+    #container_content .wizard_content .wizard, #container_wizard .wizard_content .wizard {
+      border: 1px solid #d4972d;
+      height: 140px;
+      margin: 10px;
+      background: url(/media/images/wizard_bg.gif) repeat-x top left; }
+    #container_content .wizard_content .content_wrapper, #container_wizard .wizard_content .content_wrapper {
+      padding: 20px 40px 20px 40px; }
+  #container_content #page_title, #container_wizard #page_title {
+    min-height: 40px;
+    padding: 15px 0 0px 0;
+    width: 950px;
+    border-radius: 1px solid red;
+    margin: 0 auto;
+    font-size: 22px;
+    font-weight: bold; }
+    #container_content #page_title .project_title, #container_wizard #page_title .project_title {
+      font-size: 22px; }
+      #container_content #page_title .project_title:first-letter, #container_wizard #page_title .project_title:first-letter {
+        text-transform: uppercase; }
+    #container_content #page_title .project_detail, #container_wizard #page_title .project_detail {
+      padding-bottom: 10px;
+      font-size: 12px; }
+      #container_content #page_title .project_detail .project_status, #container_wizard #page_title .project_detail .project_status {
+        margin-right: 5px; }
+      #container_content #page_title .project_detail a, #container_wizard #page_title .project_detail a {
+        border-left: 1px solid #666666;
+        padding-left: 7px;
+        padding-right: 7px; }
+
+table.styled_table {
+  width: 100%;
+  margin-bottom: 30px; }
+  table.styled_table thead {
+    height: 40px;
+    background-color: #525252;
+    background: -webkit-gradient(linear, left top, left bottom, from(#525252), to(#3d3d3d));
+    background: -moz-linear-gradient(top, #525252, #262626); }
+    table.styled_table thead th {
+      color: #FFFFFF;
+      font-size: 15px;
+      text-align: center;
+      vertical-align: middle; }
+
+table.error_table td {
+  color: #FF0000; }

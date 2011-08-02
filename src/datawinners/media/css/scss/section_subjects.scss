@@ -1,0 +1,144 @@
+.add_subjects_section{
+    border: 1px solid #CCCCCC;
+    height:120px;
+    background: #EEEEEE;
+    padding: 10px 6px 0 20px;
+    float:left;
+    > div{
+        h6{
+            font-size:12px;
+            border-bottom: 1px solid #CCCCCC;
+            margin-bottom: 10px;
+        }
+        p{
+            font-style: italic;
+            font-size:12px;
+            color:#666666;
+            margin-bottom: 10px;
+        }
+        input[type=button]{
+            float:right;
+        }
+    }
+    .import_list{
+        padding-right:20px;
+        margin-left:20px;
+    }
+}
+.add_subject_form{
+    ul{
+        float:left;
+        li{
+            margin-bottom:15px;
+            float:left;
+        label{
+           width:120px;
+           float:left;
+           label{
+            display:inline;
+           }
+           &.error{
+            font-size:11px;
+            font-weight:normal;
+            margin-left:120px;
+            width:auto;
+
+           }
+        }
+        .location_section{
+            li{
+                float:none;
+            }
+            label{
+                display:block;
+                float:none;
+            }
+            .error_arrow{
+                max-width:170px;
+            }
+        }
+        #add_subject_type{
+            margin-left:120px;
+            .message-box{
+                float:left !important;
+                font-size:12px;
+            }
+        }
+
+        .auto_gen_checkbox{
+            label{
+                float: none;
+                display:inline;
+            }
+        }
+        input[type=text], textarea{
+            width:200px;
+        }
+
+        }
+    }
+}
+.add_datasender_form{
+    input[type=text]{
+        width:200px !important;
+    }
+}
+#question-detail-panel{
+    >div{
+        span{
+            margin-bottom:20px;
+            display:block;
+        }
+    }
+}
+
+
+/* jQuery UI Stylings */
+.ui-widget-overlay{
+    background: #000000;
+    opacity:0.8;
+}
+.ui-widget-content{
+        background:#FFFFFF;
+        .ui-widget-header{
+            border:none;
+            background-color:#525252;
+            background: -webkit-gradient(linear, left top, left bottom, from(#525252), to(#3d3d3d));  //for webkit browsers
+            background: -moz-linear-gradient(top,  #525252,  #262626);  //for firefox 3.6+
+            .ui-dialog-title{
+                font-size:18px;
+            }
+        }
+}
+#error_table{
+    display:none;
+    table{
+        width:100%;
+    }
+    th{
+        color:#000000;
+        text-align:center;
+    }
+    td{
+        color:#FF0000;
+    }
+}
+.import_subjects{
+    .browse_subjects{
+        label{
+            float:none;
+        }
+    }
+    .add_subjects, add_datasenders{
+        .add_subject_link{
+            position:relative;
+            top:10px;
+            margin-left:10px;
+        }
+    }
+}
+
+.ui-widget-content a{
+    color: #0070AC;
+    font-size: 12px;
+}

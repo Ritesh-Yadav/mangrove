@@ -1,0 +1,45 @@
+{% extends 'layout_application.html' %}
+
+ {% block header %}
+    <div id="container_header_application">
+    <div class="container_24" id="header_application">
+        {% include 'header_wizard.html' %}
+        {% include 'main_navigation.html' %}
+    </div>
+</div>
+ {% endblock %}
+{% block main_content %}
+    <div id="container_content">
+        <div class="container_24">
+
+            <div class="grid_24 content wizard_content">
+                <div class="wizard">
+                    {% block wizard %}{% endblock %}
+                </div>
+
+                <div class="content_wrapper grid_24 alpha omega">
+                    <div class="step_number">
+                         {% block step_number %}{% endblock %}
+                    </div>
+                    {% block content %} {% endblock %}
+                </div>
+            </div>
+
+            <div class="grid_24 buttons">
+                 <div class="text_align_right buttons">
+                      {% block previous %}
+                      <div class="grid_5 previous_step">
+                          <a href={{ previous }}>Previous Step:</a>
+                          {% block previous_step %} {% endblock %}
+                         
+                      </div>
+                      {% endblock %}
+                     <div class="next_step">
+                         {% block buttons %} {% endblock %}
+                     </div>
+                 </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

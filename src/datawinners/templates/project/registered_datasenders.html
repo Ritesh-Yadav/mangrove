@@ -1,0 +1,25 @@
+{% extends 'project/tab_navigation.html' %}
+{% block page_title %} Projects - Data Senders {% endblock %}
+
+{% load dw_tabs %}
+{% block navigation %}
+    {% activetab "tab_nav" "data_senders" %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body %}
+    {% activetab "main_nav" "projects" %}
+    {{ block.super }}
+{% endblock %}
+
+{% block page_scss %}
+    {{ block.super }}
+    {#    <link href="/media/css/scss/section_project_overview.scss" rel="stylesheet" />#}
+{% endblock %}
+{% block content %}
+    {% block secondary_navigation_datasenders %}
+    {% activetab "secondary_tab_nav" "datasenders" %}
+    {{ block.super }}
+    {% endblock %}
+{% include 'project/registered_entity_table.html' %}
+{% endblock %}

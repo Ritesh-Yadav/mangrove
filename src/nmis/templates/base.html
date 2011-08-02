@@ -1,0 +1,112 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>{{title}}</title>
+  <meta name="description" content="Mangrove">
+  <meta name="author" content="Mangrove">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/static/browser-images/favicon.ico">
+  <link rel="apple-touch-icon" href="/static/browser-images/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/ui-theme/jquery-ui-1.8.12.custom.css">
+  <script src="/static/js/libs/modernizr-1.7.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+	window.csrf = "{{csrf_token}}";
+</script>
+  {% block head %}{% endblock %}
+  {% load compress %}
+<!--
+  {% compress css %}
+    <link rel="stylesheet" href="main/static/css/widgets.scss" media="screen">
+  {% endcompress %}
+	-->
+    <!-- not sure how to adjust the link to the "compress"ed css file from filename to uri. -->
+	<link rel="stylesheet" href="/static/css/widgets.css" media="all" charset="utf-8">
+</head>
+<body>
+  <div id="container">
+    <header>
+		<a href="/" id="logo"><span>Nigeria MDG Information System</span></a>
+		<div class="search-box">
+			<span class="magnifying-glass">&nbsp;</span>
+			<input type="text" id="lgas" value="">
+		</div>
+    </header>
+    <div id="main" role="main">
+		{% block content %}{% endblock %}
+    </div>
+    <footer>
+    </footer>
+  </div> <!-- eo #container -->
+
+<!--
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.js"></script>
+-->
+<script src='/static/js/libs/jquery-1.6.min.js'></script>  
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"></script> -->
+<script src='/static/js/libs/jquery-ui.1.8.12.js'></script>
+<!--  <script>window.jQuery.ui || document.write("")</script> -->
+
+  <script src="/static/js/src/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+  <!--[if lt IE 7 ]>
+    <script src="/static/js/libs/dd_belatedpng.js"></script>
+    <script>DD_belatedPNG.fix("img, .png_bg");</script>
+  <![endif]-->
+  <script src="/static/js/src/script.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/static/js/libs/jquery.scrollTo.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+function resizeFriendlyContent() {
+	var rnavHeight = $('#region-nav').height();
+	
+	var windowHeight = (function(){
+		var hh = $('header').height();
+		var windowHeight = $(window).height();
+		var padding = 70;
+		return windowHeight-hh-padding;
+	})();
+	
+	if(rnavHeight > 0) {
+		$('#main').css({
+			'height': rnavHeight > windowHeight ? rnavHeight: windowHeight
+		});
+	}
+}
+$(resizeFriendlyContent);
+/*
+$.getJSON('{% url lgas-list %}', function(data) {
+  var items = [];
+
+  $.each(data, function(key, val) {
+    items.push(val);
+  });
+
+  $(function() {
+
+    function change_page(path) {
+      if (path.length > 0)
+        window.location = '/profiles/nigeria/' + path.toLowerCase();
+    }
+
+    $( "#lgas" ).autocomplete({
+      source: items,
+      minLength: 3,
+      select: function( event, ui ) {
+        change_page(ui.item.path);
+      },
+    });
+  });
+
+}); */
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -11,12 +11,13 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys, os, glob
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.append(os.path.abspath('.'))
+sources = glob.glob(os.path.abspath(''.join(['..', os.sep, 'src', os.sep, '*'])))
+sys.path.extend(sources)
 
 # -- General configuration -----------------------------------------------------
 
@@ -90,8 +91,15 @@ pygments_style = 'sphinx'
 # -- Options for HTML output ---------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
-# Sphinx are currently 'default' and 'sphinxdoc'.
-html_theme = 'default'
+# Sphinx are currently 'default' and 'sphinxdoc'
+#html_theme = 'default'
+#html_theme = 'epub'
+#html_theme = 'agogo'
+html_theme = 'nature'
+#html_theme = 'scrolls'
+#html_theme = 'haiku'
+#html_theme = 'sphinxdoc'
+#html_theme = 'traditional'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

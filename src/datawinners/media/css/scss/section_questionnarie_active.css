@@ -1,0 +1,35 @@
+#question_form label {
+  display: block;
+  float: none; }
+#question_form input {
+  float: none; }
+#question_form .questionnaire_code label, #question_form .questionnaire_code input {
+  float: left; }
+#question_form .questionnaire_code input {
+  width: 100px; }
+#question_form .alpha_list {
+  margin-left: 20px; }
+  #question_form .alpha_list input {
+    float: none; }
+  #question_form .alpha_list .error_arrow {
+    float: none !important;
+    background-position: 0px 3px !important; }
+#question_form .new_question {
+  display: none; }
+#question_form #questions-panel {
+  border-right: 1px solid #ececec;
+  margin: 0px 20px 0 20px; }
+  #question_form #questions-panel .question_list li {
+    margin-bottom: 10px; }
+#question_form #range_min, #question_form #range_max {
+  width: 70px;
+  margin-bottom: 10px; }
+#question_form #question-detail-panel {
+  float: left;
+  width: 525px; }
+#question_form #max_length {
+  width: 50px;
+  float: none; }
+#question_form #not_wizard .error_arrow {
+  float: none !important;
+  background-position: left 3px; }

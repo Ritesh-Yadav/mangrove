@@ -1,0 +1,81 @@
+{% extends 'layout_application.html' %}
+{% block page_title %} Dashboard {% endblock %}
+{% block section_title %} Dashboard {% endblock %}
+
+{% load dw_tabs %}
+{% block body %}
+{% activetab "main_nav" "dashboard" %}
+{{ block.super }}
+{% endblock %}
+
+{% block page_scss %}
+    {{ block.super }}
+    <link href="/media/css/scss/section_dashboard.scss" rel="stylesheet" />
+{% endblock %}
+
+{% block page_js %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $( "#how_to" ).accordion({ collapsible: true, active: 0 });
+            $( "#projects" ).accordion({ header: '.project_header', autoHeight: false, collapsible: true,active:100 });
+        })
+    </script>
+{% endblock %}
+
+{% block navigation %}
+    <div class="grid_24 margin_bottom_10">
+        <div class="grid_11 margin_left_null">
+            <a href="{% url datawinners.project.views.create_profile %}" class="button"style="margin-top:-2px;">Create a new project</a><img src="/media/images/help_icon.png" class="help_icon" style="margin-top:-6px;">
+            <div class="tooltip"><p>Follow the easy step-by-step process to create a new project.</p></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="how_to">
+        <h3><span class="title">How to use Datawinners</span><img src="/media/images/help_icon.png" class="help_icon" style="margin-top:-6px;">
+            <div class="tooltip"><p>Get more information on what you can do with DataWinners.</p></div>
+        </h3>
+         <p>
+            DataWinners is the do-it-yourself Data Collection and Communication tool you need to make better decisions.<br />
+            Click on the Create a New Project button to get started.
+         </p>
+    </div>
+
+    <div class="grid_18 margin_left_null dashboard_left">
+        <h4 class="grid_16 omega alpha">Your projects</h4>
+        <div id="projects">
+        {% for project in projects %}
+            <div class="project_header">
+                <span class="header">{{ project.name|capfirst }} </span>
+                <span class="success_error">{{ project.success }} successful |
+                {{ project.errors }} error{{ project.errors|pluralize }}</span>
+            </div>
+            <div>
+                <a class="go_to_project"href="{{ project.link }}">go to this project »</a>
+                {% if not project.inactive %}
+                    {% if project.submissions|length > 0 %}
+                        <table>
+                        {% for submission in project.submissions %}
+                            <tr>
+                                <td>{{ submission.created }}</td>
+                                <td>{{ submission.reporter }}</td>
+                                <td>{{ submission.message }}</td>
+                            </tr>
+                        {% endfor %}
+                        </table>
+                    {% else %}
+                        <strong>No submissions present for this project</strong><br/>
+                    {% endif %}
+                {% else %}
+                        <strong>This project is inactive</strong><br/>
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+        <a class="grid_4  omega alpha view_all_projects" href="{% url datawinners.project.views.index %}">view all projects »</a>
+    </div>
+    <div class="grid_4 alpha omega dashboard_right">
+    </div>
+{% endblock %}

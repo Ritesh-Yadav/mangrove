@@ -1,0 +1,216 @@
+[
+    {
+        "model": "sites.site",
+        "pk": 1,
+        "fields": {
+            "domain": "localhost:8000",
+            "name": "localhost"
+        }
+    },
+    {
+        "model": "sites.site",
+        "pk": 2,
+        "fields": {
+            "domain": "178.79.161.90:8000",
+            "name": "datawinners-showcase"
+        }
+    },
+    {
+        "model": "sites.site",
+        "pk": 3,
+        "fields": {
+            "domain": "datawinners-dev:8000",
+            "name": "Dev"
+        }
+    },
+    {
+        "model": "sites.site",
+        "pk": 4,
+        "fields": {
+            "domain": "173.255.238.6:8000",
+            "name": "CI"
+        }
+    },
+    {
+        "model": "sites.site",
+        "pk": 5,
+        "fields": {
+            "domain": "www.datawinners.com",
+            "name": "beta system"
+        }
+    },
+    {
+        "pk": "SLX364903",
+        "model": "accountmanagement.organization",
+        "fields": {
+            "sector": "PublicHealth",
+            "city": "Pune",
+            "name": "Testorg",
+            "country": "IND",
+            "org_id": "SLX364903",
+            "zipcode": "445676",
+            "website": "https://help.org/",
+            "office_phone": "261333782943",
+            "state": "MH",
+            "address": "Don Bosco Road, Yerwada"
+        }
+    },
+    {
+        "pk": "COJ409579",
+        "model": "accountmanagement.organization",
+        "fields": {
+            "sector": "PublicHealth",
+            "city": "Pune",
+            "name": "Testorg",
+            "country": "IND",
+            "org_id": "COJ409579",
+            "zipcode": "445676",
+            "website": "https://help.org/",
+            "office_phone": "91-99766-76893",
+            "state": "MH",
+            "address": "Don Bosco Road, Yerwada"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "accountmanagement.ngouserprofile",
+        "fields": {
+            "org_id": "SLX364903",
+            "user": 1,
+            "title": "Mr."
+        }
+    },
+    {
+        "pk": 2,
+        "model": "accountmanagement.ngouserprofile",
+        "fields": {
+            "org_id": "COJ409579",
+            "user": 2,
+            "title": "Mr."
+        }
+    } ,
+    {
+        "pk": 1,
+        "model": "accountmanagement.organizationsetting",
+        "fields": {
+            "organization": "SLX364903",
+            "document_store": "hni_testorg_slx364903",
+            "sms_tel_number": "261333782943"
+        }
+    } ,
+    {
+        "pk": 2,
+        "model": "accountmanagement.organizationsetting",
+        "fields": {
+            "organization": "COJ409579",
+            "document_store": "hni_testorg_coj409579",
+            "sms_tel_number": "0123498765"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "registration.registrationprofile",
+        "fields": {
+            "activation_key": "ALREADY_ACTIVATED",
+            "user": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "registration.registrationprofile",
+        "fields": {
+            "activation_key": "20d000226e38f51cf8f29711591d1b3fa4e7481f",
+            "user": 2
+        }
+    },
+    {
+        "pk": 1,
+        "model": "auth.user",
+        "fields": {
+            "username": "tester150411@gmail.com",
+            "first_name": "Tester",
+            "last_name": "Pune",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2011-04-17 04:46:57",
+            "groups": [
+                
+            ],
+            "user_permissions": [
+                
+            ],
+            "password": "sha1$64c7c$408711ddd5e4e6ba7d4865dd350b7509124f3e86",
+            "email": "tester150411@gmail.com",
+            "date_joined": "2011-04-17 04:46:57"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "auth.user",
+        "fields": {
+            "username": "tester@gmail.com",
+            "first_name": "Tester",
+            "last_name": "14-APR-11",
+            "is_active": false,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2011-04-17 04:54:47",
+            "groups": [
+                
+            ],
+            "user_permissions": [
+                
+            ],
+            "password": "sha1$8c72d$7bca3757c08d7e047c4bfa91bc79a26af06ff1c4",
+            "email": "tester@gmail.com",
+            "date_joined": "2011-04-17 04:54:47"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "auth.user",
+        "fields": {
+            "username": "datawinner",
+            "first_name": "datawinner",
+            "last_name": "HNI",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2011-04-17 04:54:47",
+            "groups": [
+
+            ],
+            "user_permissions": [
+
+            ],
+            "password": "sha1$a1ba4$cd5c092fdc9d03a12c7e5ec153f147df6efe5a2a",
+            "email": "datawinner@gmail.com",
+            "date_joined": "2011-04-17 04:54:47"
+        }
+    },
+    {
+        "pk": 1, 
+        "model": "auth.group", 
+        "fields": {
+            "name": "NGO Admins", 
+            "permissions": []
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "auth.group", 
+        "fields": {
+            "name": "Project Managers", 
+            "permissions": []
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "auth.group", 
+        "fields": {
+            "name": "Read Only Users", 
+            "permissions": []
+        }
+    }
+]

@@ -7,37 +7,71 @@
 *.o
 *.so
 *.pyc
+*.jar
 
-# Auto generated files#
+# Auto generated files #
+########################
 docs/_build/*
 .idea
+.buildinfo
+.doctrees
+*.mo
 
-# Packages #
-############
-# it's better to unpack these files and commit the raw source
-# git has its own built in compression methods
-#*.7z
-#*.dmg
-#*.gz
-#*.iso
-#*.jar
-#*.rar
-#*.tar
-#*.zip
-
-# Logs and databases #
-######################
+# Logs, databases, packages #
+#############################
 *.log
 *.sql
 *.sqlite
+*.db
+*.egg
+*.egg-info
+*.swp
 
 # OS generated files #
 ######################
-.DS_Store?
+.DS_Store
 ehthumbs.db
 Icon?
 Thumbs.db
+mangrovedb
 
-# backup files #
-################
+# backup & tmp files #
+######################
 *~
+\#*\#
+*.orig
+*.tmp
+.sass-cache
+
+# OS/editor specific files #
+############################
+ve/
+build/*
+pip-log.txt
+xunit.xml
+.coverage
+coverage.xml
+.idea
+
+# gitflow specific files #
+##########################
+gitflow/
+
+# Local settings files #
+########################
+localsettings.py
+local_settings.py
+
+# Local cache files #
+#####################
+nigeria_regions.json
+
+# Local data files #
+#####################
+src/nmis/data
+
+# SCSS Generated Files #
+src/datawinners/.sass-cache/
+
+# Emacs files
+.ropeproject

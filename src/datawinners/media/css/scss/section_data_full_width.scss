@@ -1,0 +1,61 @@
+table{
+    margin:0;
+}
+
+.container_24{
+    float: left;
+    margin: 0;
+    width: auto;
+    .content{
+        width:auto;
+        padding:0;
+        table td, table th{
+        }
+        > div, > ul{
+            width:100%;
+        }
+        > ul{
+            margin:0px;
+            left:0px;
+        }
+        .data_block{
+            .data_table{
+                width:100%;
+                table{
+                    min-width:100%;
+                    border:1px solid #FFFFFF;
+                    td{
+                         min-width:170px;
+                    }
+                }
+            }
+            width:auto;
+        }
+    }
+}
+#page_title{
+    /*float:left;*/
+    margin: 0 0 0 15px !important;
+}
+#header_application{
+    width:auto;
+    #header_wizard{
+        width:100%;
+        #header_wizard{
+            width:100%;
+
+        }
+    }
+}
+ #header{
+    width:100% !important;
+    .login{
+        float:right;
+    }
+}
+#main_tab{
+    width:100%;
+    .last{
+        padding-right:10px !important;
+    }
+}

@@ -1,0 +1,138 @@
+{% extends 'project/tab_navigation.html' %}
+
+{% block page_title %}Project - Questionnaire {% endblock %}
+
+{% load dw_tabs %}
+
+{% block navigation %}
+    {% activetab "tab_nav" "questionnaire" %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body %}
+    {% activetab "main_nav" "projects" %}
+    {{ block.super }}
+{% endblock %}
+
+{% block page_scss %}
+    {{ block.super }}
+    <link href="/media/css/scss/section_questionnarie_active.scss" rel="stylesheet"/>
+    <link href="/media/css/scss/section_questionnaire_preview.scss" rel="stylesheet"/>
+{% endblock %}
+
+{% block page_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="/media/javascript/project/view_model.js"></script>
+    <script type="text/javascript" src="/media/javascript/jquery.sprintf.js"></script>
+    <script type="text/javascript" src="/media/javascript/project/questionnaire_charcount.js"></script>
+    <script type="text/javascript" src="/media/javascript/project/questionnaire_helper.js"></script>
+    <script type="text/javascript">
+        var question_list = $.parseJSON({{existing_questions|safe}}),
+            quessionarie_preview_link ="{{ project_links.questionnaire_preview_link }}",
+            subject_registration_form_preview_link = "{{ project_links.subject_registration_preview_link }}",
+            sender_registration_form_preview_link = "{{ project_links.sender_registration_preview_link }}";
+    </script>
+    <script type="text/javascript" src="/media/javascript/project/questionnaire_wizard_submit.js"></script>
+    <script type="text/javascript" src="/media/javascript/project/questionnaire_wizard.js"></script>
+    <script type="text/javascript" src="/media/javascript/project/questionnaire_preview.js"></script>
+    <script type="text/javascript" src="/media/javascript/csrf_token_handler.js"></script>
+    <script type="text/html" id="choice-template">
+        <li>
+                <input id="choice_text" name="choice_text" class="required" type="text" data-bind="value: text, uniqueName: true, enable: viewModel.isEnabled()"/>
+                <a href="questionnaire.html#" class='delete delete_link'
+                   data-bind="visible: viewModel.choiceCanBeDeleted(), click:function(){viewModel.removeOptionFromQuestion($data)}">Delete</a>
+        </li>
+    </script>
+    <script type="text/html" id="question-list-template_new">
+        <div class="question_list">
+            <ol>
+            {% templatetag openvariable %}each(i,question) questions{% templatetag closevariable %}
+             <div data-bind="click: function() { if($('#question_form').valid()) viewModel.changeSelectedQuestion(question); } ">
+                 <li>
+                    <a href="questionnaire_wizard.html#" data-bind="text: question.display"></a>
+                     <div data-bind="visible: question.isenabled()" class="question_delete_link delete">
+                         <a href="questionnaire_wizard.html#" class="delete_link" data-bind="click: function() {if($('#question_form').valid()){ viewModel.removeQuestion(question);} else {viewModel.removeIfQuestionIsSelectedQuestion(question);} }">Delete</a>
+                    </div>
+                 </li>
+            </div>
+            {% templatetag openvariable %}/each{% templatetag closevariable %}
+            </ol>
+        </div>
+    </script>
+{% endblock %}
+
+
+{% block step_number %}
+    <h3>Step 3: Questionnaire</h3>
+    <p>Review the question by clicking on each</p>
+{% endblock %}
+{% block content %}
+    <div class="preview_block"><a class="preview" href="#"> Preview Questionnaire </a></div>
+    <form id="question_form">
+    {% csrf_token %}
+        <fieldset>
+            <ul class="questionnaire_code">
+                <li>
+                    <label>Questionnaire Code :</label>
+                    <input id='project-id' type='hidden' value="{{ project.id }}"/>
+                    <input id='questionnaire-code' class='required' disabled="disabled" value="{{ questionnaire_code }}"/>
+                    <img src="/media/images/help_icon.png" class="help_icon" style="margin-top:-6px;">
+                    <div class="tooltip"><p>
+                        <strong>What is this?</strong><br />
+                        All questionnaires have a Unique Questionnaire Code. DataWinners uses this unique code to correctly
+                         identify your questionnaire. Use the recommended code or change it if you like.<br /><br />
+                        <strong>What do I need to do?</strong><br />
+                        Enter a 3 letter code (letters and numbers). This questionnaire code will appear on the printed version
+                        of your questionnaire. Your Data Senders will type in this code first when sending in their data.
+                    </p></div>
+                    <span id="questionnaire-code-error"></span>
+                </li>
+            </ul>
+            <div class="questionnare_content grid_23 alpha omega">
+                <div id="message-label" class="none">
+                </div>
+
+                <div>
+                    <div id="questions-panel" class="grid_8 alpha">
+                        <h4>Questions</h4>
+                        <div data-bind="template: 'question-list-template_new'" ></div>
+                        <div class="add_question">
+                            <a class="add_link" href="questionnaire.html#"
+                               data-bind="click: function() { if($('#question_form').valid()) viewModel.addQuestion();}">Add
+                                another Question</a>
+                        </div>
+                    </div>
+
+                    <div id="question-detail-panel">
+                        <div id="not_wizard">
+                                {% include 'project/question_detail_panel.html' %}
+                        </div>
+                        <div class="grid_1 alpha text_align_right">
+                            <img src="/media/images/help_icon.png" class="help_icon" style="margin-top:-1px;">
+                            <div class="tooltip"><p>
+                                <strong>What is this?</strong><br />
+                                <strong>1 SMS is limited to 160 characters.</strong><br />
+                                The Running Count tallies the questionnaire code, all question codes and
+                                the maximum lengths of all answers and keeps a running count of how many characters you have used out of 160.<br /><br />
+                                <strong>What do I need to do?</strong><br />
+                                Use this count to determine how many questions you can add to the questionnaire and still keep the response within 1 SMS (160 characters).
+                                Don't worry, you can go beyond 160 characters. However, more than one SMS will be required to answer all the questions in your questionnaire.
+                            </p></div>
+                        </div>
+                        <div class="grid_12 alpha omega">
+                            <div id='char-count'>
+                            </div>
+                        </div>
+                        <div class="margin_top_10 float_left">
+                            <input id="submit-button" type="submit" class="button" value="submit" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div class="questionnaire_preview">
+        Generating the questionnaire preview.
+    </div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'layout_application.html' %}
+{% block page_title %} All Projects {% endblock %}
+{% block section_title %} <h2 class="project_title">All Projects</h2> {% endblock %}
+
+{% load dw_tabs %}
+{% block body %}
+    {% activetab "main_nav" "projects" %}
+    {{ block.super }}
+{% endblock %}
+
+
+{% block page_js %}
+    {{ block.super }}
+    <script src="/media/javascript/project/activate_project.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="text_align_right margin_bottom_20">
+        <a href="{% url datawinners.project.views.create_profile %}" class="button">Create a new project</a>
+    </div>
+    <table class="styled_table">
+        <thead>
+        <th> Name</th>
+        <th> Created On</th>
+        <th> Type</th>
+        <th> State</th>
+        <th> Actions</th>
+        </thead>
+        {% for project in projects %}
+            <tr>
+                <td><a href="{{ project.link }}" class='project-id-class'>{{ project.name }}</a></td>
+                <td>{{ project.created }}</td>
+                <td>{{ project.type }}</td>
+                <td>{{ project.state }}</td>
+                <td>
+                    {% if  project.state  != 'Active' %}
+                        <a href="#" class="activate_project">Activate</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <div id="activate_project_block">
+        <p class="warning_message">Warning: Activating the project will remove all existing test data.</p>
+        <a href="#" class="cancel_link" >Cancel</a>
+        <a href="{{ project.activate_link }}" class="button" id="confirm">Activate</a>
+    </div>
+
+{% endblock %}

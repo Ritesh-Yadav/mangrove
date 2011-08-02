@@ -1,0 +1,15 @@
+<div id="mdg-data-widget" class="widget" data-entity-id="{{mdg_table.entity_id}}">
+	<h2>
+		MDG Table for {{ mdg_table.name }}
+	</h2>
+	<h4>
+		Level {{mdg_table.level}}
+	</h4>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	var mdgData = {{ mdg_table.mdg_data|safe }};
+	widgetActivators['mdg_table'] = (function(){
+		$.createMdgTable(mdgData).appendTo('#mdg-data-widget');
+	});
+</script>
