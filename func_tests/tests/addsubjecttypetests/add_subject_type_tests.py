@@ -5,7 +5,7 @@ from framework.utils.data_fetcher import from_, fetch_
 from pages.addsubjecttypepage.add_subject_type_page import AddSubjectTypePage
 from pages.loginpage.login_page import LoginPage
 from nose.plugins.skip import SkipTest
-from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_ADD_SUBJECT_TYPE
+from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_ADD_SUBJECT
 from tests.addsubjecttypetests.add_subject_type_data import *
 from tests.logintests.login_data import VALID_CREDENTIALS
 
@@ -17,7 +17,7 @@ class TestAddSubjectType(BaseTest):
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
         login_page = LoginPage(self.driver)
         login_page.do_successful_login_with(VALID_CREDENTIALS)
-        self.driver.go_to(DATA_WINNER_ADD_SUBJECT_TYPE)
+        self.driver.go_to(DATA_WINNER_ADD_SUBJECT)
         return AddSubjectTypePage(self.driver)
     @SkipTest
     @attr('functional_test', 'smoke')

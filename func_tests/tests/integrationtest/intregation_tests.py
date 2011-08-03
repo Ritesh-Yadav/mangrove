@@ -11,7 +11,7 @@ from pages.addsubjecttypepage.add_subject_type_page import AddSubjectTypePage
 from pages.loginpage.login_page import LoginPage
 from nose.plugins.skip import SkipTest
 from pages.smstesterpage.sms_tester_page import SMSTesterPage
-from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_ADD_SUBJECT_TYPE, DATA_WINNER_SMS_TESTER_PAGE
+from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_ADD_SUBJECT, DATA_WINNER_SMS_TESTER_PAGE
 from tests.integrationtest.intregation_data import *
 
 
@@ -60,7 +60,7 @@ class TestIntregationOfApplication(BaseTest):
         register_reporter_page.register_with(VALID_DATA_FOR_REPORTER)
         self.assertRegexpMatches(register_reporter_page.get_success_message(), fetch_(SUCCESS_MESSAGE, from_(VALID_DATA_FOR_REPORTER)))
 
-        self.driver.go_to(DATA_WINNER_ADD_SUBJECT_TYPE)
+        self.driver.go_to(DATA_WINNER_ADD_SUBJECT)
         add_subject_type_page = AddSubjectTypePage(self.driver)
         add_subject_type_page.add_entity_type_with(VALID_SUBJECT_TYPE1)
         self.assertEqual(add_subject_type_page.get_flash_message(), fetch_(SUCCESS_MESSAGE, from_(VALID_SUBJECT_TYPE1)))
