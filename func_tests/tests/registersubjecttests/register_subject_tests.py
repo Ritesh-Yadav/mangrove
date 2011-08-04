@@ -48,7 +48,6 @@ class TestRegisterSubject(BaseTest):
         message = register_subject_page.successfully_register_subject_with(AUTO_GENERATE_FALSE)
         self.assertRegexpMatches(register_subject_page.get_flash_message(), message)
 
-    @SkipTest
     @attr('functional_test')
     def test_registration_of_subject_without_location_name(self):
         """
@@ -56,4 +55,58 @@ class TestRegisterSubject(BaseTest):
         """
         register_subject_page = self.prerequisites_of_register_subject()
         message = register_subject_page.successfully_register_subject_with(WITHOUT_LOCATION_NAME)
-        self.assertEqual(register_subject_page.get_flash_message(), message)
+        self.assertRegexpMatches(register_subject_page.get_flash_message(), message)
+
+    @attr('functional_test')
+    def test_registration_of_subject_without_gps(self):
+        """
+        Function to test the registration of subject without GPS
+        """
+        register_subject_page = self.prerequisites_of_register_subject()
+        message = register_subject_page.successfully_register_subject_with(WITHOUT_GPS)
+        self.assertRegexpMatches(register_subject_page.get_flash_message(), message)
+
+    @attr('functional_test')
+    def test_registration_of_subject_invalid_latitude_gps(self):
+        """
+        Function to test the registration of subject with invalid latitude
+        """
+        register_subject_page = self.prerequisites_of_register_subject()
+        message = register_subject_page.register_subject_with(INVALID_LATITUDE_GPS)
+        self.assertEqual(register_subject_page.get_error_message(), message)
+
+    @attr('functional_test')
+    def test_registration_of_subject_invalid_longitude_gps(self):
+        """
+        Function to test the registration of subject with invalid latitude
+        """
+        register_subject_page = self.prerequisites_of_register_subject()
+        message = register_subject_page.register_subject_with(INVALID_LONGITUDE_GPS)
+        self.assertEqual(register_subject_page.get_error_message(), message)
+
+    @attr('functional_test')
+    def test_registration_of_subject_invalid_gps(self):
+        """
+        Function to test the registration of subject with invalid gps
+        """
+        register_subject_page = self.prerequisites_of_register_subject()
+        message = register_subject_page.register_subject_with(INVALID_GPS)
+        self.assertEqual(register_subject_page.get_error_message(), message)
+
+    @attr('functional_test')
+    def test_registration_of_subject_invalid_gps_with_comma(self):
+        """
+        Function to test the registration of subject with invalid gps with comma
+        """
+        register_subject_page = self.prerequisites_of_register_subject()
+        message = register_subject_page.register_subject_with(INVALID_GPS_WITH_COMMA)
+        self.assertEqual(register_subject_page.get_error_message(), message)
+
+    @attr('functional_test')
+    def test_registration_of_subject_with_unicode_in_gps(self):
+        """
+        Function to test the registration of subject with unicode in GPS
+        """
+        register_subject_page = self.prerequisites_of_register_subject()
+        message = register_subject_page.register_subject_with(WITH_UNICODE_IN_GPS)
+        self.assertEqual(register_subject_page.get_error_message(), message)

@@ -10,6 +10,7 @@ class TextBox (WebElement):
         self.webElement = textBoxWebElement
 
     def enter_text(self, textToBeEntered):
+        self.webElement.click()
         self.webElement.clear()
         self.webElement.send_keys(textToBeEntered)
         return self

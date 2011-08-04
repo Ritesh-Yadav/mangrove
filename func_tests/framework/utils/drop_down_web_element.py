@@ -37,5 +37,5 @@ class DropDown (WebElement):
         """
         for option in self.selectOptions:
             value = option.get_attribute("value")
-            if option.get_attribute("value") == itemText:
-                option.select()
+            if value == itemText:
+                option.click()

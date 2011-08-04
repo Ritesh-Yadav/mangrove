@@ -1,7 +1,8 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 import time
 from framework.utils.common_utils import generateId, CommonUtilities
-
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 from pages.page import Page
 from framework.utils.data_fetcher import *
 from pages.registersubjectpage.register_subject_locator import *

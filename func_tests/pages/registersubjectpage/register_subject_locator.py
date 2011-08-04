@@ -30,5 +30,5 @@ DESCRIPTION_TB = by_css("textarea#description")
 MOBILE_NUMBER_TB = by_css("input#mobile_number")
 
 ADD_BTN = by_css("input#register_entity")
-ERROR_MESSAGE_LABEL = by_xpath("//div[@class='error_message message-box'] | //label[@class='error']")
+ERROR_MESSAGE_LABEL = by_xpath("//div[@class='error_message message-box'] | //label[@class='error']/../../..")
 FLASH_MESSAGE_LABEL = by_xpath("//div[@class='success-message-box' and not(contains(@id,'none'))]")
