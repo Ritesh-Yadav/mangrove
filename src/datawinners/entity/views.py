@@ -22,6 +22,7 @@ from mangrove.transport.submissions import SubmissionHandler
 from mangrove.utils.types import is_empty
 from datawinners.entity import import_data as import_module
 
+COUNTRY = ',MADAGASCAR'
 
 def _validate_post_data(dbm, request):
     form = ReporterRegistrationForm(request.POST)
@@ -58,7 +59,7 @@ def _get_data(form_data):
     telephone_number = form_data.get('telephone_number')
     if telephone_number is not None:
         data[mapper['telephone_number']] = _get_telephone_number(telephone_number)
-    data[mapper['location']] = form_data.get('location')
+    data[mapper['location']] = form_data.get('location')+ COUNTRY if form_data.get('location') is not None else None
     data[mapper['geo_code']] = form_data.get('geo_code')
     data[mapper['Name']] = form_data.get('first_name')
     data['form_code'] = REGISTRATION_FORM_CODE
@@ -92,19 +93,14 @@ def _get_submission(post):
 @require_http_methods(['POST'])
 @login_required(login_url='/login')
 def submit(request):
-    mapper = {'telephone_number': MOBILE_NUMBER_FIELD_CODE, 'geo_code': GEO_CODE, 'Name': NAME_FIELD_CODE,
-              'location': LOCATION_TYPE_FIELD_CODE}
     dbm = get_database_manager(request)
     post = _get_submission(request.POST)
     success = True
     try:
         web_player = WebPlayer(dbm, SubmissionHandler(dbm), LocationTree())
         message = {k: v for (k, v) in post.get('message').items() if not is_empty(v)}
-#        display_location = message.get(mapper['location'])
-#        geo_code = message.get(mapper['geo_code'])
-#        location_hierarchy = _get_location_hierarchy(display_location, geo_code)
-#        if location_hierarchy is  not None:
-#            message[mapper['location']] = display_location
+        if message.get(LOCATION_TYPE_FIELD_CODE) is not None:
+            message[LOCATION_TYPE_FIELD_CODE]+= COUNTRY
         request = Request(message=message,
                           transportInfo=TransportInfo(transport=post.get('transport'), source=post.get('source'),
                                                       destination=post.get('destination')))
@@ -122,9 +118,6 @@ def submit(request):
 
 
 def create_datasender(request):
-    """
-
-    """
     if request.method == 'GET':
         form = ReporterRegistrationForm()
         return render_to_response('entity/create_datasender.html', {'form': form},
@@ -141,7 +134,6 @@ def create_datasender(request):
 
 
 def create_type(request):
-    message = ""
     success = False
     form = EntityTypeForm(request.POST)
     if form.is_valid():

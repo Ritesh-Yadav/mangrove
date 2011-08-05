@@ -79,10 +79,6 @@ class Player(object):
         self.submission_handler = submission_handler
         self.location_tree = location_tree
 
-    def _generate_location_hierarchy_if_registration_form(self, values):
-        location_hierarchy = self._get_location_hierarchy(values)
-        values[LOCATION_TYPE_FIELD_CODE] = location_hierarchy
-
     def submit(self, dbm, submission_handler, transportInfo, form_code, values, reporter_entity=None):
         self._handle_registration_form(dbm, form_code, values)
         submission_request = SubmissionRequest(form_code=form_code, submission=values, transport=transportInfo.transport,
@@ -94,29 +90,39 @@ class Player(object):
     def _get_location_heirarchy_from_location_name(self, display_location):
         if is_empty(display_location):
             return None
-        lowest_level_location = display_location.split(',')[0]
+        display_location_list = display_location.lower().split(',')
+        if len(display_location_list) > 1:
+            display_location_list.reverse()
+            return display_location_list
+        lowest_level_location = display_location_list[0]
         tree = self.location_tree
         location_hierarchy = tree.get_hierarchy_path(lowest_level_location)
         return location_hierarchy
 
 
-    def _get_location_hierarchy(self, values):
+    def _get_location_data(self, values):
         display_location, geo_code = values.get(LOCATION_TYPE_FIELD_CODE), values.get(GEO_CODE)
         location_hierarchy = self._get_location_heirarchy_from_location_name(display_location)
-        if location_hierarchy is None and geo_code is not None:
-            tree = self.location_tree
+        tree = self.location_tree
+        if location_hierarchy is None and not is_empty(geo_code):
             try:
                 lat_string, long_string = tuple(geo_code.split())
                 location_hierarchy = tree.get_location_hierarchy_for_geocode(lat=float(lat_string), long=float(long_string))
             except ValueError as e:
                 raise GeoCodeFormatException(e.args)
-        return location_hierarchy
+        elif location_hierarchy is not None and is_empty(geo_code):
+            try:
+                translated_geo_code = tree.get_centroid(display_location.split(',')[0],len(location_hierarchy)-1)
+                values[GEO_CODE] = "%s %s" % (translated_geo_code[1], translated_geo_code[0])
+            except Exception:
+                pass
+        values[LOCATION_TYPE_FIELD_CODE] = location_hierarchy
 
     def _handle_registration_form(self, dbm, form_code, values):
         form_model = get_form_model_by_code(dbm, form_code)
         if form_model.is_registration_form():
             _generate_short_code_if_registration_form(dbm, form_model, values)
-            self._generate_location_hierarchy_if_registration_form(values)
+            self._get_location_data(values)
 
 
 class SMSPlayer(Player):

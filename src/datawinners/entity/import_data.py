@@ -4,7 +4,7 @@ from datawinners import settings
 from datawinners.location.LocationTree import LocationTree
 from datawinners.main.utils import get_database_manager
 from datawinners.entity.entity_exceptions import InvalidFileFormatException
-from mangrove.datastore.entity import get_all_entities, get_by_short_code
+from mangrove.datastore.entity import get_all_entities, get_by_short_code, Entity
 from mangrove.errors.MangroveException import CSVParserInvalidHeaderFormatException, XlsParserInvalidHeaderFormatException
 from mangrove.form_model.form_model import NAME_FIELD, MOBILE_NUMBER_FIELD, DESCRIPTION_FIELD
 from mangrove.transport.player.parser import CsvParser, XlsParser
@@ -25,14 +25,18 @@ def tabulate_failures(rows):
     return tabulated_data
 
 
+def _format(value):
+    return value if value else "--"
+
+
 def _tabulate_data(entity, row, short_code, type):
     id = row['id']
-    name = entity.value(NAME_FIELD) if entity.value(NAME_FIELD) else "--"
+    name = _format(entity.value(NAME_FIELD))
     geocode = row['doc']['geometry'].get('coordinates')
-    geocode_string = ", ".join([str(i) for i in geocode]) if geocode else "--"
-    location = sequence_to_str(entity.location_path) if sequence_to_str(entity.location_path) != "" else "--"
-    mobile_number = entity.value(MOBILE_NUMBER_FIELD) if entity.value(MOBILE_NUMBER_FIELD) else "--"
-    description = entity.value(DESCRIPTION_FIELD) if entity.value(DESCRIPTION_FIELD) else "--"
+    geocode_string = ", ".join([str(i) for i in geocode]) if geocode is not None else "--"
+    location = _format(sequence_to_str(entity.location_path))
+    mobile_number = _format(entity.value(MOBILE_NUMBER_FIELD))
+    description = _format(entity.value(DESCRIPTION_FIELD))
     return dict(id=id, name=name, short_name=short_code, type=type, geocode=geocode_string, location=location,
                 description=description, mobile_number=mobile_number)
 
@@ -44,7 +48,7 @@ def _get_entity_type_from_row(row):
 
 def _get_entity_for_row(manager, row, type):
     short_code = row['doc']['short_code']
-    entity = get_by_short_code(dbm=manager, short_code=short_code, entity_type=type)
+    entity = Entity.new_from_doc(dbm=manager, doc=Entity.__document_class__.wrap(row.get('doc')))
     return entity, short_code
 
 

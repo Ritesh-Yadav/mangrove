@@ -1,6 +1,8 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
+import time
 from framework.utils.common_utils import generateId, CommonUtilities
-
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 from pages.page import Page
 from framework.utils.data_fetcher import *
 from pages.registersubjectpage.register_subject_locator import *
@@ -8,7 +10,6 @@ from tests.registersubjecttests.register_subject_data import *
 
 
 class RegisterSubjectPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 
@@ -32,26 +33,24 @@ class RegisterSubjectPage(Page):
         Return flash message
         """
         entity_type = fetch_(ENTITY_TYPE, from_(registration_data))
-        self.driver.execute_script("document.getElementById('id_entity_type').value = '" + entity_type + "';")
-        self.driver.find_drop_down(ENTITY_TYPE_DD).set_selected(entity_type)
-#        self.driver.find_drop_down(ENTITY_TYPE_DD).set_selected(
-#            DROP_DOWN_OPTION_CSS % entity_type)
+        self.driver.find(ENTITY_TYPE_DD).click()
+        self.driver.find(by_css(DROP_DOWN_OPTION_CSS % entity_type)).click()
+        self.driver.find_text_box(NAME_TB).enter_text(fetch_(NAME, from_(registration_data)))
         short_name = fetch_(SHORT_NAME, from_(registration_data))
         if not fetch_(AUTO_GENERATE, from_(registration_data)):
             self.driver.find(AUTO_GENERATE_CB).click()
             short_name = short_name + generateId()
-            self.driver.find_text_box(SHORT_NAME_ENABLED_TB).enter_text()
-        self.driver.find_text_box(NAME_TB).enter_text(
-            fetch_(NAME, from_(registration_data)))
+            time.sleep(3)
+            self.driver.find_text_box(SHORT_NAME_ENABLED_TB).enter_text(short_name)
         self.driver.find_text_box(LOCATION_TB).enter_text(
             fetch_(LOCATION, from_(registration_data)))
         self.driver.find_text_box(GEO_CODE_TB).enter_text(
-            fetch_(GEO_CODE, from_(registration_data)))
+            fetch_(GPS, from_(registration_data)))
         self.driver.find_text_box(DESCRIPTION_TB).enter_text(
             fetch_(DESCRIPTION, from_(registration_data)))
         self.driver.find_text_box(MOBILE_NUMBER_TB).enter_text(
             fetch_(MOBILE_NUMBER, from_(registration_data)))
-        self.driver.find(REGISTER_BTN).click()
+        self.driver.find(ADD_BTN).click()
         return fetch_(SUCCESS_MSG, from_(registration_data)) + short_name
 
     def register_subject_with(self, registration_data):
@@ -67,22 +66,23 @@ class RegisterSubjectPage(Page):
         entity_type = fetch_(ENTITY_TYPE, from_(registration_data))
         self.driver.find_drop_down(ENTITY_TYPE_DD).click()
         self.driver.find(by_css(DROP_DOWN_OPTION_CSS % entity_type)).click()
+        self.driver.find_text_box(NAME_TB).enter_text(
+            fetch_(NAME, from_(registration_data)))
         short_name = fetch_(SHORT_NAME, from_(registration_data))
         if not fetch_(AUTO_GENERATE, from_(registration_data)):
             self.driver.find(AUTO_GENERATE_CB).click()
-            self.driver.find_text_box(SHORT_NAME_ENABLED_TB).enter_text()
-        self.driver.find_text_box(NAME_TB).enter_text(
-            fetch_(NAME, from_(registration_data)))
+            time.sleep(3)
+            self.driver.find_text_box(SHORT_NAME_ENABLED_TB).enter_text(short_name)
         self.driver.find_text_box(LOCATION_TB).enter_text(
             fetch_(LOCATION, from_(registration_data)))
         self.driver.find_text_box(GEO_CODE_TB).enter_text(
-            fetch_(GEO_CODE, from_(registration_data)))
+            fetch_(GPS, from_(registration_data)))
         self.driver.find_text_box(DESCRIPTION_TB).enter_text(
             fetch_(DESCRIPTION, from_(registration_data)))
         self.driver.find_text_box(MOBILE_NUMBER_TB).enter_text(
             fetch_(MOBILE_NUMBER, from_(registration_data)))
-        self.driver.find(REGISTER_BTN).click()
-        return self
+        self.driver.find(ADD_BTN).click()
+        return fetch_(ERROR_MSG, from_(registration_data))
 
     def get_error_message(self):
         """
@@ -96,7 +96,7 @@ class RegisterSubjectPage(Page):
         if locators:
             for locator in locators:
                 error_message = error_message + locator.text
-        return error_message.replace("\n", " ")
+        return str(error_message.replace("\n", " "))
 
     def get_flash_message(self):
         """
