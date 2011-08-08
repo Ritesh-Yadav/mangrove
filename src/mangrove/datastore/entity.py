@@ -18,7 +18,7 @@ ENTITY_TYPE_TREE = u'entity_type_tree'
 
 def _check_if_exists(dbm, entity_type, short_code):
     try:
-        existing_entity = get_by_short_code(dbm, short_code, entity_type)
+        get_by_short_code(dbm, short_code, entity_type)
         return True
     except DataObjectNotFound:
         return False
@@ -34,7 +34,7 @@ def create_entity(dbm, entity_type, short_code, location=None, aggregation_paths
     """
     assert is_string(short_code) and not is_empty(short_code)
     assert type(entity_type) is list and not is_empty(entity_type)
-    type_hierarchy = [e_type.lower() for e_type in entity_type]
+    type_hierarchy = [e_type for e_type in entity_type]
     if not entity_type_already_defined(dbm, type_hierarchy):
         raise EntityTypeDoesNotExistsException(entity_type)
     if _check_if_exists(dbm,type_hierarchy,short_code):
@@ -332,6 +332,10 @@ class Entity(DataObject):
     def short_code(self):
         return self._doc.short_code
 
+    @property
+    def data(self):
+        return self._doc.data
+
     def set_aggregation_path(self, name, path):
         assert self._doc is not None
         assert is_string(name) and is_not_empty(name)
@@ -367,7 +371,7 @@ class Entity(DataObject):
         for (label, value, dd_type) in data:
             if not isinstance(dd_type, DataDictType) or is_empty(label):
                 raise ValueError(u'Data must be of the form (label, value, DataDictType).')
-
+        self.update_latest_data(data=data)
         if multiple_records:
             data_list = []
             for (label, value, dd_type) in data:
@@ -388,6 +392,10 @@ class Entity(DataObject):
             )
             return self._dbm._save_document(data_record_doc)
 
+    def update_latest_data(self,data):
+        for (label, value, dd_type) in data:
+            self.data[label] = {'value': value, 'type': dd_type._doc.unwrap()}
+        self.save()
 
     def invalidate_data(self, uid):
         """
@@ -472,8 +480,8 @@ class Entity(DataObject):
         assert isinstance(label, DataDictType) or is_string(label)
         if isinstance(label, DataDictType):
             label = label.slug
-
-        return self.values({label: u'latest'})[label]
+        field = self.data.get(label)
+        return field.get('value') if field is not None else None
 
     def values(self, aggregation_rules, asof=None):
         """
