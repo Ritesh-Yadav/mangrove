@@ -4,6 +4,7 @@ from nose.plugins.attrib import attr
 
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
+from framework.utils.database_manager_postgres import DatabaseManager
 from pages.registrationpage.registration_page import RegistrationPage
 from registration_data import *
 from testdata.test_data import DATA_WINNER_REGISTER_PAGE
@@ -20,6 +21,8 @@ class TestRegistrationPage(BaseTest):
         self.assertEquals(registration_confirmation_page.registration_success_message(),
             fetch_(SUCCESS_MESSAGE,
                    from_(REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION)))
+        dbmanager = DatabaseManager()
+        dbmanager.delete_organization_all_details(email)
 
     @attr('functional_test')
     def test_register_ngo_with_existing_email_address(self):
