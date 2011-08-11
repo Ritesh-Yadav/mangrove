@@ -2,7 +2,7 @@
 from selenium.webdriver.common.by import By
 
 from pages.page import Page
-from pages.dashboardpage.dashboard_page import DashboardPage
+from pages.globalnavigationpage.global_navigation_page import Page
 from pages.registrationpage.registration_page import  RegistrationPage
 from framework.utils.common_utils import CommonUtilities, generateId
 from framework.utils.data_fetcher import from_, fetch_
@@ -27,7 +27,7 @@ class AddSubjectTypePage(Page):
         entity_type = fetch_(ENTITY_TYPE, from_(entity_data)) + generateId()
         self.driver.find_text_box(NEW_SUBJECT_TB).enter_text(entity_type)
         self.driver.find(ADD_BTN).click()
-        return self
+        return entity_type
 
     def add_entity_type_with(self, entity_data):
         """
@@ -51,11 +51,11 @@ class AddSubjectTypePage(Page):
         """
         return self.driver.find(ERROR_MESSAGE_LABEL).text
 
-    def get_flash_message(self):
+    def click_on_accordian_link(self):
         """
-        Function to fetch the success message from flash label of the Add a new subject type
-        page
+        Function to open/close the accordian of the add a subject type
 
-        Return flash message
+        Return self
         """
-        return self.driver.find(FLASH_MESSAGE_LABEL).text
+        self.driver.find(ADD_NEW_SUBJECT_TYPE_LINK).click()
+        return self

@@ -19,7 +19,7 @@ class ProjectsPage(Page):
         self.driver.find(CREATE_A_NEW_PROJECT_LINK).click()
         return CreateProjectPage(self.driver)
 
-    def navigate_to_project_page(self, project_name):
+    def navigate_to_project_overview_page(self, project_name):
         """
         Function to navigate to specific project overview page
 

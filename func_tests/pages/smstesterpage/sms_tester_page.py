@@ -55,7 +55,7 @@ class SMSTesterPage(Page):
         """
         error_message = ""
         comm_utils = CommonUtilities(self.driver)
-        comm_utils.wait_for_element(10,ERROR_MESSAGE_LABEL)
+        comm_utils.wait_for_element(10, ERROR_MESSAGE_LABEL)
         locators = self.driver.find_elements_(ERROR_MESSAGE_LABEL)
         if locators:
             for locator in locators:

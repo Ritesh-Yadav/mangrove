@@ -99,4 +99,4 @@ class DatabaseManager(object):
 
 if __name__ == "__main__":
     db = DatabaseManager()
-    dbname = db.set_sms_telephone_number(123456,"tester150411@gmail.com")
+    dbname = db.set_sms_telephone_number(123456, "tester150411@gmail.com")

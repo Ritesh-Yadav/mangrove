@@ -68,7 +68,7 @@ class DriverWrapper(object):
             return self.driver.find_element(by=locator_dict[BY],
                                             value=locator_dict[LOCATOR])
         except NoSuchElementException as e:
-            raise CouldNotLocateElementException(selector=locator_dict[BY],locator=locator_dict[LOCATOR])
+            raise CouldNotLocateElementException(selector=locator_dict[BY], locator=locator_dict[LOCATOR])
 
     def find_elements_(self, locator_dict):
         """

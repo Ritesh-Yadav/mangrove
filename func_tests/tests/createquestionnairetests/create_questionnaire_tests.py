@@ -3,6 +3,7 @@ from nose.plugins.attrib import attr
 from nose.plugins.skip import SkipTest
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
+from pages.dashboardpage.dashboard_page import DashboardPage
 from pages.loginpage.login_page import LoginPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
@@ -17,7 +18,8 @@ class TestCreateQuestionnaire(BaseTest):
         # doing successful login with valid credentials
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
         login_page = LoginPage(self.driver)
-        dashboard_page = login_page.do_successful_login_with(VALID_CREDENTIALS)
+        login_page.do_successful_login_with(VALID_CREDENTIALS)
+        dashboard_page = DashboardPage(self.driver)
         # going on setup project page
         create_project_page = dashboard_page.navigate_to_create_project_page()
         #Navigating to Create Questionnaire Page by successfully creating a Project

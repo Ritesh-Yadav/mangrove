@@ -19,8 +19,8 @@ LOCATOR = "locator"
 BY = "by"
 
 # List of all the locators related to login page
-NEW_SUBJECT_TB = by_css("input#id_entity_type")
-ADD_BTN = by_css("input[value='Add']")
+ADD_NEW_SUBJECT_TYPE_LINK = by_css("a#add_new_subject_type")
+NEW_SUBJECT_TB = by_css("div[class~='ui-accordion-content-active']>input#id_entity_type_text")
+ADD_BTN = by_css("div[class~='ui-accordion-content-active']>input#add_type")
 
-ERROR_MESSAGE_LABEL = by_css("ul.errorlist>li")
-FLASH_MESSAGE_LABEL = by_xpath("//div[@id='flash-message' and not(contains(@style,'none'))]")
+ERROR_MESSAGE_LABEL = by_css("div[class~='ui-accordion-content-active']>div#type_message.message-box")

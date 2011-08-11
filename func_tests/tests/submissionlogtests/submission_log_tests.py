@@ -25,13 +25,9 @@ class TestSubmissionLog(BaseTest):
         sms_tester_page.send_sms_with(sms_data)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(MESSAGE, from_(sms_data)))
         self.driver.go_to(DATA_WINNER_DASHBOARD_PAGE)
-        time.sleep(5)
         view_all_project_page = dashboard_page.navigate_to_view_all_project_page()
-        time.sleep(3)
-        project_overview_project = view_all_project_page.navigate_to_project_page(PROJECT_NAME)
-        time.sleep(3)
+        project_overview_project = view_all_project_page.navigate_to_project_overview_page(PROJECT_NAME)
         data_page = project_overview_project.navigate_to_data_page()
-        time.sleep(3)
         submission_log_page = data_page.navigate_to_all_data_record_page()
         return submission_log_page
 

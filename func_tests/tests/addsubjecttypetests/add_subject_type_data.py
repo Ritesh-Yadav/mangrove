@@ -6,8 +6,9 @@ ERROR_MESSAGE = 'message'
 SUCCESS_MESSAGE = 'message'
 
 # valid entity data
-VALID_ENTITY = {ENTITY_TYPE: "Hospital", SUCCESS_MESSAGE: "Entity definition successful"}
+VALID_ENTITY = {ENTITY_TYPE: "Hospital", SUCCESS_MESSAGE: "hospital"}
 # already exist entity
-ALREADY_EXIST_ENTITY = {ENTITY_TYPE: "clinic", ERROR_MESSAGE: "Type: clinic is already defined"}
+ALREADY_EXIST_ENTITY = {ENTITY_TYPE: "clinic", ERROR_MESSAGE: "This subject has already been added."}
 # Blank entity
-BLANK = {ENTITY_TYPE: "", ERROR_MESSAGE: "This field is required."}
+BLANK = {ENTITY_TYPE: "", ERROR_MESSAGE: "Only letters and numbers are valid"}
+INVALID_ENTITY = {ENTITY_TYPE: "w@terpo!nt", ERROR_MESSAGE: "Only letters and numbers are valid"}

@@ -12,7 +12,7 @@ from pages.loginpage.login_page import LoginPage
 from nose.plugins.skip import SkipTest
 from pages.smstesterpage.sms_tester_page import SMSTesterPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_ADD_SUBJECT, DATA_WINNER_SMS_TESTER_PAGE
-from tests.integrationtest.intregation_data import *
+from tests.endtoendtest.end_to_end_data import *
 
 
 class TestIntregationOfApplication(BaseTest):
@@ -60,14 +60,17 @@ class TestIntregationOfApplication(BaseTest):
         register_reporter_page.register_with(VALID_DATA_FOR_REPORTER)
         self.assertRegexpMatches(register_reporter_page.get_success_message(), fetch_(SUCCESS_MESSAGE, from_(VALID_DATA_FOR_REPORTER)))
 
-        self.driver.go_to(DATA_WINNER_ADD_SUBJECT)
+        dashboard_page.navigate_to_register_subject_page()
         add_subject_type_page = AddSubjectTypePage(self.driver)
-        add_subject_type_page.add_entity_type_with(VALID_SUBJECT_TYPE1)
-        self.assertEqual(add_subject_type_page.get_flash_message(), fetch_(SUCCESS_MESSAGE, from_(VALID_SUBJECT_TYPE1)))
+        add_subject_type_page.click_on_accordian_link()
+        entity_type = add_subject_type_page.add_entity_type_with(VALID_SUBJECT_TYPE1)
+        time.sleep(2)
+        add_subject_page = RegisterSubjectPage(self.driver)
+        self.assertEqual(add_subject_page.get_selected_subject(), entity_type.lower())
+        add_subject_type_page.click_on_accordian_link()
         add_subject_type_page.add_entity_type_with(VALID_SUBJECT_TYPE2)
         self.assertEqual(add_subject_type_page.get_flash_message(), fetch_(SUCCESS_MESSAGE, from_(VALID_SUBJECT_TYPE2)))
 
-        self.driver.go_to(DATA_WINNER_HOME_PAGE)
         register_subject_page = dashboard_page.navigate_to_register_subject_page()
         message = register_subject_page.successfully_register_subject_with(VALID_DATA_FOR_SUBJECT)
         self.assertRegexpMatches(register_subject_page.get_flash_message(), message)

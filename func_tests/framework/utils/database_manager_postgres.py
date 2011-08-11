@@ -65,7 +65,7 @@ class DatabaseManager(object):
             cur = con.cursor()
             cur.execute("update accountmanagement_organizationsetting set sms_tel_number=%s where \
                   organization_id=(select org_id from accountmanagement_ngouserprofile where \
-                  user_id=(select id from auth_user where email=%s));" , (telephone_number, email))
+                  user_id=(select id from auth_user where email=%s));", (telephone_number, email))
             con.commit()
         except Exception as e:
             print e

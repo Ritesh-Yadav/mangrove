@@ -108,3 +108,11 @@ class RegisterSubjectPage(Page):
         comm_utils = CommonUtilities(self.driver)
         comm_utils.wait_for_element(5, FLASH_MESSAGE_LABEL)
         return self.driver.find(FLASH_MESSAGE_LABEL).text
+
+    def get_selected_subject(self):
+        """
+        Function to fetch the selected subject from the drop down
+
+        Return message
+        """
+        return self.driver.find_drop_down(ENTITY_TYPE_DD).get_selected()

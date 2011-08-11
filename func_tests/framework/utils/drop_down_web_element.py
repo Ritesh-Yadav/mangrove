@@ -20,8 +20,7 @@ class DropDown (WebElement):
         """
         for option in self.selectOptions:
             if option.is_selected():
-                return option.get_text()
-
+                return option.get_attribute("value")
         return None
 
     def is_selected(self, itemText):

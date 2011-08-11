@@ -1,6 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 
 from framework.utils.data_fetcher import *
+from pages.createdatasenderquestionnairepage.create_data_sender_questionnaire_page import CreateDataSenderQuestionnairePage
 from pages.createquestionnairepage.create_questionnaire_locator import *
 from tests.createquestionnairetests.create_questionnaire_data import *
 from framework.utils.common_utils import generateId
@@ -46,6 +47,15 @@ class CreateQuestionnairePage(Page):
             self.fill_question_and_code_tb(question)
             self.SELECT_FUNC[fetch_(TYPE, from_(question))](question)
         return self
+
+    def save_questionnaire_successfully(self):
+        """
+        Function to save the questionnaire page successfully
+
+        return self
+        """
+        self.driver.find(SAVE_CHANGES_BTN).click()
+        return CreateDataSenderQuestionnairePage(self.driver)
 
     def save_questionnaire(self):
         """

@@ -2,7 +2,7 @@
 from selenium.webdriver.common.by import By
 
 from pages.page import Page
-from pages.dashboardpage.dashboard_page import DashboardPage
+from pages.globalnavigationpage.global_navigation_page import GlobalNavigationPage
 from pages.registrationpage.registration_page import  RegistrationPage
 from framework.utils.common_utils import CommonUtilities
 from framework.utils.data_fetcher import *
@@ -22,12 +22,12 @@ class LoginPage(Page):
         Args:
         'login_credential' is valid login credentials of the user
 
-        Return DashboardPage on successful login
+        Return GlobalNavigationPage on successful login
         """
         self.driver.find_text_box(EMAIL_TB).enter_text(fetch_(USERNAME, from_(login_credential)))
         self.driver.find_text_box(PASSWORD_TB).enter_text(fetch_(PASSWORD, from_(login_credential)))
         self.driver.find(LOGIN_BTN).click()
-        return DashboardPage(self.driver)
+        return GlobalNavigationPage(self.driver)
 
     def login_with(self, login_credential):
         """

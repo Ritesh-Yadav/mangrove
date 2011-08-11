@@ -24,7 +24,7 @@ class TestRegisterReporter(BaseTest):
         # doing reporter registration
         self.driver.go_to(DATA_WINNER_CREATE_DATA_SENDERS)
         return ReporterRegistrationPage(self.driver)
-    @SkipTest
+
     @attr('functional_test', 'smoke')
     def test_successful_registration_of_reporter(self):
         """
@@ -35,7 +35,7 @@ class TestRegisterReporter(BaseTest):
         register_reporter_page.register_with(VALID_DATA)
         self.assertRegexpMatches(register_reporter_page.get_success_message(),
                                  fetch_(SUCCESS_MSG, from_(VALID_DATA)))
-    @SkipTest
+
     @attr('functional_test')
     def test_registration_of_reporter_without_entering_data(self):
         """
@@ -46,7 +46,7 @@ class TestRegisterReporter(BaseTest):
         time.sleep(5)
         self.assertEqual(register_reporter_page.get_error_message(),
                                  fetch_(ERROR_MSG, from_(BLANK_FIELDS)))
-    @SkipTest
+
     @attr('functional_test')
     def test_registration_of_reporter_with_existing_data(self):
         """
@@ -58,7 +58,7 @@ class TestRegisterReporter(BaseTest):
         time.sleep(5)
         self.assertEqual(register_reporter_page.get_error_message(),
                                  fetch_(ERROR_MSG, from_(EXISTING_DATA)))
-    @SkipTest
+
     @attr('functional_test')
     def test_registration_of_reporter_without_location_name(self):
         """
