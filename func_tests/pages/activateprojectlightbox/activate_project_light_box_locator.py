@@ -1,7 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 
-
 from framework.utils.common_utils import *
+
 
 # By default every locator should be CSS
 # Abbr:
@@ -18,9 +18,8 @@ from framework.utils.common_utils import *
 LOCATOR = "locator"
 BY = "by"
 
-WELCOME_MESSAGE_LABEL = by_css("span.welcome")
-DASHBOARD_PAGE_LINK = by_css("a#global_dashboard_link")
-DATA_SENDERS_LINK = by_css("a#global_datasenders_link")
-SUBJECTS_LINK = by_css("a#global_subjects_link")
-PROJECT_LINK = by_css("a#global_projects_link")
-ALL_DATA_LINK = by_css("a#global_all_data_link")
+ACTIVATE_BTN = by_css("a#confirm")
+CANCEL_LINK = by_css("a.cancel_link")
+CLOSE_BTN = by_css("span[class='ui-icon ui-icon-closethick']")
+MESSAGE_LABEL = by_css("p.warning_message")
+TITLE_LABEL = by_xpath("//div[@role='dialog' and contains(@style,'block')]/div/span[@class='ui-dialog-title']")

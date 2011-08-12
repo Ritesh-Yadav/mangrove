@@ -91,3 +91,12 @@ class DriverWrapper(object):
         url is url of the website
         """
         self.driver.get(url)
+
+    def get_title(self):
+        """
+        Fetch the title of the web page
+
+        Return title of the web page
+        """
+        page_title = self.driver.title
+        return page_title

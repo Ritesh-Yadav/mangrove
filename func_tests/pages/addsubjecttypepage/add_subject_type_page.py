@@ -1,10 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from selenium.webdriver.common.by import By
 
+from framework.utils.common_utils import generateId
 from pages.page import Page
-from pages.globalnavigationpage.global_navigation_page import Page
-from pages.registrationpage.registration_page import  RegistrationPage
-from framework.utils.common_utils import CommonUtilities, generateId
 from framework.utils.data_fetcher import from_, fetch_
 from pages.addsubjecttypepage.add_subject_type_locator import *
 from tests.addsubjecttypetests.add_subject_type_data import *

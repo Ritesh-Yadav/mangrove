@@ -13,14 +13,6 @@ class RegistrationPage(Page):
     def __init__(self, driver):
         Page.__init__(self, driver)
 
-    def get_title(self):
-        """Fetch the title of the web page
-
-        Return title of the web page
-        """
-        page_title = self.driver.title
-        return page_title
-
     def successful_registration_with(self, registration_data):
         self.driver.find_text_box(ORGANIZATION_NAME_TB).enter_text(
             fetch_(ORGANIZATION_NAME, from_(registration_data)))

@@ -2,27 +2,18 @@
 
 from pages.page import Page
 from framework.utils.data_fetcher import *
-from pages.registerreporterpage.register_reporter_locator import *
-from tests.registerreportertests.register_reporter_data import *
+from pages.adddatasenderspage.add_data_senders_locator import *
+from tests.adddatasenderstests.add_data_senders_data import *
 
 
-class ReporterRegistrationPage(Page):
+class AddDataSenderPage(Page):
 
     def __init__(self, driver):
         Page.__init__(self, driver)
 
-    def get_title(self):
+    def add_data_sender_with(self, registration_data):
         """
-        Fetch the title of the web page
-
-        Return title of the web page
-        """
-        page_title = self.driver.title
-        return page_title
-
-    def register_with(self, registration_data):
-        """
-        Function to enter and submit the data on register reporter page
+        Function to enter and submit the data on add data sender page
 
         Args:
         registration_data is data to fill in the different fields like first
@@ -43,8 +34,7 @@ class ReporterRegistrationPage(Page):
 
     def get_error_message(self):
         """
-        Function to fetch the error messages from error label of the register
-         reporter page
+        Function to fetch the error messages from error label of the add data sender page
 
         Return error message
         """
@@ -57,8 +47,7 @@ class ReporterRegistrationPage(Page):
 
     def get_success_message(self):
         """
-        Function to fetch the success message from flash label of the register
-         reporter page
+        Function to fetch the success message from flash label of the add data sender page
 
         Return success message
         """

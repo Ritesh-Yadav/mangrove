@@ -12,15 +12,6 @@ class CreateSubjectQuestionnairePage(Page):
     def __init__(self, driver):
         Page.__init__(self, driver)
 
-    def get_title(self):
-        """
-        Fetch the title of the web page
-
-        Return title of the web page
-        """
-        page_title = self.driver.title
-        return page_title
-
     def successfully_create_subject_questionnaire_with(self, subject_data):
         """
         Function to enter and save the data on set up project page

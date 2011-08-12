@@ -18,15 +18,6 @@ class CreateQuestionnairePage(Page):
                    LIST_OF_CHOICES: self.configure_list_of_choices_type_question,
                    GEO: self.configure_geo_type_question}
 
-    def get_title(self):
-        """
-        Fetch the title of the web page
-
-        Return title of the web page
-        """
-        page_title = self.driver.title
-        return page_title
-
     def create_questionnaire_with(self, questionnaire_data):
         """
         Function to create a questionnaire on the 'create questionnaire' page

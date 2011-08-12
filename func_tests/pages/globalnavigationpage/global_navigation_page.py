@@ -1,9 +1,10 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
+from pages.allsubjectspage.all_subjects_page import AllSubjectsPage
+from pages.dashboardpage.dashboard_page import DashboardPage
 from pages.globalnavigationpage.global_navigation_locator import *
 from pages.page import Page
 from pages.projectspage.projects_page import ProjectsPage
-from pages.registerreporterpage.register_reporter_page import ReporterRegistrationPage
-from pages.registersubjectpage.register_subject_page import RegisterSubjectPage
+from pages.alldatasenderspage.all_data_senders_page import AllDataSendersPage
 
 
 class GlobalNavigationPage(Page):
@@ -21,14 +22,14 @@ class GlobalNavigationPage(Page):
         welcome_message = self.driver.find(WELCOME_MESSAGE_LABEL).text
         return welcome_message
 
-    def navigate_to_register_reporter_page(self):
+    def navigate_to_all_data_sender_page(self):
         """
-        Function to navigate to register a reporter page of the website.
+        Function to navigate to all data sender page of the website.
 
-        Return register reporter page
+        Return add data sender page
          """
         self.driver.find(DATA_SENDERS_LINK).click()
-        return ReporterRegistrationPage(self.driver)
+        return AllDataSendersPage(self.driver)
 
     def navigate_to_view_all_project_page(self):
         """
@@ -41,9 +42,18 @@ class GlobalNavigationPage(Page):
 
     def navigate_to_all_subject_page(self):
         """
-        Function to navigate to register a subject page of the website.
+        Function to navigate to add a subject page of the website.
 
-        Return register subject page
+        Return add subject page
          """
         self.driver.find(SUBJECTS_LINK).click()
-        return RegisterSubjectPage(self.driver)
+        return AllSubjectsPage(self.driver)
+
+    def navigate_to_dashboard_page(self):
+        """
+        Function to navigate to dashboard page of the website
+
+        Return dashboard page
+         """
+        self.driver.find(DASHBOARD_PAGE_LINK).click()
+        return DashboardPage(self.driver)

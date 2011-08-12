@@ -12,15 +12,6 @@ class SMSTesterPage(Page):
     def __init__(self, driver):
         Page.__init__(self, driver)
 
-    def get_title(self):
-        """
-        Fetch the title of the web page
-
-        Return title of the web page
-        """
-        page_title = self.driver.title
-        return page_title
-
     def send_sms_with(self, sms_data):
         """
         Function to enter and send the data using sms player

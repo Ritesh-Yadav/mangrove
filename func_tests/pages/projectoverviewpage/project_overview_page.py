@@ -1,9 +1,9 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from pages.createprojectpage.create_project_page import CreateProjectPage
+from pages.activateprojectlightbox.activate_project_light_box_page import ActivateProjectLightBox
+from pages.createprojectpage.create_project_page import *
 from pages.datapage.data_page import DataPage
 from pages.projectoverviewpage.project_overview_locator import *
 from pages.page import Page
-from pages.submissionlogpage.submission_log_page import SubmissionLogPage
 
 
 class ProjectOverviewPage(Page):
@@ -20,7 +20,7 @@ class ProjectOverviewPage(Page):
         self.driver.find(DATA_TAB).click()
         return DataPage(self.driver)
 
-    def navigate_to_create_project_page(self):
+    def navigate_to_edit_project_page(self):
         """
         Function to navigate to create project page
 
@@ -28,3 +28,20 @@ class ProjectOverviewPage(Page):
          """
         self.driver.find(PROJECT_EDIT_LINK).click()
         return CreateProjectPage(self.driver)
+
+    def open_activate_project_light_box(self):
+        """
+        Function to open the activate project light box
+
+        Return ActivateProjectLightBox
+         """
+        self.driver.find(ACTIVATE_PROJECT_LINK).click()
+        return ActivateProjectLightBox(self.driver)
+
+    def get_status_of_the_project(self):
+        """
+        Function to get the current status of the project
+
+        Return status
+         """
+        return self.driver.find(PROJECT_STATUS_LABEL).get_text()

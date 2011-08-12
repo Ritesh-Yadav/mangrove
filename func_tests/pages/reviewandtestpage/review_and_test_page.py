@@ -1,6 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from framework.utils.common_utils import CommonUtilities, generateId
 from pages.page import Page
+from pages.projectoverviewpage.project_overview_page import ProjectOverviewPage
 from pages.reviewandtestpage.review_and_test_locator import *
 from framework.utils.common_utils import *
 
@@ -10,11 +11,11 @@ class ReviewAndTestPage(Page):
     def __init__(self, driver):
         Page.__init__(self, driver)
 
-    def get_title(self):
+    def navigate_to_project_overview_page(self):
         """
-        Fetch the title of the web page
+        Function to navigate to project overview page of the website
 
-        Return title of the web page
-        """
-        page_title = self.driver.title
-        return page_title
+        Return project_overview_page
+         """
+        self.driver.find(GO_TO_PROJECT_OVERVIEW_BTN).click()
+        return ProjectOverviewPage(self.driver)

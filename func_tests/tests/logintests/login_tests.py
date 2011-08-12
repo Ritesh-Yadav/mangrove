@@ -79,4 +79,4 @@ class TestLoginPage(BaseTest):
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
         login_page = LoginPage(self.driver)
         register_page = login_page.navigate_to_registration_page()
-        self.assertEqual(register_page.get_title(), "Register")
+        self.assertEqual(self.driver.get_title(), "Register")

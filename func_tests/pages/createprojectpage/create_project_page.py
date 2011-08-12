@@ -12,15 +12,6 @@ class CreateProjectPage(Page):
     def __init__(self, driver):
         Page.__init__(self, driver)
 
-    def get_title(self):
-        """
-        Fetch the title of the web page
-
-        Return title of the web page
-        """
-        page_title = self.driver.title
-        return page_title
-
     def successfully_create_project_with(self, project_data):
         """
         Function to enter and save the data on set up project page
@@ -143,3 +134,11 @@ class CreateProjectPage(Page):
         if locator:
             error_message = error_message + "Activity Report Type  " + locator.text
         return error_message == "" and "No error message on the page" or error_message
+
+    def get_selected_subject(self):
+        """
+        Function to fetch the selected subject from the drop down
+
+        Return message
+        """
+        return self.driver.find_drop_down(SUBJECTS_DD).get_selected()

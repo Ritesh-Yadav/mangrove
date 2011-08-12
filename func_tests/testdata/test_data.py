@@ -1,5 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 
+ACTIVATE = "activate"
+CANCEL = "cancel"
 DATA_WINNER_LOGIN_PAGE = "http://localhost:8000/login"
 DATA_WINNER_DASHBOARD_PAGE = "http://localhost:8000/dashboard"
 DATA_WINNER_REGISTER_PAGE = "http://localhost:8000/register"

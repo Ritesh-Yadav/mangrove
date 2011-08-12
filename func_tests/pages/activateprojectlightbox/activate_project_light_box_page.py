@@ -1,0 +1,53 @@
+# vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
+from pages.page import Page
+from pages.activateprojectlightbox.activate_project_light_box_locator import *
+from framework.utils.common_utils import *
+
+
+class ActivateProjectLightBox(Page):
+
+    def __init__(self, driver):
+        Page.__init__(self, driver)
+
+    def activate_project(self):
+        """
+        Function to activate the project
+
+        Return create project page
+         """
+        self.driver.find(ACTIVATE_BTN).click()
+        return self
+
+    def cancel_activation(self):
+        """
+        Function to cancel the activation of a project
+
+        Return create project page
+         """
+        self.driver.find(CANCEL_LINK).click()
+        return self
+
+    def close_activation_light_box(self):
+        """
+        Function to close the activation light box of a project
+
+        Return create project page
+         """
+        self.driver.find(CLOSE_BTN).click()
+        return self
+
+    def get_message_from_light_box(self):
+        """
+        Function to fetch the message from light box
+
+        Return message text
+         """
+        return self.driver.find(MESSAGE_LABEL).get_text()
+
+    def get_title_of_light_box(self):
+        """
+        Function to fetch the title from light box
+
+        Return title text
+         """
+        return self.driver.find(TITLE_LABEL).get_text()

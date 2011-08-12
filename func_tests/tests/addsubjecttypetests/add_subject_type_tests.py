@@ -6,7 +6,7 @@ from framework.utils.data_fetcher import from_, fetch_
 from pages.addsubjecttypepage.add_subject_type_page import AddSubjectTypePage
 from pages.loginpage.login_page import LoginPage
 from nose.plugins.skip import SkipTest
-from pages.registersubjectpage.register_subject_page import RegisterSubjectPage
+from pages.addsubjectpage.add_subject_page import AddSubjectPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_ADD_SUBJECT
 from tests.addsubjecttypetests.add_subject_type_data import *
 from tests.logintests.login_data import VALID_CREDENTIALS
@@ -28,7 +28,7 @@ class TestAddSubjectType(BaseTest):
         add_subject_type_page.click_on_accordian_link()
         entity_type = add_subject_type_page.successfully_add_entity_type_with(VALID_ENTITY)
         time.sleep(2)
-        add_subject_page = RegisterSubjectPage(self.driver)
+        add_subject_page = AddSubjectPage(self.driver)
         self.assertEqual(add_subject_page.get_selected_subject(), entity_type.lower())
 
     @attr('functional_test')

@@ -6,8 +6,7 @@ ERROR_MESSAGE = 'message'
 
 ORGANIZATION_NAME = 'organization_name'
 ORGANIZATION_SECTOR = 'organization_sector'
-ORGANIZATION_ADDRESS_LINE1 = 'organization_addressline1'
-ORGANIZATION_ADDRESS_LINE2 = 'organization_addressline12'
+ORGANIZATION_ADDRESS_LINE = 'organization_addressline'
 ORGANIZATION_CITY = 'organization_city'
 ORGANIZATION_STATE = 'organization_state'
 ORGANIZATION_COUNTRY = 'organization_country'
@@ -26,7 +25,7 @@ ACTIVATION_CODE = "activation_code"
 USERNAME = 'username'
 PASSWORD = 'password'
 
-REPORTER_NAME = "name"
+DATA_SENDER_NAME = "name"
 TELEPHONE_NUMBER = "telephone_number"
 COMMUNE = "commune"
 GPS = "gps"
@@ -90,8 +89,7 @@ UNIQUE_VALUE = "unique_value"
 #Registration Page Data for Successful Registration Page
 REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION = {ORGANIZATION_NAME: "Automation NGO",
                        ORGANIZATION_SECTOR: "PublicHealth",
-                       ORGANIZATION_ADDRESS_LINE1: "Panchshil Tech Park, Near Don Bosco School,",
-                       ORGANIZATION_ADDRESS_LINE2: "Yerwada",
+                       ORGANIZATION_ADDRESS_LINE: "Panchshil Tech Park, Near Don Bosco School, Yerwada",
                        ORGANIZATION_CITY: "Pune",
                        ORGANIZATION_STATE: "Maharashtra",
                        ORGANIZATION_COUNTRY: "India",
@@ -104,7 +102,7 @@ REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION = {ORGANIZATION_NAME: "Automation 
                        EMAIL: "ngo",
                        REGISTRATION_PASSWORD: "ngo001",
                        REGISTRATION_CONFIRM_PASSWORD: "ngo001",
-                       SUCCESS_MESSAGE: "You have successfully registered!! An activation email has been sent to your email address. Please activate before login."}
+                       SUCCESS_MESSAGE: "You have successfully registered!!\nAn activation email has been sent to your email address. Please activate before login."}
 
 VALID_ACTIVATION_DETAILS = {ACTIVATION_CODE: "",
                    SUCCESS_MESSAGE: "You have successfully activated your account"}
@@ -114,11 +112,11 @@ VALID_CREDENTIALS = {USERNAME: "",
                      PASSWORD: "ngo001",
                      WELCOME_MESSAGE: "Welcome Mickey!"}
 
-VALID_DATA_FOR_REPORTER = {REPORTER_NAME: "Donald Mouse",
+VALID_DATA_FOR_DATA_SENDER = {DATA_SENDER_NAME: "Donald Mouse",
               TELEPHONE_NUMBER: "1234567890",
               COMMUNE: "urbaine",
               GPS: "48.955267  1.816013",
-              SUCCESS_MESSAGE: "Registration successful. Reporter identification number: rep1"}
+              SUCCESS_MESSAGE: "Registration successful. Unique identification number(ID) is: rep2."}
 
 # valid entity data
 VALID_SUBJECT_TYPE1 = {ENTITY_TYPE: "Waterpoint", SUCCESS_MESSAGE: "Entity definition successful"}
@@ -132,7 +130,7 @@ VALID_DATA_FOR_SUBJECT = {ENTITY_TYPE: "waterpoint",
               GEO_CODE: "47.411631 28.369885",
               DESCRIPTION: "This is a waterpoint in monodova",
               MOBILE_NUMBER: "3456789012",
-              SUCCESS_MESSAGE: "Registration successful. Subject identification number: wat1."}
+              SUCCESS_MESSAGE: "Registration successful. Unique identification number(ID) is: wat1."}
 
 VALID_DATA_FOR_PROJECT = {PROJECT_NAME: "Waterpoint morondava", GEN_RANDOM: False,
               PROJECT_BACKGROUND: "This project is created by functional automation suite.",
@@ -143,6 +141,8 @@ VALID_DATA_FOR_PROJECT = {PROJECT_NAME: "Waterpoint morondava", GEN_RANDOM: Fals
               PAGE_TITLE: "Subjects"}
 
 VALID_DATA_FOR_SUBJECT_QUESTIONNAIRE = {PAGE_TITLE: "Questionnaire"}
+
+VALID_DATA_FOR_DATA_SENDER_QUESTIONNAIRE = {PAGE_TITLE: "Review & Test"}
 
 QUESTIONNAIRE_DATA = {QUESTIONNAIRE_CODE: "WPS01", GEN_RANDOM: False,
                       DEFAULT_QUESTION: {QUESTION: "What are you reporting on?", CODE: "WID", MIN: "1", MAX: "10"},
@@ -159,7 +159,7 @@ QUESTIONNAIRE_DATA = {QUESTIONNAIRE_CODE: "WPS01", GEN_RANDOM: False,
                                    ALLOWED_CHOICE: MULTIPLE_ANSWERS},
                                   {QUESTION: "Geo points of Well", CODE: "GPS", TYPE: GEO}],
                       CHARACTER_REMAINING: "112 / 160 characters used",
-                      SUCCESS_MESSAGE: "Your questionnaire has been saved"}
+                      PAGE_TITLE: "Data Senders"}
 
 VALID_DATA_FOR_SMS = {SENDER: "1234567890",
               RECEIVER: "",

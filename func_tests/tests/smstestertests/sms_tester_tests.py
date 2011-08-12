@@ -61,24 +61,24 @@ class TestSMSTester(BaseTest):
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(ERROR_MSG, from_(UNREGISTERED_FROM_NUMBER)))
 
     @attr('functional_test')
-    def test_sms_player_for_registration_of_reporter(self):
+    def test_sms_player_for_addition_of_data_sender(self):
         """
         Function to test the registration of the reporter using sms submission with registered number
         """
         self.driver.go_to(DATA_WINNER_SMS_TESTER_PAGE)
         sms_tester_page = SMSTesterPage(self.driver)
-        sms_tester_page.send_sms_with(REGISTER_REPORTER)
-        self.assertRegexpMatches(sms_tester_page.get_response_message(), fetch_(SUCCESS_MESSAGE, from_(REGISTER_REPORTER)))
+        sms_tester_page.send_sms_with(REGISTER_DATA_SENDER)
+        self.assertRegexpMatches(sms_tester_page.get_response_message(), fetch_(SUCCESS_MESSAGE, from_(REGISTER_DATA_SENDER)))
 
     @attr('functional_test')
-    def test_sms_player_for_registration_of_reporter_from_unknown_number(self):
+    def test_sms_player_for_addition_of_data_sender_from_unknown_number(self):
         """
         Function to test the registration of the reporter using sms submission with unregistered number
         """
         self.driver.go_to(DATA_WINNER_SMS_TESTER_PAGE)
         sms_tester_page = SMSTesterPage(self.driver)
-        sms_tester_page.send_sms_with(REGISTER_REPORTER_FROM_UNKNOWN_NUMBER)
-        self.assertEqual(sms_tester_page.get_response_message(), fetch_(ERROR_MSG, from_(REGISTER_REPORTER_FROM_UNKNOWN_NUMBER)))
+        sms_tester_page.send_sms_with(REGISTER_DATA_SENDER_FROM_UNKNOWN_NUMBER)
+        self.assertEqual(sms_tester_page.get_response_message(), fetch_(ERROR_MSG, from_(REGISTER_DATA_SENDER_FROM_UNKNOWN_NUMBER)))
 
     @attr('functional_test')
     def test_sms_player_for_registration_of_new_subject(self):

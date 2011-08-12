@@ -18,4 +18,6 @@ LOCATOR = "locator"
 BY = "by"
 
 DATA_TAB = by_xpath("//div[contains(@class,'tab_navigation')]/ul/li/a[text()='Data']")
+ACTIVATE_PROJECT_LINK = by_css("a.activate_project")
 PROJECT_EDIT_LINK = by_css("a[href~='/project/profile/edit']")
+PROJECT_STATUS_LABEL = by_css("span.project_status>span")
