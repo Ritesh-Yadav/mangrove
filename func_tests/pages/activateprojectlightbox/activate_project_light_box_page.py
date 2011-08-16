@@ -16,7 +16,8 @@ class ActivateProjectLightBox(Page):
         Return create project page
          """
         self.driver.find(ACTIVATE_BTN).click()
-        return self
+        from pages.projectoverviewpage.project_overview_page import ProjectOverviewPage
+        return ProjectOverviewPage(self.driver)
 
     def cancel_activation(self):
         """
@@ -42,7 +43,7 @@ class ActivateProjectLightBox(Page):
 
         Return message text
          """
-        return self.driver.find(MESSAGE_LABEL).get_text()
+        return self.driver.find(MESSAGE_LABEL).text
 
     def get_title_of_light_box(self):
         """
@@ -50,4 +51,4 @@ class ActivateProjectLightBox(Page):
 
         Return title text
          """
-        return self.driver.find(TITLE_LABEL).get_text()
+        return self.driver.find(TITLE_LABEL).text

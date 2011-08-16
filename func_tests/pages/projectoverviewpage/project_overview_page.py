@@ -1,8 +1,8 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from pages.activateprojectlightbox.activate_project_light_box_page import ActivateProjectLightBox
 from pages.createprojectpage.create_project_page import *
 from pages.datapage.data_page import DataPage
 from pages.projectoverviewpage.project_overview_locator import *
+from pages.activateprojectlightbox.activate_project_light_box_page import ActivateProjectLightBox
 from pages.page import Page
 
 
@@ -44,4 +44,4 @@ class ProjectOverviewPage(Page):
 
         Return status
          """
-        return self.driver.find(PROJECT_STATUS_LABEL).get_text()
+        return self.driver.find(PROJECT_STATUS_LABEL).text

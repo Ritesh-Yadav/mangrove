@@ -3,7 +3,7 @@ from framework.utils.common_utils import CommonUtilities, generateId
 from pages.page import Page
 from pages.createdatasenderquestionnairepage.create_data_sender_questionnaire_locator import *
 from framework.utils.common_utils import *
-from pages.reviewandtestpage.review_and_test_page import ReviewAndTestPage
+from pages.reviewpage.review_page import ReviewPage
 
 
 class CreateDataSenderQuestionnairePage(Page):
@@ -22,4 +22,4 @@ class CreateDataSenderQuestionnairePage(Page):
         Return self
         """
         self.driver.find(SAVE_CHANGES_BTN).click()
-        return ReviewAndTestPage(self.driver)
+        return ReviewPage(self.driver)

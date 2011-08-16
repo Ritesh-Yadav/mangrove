@@ -13,10 +13,10 @@ PAGE_TITLE = "page_title"
 GEN_RANDOM = "gen_random"
 
 
-VALID_DATA = {PROJECT_NAME: "Clinic Morondava ", GEN_RANDOM: True,
+VALID_DATA = {PROJECT_NAME: "Reporter Activities ", GEN_RANDOM: True,
               PROJECT_BACKGROUND: "This project is created by functional automation suite.",
               PROJECT_TYPE: "survey",
-              SUBJECT: "clinic",
+              SUBJECT: "",
               REPORT_TYPE: "data sender work",
               DEVICES: "sms",
               PAGE_TITLE: "Subjects"}

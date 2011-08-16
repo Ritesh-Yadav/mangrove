@@ -10,9 +10,8 @@ from pages.activateaccountpage.activate_account_page import ActivateAccountPage
 from pages.addsubjecttypepage.add_subject_type_page import AddSubjectTypePage
 from pages.loginpage.login_page import LoginPage
 from nose.plugins.skip import SkipTest
-from pages.addsubjectpage.add_subject_page import AddSubjectPage
 from pages.smstesterpage.sms_tester_page import SMSTesterPage
-from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_SMS_TESTER_PAGE
+from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_DASHBOARD_PAGE
 from tests.endtoendtest.end_to_end_data import *
 
 
@@ -117,7 +116,6 @@ class TestIntregationOfApplication(BaseTest):
         create_data_sender_questionnaire_page = create_questionnaire_page.save_questionnaire_successfully()
         return create_data_sender_questionnaire_page
 
-
     def send_sms(self, organization_sms_tel_number):
         sms_tester_page = SMSTesterPage(self.driver)
         sms_tester_data = VALID_DATA_FOR_SMS
@@ -128,7 +126,7 @@ class TestIntregationOfApplication(BaseTest):
 
     def verify_submission(self, global_navigation):
         view_all_project_page = global_navigation.navigate_to_view_all_project_page()
-        project_overview_project = view_all_project_page.navigate_to_project_page(
+        project_overview_project = view_all_project_page.navigate_to_project_overview_page(
             fetch_(PROJECT_NAME, VALID_DATA_FOR_PROJECT))
         data_page = project_overview_project.navigate_to_data_page()
         submission_log_page = data_page.navigate_to_all_data_record_page()
@@ -136,7 +134,7 @@ class TestIntregationOfApplication(BaseTest):
                                  fetch_(SMS_SUBMISSION, from_(SMS_DATA_LOG)))
 
     @attr('functional_test', 'smoke', "intregation")
-    def test_intregation_of_application(self):
+    def test_end_to_end(self):
 
         self.email = None
         self.do_org_registartion()
@@ -162,14 +160,15 @@ class TestIntregationOfApplication(BaseTest):
         add_data_sender_page = all_data_senders_page.navigate_to_add_a_data_sender_page()
         self.add_a_data_sender(add_data_sender_page)
 
-        project_overview_page = review_and_test_page.navigate_to_project_overview_page()
-        activate_project_light_box = project_overview_page.open_activate_project_light_box()
+        all_projects_page = global_navigation.navigate_to_view_all_project_page()
+        project_name = fetch_(PROJECT_NAME, from_(VALID_DATA_FOR_PROJECT))
+        activate_project_light_box = all_projects_page.open_activate_project_light_box(project_name)
         self.assertEqual(activate_project_light_box.get_title_of_light_box(), "Activate this Project?")
-        activate_project_light_box.activate_project()
+        project_overview_page = activate_project_light_box.activate_project()
         self.assertEqual(project_overview_page.get_status_of_the_project(), "Active")
 
         self.driver.go_to(DATA_WINNER_SMS_TESTER_PAGE)
         self.send_sms(organization_sms_tel_number)
 
-        self.driver.go_to(DATA_WINNER_HOME_PAGE)
+        self.driver.go_to(DATA_WINNER_DASHBOARD_PAGE)
         self.verify_submission(global_navigation)

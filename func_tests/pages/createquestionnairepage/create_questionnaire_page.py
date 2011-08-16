@@ -201,3 +201,16 @@ class CreateQuestionnairePage(Page):
         """
         question_locator = QUESTION_LINK_CSS_LOCATOR_PART1 + ":nth-child(" + str(question_number) + ")" + QUESTION_LINK_CSS_LOCATOR_PART2
         return self.driver.find(by_css(question_locator)).text
+
+    def get_question_and_code(self):
+        """
+        Function to fill the question and code text box on the questionnaire page
+
+        Args:
+        question_data is data to fill in the question and code text boxes
+
+        return self
+        """
+        self.driver.find_text_box(QUESTION_TB).value
+        self.driver.find_text_box(CODE_TB).enter_text(fetch_(CODE, from_(question_data)))
+        return self

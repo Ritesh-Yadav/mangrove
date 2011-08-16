@@ -18,8 +18,4 @@ from framework.utils.common_utils import *
 LOCATOR = "locator"
 BY = "by"
 
-ACTIVATE_BTN = by_css("a#confirm")
-CANCEL_LINK = by_css("a.cancel_link")
-CLOSE_BTN = by_css("span[class='ui-icon ui-icon-closethick']")
-MESSAGE_LABEL = by_css("p.warning_message")
-TITLE_LABEL = by_xpath("//div[@role='dialog' and contains(@style,'block')]/div/span[@class='ui-dialog-title']")
+GO_TO_PROJECT_OVERVIEW_BTN = by_css("input#submit-button[value='Go to Project Overview']")
