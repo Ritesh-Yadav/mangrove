@@ -2,6 +2,7 @@
 
 
 ##Variables
+PAGE_TITLE = "page_title"
 QUESTIONNAIRE_CODE = "questionnaire_code"
 GEN_RANDOM = "gen_random"
 DEFAULT_QUESTION = "default_question"
@@ -44,4 +45,5 @@ QUESTIONNAIRE_DATA = {QUESTIONNAIRE_CODE: "WPS", GEN_RANDOM: True,
                                    ALLOWED_CHOICE: MULTIPLE_ANSWERS},
                                   {QUESTION: "Geo points of water point", CODE: "GPS", TYPE: GEO}],
                       CHARACTER_REMAINING: "85 / 160 characters used",
-                      SUCCESS_MSG: "Your questionnaire has been saved"}
+                      SUCCESS_MSG: "Your questionnaire has been saved",
+                      PAGE_TITLE: "Data Senders"}

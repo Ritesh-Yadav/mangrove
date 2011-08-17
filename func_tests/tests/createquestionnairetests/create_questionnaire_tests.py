@@ -44,4 +44,4 @@ class TestCreateQuestionnaire(BaseTest):
                           fetch_(CHARACTER_REMAINING, from_(QUESTIONNAIRE_DATA)))
         create_questionnaire_page.save_questionnaire()
         time.sleep(3)
-        self.assertEqual(self.driver.get_title(), "Data Senders")
+        self.assertEqual(self.driver.get_title(), fetch_(PAGE_TITLE, from_(QUESTIONNAIRE_DATA)))

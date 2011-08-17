@@ -18,4 +18,4 @@ from framework.utils.common_utils import *
 LOCATOR = "locator"
 BY = "by"
 
-SAVE_CHANGES_BTN = by_css("input#submit-button[value='Next Step: Review and Test']")
+SAVE_CHANGES_BTN = by_css("input#submit-button[value='Next Step: Reminders']")

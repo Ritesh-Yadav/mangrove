@@ -11,11 +11,14 @@ DEVICES = "devices"
 ERROR_MSG = "message"
 PAGE_TITLE = "page_title"
 GEN_RANDOM = "gen_random"
-
+SURVEY = "survey"
+PUBLIC_INFO = "public information"
+DATA_SENDER_WORK = "data sender work"
+OTHER_SUBJECT = "other subject"
 
 VALID_DATA = {PROJECT_NAME: "Reporter Activities ", GEN_RANDOM: True,
               PROJECT_BACKGROUND: "This project is created by functional automation suite.",
-              PROJECT_TYPE: "survey",
+              PROJECT_TYPE: SURVEY,
               SUBJECT: "",
               REPORT_TYPE: "data sender work",
               DEVICES: "sms",

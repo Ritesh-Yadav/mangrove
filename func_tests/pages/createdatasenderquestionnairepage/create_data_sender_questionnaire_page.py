@@ -1,9 +1,8 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from framework.utils.common_utils import CommonUtilities, generateId
+from pages.createreminderpage.create_reminder_page import CreateReminderPage
 from pages.page import Page
 from pages.createdatasenderquestionnairepage.create_data_sender_questionnaire_locator import *
 from framework.utils.common_utils import *
-from pages.reviewpage.review_page import ReviewPage
 
 
 class CreateDataSenderQuestionnairePage(Page):
@@ -22,4 +21,4 @@ class CreateDataSenderQuestionnairePage(Page):
         Return self
         """
         self.driver.find(SAVE_CHANGES_BTN).click()
-        return ReviewPage(self.driver)
+        return CreateReminderPage(self.driver)

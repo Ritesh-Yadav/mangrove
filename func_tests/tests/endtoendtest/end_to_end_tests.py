@@ -9,14 +9,12 @@ from framework.utils.database_manager_postgres import DatabaseManager
 from pages.activateaccountpage.activate_account_page import ActivateAccountPage
 from pages.addsubjecttypepage.add_subject_type_page import AddSubjectTypePage
 from pages.loginpage.login_page import LoginPage
-from nose.plugins.skip import SkipTest
 from pages.smstesterpage.sms_tester_page import SMSTesterPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_DASHBOARD_PAGE
 from tests.endtoendtest.end_to_end_data import *
 
 
 class TestIntregationOfApplication(BaseTest):
-
     def tearDown(self):
         try:
             self.driver.quit()
@@ -81,12 +79,13 @@ class TestIntregationOfApplication(BaseTest):
 
     def add_a_data_sender(self, add_data_sender_page):
         add_data_sender_page.add_data_sender_with(VALID_DATA_FOR_DATA_SENDER)
-        self.assertEqual(add_data_sender_page.get_success_message(), fetch_(SUCCESS_MESSAGE, from_(VALID_DATA_FOR_DATA_SENDER)))
+        self.assertEqual(add_data_sender_page.get_success_message(),
+                         fetch_(SUCCESS_MESSAGE, from_(VALID_DATA_FOR_DATA_SENDER)))
 
     def create_project(self, create_project_page):
         create_subject_questionnaire_page = create_project_page.successfully_create_project_with(VALID_DATA_FOR_PROJECT)
         self.assertEqual(self.driver.get_title(),
-                                 fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_PROJECT)))
+                         fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_PROJECT)))
         return create_subject_questionnaire_page
 
     def create_subject_questionnaire(self, create_subject_questionnaire_page):
@@ -97,10 +96,16 @@ class TestIntregationOfApplication(BaseTest):
         return create_questionnaire_page
 
     def create_data_sender_questionnaire(self, create_data_sender_questionnaire_page):
-        review_and_test_page = create_data_sender_questionnaire_page.successfully_create_data_sender_questionnaire_with(
+        reminder_page = create_data_sender_questionnaire_page.successfully_create_data_sender_questionnaire_with(
             VALID_DATA_FOR_DATA_SENDER_QUESTIONNAIRE)
         self.assertRegexpMatches(self.driver.get_title(),
                                  fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_DATA_SENDER_QUESTIONNAIRE)))
+        return reminder_page
+
+    def create_reminder(self, reminder_page):
+        review_and_test_page = reminder_page.successfully_create_reminder_with(VALID_DATA_FOR_REMINDER)
+        self.assertRegexpMatches(self.driver.get_title(),
+                                 fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_REMINDER)))
         return review_and_test_page
 
     def create_questionnaire(self, create_questionnaire_page):
@@ -135,7 +140,6 @@ class TestIntregationOfApplication(BaseTest):
 
     @attr('functional_test', 'smoke', "intregation")
     def test_end_to_end(self):
-
         self.email = None
         self.do_org_registartion()
 
@@ -150,7 +154,8 @@ class TestIntregationOfApplication(BaseTest):
         create_subject_questionnaire_page = self.create_project(create_project_page)
         create_questionnaire_page = self.create_subject_questionnaire(create_subject_questionnaire_page)
         create_data_sender_questionnaire_page = self.create_questionnaire(create_questionnaire_page)
-        review_and_test_page = self.create_data_sender_questionnaire(create_data_sender_questionnaire_page)
+        reminder_page = self.create_data_sender_questionnaire(create_data_sender_questionnaire_page)
+        review_and_test_page = self.create_reminder(reminder_page)
 
         all_subjects_page = global_navigation.navigate_to_all_subject_page()
         add_subject_page = all_subjects_page.navigate_to_add_a_subject_page()

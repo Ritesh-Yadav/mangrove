@@ -31,15 +31,15 @@ class CreateProjectPage(Page):
             fetch_(PROJECT_BACKGROUND, from_(project_data)))
         # Selecting radio button according to given option
         project_type = fetch_(PROJECT_TYPE, from_(project_data))
-        if project_type == "survey":
+        if project_type == SURVEY:
             self.driver.find(SURVEY_PROJECT_RB).click()
-        elif project_type == "public information":
+        elif project_type == PUBLIC_INFO:
             self.driver.find(PUBLIC_INFORMATION_RB).click()
 
         report_type = fetch_(REPORT_TYPE, from_(project_data))
-        if report_type == "data sender work":
+        if report_type == DATA_SENDER_WORK:
             self.driver.find(DATA_SENDER_RB).click()
-        elif report_type == "other subject":
+        elif report_type == OTHER_SUBJECT:
             self.driver.find(OTHER_SUBJECT_RB).click()
 
         subject = fetch_(SUBJECT, from_(project_data))
@@ -86,9 +86,9 @@ class CreateProjectPage(Page):
             fetch_(PROJECT_BACKGROUND, from_(project_data)))
         # Selecting radio button according to given option
         project_type = fetch_(PROJECT_TYPE, from_(project_data))
-        if project_type == "survey":
+        if project_type == SURVEY:
             self.driver.find(SURVEY_PROJECT_RB).click()
-        elif project_type == "public information":
+        elif project_type == PUBLIC_INFO:
             self.driver.find(PUBLIC_INFORMATION_RB).click()
         # Selecting check box according to given options
         devices = fetch_(DEVICES, from_(project_data)).split(",")
@@ -142,3 +142,67 @@ class CreateProjectPage(Page):
         Return message
         """
         return self.driver.find_drop_down(SUBJECTS_DD).get_selected()
+
+    def get_project_name(self):
+        """
+        Function to fetch the project name
+
+        Return message
+        """
+        return self.driver.find_text_box(PROJECT_NAME_TB).get_attribute("value")
+
+    def get_project_type(self):
+        """
+        Function to fetch the project type e.g. Survey or Public info
+
+        Return message
+        """
+        project_type = ""
+        if self.driver.find_radio_button(SURVEY_PROJECT_RB).is_selected:
+            project_type = SURVEY
+        elif self.driver.find_radio_button(PUBLIC_INFORMATION_RB).is_selected:
+            project_type = PUBLIC_INFO
+        return project_type
+
+    def get_project_description(self):
+        """
+        Function to fetch the project description
+
+        Return message
+        """
+        return self.driver.find_text_box(PROJECT_BACKGROUND_TB).text
+
+    def get_devices(self):
+        """
+        Function to fetch the devices for project
+
+        Return message
+        """
+        return "sms"
+
+    def get_project_type(self):
+        """
+        Function to fetch the project type e.g. Survey or Public info
+
+        Return message
+        """
+        report_type = ""
+        if self.driver.find_radio_button(OTHER_SUBJECT_RB).is_selected:
+            report_type = OTHER_SUBJECT
+        elif self.driver.find_radio_button().is_selected:
+            report_type = PUBLIC_INFO
+        return report_type
+    
+    def get_project_details(self):
+        """
+        Function to fetch the project details e.g. Name, Type, description etc
+
+        Return message
+        """
+        project_details = dict()
+        project_details[PROJECT_NAME] = self.get_project_name()
+        project_details[PROJECT_BACKGROUND] = self.get_project_description()
+        project_details[PROJECT_TYPE] = self.get_project_type()
+        project_details[SUBJECT] = self.get_selected_subject()
+        project_details[DEVICES] = self.get_devices()
+        return project_details
