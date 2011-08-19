@@ -109,6 +109,6 @@ WITH_UNICODE_IN_GPS = {ENTITY_TYPE: "clinic",
                        AUTO_GENERATE: True,
                        MOBILE_NUMBER: "5673456834",
                        LOCATION: "",
-                       GPS: "23º 45",
+                       GPS: u"23º 45",
                        DESCRIPTION: "This is a clinic with Unicode in GPS",
                        ERROR_MSG: "GPS Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}

@@ -2,8 +2,8 @@
 
 
 ##Variables
-SENDER = "to"
-RECEIVER = "from"
+SENDER = "from"
+RECEIVER = "to"
 SMS = "sms"
 ERROR_MSG = "message"
 SUCCESS_MESSAGE = "message"

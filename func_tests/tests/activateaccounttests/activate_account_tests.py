@@ -15,6 +15,7 @@ from framework.utils.database_manager_postgres import DatabaseManager
 class TestActivateAccount(BaseTest):
 
     def prerequisites_of_activate_account(self):
+        self.email = None
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
         registration_confirmation_page, self.email = registration_page.successful_registration_with(REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION)
@@ -25,11 +26,12 @@ class TestActivateAccount(BaseTest):
     def tearDown(self):
         try:
             self.driver.quit()
-            email = self.email
-            dbmanager = DatabaseManager()
-            dbname = dbmanager.delete_organization_all_details(email)
-            couchwrapper = CouchHttpWrapper("localhost")
-            couchwrapper.deleteDb(dbname)
+            if self.email is not None:
+                email = self.email
+                dbmanager = DatabaseManager()
+                dbname = dbmanager.delete_organization_all_details(email)
+                couchwrapper = CouchHttpWrapper("localhost")
+                couchwrapper.deleteDb(dbname)
         except TypeError as e:
             pass
 

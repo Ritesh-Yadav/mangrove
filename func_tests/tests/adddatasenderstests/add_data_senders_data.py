@@ -68,5 +68,5 @@ INVALID_GPS_WITH_COMMA = {NAME: "Invalid GPS With Comma",
 WITH_UNICODE_IN_GPS = {NAME: "Unicode in GPS",
               TELEPHONE_NUMBER: "5673456834",
               COMMUNE: "",
-              GPS: "23º 45",
+              GPS: u"23º 45",
               SUCCESS_MSG: "GPS: Enter Lat Long Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"}

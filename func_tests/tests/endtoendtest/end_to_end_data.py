@@ -76,8 +76,8 @@ ONLY_ONE_ANSWER = "only_one_answer"
 MULTIPLE_ANSWERS = "multiple_answers"
 CHARACTER_REMAINING = "character_remaining"
 
-SENDER = "to"
-RECEIVER = "from"
+SENDER = "from"
+RECEIVER = "to"
 SMS = "sms"
 MESSAGE = "message"
 

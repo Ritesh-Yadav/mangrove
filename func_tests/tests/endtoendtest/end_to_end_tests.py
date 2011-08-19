@@ -124,7 +124,7 @@ class TestIntregationOfApplication(BaseTest):
     def send_sms(self, organization_sms_tel_number):
         sms_tester_page = SMSTesterPage(self.driver)
         sms_tester_data = VALID_DATA_FOR_SMS
-        sms_tester_data[RECEIVER] = organization_sms_tel_number
+        sms_tester_data[RECEIVER] = str(organization_sms_tel_number)
         sms_tester_page.send_sms_with(sms_tester_data)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(SUCCESS_MESSAGE, from_(sms_tester_data)))
         return sms_tester_page
