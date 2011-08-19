@@ -8,11 +8,12 @@ from pages.loginpage.login_page import LoginPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.editprojecttests.edit_project_data import *
+import time
 
 
 class TestEditProject(BaseTest):
 
-    def prerequisites_of_create_project(self):
+    def prerequisites_of_edit_project(self):
         # doing successful login with valid credentials
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
         login_page = LoginPage(self.driver)
@@ -20,15 +21,47 @@ class TestEditProject(BaseTest):
 
         # going on all project page
         return global_navigation.navigate_to_view_all_project_page()
-    @SkipTest
+
     @attr('functional_test', 'smoke')
-    def test_successful_project_editing(self):
+    def test_successful_project_editing_with_subject_change(self):
         """
-        Function to test the successful creation of project with given
-        details e.g. Name, Project Background and goal, Project Type,
-        Subject and Devices
+        Function to test the successful editing of project with given details e.g. project name and subject
         """
-        all_project_page = self.prerequisites_of_create_project()
+        all_project_page = self.prerequisites_of_edit_project()
         project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME ,from_(VALID_DATA)))
         edit_project_page = project_overview_page.navigate_to_edit_project_page()
         self.assertEqual(VALID_DATA ,edit_project_page.get_project_details())
+        edit_project_page.type_project_name(WATER_POINT_DATA)
+        light_box = edit_project_page.edit_subject(WATER_POINT_DATA)
+        self.assertEquals(light_box.get_title_of_light_box(), fetch_(TITLE, from_(LIGHT_BOX_DATA)))
+        self.assertEquals(light_box.get_message_from_light_box(), fetch_(MESSAGE, from_(LIGHT_BOX_DATA)))
+        edit_project_page = light_box.continue_change()
+        subject_questionnaire_page = edit_project_page.save_project_successfully()
+        self.assertEquals(self.driver.get_title(), subject_questionnaire_page.get_page_title())
+        create_questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
+        self.assertEqual(create_questionnaire_page.get_question_link_text(1), fetch_(DEFAULT_QUESTION, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT)))
+        create_questionnaire_page.navigate_to_previous_step()
+        subject_questionnaire_page.navigate_to_previous_step()
+        self.assertEqual(WATER_POINT_DATA ,edit_project_page.get_project_details())
+
+    def test_successful_project_editing_with_report_type_change(self):
+        """
+        Function to test the successful editing of project with given details e.g. project name and report type
+        """
+        all_project_page = self.prerequisites_of_edit_project()
+        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME ,from_(VALID_DATA2)))
+        edit_project_page = project_overview_page.navigate_to_edit_project_page()
+        self.assertEqual(VALID_DATA2 ,edit_project_page.get_project_details())
+        edit_project_page.type_project_name(REPORTER_ACTIVITIES_DATA)
+        edit_project_page.type_project_description(REPORTER_ACTIVITIES_DATA)
+        light_box = edit_project_page.select_report_type(REPORTER_ACTIVITIES_DATA)
+        self.assertEquals(light_box.get_title_of_light_box(), fetch_(TITLE, from_(LIGHT_BOX_DATA)))
+        self.assertEquals(light_box.get_message_from_light_box(), fetch_(MESSAGE, from_(LIGHT_BOX_DATA)))
+        edit_project_page = light_box.continue_change()
+        subject_questionnaire_page = edit_project_page.save_project_successfully()
+        self.assertEquals(self.driver.get_title(), subject_questionnaire_page.get_page_title())
+        create_questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
+        self.assertEqual(create_questionnaire_page.get_question_link_text(1), fetch_(DEFAULT_QUESTION, from_(QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES)))
+        create_questionnaire_page.navigate_to_previous_step()
+        subject_questionnaire_page.navigate_to_previous_step()
+        self.assertEqual(REPORTER_ACTIVITIES_DATA ,edit_project_page.get_project_details())

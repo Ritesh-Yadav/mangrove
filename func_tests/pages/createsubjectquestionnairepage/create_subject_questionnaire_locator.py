@@ -19,3 +19,4 @@ LOCATOR = "locator"
 BY = "by"
 
 SAVE_CHANGES_BTN = by_css("input#submit-button[value='Next Step: Questionnaire']")
+PREVIOUS_STEP_LINK = by_xpath("//a[@id='define_project_link' and text()='Define Project']")

@@ -1,96 +1,65 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from framework.utils.common_utils import CommonUtilities, generateId
 from pages.createsubjectquestionnairepage.create_subject_questionnaire_page import CreateSubjectQuestionnairePage
+from pages.lightbox.light_box_page import LightBox
 from pages.page import Page
 from framework.utils.data_fetcher import *
 from pages.createprojectpage.create_project_locator import *
 from tests.createprojecttests.create_project_data import *
-
+import time
 
 class CreateProjectPage(Page):
 
     def __init__(self, driver):
         Page.__init__(self, driver)
 
-    def successfully_create_project_with(self, project_data):
-        """
-        Function to enter and save the data on set up project page
+    def select_report_type(self, project_data):
+        report_type = fetch_(REPORT_TYPE, from_(project_data))
+        if report_type == DATA_SENDER_WORK:
+            self.driver.find(DATA_SENDER_RB).click()
+        elif report_type == OTHER_SUBJECT:
+            self.driver.find(OTHER_SUBJECT_RB).click()
+        return LightBox(self.driver)
 
-        Args:
-        registration_data is data to fill in the different fields like first
-        name, last name, telephone number and commune
-
-        Return self
-        """
-        project_name = fetch_(PROJECT_NAME, from_(project_data))
-        gen_ramdom = fetch_(GEN_RANDOM, from_(project_data))
-        if gen_ramdom:
-            project_name = project_name + generateId()
-        self.driver.find_text_box(PROJECT_NAME_TB).enter_text(project_name)
-        self.driver.find_text_box(PROJECT_BACKGROUND_TB).enter_text(
-            fetch_(PROJECT_BACKGROUND, from_(project_data)))
-        # Selecting radio button according to given option
+    def select_project_type(self, project_data):
         project_type = fetch_(PROJECT_TYPE, from_(project_data))
         if project_type == SURVEY:
             self.driver.find(SURVEY_PROJECT_RB).click()
         elif project_type == PUBLIC_INFO:
             self.driver.find(PUBLIC_INFORMATION_RB).click()
 
-        report_type = fetch_(REPORT_TYPE, from_(project_data))
-        if report_type == DATA_SENDER_WORK:
-            self.driver.find(DATA_SENDER_RB).click()
-        elif report_type == OTHER_SUBJECT:
-            self.driver.find(OTHER_SUBJECT_RB).click()
+    def type_project_description(self, project_data):
+        self.driver.find_text_box(PROJECT_BACKGROUND_TB).enter_text(
+            fetch_(PROJECT_BACKGROUND, from_(project_data)))
 
-        subject = fetch_(SUBJECT, from_(project_data))
-        if len(subject) != 0:
-            self.driver.execute_script("document.getElementById('id_entity_type').value = '" + subject + "';")
-        # Selecting check box according to given options
-        devices = fetch_(DEVICES, from_(project_data)).split(",")
-        comm_utils = CommonUtilities(self.driver)
-        # Selecting and Deselecting SMS checkbox for devices as per given option
-        if "sms" in devices:
-            if not(comm_utils.is_element_present(SMS_CB_CHECKED)):
-                self.driver.find(SMS_CB).toggle()
-        elif comm_utils.is_element_present(SMS_CB_CHECKED):
-                self.driver.find(SMS_CB).toggle()
-        # Selecting and Deselecting Smart phone checkbox for devices as per
-        # given option
-#        if "smartphone" in devices:
-#            if not(comm_utils.is_element_present(SMART_PHONE_CB_CHECKED)):
-#                self.driver.find(SMART_PHONE_CB).toggle()
-#        elif comm_utils.is_element_present(SMART_PHONE_CB_CHECKED):
-#                self.driver.find(SMART_PHONE_CB).toggle()
-#        #Selecting and Deselecting Web checkbox for devices as per given option
-#        if "web" in devices:
-#            if not(comm_utils.is_element_present(WEB_CB_CHECKED)):
-#                self.driver.find(WEB_CB).toggle()
-#        elif comm_utils.is_element_present(WEB_CB_CHECKED):
-#                self.driver.find(WEB_CB).toggle()
-        self.driver.find(SAVE_CHANGES_BTN).click()
-        return CreateSubjectQuestionnairePage(self.driver)
+    def type_project_name(self, project_data):
+        project_name = fetch_(PROJECT_NAME, from_(project_data))
+        try:
+            gen_random = fetch_(GEN_RANDOM, from_(project_data))
+        except KeyError:
+            gen_random = False
+        if gen_random:
+            project_name = project_name + generateId()
+        self.driver.find_text_box(PROJECT_NAME_TB).enter_text(project_name)
 
     def create_project_with(self, project_data):
         """
         Function to enter and save the data on set up project page
 
         Args:
-        registration_data is data to fill in the different fields like first
-        name, last name, telephone number and commune
+        project_data is data to fill in the different fields
 
         Return self
         """
-        self.driver.find_text_box(PROJECT_NAME_TB).enter_text(
-            fetch_(PROJECT_NAME, from_(project_data)))
-        self.driver.find_text_box(PROJECT_BACKGROUND_TB).enter_text(
-            fetch_(PROJECT_BACKGROUND, from_(project_data)))
-        # Selecting radio button according to given option
-        project_type = fetch_(PROJECT_TYPE, from_(project_data))
-        if project_type == SURVEY:
-            self.driver.find(SURVEY_PROJECT_RB).click()
-        elif project_type == PUBLIC_INFO:
-            self.driver.find(PUBLIC_INFORMATION_RB).click()
-        # Selecting check box according to given options
+        self.type_project_name(project_data)
+        self.type_project_description(project_data)
+        self.select_project_type(project_data)
+        self.select_report_type(project_data)
+        self.set_subject(project_data)
+        self.select_devices(project_data)
+        return self
+
+    def select_devices(self, project_data):
         devices = fetch_(DEVICES, from_(project_data)).split(",")
         comm_utils = CommonUtilities(self.driver)
         # Selecting and Deselecting SMS checkbox for devices as per given option
@@ -99,21 +68,36 @@ class CreateProjectPage(Page):
                 self.driver.find(SMS_CB).click()
         elif comm_utils.is_element_present(SMS_CB_CHECKED):
                 self.driver.find(SMS_CB).click()
-        # Selecting and Deselecting Smart phone checkbox for devices as per
-        # given option
 #        if "smartphone" in devices:
 #            if not(comm_utils.is_element_present(SMART_PHONE_CB_CHECKED)):
-#                self.driver.find(SMART_PHONE_CB).click()
+#                self.driver.find(SMART_PHONE_CB).toggle()
 #        elif comm_utils.is_element_present(SMART_PHONE_CB_CHECKED):
-#                self.driver.find(SMART_PHONE_CB).click()
+#                self.driver.find(SMART_PHONE_CB).toggle()
 #        #Selecting and Deselecting Web checkbox for devices as per given option
 #        if "web" in devices:
 #            if not(comm_utils.is_element_present(WEB_CB_CHECKED)):
-#                self.driver.find(WEB_CB).click()
+#                self.driver.find(WEB_CB).toggle()
 #        elif comm_utils.is_element_present(WEB_CB_CHECKED):
-#                self.driver.find(WEB_CB).click()
+#                self.driver.find(WEB_CB).toggle()
+
+    def save_project_successfully(self):
+        self.driver.find(SAVE_CHANGES_BTN).click()
+        return CreateSubjectQuestionnairePage(self.driver)
+
+    def save_project(self):
         self.driver.find(SAVE_CHANGES_BTN).click()
         return self
+
+    def set_subject(self, project_data):
+        subject = fetch_(SUBJECT, from_(project_data))
+        if len(subject) != 0:
+            self.driver.find_drop_down(SUBJECTS_DD).set_selected(subject)
+        return self
+
+    def edit_subject(self, project_data):
+        subject = fetch_(SUBJECT, from_(project_data))
+        self.driver.find_drop_down(SUBJECTS_DD).set_selected(subject)
+        return LightBox(self.driver)
 
     def get_error_message(self):
         """
@@ -158,9 +142,9 @@ class CreateProjectPage(Page):
         Return message
         """
         project_type = ""
-        if self.driver.find_radio_button(SURVEY_PROJECT_RB).is_selected:
+        if self.driver.find_radio_button(SURVEY_PROJECT_RB).is_selected():
             project_type = SURVEY
-        elif self.driver.find_radio_button(PUBLIC_INFORMATION_RB).is_selected:
+        elif self.driver.find_radio_button(PUBLIC_INFORMATION_RB).is_selected():
             project_type = PUBLIC_INFO
         return project_type
 
@@ -180,17 +164,17 @@ class CreateProjectPage(Page):
         """
         return "sms"
 
-    def get_project_type(self):
+    def get_report_type(self):
         """
-        Function to fetch the project type e.g. Survey or Public info
+        Function to fetch the report type e.g. other subject or Activity report
 
         Return message
         """
         report_type = ""
-        if self.driver.find_radio_button(OTHER_SUBJECT_RB).is_selected:
+        if self.driver.find_radio_button(OTHER_SUBJECT_RB).is_selected():
             report_type = OTHER_SUBJECT
-        elif self.driver.find_radio_button().is_selected:
-            report_type = PUBLIC_INFO
+        elif self.driver.find_radio_button(DATA_SENDER_RB).is_selected():
+            report_type = DATA_SENDER_WORK
         return report_type
     
     def get_project_details(self):
@@ -203,6 +187,10 @@ class CreateProjectPage(Page):
         project_details[PROJECT_NAME] = self.get_project_name()
         project_details[PROJECT_BACKGROUND] = self.get_project_description()
         project_details[PROJECT_TYPE] = self.get_project_type()
-        project_details[SUBJECT] = self.get_selected_subject()
+        project_details[REPORT_TYPE] = self.get_report_type()
+        if project_details[REPORT_TYPE] == OTHER_SUBJECT:
+            project_details[SUBJECT] = self.get_selected_subject()
+        else:
+            project_details[SUBJECT] = ""
         project_details[DEVICES] = self.get_devices()
         return project_details

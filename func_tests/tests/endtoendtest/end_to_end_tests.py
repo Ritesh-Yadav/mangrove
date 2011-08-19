@@ -83,14 +83,14 @@ class TestIntregationOfApplication(BaseTest):
                          fetch_(SUCCESS_MESSAGE, from_(VALID_DATA_FOR_DATA_SENDER)))
 
     def create_project(self, create_project_page):
-        create_subject_questionnaire_page = create_project_page.successfully_create_project_with(VALID_DATA_FOR_PROJECT)
+        create_project_page.create_project_with(VALID_DATA_FOR_PROJECT)
+        create_subject_questionnaire_page = create_project_page.save_project_successfully()
         self.assertEqual(self.driver.get_title(),
                          fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_PROJECT)))
         return create_subject_questionnaire_page
 
     def create_subject_questionnaire(self, create_subject_questionnaire_page):
-        create_questionnaire_page = create_subject_questionnaire_page.successfully_create_subject_questionnaire_with(
-            VALID_DATA_FOR_SUBJECT_QUESTIONNAIRE)
+        create_questionnaire_page = create_subject_questionnaire_page.save_questionnaire_successfully()
         self.assertRegexpMatches(self.driver.get_title(),
                                  fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_SUBJECT_QUESTIONNAIRE)))
         return create_questionnaire_page

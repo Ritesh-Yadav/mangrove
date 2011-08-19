@@ -23,8 +23,9 @@ class TestCreateQuestionnaire(BaseTest):
         # going on setup project page
         create_project_page = dashboard_page.navigate_to_create_project_page()
         #Navigating to Create Questionnaire Page by successfully creating a Project
-        create_subject_questionnaire_page = create_project_page.successfully_create_project_with(VALID_DATA2)
-        create_questionnaire_page = create_subject_questionnaire_page.successfully_create_subject_questionnaire_with(None)
+        create_project_page.create_project_with(VALID_DATA2)
+        create_subject_questionnaire_page = create_project_page.save_project_successfully()
+        create_questionnaire_page = create_subject_questionnaire_page.save_questionnaire_successfully()
         return create_questionnaire_page
 
     @attr('functional_test', 'smoke')

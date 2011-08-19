@@ -45,6 +45,8 @@ MULTIPLE_ANSWER_RB = by_css("input[value='select']")
 GEO_RB = by_css("input[value='geocode']")
 CHARACTER_COUNT = by_css("div#char-count")
 
+PREVIOUS_STEP_LINK = by_xpath("//a[@id='subjects_link' and text()='Subjects']")
+
 # Locators for Question List section of the page
 DEFAULT_QUESTION_LINK = by_xpath("//div[@class='question_list']/ol/div/li/a[contains(text(),'Which subject are you reporting on?')]")
 QUESTION_LINK_CSS_LOCATOR_PART1 = "div.question_list>ol>div"  # index number to identify question

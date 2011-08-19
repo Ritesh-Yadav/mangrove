@@ -12,15 +12,32 @@ class CreateSubjectQuestionnairePage(Page):
     def __init__(self, driver):
         Page.__init__(self, driver)
 
-    def successfully_create_subject_questionnaire_with(self, subject_data):
+    def save_questionnaire_successfully(self):
         """
-        Function to enter and save the data on set up project page
+        Function to save subject questionnaire
 
         Args:
-        registration_data is data to fill in the different fields like first
-        name, last name, telephone number and commune
+        subject_data is data to fill in the different fields
 
-        Return self
+        Return CreateQuestionnairePage
         """
         self.driver.find(SAVE_CHANGES_BTN).click()
         return CreateQuestionnairePage(self.driver)
+
+    def navigate_to_previous_step(self):
+        """
+        Function to go on set up project profile page
+
+        Return self
+        """
+        self.driver.find(PREVIOUS_STEP_LINK).click()
+        from pages.createprojectpage.create_project_page import CreateProjectPage
+        return CreateProjectPage(self.driver)
+
+    def get_page_title(self):
+        """
+        Function to return the page title
+
+        Return title
+        """
+        return "Subjects"

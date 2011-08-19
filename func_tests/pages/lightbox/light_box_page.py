@@ -1,10 +1,10 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from pages.page import Page
-from pages.activateprojectlightbox.activate_project_light_box_locator import *
+from pages.lightbox.light_box_locator import *
 from framework.utils.common_utils import *
 
 
-class ActivateProjectLightBox(Page):
+class LightBox(Page):
 
     def __init__(self, driver):
         Page.__init__(self, driver)
@@ -13,13 +13,23 @@ class ActivateProjectLightBox(Page):
         """
         Function to activate the project
 
-        Return create project page
+        Return ProjectOverviewPage
          """
         self.driver.find(ACTIVATE_BTN).click()
         from pages.projectoverviewpage.project_overview_page import ProjectOverviewPage
         return ProjectOverviewPage(self.driver)
 
-    def cancel_activation(self):
+    def continue_change(self):
+        """
+        Function to continue the subject change
+
+        Return CreateProjectPage
+         """
+        self.driver.find(CONFIRMATION_BTN).click()
+        from pages.createprojectpage.create_project_page import CreateProjectPage
+        return CreateProjectPage(self.driver)
+
+    def cancel_light_box(self):
         """
         Function to cancel the activation of a project
 
@@ -28,7 +38,7 @@ class ActivateProjectLightBox(Page):
         self.driver.find(CANCEL_LINK).click()
         return self
 
-    def close_activation_light_box(self):
+    def close_light_box(self):
         """
         Function to close the activation light box of a project
 

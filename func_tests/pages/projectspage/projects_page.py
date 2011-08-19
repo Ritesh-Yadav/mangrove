@@ -1,5 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from pages.activateprojectlightbox.activate_project_light_box_page import ActivateProjectLightBox
+from pages.lightbox.light_box_page import LightBox
 from pages.createprojectpage.create_project_page import CreateProjectPage
 from pages.projectoverviewpage.project_overview_page import ProjectOverviewPage
 from pages.projectspage.projects_locator import *
@@ -37,7 +37,7 @@ class ProjectsPage(Page):
         Return ActivateProjectLightBox
          """
         self.driver.find(by_xpath(ACTIVATE_PROJECT_LINK_XPATH % project_name.lower())).click()
-        return ActivateProjectLightBox(self.driver)
+        return LightBox(self.driver)
 
     def get_status_of_the_project(self, project_name):
         """

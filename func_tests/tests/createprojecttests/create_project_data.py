@@ -30,11 +30,12 @@ VALID_DATA2 = {PROJECT_NAME: "Water Point2 Morondava ", GEN_RANDOM: True,
               SUBJECT: "waterpoint",
               REPORT_TYPE: "other subject",
               DEVICES: "sms",
-              PAGE_TITLE: "Questionnaire"}
+              PAGE_TITLE: "Subjects"}
 
 BLANK_FIELDS = {PROJECT_NAME: "",
               PROJECT_BACKGROUND: "",
               PROJECT_TYPE: "",
               SUBJECT: "",
+              REPORT_TYPE: "",
               DEVICES: "",
               ERROR_MSG: "Name  This field is required."}

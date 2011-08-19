@@ -4,7 +4,7 @@ from framework.utils.data_fetcher import *
 from pages.createdatasenderquestionnairepage.create_data_sender_questionnaire_page import CreateDataSenderQuestionnairePage
 from pages.createquestionnairepage.create_questionnaire_locator import *
 from tests.createquestionnairetests.create_questionnaire_data import *
-from framework.utils.common_utils import generateId
+from framework.utils.common_utils import generateId, CommonUtilities
 from pages.page import Page
 
 
@@ -202,15 +202,141 @@ class CreateQuestionnairePage(Page):
         question_locator = QUESTION_LINK_CSS_LOCATOR_PART1 + ":nth-child(" + str(question_number) + ")" + QUESTION_LINK_CSS_LOCATOR_PART2
         return self.driver.find(by_css(question_locator)).text
 
-    def get_question_and_code(self):
+    def select_question_link(self, question_number):
         """
-        Function to fill the question and code text box on the questionnaire page
+        Function to select the question link
 
         Args:
-        question_data is data to fill in the question and code text boxes
-
-        return self
+        question_number is index number of the question
         """
-        self.driver.find_text_box(QUESTION_TB).value
-        self.driver.find_text_box(CODE_TB).enter_text(fetch_(CODE, from_(question_data)))
-        return self
+        question_locator = QUESTION_LINK_CSS_LOCATOR_PART1 + ":nth-child(" + str(question_number) + ")" + QUESTION_LINK_CSS_LOCATOR_PART2
+        self.driver.find(by_css(question_locator)).click()
+
+    def get_question(self):
+        """
+        Function to fetch the question text on the questionnaire page
+
+        return question
+        """
+        return self.driver.find_text_box(QUESTION_TB).get_attribute("value")
+
+    def get_question_code(self):
+        """
+        Function to fetch the question text on the questionnaire page
+
+        return question_code
+        """
+        return self.driver.find_text_box(CODE_TB).get_attribute("value")
+
+    def navigate_to_previous_step(self):
+        """
+        Function to go on subject questionnaire page
+
+        Return self
+        """
+        self.driver.find(PREVIOUS_STEP_LINK).click()
+        from pages.createsubjectquestionnairepage.create_subject_questionnaire_page import CreateSubjectQuestionnairePage
+        return CreateSubjectQuestionnairePage(self.driver)
+
+    def get_page_title(self):
+        """
+        Function to return the page title
+
+        Return title
+        """
+        return "Questionnaire"
+
+    def get_word_type_question(self):
+        """
+        Function to get the word or phrase option and the details of max on the questionnaire page
+        
+        return question dict
+        """
+        question = dict()
+        if self.driver.find_radio_button(WORD_OR_PHRASE_RB).is_selected():
+            question[TYPE] = WORD
+        if self.driver.find_radio_button(CHARACTER_LIMIT_RB).is_selected():
+            question[LIMIT] = LIMITED
+            question[MAX] = self.driver.find_text_box(WORD_OR_PHRASE_MAX_LENGTH_TB).get_attribute("value")
+        elif self.driver.find_radio_button(NO_CHARACTER_LIMIT_RB).is_selected():
+            question[LIMIT] = NO_LIMIT
+        question[QUESTION] = self.get_question()
+        question[CODE] = self.get_question_code()
+        return question
+
+    def get_number_type_question(self):
+        """
+        Function to get the number option and the details min or max on the questionnaire page
+        
+        return question dict
+        """
+        question = dict()
+        if self.driver.find_radio_button(NUMBER_RB).is_selected():
+            question[TYPE] = NUMBER
+        question[MIN] = self.driver.find_text_box(NUMBER_MIN_LENGTH_TB).get_attribute("value")
+        question[MAX] = self.driver.find_text_box(NUMBER_MAX_LENGTH_TB).get_attribute("value")
+        question[QUESTION] = self.get_question()
+        question[CODE] = self.get_question_code()
+        return question
+
+    def get_date_type_question(self):
+        """
+        Function to get date type question option and date format on the questionnaire page
+
+        return question dict
+        """
+        question = dict()
+        if self.driver.find_radio_button(DATE_RB).is_selected():
+            question[TYPE] = DATE
+        if self.driver.find_radio_button(MONTH_YEAR_RB).is_selected():
+            question[DATE_FORMAT] = MM_YYYY
+        elif self.driver.find_radio_button(DATE_MONTH_YEAR_RB).is_selected():
+            question[DATE_FORMAT] = DD_MM_YYYY
+        elif self.driver.find_radio_button(MONTH_DATE_YEAR_RB).is_selected():
+            question[DATE_FORMAT] = MM_DD_YYYY
+        question[QUESTION] = self.get_question()
+        question[CODE] = self.get_question_code()
+        return question
+
+    def get_list_of_choices_type_question(self):
+        """
+        Function to get the list of choices question option on the questionnaire page
+
+        return question dict
+        """
+        question = dict()
+        if self.driver.find_radio_button(LIST_OF_CHOICE_RB).is_selected():
+            question[TYPE] = LIST_OF_CHOICES
+        #options_tbs = self.driver.find_elements_(by_xpath(CHOICE_XPATH_LOCATOR))
+        options_tbs = self.driver.find_elements_(by_xpath(CHOICE_XPATH_LOCATOR + CHOICE_TB_XPATH_LOCATOR))
+        count = options_tbs.__len__() + 1
+        choices = []
+        index = 1
+        for options_tb in options_tbs:
+        #while index < count:
+            #choices.append(self.driver.find_text_box(by_xpath(CHOICE_XPATH_LOCATOR + "[" + str(index) + "]" + CHOICE_TB_XPATH_LOCATOR)).get_attribute("value"))
+            #index = index + 1
+            choices.append(options_tb.get_attribute("value"))
+        question[CHOICE] = choices
+
+        if self.driver.find_radio_button(ONLY_ONE_ANSWER_RB).is_selected():
+            question[ALLOWED_CHOICE] = ONLY_ONE_ANSWER
+        elif self.driver.find_radio_button(MULTIPLE_ANSWER_RB).is_selected():
+            question[ALLOWED_CHOICE] = MULTIPLE_ANSWERS
+
+        question[QUESTION] = self.get_question()
+        question[CODE] = self.get_question_code()
+        return question
+
+    def get_geo_type_question(self):
+        """
+        Function to get the geo type question options on the questionnaire page
+
+        return question dict
+        """
+        question = dict()
+        if self.driver.find_radio_button(GEO_RB).is_selected():
+            question[TYPE] = GEO
+        question[QUESTION] = self.get_question()
+        question[CODE] = self.get_question_code()
+        return question
