@@ -44,6 +44,7 @@ class TestEditProject(BaseTest):
         subject_questionnaire_page.navigate_to_previous_step()
         self.assertEqual(WATER_POINT_DATA ,edit_project_page.get_project_details())
 
+    @attr('functional_test', 'smoke')
     def test_successful_project_editing_with_report_type_change(self):
         """
         Function to test the successful editing of project with given details e.g. project name and report type
