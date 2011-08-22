@@ -29,17 +29,7 @@ class TestEditQuestionnaire(BaseTest):
     @attr('functional_test', 'smoke')
     def test_successful_questionnaire_editing(self):
         """
-        Function to test the successful Creation of a Questionnaire with given details
-        QUESTIONS: [{QUESTION: "What is your namé?", CODE: "NA", TYPE: WORD, LIMIT: LIMITED, MAX: "10"},
-                                  {QUESTION: "What is age öf father?", CODE: "FA", TYPE: NUMBER, MIN: "18", MAX: "100"},
-                                  {QUESTION: "What is réporting date?", CODE: "RD", TYPE: DATE, DATE_FORMAT: DD_MM_YYYY},
-                                  {QUESTION: "What is your blood group?", CODE: "BG", TYPE: LIST_OF_CHOICES,
-                                   CHOICE: ["O+", "O-", "AB", "B+"],
-                                   ALLOWED_CHOICE: ONLY_ONE_ANSWER},
-                                  {QUESTION: "What aré symptoms?", CODE: "SY", TYPE: LIST_OF_CHOICES,
-                                   CHOICE: ["Rapid weight loss", "Dry cough", "Pneumonia", "Memory loss", "Neurological disorders "],
-                                   ALLOWED_CHOICE: MULTIPLE_ANSWERS},
-                                  {QUESTION: "What is the GPS codé for clinic", CODE: "GPS", TYPE: GEO}]
+        Function to test the successful editing of a Questionnaire with given details
         """
         create_questionnaire_page = self.prerequisites_of_edit_questionnaire()
         questions = fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA))

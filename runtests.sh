@@ -57,13 +57,17 @@ case "${TESTCHOICE}" in
      nosetests -a 'smoke'
      ;;
 "ut") echo "-------- Unit test execution Started --------"
-     cd ../..
-     nosetests -a '!functional_test'
+     nosetests --with-xunit --xunit-file=../../xunit.xml
+     cd ..
+     cd mangrove && nosetests --with-xunit --xunit-file=../../xunit2.xml
      ;;
 "all") echo "-------- All test execution Started --------"
      xterm -e "python manage.py runserver" &
+     nosetests --with-xunit --xunit-file=../../xunit.xml
+     cd ..
+     cd mangrove && nosetests --with-xunit --xunit-file=../../xunit2.xml
      cd ../..
-     nosetests
+     cd func_tests && nosetests --with-xunit --xunit-file=../xunit3.xml
      ;;
 esac
 

@@ -47,7 +47,7 @@ mangrovedb
 ve/
 build/*
 pip-log.txt
-xunit.xml
+xunit*.xml
 .coverage
 coverage.xml
 .idea
