@@ -4,6 +4,7 @@ from pages.datapage.data_page import DataPage
 from pages.lightbox.light_box_page import LightBox
 from pages.projectoverviewpage.project_overview_locator import *
 from pages.page import Page
+from pages.smstesterlightbox.sms_tester_light_box_page import SMSTesterLightBoxPage
 
 
 class ProjectOverviewPage(Page):
@@ -45,3 +46,12 @@ class ProjectOverviewPage(Page):
         Return status
          """
         return self.driver.find(PROJECT_STATUS_LABEL).text
+
+    def open_sms_tester_light_box(self):
+        """
+        Function to open the SMS tester light box
+
+        Return SMSTesterLightBoxPage
+         """
+        self.driver.find(TEST_QUESTIONNAIRE_LINK).click()
+        return SMSTesterLightBoxPage(self.driver)

@@ -96,14 +96,13 @@ class TestIntregationOfApplication(BaseTest):
         return create_questionnaire_page
 
     def create_data_sender_questionnaire(self, create_data_sender_questionnaire_page):
-        reminder_page = create_data_sender_questionnaire_page.successfully_create_data_sender_questionnaire_with(
-            VALID_DATA_FOR_DATA_SENDER_QUESTIONNAIRE)
+        reminder_page = create_data_sender_questionnaire_page.save_questionnnaire_successfully()
         self.assertRegexpMatches(self.driver.get_title(),
                                  fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_DATA_SENDER_QUESTIONNAIRE)))
         return reminder_page
 
     def create_reminder(self, reminder_page):
-        review_and_test_page = reminder_page.successfully_create_reminder_with(VALID_DATA_FOR_REMINDER)
+        review_and_test_page = reminder_page.save_reminder_successfully()
         self.assertRegexpMatches(self.driver.get_title(),
                                  fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_REMINDER)))
         return review_and_test_page

@@ -26,7 +26,7 @@ EXISTING_DATA = {NAME: "Mickey Mouse",
               TELEPHONE_NUMBER: "1234567890",
               COMMUNE: "MAHAVELO, FIANARANTSOA",
               GPS: "48.955267  1.816013",
-              SUCCESS_MSG: "Sorry, the telephone number 1234567890 has already been registered"}
+              SUCCESS_MSG: "* Mobile Number Sorry, the telephone number 1234567890 has already been registered"}
 
 WITHOUT_LOCATION_NAME = {NAME: "Mini Mouse",
               TELEPHONE_NUMBER: "3456734568",

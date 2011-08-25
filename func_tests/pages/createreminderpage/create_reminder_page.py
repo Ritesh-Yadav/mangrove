@@ -11,12 +11,9 @@ class CreateReminderPage(Page):
     def __init__(self, driver):
         Page.__init__(self, driver)
 
-    def successfully_create_reminder_with(self, reminder_data):
+    def save_reminder_successfully(self):
         """
         Function to save the data on set up reminder page
-
-        Args:
-        reminder_data is data to fill in the different fields
 
         Return ReviewPage
         """

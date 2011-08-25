@@ -10,15 +10,11 @@ class CreateDataSenderQuestionnairePage(Page):
     def __init__(self, driver):
         Page.__init__(self, driver)
 
-    def successfully_create_data_sender_questionnaire_with(self, subject_data):
+    def save_questionnnaire_successfully(self):
         """
-        Function to enter and save the data on set up project page
+        Function to save the data sender questionnaire
 
-        Args:
-        registration_data is data to fill in the different fields like first
-        name, last name, telephone number and commune
-
-        Return self
+        Return CreateReminderPage
         """
         self.driver.find(SAVE_CHANGES_BTN).click()
         return CreateReminderPage(self.driver)
