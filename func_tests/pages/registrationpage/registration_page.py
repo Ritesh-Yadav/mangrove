@@ -40,6 +40,12 @@ class RegistrationPage(Page):
             fetch_(LAST_NAME, from_(registration_data)))
         email = fetch_(EMAIL, from_(registration_data)) + generateId() + "@ngo.com"
         self.driver.find_text_box(ORGANIZATION_EMAIL_TB).enter_text(email)
+        self.driver.find_text_box(ADMIN_OFFICE_NUMBER_TB).enter_text(
+            fetch_(ADMIN_OFFICE_NUMBER, from_(registration_data)))
+        self.driver.find_text_box(ADMIN_MOBILE_NUMBER_TB).enter_text(
+            fetch_(ADMIN_MOBILE_NUMBER, from_(registration_data)))
+        self.driver.find_text_box(SKYPE_ID_TB).enter_text(
+            fetch_(ADMIN_SKYPE_ID, from_(registration_data)))
         self.driver.find_text_box(ORGANIZATION_PASSWORD_TB).enter_text(
             fetch_(REGISTRATION_PASSWORD, from_(registration_data)))
         self.driver.find_text_box(ORGANIZATION_CONFIRM_PASSWORD_TB).enter_text(
@@ -74,6 +80,12 @@ class RegistrationPage(Page):
             fetch_(LAST_NAME, from_(registration_data)))
         self.driver.find_text_box(ORGANIZATION_EMAIL_TB).enter_text(
             fetch_(EMAIL, from_(registration_data)))
+        self.driver.find_text_box(ADMIN_OFFICE_NUMBER_TB).enter_text(
+            fetch_(ADMIN_OFFICE_NUMBER, from_(registration_data)))
+        self.driver.find_text_box(ADMIN_MOBILE_NUMBER_TB).enter_text(
+            fetch_(ADMIN_MOBILE_NUMBER, from_(registration_data)))
+        self.driver.find_text_box(SKYPE_ID_TB).enter_text(
+            fetch_(ADMIN_SKYPE_ID, from_(registration_data)))
         self.driver.find_text_box(ORGANIZATION_PASSWORD_TB).enter_text(
             fetch_(REGISTRATION_PASSWORD, from_(registration_data)))
         self.driver.find_text_box(ORGANIZATION_CONFIRM_PASSWORD_TB).enter_text(

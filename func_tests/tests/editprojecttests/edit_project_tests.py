@@ -28,9 +28,9 @@ class TestEditProject(BaseTest):
         Function to test the successful editing of project with given details e.g. project name and subject
         """
         all_project_page = self.prerequisites_of_edit_project()
-        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME ,from_(VALID_DATA)))
+        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME, from_(VALID_DATA)))
         edit_project_page = project_overview_page.navigate_to_edit_project_page()
-        self.assertEqual(VALID_DATA ,edit_project_page.get_project_details())
+        self.assertEqual(VALID_DATA, edit_project_page.get_project_details())
         edit_project_page.type_project_name(WATER_POINT_DATA)
         light_box = edit_project_page.edit_subject(WATER_POINT_DATA)
         self.assertEquals(light_box.get_title_of_light_box(), fetch_(TITLE, from_(LIGHT_BOX_DATA)))
@@ -42,7 +42,7 @@ class TestEditProject(BaseTest):
         self.assertEqual(create_questionnaire_page.get_question_link_text(1), fetch_(DEFAULT_QUESTION, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT)))
         create_questionnaire_page.navigate_to_previous_step()
         subject_questionnaire_page.navigate_to_previous_step()
-        self.assertEqual(WATER_POINT_DATA ,edit_project_page.get_project_details())
+        self.assertEqual(WATER_POINT_DATA, edit_project_page.get_project_details())
 
     @attr('functional_test', 'smoke')
     def test_successful_project_editing_with_report_type_change(self):
@@ -50,9 +50,9 @@ class TestEditProject(BaseTest):
         Function to test the successful editing of project with given details e.g. project name and report type
         """
         all_project_page = self.prerequisites_of_edit_project()
-        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME ,from_(VALID_DATA2)))
+        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME, from_(VALID_DATA2)))
         edit_project_page = project_overview_page.navigate_to_edit_project_page()
-        self.assertEqual(VALID_DATA2 ,edit_project_page.get_project_details())
+        self.assertEqual(VALID_DATA2, edit_project_page.get_project_details())
         edit_project_page.type_project_name(REPORTER_ACTIVITIES_DATA)
         edit_project_page.type_project_description(REPORTER_ACTIVITIES_DATA)
         light_box = edit_project_page.select_report_type(REPORTER_ACTIVITIES_DATA)
@@ -65,4 +65,4 @@ class TestEditProject(BaseTest):
         self.assertEqual(create_questionnaire_page.get_question_link_text(1), fetch_(DEFAULT_QUESTION, from_(QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES)))
         create_questionnaire_page.navigate_to_previous_step()
         subject_questionnaire_page.navigate_to_previous_step()
-        self.assertEqual(REPORTER_ACTIVITIES_DATA ,edit_project_page.get_project_details())
+        self.assertEqual(REPORTER_ACTIVITIES_DATA, edit_project_page.get_project_details())

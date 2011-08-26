@@ -249,7 +249,7 @@ class CreateQuestionnairePage(Page):
     def get_word_type_question(self):
         """
         Function to get the word or phrase option and the details of max on the questionnaire page
-        
+
         return question dict
         """
         question = dict()
@@ -267,7 +267,7 @@ class CreateQuestionnairePage(Page):
     def get_number_type_question(self):
         """
         Function to get the number option and the details min or max on the questionnaire page
-        
+
         return question dict
         """
         question = dict()

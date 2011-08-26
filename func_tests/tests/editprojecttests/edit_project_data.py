@@ -49,5 +49,5 @@ REPORTER_ACTIVITIES_DATA = {PROJECT_NAME: u"reporter activities",
 
 QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES = {DEFAULT_QUESTION: "What is the reporting period for the activity? rpd"}
 
-LIGHT_BOX_DATA = {TITLE:"Warning !!",
-                  MESSAGE:"Warning: Updating the associated type of the project questionnaire will remove all existing data."}
+LIGHT_BOX_DATA = {TITLE: "Warning !!",
+                  MESSAGE: "Warning: Updating the associated type of the project questionnaire will remove all existing data."}

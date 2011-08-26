@@ -8,6 +8,7 @@ from pages.createprojectpage.create_project_locator import *
 from tests.createprojecttests.create_project_data import *
 import time
 
+
 class CreateProjectPage(Page):
 
     def __init__(self, driver):
@@ -176,7 +177,7 @@ class CreateProjectPage(Page):
         elif self.driver.find_radio_button(DATA_SENDER_RB).is_selected():
             report_type = DATA_SENDER_WORK
         return report_type
-    
+
     def get_project_details(self):
         """
         Function to fetch the project details e.g. Name, Type, description etc

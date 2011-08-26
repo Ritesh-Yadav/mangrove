@@ -14,7 +14,7 @@ from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_SMS_TESTER_PA
 from tests.endtoendtest.end_to_end_data import *
 
 
-class TestIntregationOfApplication(BaseTest):
+class TestApplicationEndToEnd(BaseTest):
     def tearDown(self):
         try:
             self.driver.quit()
@@ -137,6 +137,23 @@ class TestIntregationOfApplication(BaseTest):
         self.assertRegexpMatches(submission_log_page.get_submission_message(SMS_DATA_LOG),
                                  fetch_(SMS_SUBMISSION, from_(SMS_DATA_LOG)))
 
+    def review_project_summary(self, review_page):
+        self.assertEqual(fetch_(PROJECT_PROFILE, from_(VALID_DATA_REVIEW_AND_TEST)),
+                         review_page.get_project_profile_details())
+        review_page.open_subject_accordion()
+        self.assertEqual(fetch_(SUBJECT_DETAILS, from_(VALID_DATA_REVIEW_AND_TEST)), review_page.get_subject_details())
+        review_page.open_data_sender_accordion()
+        self.assertEqual(fetch_(DATA_SENDER_COUNT, from_(VALID_DATA_REVIEW_AND_TEST)),
+                         review_page.get_data_sender_count())
+        review_page.open_questionnaire_accordion()
+        self.assertEqual(fetch_(QUESTIONNAIRE, from_(VALID_DATA_REVIEW_AND_TEST)), review_page.get_questionnaire())
+
+    def sms_light_box_verification(self, sms_tester_light_box):
+        sms_tester_light_box.send_sms_with(VALID_DATA_FOR_SMS_LIGHT_BOX)
+        self.assertEqual(sms_tester_light_box.get_response_message(),
+                         fetch_(RESPONSE_MESSAGE, from_(VALID_DATA_FOR_SMS_LIGHT_BOX)))
+        sms_tester_light_box.close_light_box()
+
     @attr('functional_test', 'smoke', "intregation")
     def test_end_to_end(self):
         self.email = None
@@ -154,7 +171,10 @@ class TestIntregationOfApplication(BaseTest):
         create_questionnaire_page = self.create_subject_questionnaire(create_subject_questionnaire_page)
         create_data_sender_questionnaire_page = self.create_questionnaire(create_questionnaire_page)
         reminder_page = self.create_data_sender_questionnaire(create_data_sender_questionnaire_page)
-        review_and_test_page = self.create_reminder(reminder_page)
+        review_page = self.create_reminder(reminder_page)
+        self.review_project_summary(review_page)
+#        sms_tester_light_box = review_page.open_sms_tester_light_box()
+#        self.sms_light_box_verification(sms_tester_light_box)
 
         all_subjects_page = global_navigation.navigate_to_all_subject_page()
         add_subject_page = all_subjects_page.navigate_to_add_a_subject_page()

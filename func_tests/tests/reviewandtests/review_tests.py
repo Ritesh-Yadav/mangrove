@@ -20,8 +20,8 @@ class TestReviewProject(BaseTest):
 
         # going on all project page
         all_project_page = global_navigation.navigate_to_view_all_project_page()
-        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME ,from_(
-            fetch_(PROJECT_PROFILE,from_(VALID_DATA)))))
+        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME, from_(
+            fetch_(PROJECT_PROFILE, from_(VALID_DATA)))))
         edit_project_page = project_overview_page.navigate_to_edit_project_page()
         subject_questionnaire_page = edit_project_page.save_project_successfully()
         questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
@@ -42,4 +42,3 @@ class TestReviewProject(BaseTest):
 #        self.assertEqual(fetch_(DATA_SENDER_COUNT, from_(VALID_DATA)), review_page.get_data_sender_count())
         review_page.open_questionnaire_accordion()
         self.assertEqual(fetch_(QUESTIONNAIRE, from_(VALID_DATA)), review_page.get_questionnaire())
-        

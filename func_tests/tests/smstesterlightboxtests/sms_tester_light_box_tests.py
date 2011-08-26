@@ -20,7 +20,7 @@ class TestSMSTesterLightBox(BaseTest):
 
         # going on all project page
         all_project_page = global_navigation.navigate_to_view_all_project_page()
-        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME ,from_(PROJECT_DATA)))
+        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME, from_(PROJECT_DATA)))
         edit_project_page = project_overview_page.navigate_to_edit_project_page()
         subject_questionnaire_page = edit_project_page.save_project_successfully()
         questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
@@ -37,7 +37,7 @@ class TestSMSTesterLightBox(BaseTest):
 
         # going on all project page
         all_project_page = global_navigation.navigate_to_view_all_project_page()
-        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME ,from_(PROJECT_DATA)))
+        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME, from_(PROJECT_DATA)))
         return project_overview_page.open_sms_tester_light_box()
 
     @attr('functional_test', 'smoke')

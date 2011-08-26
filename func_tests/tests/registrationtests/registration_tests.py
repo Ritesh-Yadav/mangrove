@@ -1,6 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 import time
 from nose.plugins.attrib import attr
+from nose.plugins.skip import SkipTest
 
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
@@ -33,6 +34,7 @@ class TestRegistrationPage(BaseTest):
         self.assertEquals(registration_page.get_error_message(), fetch_(ERROR_MESSAGE,
                    from_(EXISTING_EMAIL_ADDRESS)))
 
+    @SkipTest
     @attr('functional_test')
     def test_register_ngo_with_invalid_email_address(self):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
