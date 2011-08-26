@@ -4,6 +4,7 @@ from pages.reviewpage.review_locator import *
 from pages.smstesterlightbox.sms_tester_light_box_page import SMSTesterLightBoxPage
 from tests.reviewandtests.review_data import *
 from framework.utils.common_utils import *
+import time
 
 
 class ReviewPage(Page):
@@ -86,7 +87,7 @@ class ReviewPage(Page):
         questions_labels = self.driver.find_elements_(QUESTIONS_LABELS)
         questions = []
         for questions_label in questions_labels:
-            questions.append(questions_label.text)
+            questions.append(unicode(string=(questions_label.text)))
         return questions
 
     def get_project_profile_details(self):
@@ -118,24 +119,28 @@ class ReviewPage(Page):
         Function to open the subjects accordion
         """
         self.driver.find(SUBJECTS_ACCORDION).click()
+        time.sleep(2)
 
     def open_data_sender_accordion(self):
         """
         Function to open the subjects accordion
         """
         self.driver.find(DATA_SENDERS_ACCORDION).click()
+        time.sleep(2)
 
     def open_questionnaire_accordion(self):
         """
         Function to open the subjects accordion
         """
         self.driver.find(QUESTIONNAIRE_ACCORDION).click()
+        time.sleep(2)
 
     def open_reminder_accordion(self):
         """
         Function to open the subjects accordion
         """
         self.driver.find(REMINDERS_ACCORDION).click()
+        time.sleep(2)
 
     def open_sms_tester_light_box(self):
         """

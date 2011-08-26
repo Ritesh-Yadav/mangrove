@@ -187,7 +187,7 @@ VALID_DATA_REVIEW_AND_TEST = {PROJECT_PROFILE: {PROJECT_NAME: "waterpoint morond
                                 DEVICES: "sms"},
               SUBJECT_DETAILS: {SUBJECT: "waterpoint"},
               DATA_SENDER_COUNT: "1",
-              QUESTIONNAIRE: ['What are you reporting on?', 'Water Level', 'Date of report in DD.MM.YYY format', 'Date of report in MM.YYY format', 'Date of report in MM.DD.YYY format', 'Color of Water', 'Water point admin name', 'Bacterias in water', 'Geo points of Well'],
+              QUESTIONNAIRE: [u'What are you reporting on?', u'Water Level', u'Date of report in DD.MM.YYY format', u'Date of report in MM.YYY format', u'Date of report in MM.DD.YYY format', u'Color of Water', u'Water point admin name', u'Bacterias in water', u'Geo points of Well'],
               REMINDERS: "disabled"
               }
 
