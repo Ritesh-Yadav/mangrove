@@ -3,8 +3,7 @@
 from threading import Lock
 
 from couchdb.design import ViewDefinition
-from couchdb.http import ResourceNotFound
-import couchdb.client
+from pymongo import Connection
 
 import settings
 from documents import DocumentBase
@@ -19,12 +18,12 @@ _dbms = {}
 _dbms_lock = Lock()
 
 
-def get_db_manager(server=None, database=None):
+def get_db_manager(host=None, database=None):
     global _dbms
     assert _dbms is not None
 
     # use defaults if not passed
-    srv = (server if server is not None else settings.SERVER)
+    srv = (host if host is not None else settings.HOST)
     db = (database if database is not None else settings.DATABASE)
     k = (srv, db)
     # check if already created and in dict
@@ -32,7 +31,7 @@ def get_db_manager(server=None, database=None):
         with _dbms_lock:
             if k not in _dbms or _dbms[k] is None:
                 # nope, create it
-                _dbms[k] = DatabaseManager(server, database)
+                _dbms[k] = DatabaseManager(srv, db)
 
     return _dbms[k]
 
@@ -44,7 +43,7 @@ def remove_db_manager(dbm):
 
     with _dbms_lock:
         try:
-            del _dbms[(dbm.url, dbm.database_name)]
+            del _dbms[(dbm.host, dbm.database_name)]
         except KeyError, ex:
             print ex
             assert False
@@ -54,9 +53,8 @@ def remove_db_manager(dbm):
 def _delete_db_and_remove_db_manager(dbm):
     """This is really only used for testing purposes."""
     remove_db_manager(dbm)
-    if dbm.database_name in dbm.server:
-        del dbm.server[dbm.database_name]
-
+    dbm.connection.drop_database(dbm.database)
+    dbm.connection.disconnect()
 
 class DataObject(object):
     """
@@ -80,7 +78,7 @@ class DataObject(object):
       document
     """
 
-    __document_class__ = None
+    __collection_class__ = None
 
     @classmethod
     def new_from_doc(cls, dbm, doc):
@@ -116,26 +114,18 @@ class DataObject(object):
 
 
 class DatabaseManager(object):
-    def __init__(self, server=None, database=None):
+    def __init__(self, host=None, database=None):
         """
         Connect to the CouchDB server. If no database name is given,
         use the name provided in the settings
         """
 
-        self.url = (server if server is not None else settings.SERVER)
-        self.database_name = database or settings.DATABASE
-        self.server = couchdb.client.Server(self.url)
-        try:
-            self.database = self.server[self.database_name]
-        except ResourceNotFound:
-            self.database = self.server.create(self.database_name)
-
-        if self.database is not None:
-            self.create_default_views()
-
+        self.host, self.database_name = host, database #Hack so that we can use them in remove_dbm
+        self.connection = Connection(host)
+        self.database = self.connection[database]
 
     def __unicode__(self):
-        return u"Connected on %s - working on %s" % (self.url, self.database_name)
+        return u"Connected on %s - working on %s" % (self.connection, self.database)
 
     def __str__(self):
         return unicode(self)

@@ -1,2 +1,2 @@
 DATABASE = 'mangrove_web'
-SERVER = 'http://localhost:5984'
+HOST = '127.0.0.1'
