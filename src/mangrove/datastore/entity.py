@@ -214,6 +214,10 @@ def _from_row_to_entity(dbm, row):
     pass
 #    return Entity.new_from_doc(dbm=dbm, doc=Entity.__document_class__.wrap(row.get('doc')))
 
+def get_entities(dbm, list_of_uuids):
+    assert type(list_of_uuids) is list
+    return [get_by_uuid(dbm,uuid) for uuid in list_of_uuids]
+
 def get_by_uuid(dbm, uuid):
     assert type(uuid) is str or type(uuid) is unicode
     doc = dbm.get_entity(uuid)
