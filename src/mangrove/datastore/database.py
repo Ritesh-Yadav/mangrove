@@ -1,6 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 
 from threading import Lock
+import uuid
 
 from couchdb.design import ViewDefinition
 from pymongo import Connection
@@ -78,39 +79,22 @@ class DataObject(object):
       document
     """
 
-    __collection_class__ = None
-
-    @classmethod
-    def new_from_doc(cls, dbm, doc):
-        assert isinstance(doc, cls.__document_class__)
-        me = cls(dbm)
-        me._set_document(doc)
-        return me
+    __collection__ = None
 
     @classmethod
     def get(cls, dbm, id):
         return dbm.get(id, cls)
 
     def __init__(self, dbm):
-        self._doc = None
         self._dbm = dbm
-
-    def _set_document(self, document):
-        assert isinstance(document, self.__document_class__)
-        self._doc = document
+        self.uuid = uuid.uuid4()
+        self._data = {'uuid' : self.uuid}
 
     def save(self):
-        if self._doc is None:
-            raise NoDocumentError('No document to save')
-
-        return self._dbm._save_document(self._doc)
+        return self._dbm.save(self._data, self.__collection__)
 
     def delete(self):
         self._dbm.delete(self)
-
-    @property
-    def id(self):
-        return self._doc.id if self._doc is not None else None
 
 
 class DatabaseManager(object):
@@ -258,15 +242,14 @@ class DatabaseManager(object):
 
         return many[0]
 
+    def save(self, data, collection_name):
+        self.database[collection_name].save(data)
+
     def delete(self, d_obj):
         """
         Deletes the document associated with the data_obj from the database.
 
         """
         assert isinstance(d_obj, DataObject)
-
-        if d_obj._doc is None:
-            raise NoDocumentError
-
-        id = d_obj._doc.id
-        self.database.delete(d_obj._doc)
+        entity = self.database[d_obj.__collection__].find_one({"uuid":d_obj.uuid})
+        self.database[d_obj.__collection__].remove(entity)

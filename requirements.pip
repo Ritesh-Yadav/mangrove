@@ -20,3 +20,4 @@ psycopg2
 django-extensions
 apscheduler
 south
+https://github.com/slacy/minimongo/tarball/master#egg=minimongo

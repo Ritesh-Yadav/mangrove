@@ -24,10 +24,10 @@ class TestDataStoreApi(unittest.TestCase):
 
     def test_create_entity(self):
         pass
-#        entity = Entity(self.dbm, entity_type="clinic", location=["India", "MH", "Pune"])
-#        entity.save()
-#        self.assertTrue(entity.uuid)
-#        entity.delete()
+        entity = Entity(self.dbm, entity_type="clinic", location=["India", "MH", "Pune"])
+        entity.save()
+        self.assertTrue(entity.uuid)
+        entity.delete()
 
 #    def test_create_entity_with_id(self):
 #        entity = Entity(self.dbm, entity_type="clinic", location=["India", "MH", "Pune"], id="-1000")

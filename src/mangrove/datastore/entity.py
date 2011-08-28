@@ -4,7 +4,7 @@ import copy
 from datetime import datetime
 from time import mktime
 from collections import defaultdict
-from documents import EntityDocument, DataRecordDocument, attributes
+from documents import attributes
 from datadict import DataDictType, get_datadict_types
 import mangrove.datastore.aggregationtree as atree
 from mangrove.errors.MangroveException import EntityTypeAlreadyDefined, DataObjectAlreadyExists, EntityTypeDoesNotExistsException, DataObjectNotFound
@@ -210,7 +210,8 @@ def get_all_entities(dbm, include_docs=False):
 
 
 def _from_row_to_entity(dbm, row):
-    return Entity.new_from_doc(dbm=dbm, doc=Entity.__document_class__.wrap(row.get('doc')))
+    pass
+#    return Entity.new_from_doc(dbm=dbm, doc=Entity.__document_class__.wrap(row.get('doc')))
 
 
 class Entity(DataObject):
@@ -219,7 +220,7 @@ class Entity(DataObject):
     data to the database.
     """
 
-    __document_class__ = EntityDocument
+    __collection__ = "entity"
 
     def __init__(self, dbm, entity_type=None, location=None, aggregation_paths=None,
                  geometry=None, centroid=None, gr_id=None, id=None, short_code=None):
@@ -247,29 +248,25 @@ class Entity(DataObject):
         if entity_type is None:
             return
 
-        # Not made from existing doc, so create a new one
-        doc = EntityDocument(id)
-        self._set_document(doc)
-
         # add aggregation paths
         if is_string(entity_type):
             entity_type = [entity_type]
-        doc.entity_type = entity_type
+        self._data['entity_type'] = self.entity_type = entity_type
 
         if location is not None:
-            doc.location = location
+            self._data['location'] = self.location = location
 
         if geometry is not None:
-            doc.geometry = geometry
+            self._data['geometry'] = self.geometry = geometry
 
         if centroid is not None:
-            doc.centroid = centroid
+            self._data['centroid'] = self.centroid = centroid
 
         if gr_id is not None:
-            doc.gr_id = gr_id
+            self._data['gr_id'] = self.gr_id = gr_id
 
         if short_code is not None:
-            doc.short_code = short_code
+            self._data['short_coe'] = self.short_code = short_code
 
         if aggregation_paths is not None:
             reserved_names = (attributes.TYPE_PATH, attributes.GEO_PATH)
@@ -283,21 +280,21 @@ class Entity(DataObject):
         """
         Returns a copy of the dict
         """
-        return copy.deepcopy(self._doc.aggregation_paths)
+        return copy.deepcopy(self.aggregation_paths)
 
     @property
     def type_path(self):
         """
         Returns a copy of the path
         """
-        return list(self._doc.entity_type)
+        return list(self.entity_type)
 
     @property
     def location_path(self):
         """
         Returns a copy of the path
         """
-        return list(self._doc.location) if self._doc.location is not None else []
+        return list(self.location) if self.location is not None else []
 
 
     @property
@@ -323,27 +320,26 @@ class Entity(DataObject):
 
     @property
     def geometry(self):
-        return self._doc.geometry
+        return self.geometry
 
     @property
     def centroid(self):
-        return self._doc.centroid
+        return self.centroid
 
     @property
     def short_code(self):
-        return self._doc.short_code
+        return self.short_code
 
     @property
     def data(self):
-        return self._doc.data
+        return self.data
 
     def set_aggregation_path(self, name, path):
-        assert self._doc is not None
         assert is_string(name) and is_not_empty(name)
         assert is_sequence(path) and is_not_empty(path)
 
-        assert isinstance(self._doc[attributes.AGG_PATHS], dict)
-        self._doc[attributes.AGG_PATHS][name] = list(path)
+        assert isinstance(self[attributes.AGG_PATHS], dict)
+        self._data[attributes.AGG_PATHS][name] = self[attributes.AGG_PATHS][name] = list(path)
 
         # TODO: Depending on implementation we will need to update
         # aggregation paths on data records, in which case we need to
@@ -362,36 +358,36 @@ class Entity(DataObject):
         """
         assert is_sequence(data)
         assert event_time is None or isinstance(event_time, datetime)
-        assert self.id is not None, u"id should never be none, even if haven't been saved,an entity should have a UUID."
+        assert self.uuid is not None, u"id should never be none, even if haven't been saved,an entity should have a UUID."
         # TODO: should we have a flag that says that this has been
         # saved at least once to avoid adding data records for an
         # Entity that may never be saved? Should docs just be saved on
         # init?
-        if event_time is None:
-            event_time = utcnow()
-        for (label, value, dd_type) in data:
-            if not isinstance(dd_type, DataDictType) or is_empty(label):
-                raise ValueError(u'Data must be of the form (label, value, DataDictType).')
-        self.update_latest_data(data=data)
-        if multiple_records:
-            data_list = []
-            for (label, value, dd_type) in data:
-                data_record = DataRecordDocument(
-                    entity_doc=self._doc,
-                    event_time=event_time,
-                    data=[(label, value, dd_type)],
-                    submission=submission
-                )
-                data_list.append(data_record)
-            return self._dbm._save_documents(data_list)
-        else:
-            data_record_doc = DataRecordDocument(
-                entity_doc=self._doc,
-                event_time=event_time,
-                data=data,
-                submission=submission
-            )
-            return self._dbm._save_document(data_record_doc)
+#        if event_time is None:
+#            event_time = utcnow()
+#        for (label, value, dd_type) in data:
+#            if not isinstance(dd_type, DataDictType) or is_empty(label):
+#                raise ValueError(u'Data must be of the form (label, value, DataDictType).')
+#        self.update_latest_data(data=data)
+#        if multiple_records:
+#            data_list = []
+#            for (label, value, dd_type) in data:
+#                data_record = DataRecordDocument(
+#                    entity_doc=self._doc,
+#                    event_time=event_time,
+#                    data=[(label, value, dd_type)],
+#                    submission=submission
+#                )
+#                data_list.append(data_record)
+#            return self._dbm._save_documents(data_list)
+#        else:
+#            data_record_doc = DataRecordDocument(
+#                entity_doc=self._doc,
+#                event_time=event_time,
+#                data=data,
+#                submission=submission
+#            )
+#            return self._dbm._save_document(data_record_doc)
 
     def update_latest_data(self, data):
         for (label, value, dd_type) in data:
@@ -414,7 +410,7 @@ class Entity(DataObject):
         Mark the entity as invalid.
         This will also mark all associated data records as invalid.
         """
-        self._doc.void = True
+        self.void = True
         self.save()
         for id in self._get_data_ids():
             self.invalidate_data(id)
@@ -432,7 +428,7 @@ class Entity(DataObject):
         Return a list of all the data records associated with this
         entity.
         """
-        return self._dbm.load_all_rows_in_view(u'entity_data', key=self.id)
+        return self._dbm.load_all_rows_in_view(u'entity_data', key=self.uuid)
 
     def get_all_data(self):
         """
@@ -440,7 +436,7 @@ class Entity(DataObject):
         the second level is the data dict type slug, and the third
         contains the value.
         """
-        rows = self._dbm.load_all_rows_in_view(u'id_time_slug_value', key=self.id)
+        rows = self._dbm.load_all_rows_in_view(u'id_time_slug_value', key=self.uuid)
         result = defaultdict(dict)
         for row in rows:
             row = row[u'value']
@@ -453,14 +449,14 @@ class Entity(DataObject):
         """
         assert tags is None or isinstance(tags, list) or is_string(tags)
         if tags is None or is_empty(tags):
-            rows = self._dbm.load_all_rows_in_view(u'entity_datatypes', key=self.id)
+            rows = self._dbm.load_all_rows_in_view(u'entity_datatypes', key=self.uuid)
             result = get_datadict_types(self._dbm, [row[u'value'] for row in rows])
         else:
             if is_string(tags):
                 tags = [tags]
             keys = []
             for tag in tags:
-                rows = self._dbm.load_all_rows_in_view(u'entity_datatypes_by_tag', key=[self.id, tag])
+                rows = self._dbm.load_all_rows_in_view(u'entity_datatypes_by_tag', key=[self.uuid, tag])
                 keys.append([row[u'value'] for row in rows])
             ids_with_all_tags = list(set.intersection(*map(set, keys)))
             result = get_datadict_types(self._dbm, ids_with_all_tags)
@@ -504,7 +500,7 @@ class Entity(DataObject):
         return result
 
     def _get_aggregate_value(self, field, aggregate_fn, date):
-        entity_id = self._doc.id
+        entity_id = self.uuid
         time_since_epoch_of_date = int(mktime(date.timetuple())) * 1000
         rows = self._dbm.load_all_rows_in_view(aggregate_fn, group_level=3, descending=False,
                                                startkey=[self.type_path, entity_id, field],
