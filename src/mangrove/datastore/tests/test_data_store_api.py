@@ -1,18 +1,8 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from pymongo import Connection
-from datetime import datetime
+from mangrove.datastore.entity import get_by_uuid
 from mangrove.datastore.entity import Entity, define_type, get_all_entity_types, get_all_entities, get_by_short_code
 from mangrove.datastore.database import get_db_manager, _delete_db_and_remove_db_manager, remove_db_manager
-from mangrove.datastore.documents import DataRecordDocument
-from mangrove.datastore.datadict import DataDictType
-from pytz import UTC
 import unittest
-from mangrove.errors.MangroveException import EntityTypeAlreadyDefined
-
-
-# Adaptor methods to old api
-def get(dbm, id):
-    return dbm.get(id, Entity)
 
 
 class TestDataStoreApi(unittest.TestCase):
@@ -34,11 +24,13 @@ class TestDataStoreApi(unittest.TestCase):
         entity.save()
         self.assertEqual(entity.uuid, "-1000")
         entity.delete()
-#
-#    def test_get_entity(self):
-#        entity = get(self.entity.uuid)
-#        self.assertTrue(entity.uuid)
-#        self.assertTrue(entity.type_string == "clinic")
+
+    def test_get_entity(self):
+        e = Entity(self.dbm, entity_type="clinic", location=["India", "MH", "Pune"])
+        e.save()
+        entity = get_by_uuid(self.dbm, e.uuid)
+        self.assertTrue(entity.uuid)
+        self.assertTrue(entity.type_string == "clinic")
 #
 #    def test_should_add_location_hierarchy_on_create(self):
 #        entity = Entity(entity_type="clinic", location=["India", "MH", "Pune"])

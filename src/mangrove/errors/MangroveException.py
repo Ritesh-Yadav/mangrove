@@ -266,3 +266,7 @@ class RegexMismatchException(MangroveException):
 class ConstraintTypeUnknownException(MangroveException):
     def __init__(self, name):
         MangroveException.__init__(self, "Unknown constraint type: %s" % (name,))
+
+class EntityNotFoundException(MangroveException):
+    def __init__(self, message):
+        MangroveException.__init__(self, (message))

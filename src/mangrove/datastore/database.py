@@ -252,3 +252,7 @@ class DatabaseManager(object):
         assert isinstance(d_obj, DataObject)
         entity = self.database[d_obj.__collection__].find_one({"uuid":d_obj.uuid})
         self.database[d_obj.__collection__].remove(entity)
+
+    def get_entity(self, uuid):
+        assert type(uuid) is str
+        return self.database[settings.ENTITY_COLLECTION].find_one({'uuid': uuid})

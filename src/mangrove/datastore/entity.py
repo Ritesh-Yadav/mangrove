@@ -7,7 +7,7 @@ from collections import defaultdict
 from documents import attributes
 from datadict import DataDictType, get_datadict_types
 import mangrove.datastore.aggregationtree as atree
-from mangrove.errors.MangroveException import EntityTypeAlreadyDefined, DataObjectAlreadyExists, EntityTypeDoesNotExistsException, DataObjectNotFound
+from mangrove.errors.MangroveException import EntityTypeAlreadyDefined, DataObjectAlreadyExists, EntityTypeDoesNotExistsException, DataObjectNotFound, EntityNotFoundException
 from mangrove.utils.types import is_empty
 from mangrove.utils.types import is_not_empty, is_sequence, is_string
 from mangrove.utils.dates import utcnow
@@ -214,6 +214,12 @@ def _from_row_to_entity(dbm, row):
     pass
 #    return Entity.new_from_doc(dbm=dbm, doc=Entity.__document_class__.wrap(row.get('doc')))
 
+def get_by_uuid(dbm, uuid):
+    doc = dbm.get_entity(uuid)
+    if doc is not None:
+        return Entity(dbm, doc['entity_type'], doc['location'], doc['aggregation_paths'],
+                 doc['geometry'], doc['centroid'], doc['gr_id'], doc['uuid'], doc['short_code'])
+    raise EntityNotFoundException("Entity not found for uuid: %s" % uuid)
 
 class Entity(DataObject):
     """
@@ -254,21 +260,17 @@ class Entity(DataObject):
             entity_type = [entity_type]
         self._data['entity_type'] = self.entity_type = entity_type
 
-        if location is not None:
-            self._data['location'] = self.location = location
+        self._data['location'] = self.location = location
 
-        if geometry is not None:
-            self._data['geometry'] = self.geometry = geometry
+        self._data['geometry'] = self.geometry = geometry
 
-        if centroid is not None:
-            self._data['centroid'] = self.centroid = centroid
+        self._data['centroid'] = self.centroid = centroid
 
-        if gr_id is not None:
-            self._data['gr_id'] = self.gr_id = gr_id
+        self._data['gr_id'] = self.gr_id = gr_id
 
-        if short_code is not None:
-            self._data['short_coe'] = self.short_code = short_code
+        self._data['short_code'] = self.short_code = short_code
 
+        self._data['aggregation_paths'] = self.aggregation_paths = {}
         if aggregation_paths is not None:
             reserved_names = (attributes.TYPE_PATH, attributes.GEO_PATH)
             for name in aggregation_paths.keys():
@@ -277,13 +279,6 @@ class Entity(DataObject):
                 self.set_aggregation_path(name, aggregation_paths[name])
 
         self._data['uuid'] = self.uuid = uuid if uuid is not None else str(uuid4())
-
-    @property
-    def aggregation_paths(self):
-        """
-        Returns a copy of the dict
-        """
-        return copy.deepcopy(self.aggregation_paths)
 
     @property
     def type_path(self):
@@ -320,22 +315,6 @@ class Entity(DataObject):
         """
         p = self.location_path
         return u'' if p is None else u'.'.join(p)
-
-    @property
-    def geometry(self):
-        return self.geometry
-
-    @property
-    def centroid(self):
-        return self.centroid
-
-    @property
-    def short_code(self):
-        return self.short_code
-
-    @property
-    def data(self):
-        return self.data
 
     def set_aggregation_path(self, name, path):
         assert is_string(name) and is_not_empty(name)
