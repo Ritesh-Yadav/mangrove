@@ -31,13 +31,13 @@ class TestDataStoreApi(unittest.TestCase):
         entity = get_by_uuid(self.dbm, e.uuid)
         self.assertTrue(entity.uuid)
         self.assertTrue(entity.type_string == "clinic")
-#
-#    def test_should_add_location_hierarchy_on_create(self):
-#        entity = Entity(entity_type="clinic", location=["India", "MH", "Pune"])
-#        entity.save()
-#        saved = get(self.dbm, uuid)
-#        self.assertEqual(saved.location_path, ["India", "MH", "Pune"])
-#
+
+    def test_should_add_location_hierarchy_on_create(self):
+        entity = Entity(self.dbm, entity_type="clinic", location=["India", "MH", "Pune"])
+        entity.save()
+        saved = get_by_uuid(self.dbm, entity.uuid)
+        self.assertEqual(saved.location_path, ["India", "MH", "Pune"])
+
 #    def test_should_return_empty_list_if_location_path_is_not_stored(self):
 #        e = Entity(self.dbm, entity_type="clinic")
 #        uuid = e.save()
