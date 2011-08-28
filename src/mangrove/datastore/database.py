@@ -242,6 +242,9 @@ class DatabaseManager(object):
         return many[0]
 
     def save(self, data, collection_name):
+        document = self.database[collection_name].find_one({'uuid': data['uuid']}) #For updates see if doc with uuid exists, if so add the objectId so that it is an update
+        if document is not None:
+            data['_id'] = document['_id']
         self.database[collection_name].save(data)
 
     def delete(self, d_obj):
@@ -253,6 +256,6 @@ class DatabaseManager(object):
         entity = self.database[d_obj.__collection__].find_one({"uuid":d_obj.uuid})
         self.database[d_obj.__collection__].remove(entity)
 
-    def get_entity(self, uuid):
-        assert type(uuid) is str
+    def get_entity(self, uuid): #This could be made generic, if the collection name is injected
+        assert type(uuid) is str or type(uuid) is unicode
         return self.database[settings.ENTITY_COLLECTION].find_one({'uuid': uuid})

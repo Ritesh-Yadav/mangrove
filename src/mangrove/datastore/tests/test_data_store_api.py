@@ -56,33 +56,36 @@ class TestDataStoreApi(unittest.TestCase):
         saved = get_by_uuid(self.dbm, e.uuid)
         self.assertEqual(saved.type_path, ["health_facility"])
 
-#    def test_should_add_passed_in_hierarchy_path_on_create(self):
-#        e = Entity(self.dbm, entity_type=["HealthFacility", "Clinic"], location=["India", "MH", "Pune"],
-#                   aggregation_paths={"org": ["TW_Global", "TW_India", "TW_Pune"],
-#                                      "levels": ["Lead Consultant", "Sr. Consultant", "Consultant"]})
-#        uuid = e.save()
-#        saved = get(self.dbm, uuid)
-#        hpath = saved._doc.aggregation_paths
-#        self.assertEqual(hpath["org"], ["TW_Global", "TW_India", "TW_Pune"])
-#        self.assertEqual(hpath["levels"], ["Lead Consultant", "Sr. Consultant", "Consultant"])
-#
-#    def test_hierarchy_addition(self):
-#        e = get(self.dbm, self.uuid)
-#        org_hierarchy = ["TWGlobal", "TW-India", "TW-Pune"]
-#        e.set_aggregation_path("org", org_hierarchy)
-#        e.save()
-#        saved = get(self.dbm, self.uuid)
-#        self.assertTrue(saved.aggregation_paths["org"] == ["TWGlobal", "TW-India", "TW-Pune"])
-#
-#    def test_hierarchy_addition_should_clone_tree(self):
-#        e = get(self.dbm, self.uuid)
-#        org_hierarchy = ["TW", "PS", "IS"]
-#        e.set_aggregation_path("org", org_hierarchy)
-#        org_hierarchy[0] = ["NewValue"]
-#        e.save()
-#        saved = get(self.dbm, self.uuid)
-#        self.assertTrue(saved.aggregation_paths["org"] == ["TW", "PS", "IS"])
-#
+    def test_should_add_passed_in_hierarchy_path_on_create(self):
+        e = Entity(self.dbm, entity_type=["HealthFacility", "Clinic"], location=["India", "MH", "Pune"],
+                   aggregation_paths={"org": ["TW_Global", "TW_India", "TW_Pune"],
+                                      "levels": ["Lead Consultant", "Sr. Consultant", "Consultant"]})
+        e.save()
+        saved = get_by_uuid(self.dbm, e.uuid)
+        hpath = saved.aggregation_paths
+        self.assertEqual(hpath["org"], ["TW_Global", "TW_India", "TW_Pune"])
+        self.assertEqual(hpath["levels"], ["Lead Consultant", "Sr. Consultant", "Consultant"])
+
+    def test_hierarchy_addition(self):
+        e = Entity(self.dbm, entity_type="clinic", location=["India", "MH", "Pune"])
+        e.save()
+        entity = get_by_uuid(self.dbm, e.uuid)
+        entity.set_aggregation_path("org", ["TWGlobal", "TW-India", "TW-Pune"])
+        entity.save()
+        saved = get_by_uuid(self.dbm, entity.uuid)
+        self.assertTrue(saved.aggregation_paths["org"] == ["TWGlobal", "TW-India", "TW-Pune"])
+
+    def test_hierarchy_addition_should_clone_tree(self):
+        e = Entity(self.dbm, entity_type="clinic", location=["India", "MH", "Pune"])
+        e.save()
+        e = get_by_uuid(self.dbm, e.uuid)
+        org_hierarchy = ["TW", "PS", "IS"]
+        e.set_aggregation_path("org", org_hierarchy)
+        org_hierarchy[0] = ["NewValue"]
+        e.save()
+        saved = get_by_uuid(self.dbm, e.uuid)
+        self.assertTrue(saved.aggregation_paths["org"] == ["TW", "PS", "IS"])
+
 #    def test_save_aggregation_path_only_via_api(self):
 #        e = get(self.dbm, self.uuid)
 #        e.location_path[0] = "US"

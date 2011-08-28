@@ -215,6 +215,7 @@ def _from_row_to_entity(dbm, row):
 #    return Entity.new_from_doc(dbm=dbm, doc=Entity.__document_class__.wrap(row.get('doc')))
 
 def get_by_uuid(dbm, uuid):
+    assert type(uuid) is str or type(uuid) is unicode
     doc = dbm.get_entity(uuid)
     if doc is not None:
         return Entity(dbm, doc['entity_type'], doc['location'], doc['aggregation_paths'],
@@ -270,7 +271,7 @@ class Entity(DataObject):
 
         self._data['short_code'] = self.short_code = short_code
 
-        self._data['aggregation_paths'] = self.aggregation_paths = {}
+        self._data['aggregation_paths'] = {}
         if aggregation_paths is not None:
             reserved_names = (attributes.TYPE_PATH, attributes.GEO_PATH)
             for name in aggregation_paths.keys():
@@ -279,6 +280,14 @@ class Entity(DataObject):
                 self.set_aggregation_path(name, aggregation_paths[name])
 
         self._data['uuid'] = self.uuid = uuid if uuid is not None else str(uuid4())
+
+    @property
+    def aggregation_paths(self):
+        """
+        Returns a copy of the dict
+        """
+        return copy.deepcopy(self._data['aggregation_paths'])
+
 
     @property
     def type_path(self):
@@ -320,8 +329,9 @@ class Entity(DataObject):
         assert is_string(name) and is_not_empty(name)
         assert is_sequence(path) and is_not_empty(path)
 
-        assert isinstance(self[attributes.AGG_PATHS], dict)
-        self._data[attributes.AGG_PATHS][name] = self[attributes.AGG_PATHS][name] = list(path)
+        assert isinstance(self._data[attributes.AGG_PATHS], dict)
+        self._data[attributes.AGG_PATHS][name] = list(path)
+        print self._data
 
         # TODO: Depending on implementation we will need to update
         # aggregation paths on data records, in which case we need to
