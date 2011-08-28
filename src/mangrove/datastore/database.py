@@ -53,9 +53,9 @@ def remove_db_manager(dbm):
 
 def _delete_db_and_remove_db_manager(dbm):
     """This is really only used for testing purposes."""
-    remove_db_manager(dbm)
-    dbm.connection.drop_database(dbm.database)
-    dbm.connection.disconnect()
+    collections = dbm.database.collection_names()
+    for collection in collections:
+        dbm.database[collection].remove({})
 
 class DataObject(object):
     """
