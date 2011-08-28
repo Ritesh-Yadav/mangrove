@@ -87,8 +87,7 @@ class DataObject(object):
 
     def __init__(self, dbm):
         self._dbm = dbm
-        self.uuid = uuid.uuid4()
-        self._data = {'uuid' : self.uuid}
+        self._data = {}
 
     def save(self):
         return self._dbm.save(self._data, self.__collection__)

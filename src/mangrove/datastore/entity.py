@@ -12,6 +12,7 @@ from mangrove.utils.types import is_empty
 from mangrove.utils.types import is_not_empty, is_sequence, is_string
 from mangrove.utils.dates import utcnow
 from database import DatabaseManager, DataObject
+from uuid import uuid4
 
 ENTITY_TYPE_TREE = u'entity_type_tree'
 
@@ -223,7 +224,7 @@ class Entity(DataObject):
     __collection__ = "entity"
 
     def __init__(self, dbm, entity_type=None, location=None, aggregation_paths=None,
-                 geometry=None, centroid=None, gr_id=None, id=None, short_code=None):
+                 geometry=None, centroid=None, gr_id=None, uuid=None, short_code=None):
         """
         Construct a new entity.
 
@@ -274,6 +275,8 @@ class Entity(DataObject):
                 if name in reserved_names:
                     raise ValueError(u'Attempted to add an aggregation path with a reserved name')
                 self.set_aggregation_path(name, aggregation_paths[name])
+
+        self._data['uuid'] = self.uuid = uuid if uuid is not None else str(uuid4())
 
     @property
     def aggregation_paths(self):
