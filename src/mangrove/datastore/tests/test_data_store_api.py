@@ -38,12 +38,12 @@ class TestDataStoreApi(unittest.TestCase):
         saved = get_by_uuid(self.dbm, entity.uuid)
         self.assertEqual(saved.location_path, ["India", "MH", "Pune"])
 
-#    def test_should_return_empty_list_if_location_path_is_not_stored(self):
-#        e = Entity(self.dbm, entity_type="clinic")
-#        uuid = e.save()
-#        saved = get(self.dbm, uuid)
-#        self.assertEqual(saved.location_path, [])
-#
+    def test_should_return_empty_list_if_location_path_is_not_stored(self):
+        e = Entity(self.dbm, entity_type="clinic")
+        e.save()
+        saved = get_by_uuid(self.dbm, e.uuid)
+        self.assertEqual(saved.location_path, [])
+
 #    def test_should_add_entity_type_on_create(self):
 #        e = Entity(self.dbm, entity_type=["healthfacility", "clinic"])
 #        uuid = e.save()
