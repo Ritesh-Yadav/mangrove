@@ -6,6 +6,7 @@ from time import mktime
 from collections import defaultdict
 from documents import attributes
 from datadict import DataDictType, get_datadict_types
+from mangrove.datastore import settings
 import mangrove.datastore.aggregationtree as atree
 from mangrove.errors.MangroveException import EntityTypeAlreadyDefined, DataObjectAlreadyExists, EntityTypeDoesNotExistsException, DataObjectNotFound, EntityNotFoundException
 from mangrove.utils.types import is_empty
@@ -214,6 +215,7 @@ def _from_row_to_entity(dbm, row):
     pass
 #    return Entity.new_from_doc(dbm=dbm, doc=Entity.__document_class__.wrap(row.get('doc')))
 
+#TODO Implement a method in database which hits db only once.
 def get_entities(dbm, list_of_uuids):
     assert type(list_of_uuids) is list
     return [get_by_uuid(dbm,uuid) for uuid in list_of_uuids]
@@ -232,7 +234,7 @@ class Entity(DataObject):
     data to the database.
     """
 
-    __collection__ = "entity"
+    __collection__ = settings.ENTITY_COLLECTION
 
     def __init__(self, dbm, entity_type=None, location=None, aggregation_paths=None,
                  geometry=None, centroid=None, gr_id=None, uuid=None, short_code=None):
@@ -359,31 +361,31 @@ class Entity(DataObject):
         # saved at least once to avoid adding data records for an
         # Entity that may never be saved? Should docs just be saved on
         # init?
-#        if event_time is None:
-#            event_time = utcnow()
-#        for (label, value, dd_type) in data:
-#            if not isinstance(dd_type, DataDictType) or is_empty(label):
-#                raise ValueError(u'Data must be of the form (label, value, DataDictType).')
-#        self.update_latest_data(data=data)
-#        if multiple_records:
-#            data_list = []
-#            for (label, value, dd_type) in data:
-#                data_record = DataRecordDocument(
-#                    entity_doc=self._doc,
-#                    event_time=event_time,
-#                    data=[(label, value, dd_type)],
-#                    submission=submission
-#                )
-#                data_list.append(data_record)
-#            return self._dbm._save_documents(data_list)
-#        else:
-#            data_record_doc = DataRecordDocument(
-#                entity_doc=self._doc,
-#                event_time=event_time,
-#                data=data,
-#                submission=submission
-#            )
-#            return self._dbm._save_document(data_record_doc)
+        if event_time is None:
+            event_time = utcnow()
+        for (label, value, dd_type) in data:
+            if not isinstance(dd_type, DataDictType) or is_empty(label):
+                raise ValueError(u'Data must be of the form (label, value, DataDictType).')
+        #self.update_latest_data(data=data) #Optimization to cache the latest value submitted in entity
+        if multiple_records:
+            data_list = []
+            for (label, value, dd_type) in data:
+                data_record = DataRecordDocument(
+                    entity_doc=self._doc,
+                    event_time=event_time,
+                    data=[(label, value, dd_type)],
+                    submission=submission
+                )   
+                data_list.append(data_record)
+            return self._dbm._save_documents(data_list)
+        else:
+            data_record_doc = DataRecordDocument(
+                entity_doc=self._doc,
+                event_time=event_time,
+                data=data,
+                submission=submission
+            )
+            return self._dbm._save_document(data_record_doc)
 
     def update_latest_data(self, data):
         for (label, value, dd_type) in data:

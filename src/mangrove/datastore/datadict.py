@@ -1,5 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 import dbm
+import json
+from mangrove.datastore import settings
 
 from mangrove.datastore.database import DatabaseManager, DataObject
 from mangrove.datastore.documents import DataDictDocument
@@ -48,10 +50,10 @@ def get_or_create_data_dict(dbm, name, slug, primitive_type, description=None, c
 class DataDictType(DataObject):
     """DataDict is an abstraction that stores named data types and constraints ."""
 
-    __document_class__ = DataDictDocument
+    __collection__ = settings.DATADICT_COLLECTION
 
     def __init__(self, dbm, name=None, slug=None, primitive_type=None, description=None,
-                 constraints=None, tags=None, id=None, **kwargs):
+                 constraints=None, tags=None, uuid=None):
         """Create a new DataDictType.
 
         This represents a type of data that can be used to coordinate data collection and interoperability.
@@ -71,39 +73,38 @@ class DataDictType(DataObject):
             return
 
         # Not made from existing doc, so create a new one
-        doc = DataDictDocument(id, primitive_type, constraints, slug, name, description, tags, **kwargs)
-        self._set_document(doc)
-
+        self._data = {'uuid': uuid, 'primitive_type': primitive_type, 'constraints': constraints, 'slug': slug,
+                      'name': name, 'description': description,'tags':  tags}
     @property
     def name(self):
-        return self._doc.name
+        return self._data['name']
 
     @property
     def slug(self):
-        return self._doc.slug
+        return self._data['slug']
 
     @property
     def description(self):
-        return self._doc.description
+        return self._data['description']
 
     @description.setter
     def description(self, value):
-        self._doc.description = value
+        self._data['description'] = value
 
     @property
     def constraints(self):
-        return self._doc.constraints
+        return self._data['constraints']
 
     @property
     def primitive_type(self):
-        return self._doc.primitive_type
+        return self._data['primitive_type']
 
     @property
     def tags(self):
-        return self._doc.tags
+        return self._data['tags']
 
     def to_json(self):
-        return self._doc.unwrap()
+        return json.dumps(self._data)
 
     @classmethod
     def create_from_json(cls, json, dbm):
