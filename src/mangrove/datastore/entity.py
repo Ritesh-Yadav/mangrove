@@ -210,6 +210,8 @@ def get_all_entities(dbm, include_docs=False):
     rows = dbm.load_all_rows_in_view("by_short_codes", reduce=False, include_docs=include_docs)
     return [_from_row_to_entity(dbm, row) for row in rows]
 
+def get_datarecord_by_uuid(dbm, entity_uuid, datarecord_uuid):
+    pass
 
 def _from_row_to_entity(dbm, row):
     pass
@@ -366,26 +368,25 @@ class Entity(DataObject):
         for (label, value, dd_type) in data:
             if not isinstance(dd_type, DataDictType) or is_empty(label):
                 raise ValueError(u'Data must be of the form (label, value, DataDictType).')
-        #self.update_latest_data(data=data) #Optimization to cache the latest value submitted in entity
+            #self.update_latest_data(data=data) #Optimization to cache the latest value submitted in entity
+        if not "data" in self._data.keys():
+            self._data['data'] = []
         if multiple_records:
-            data_list = []
             for (label, value, dd_type) in data:
-                data_record = DataRecordDocument(
-                    entity_doc=self._doc,
-                    event_time=event_time,
-                    data=[(label, value, dd_type)],
-                    submission=submission
-                )   
-                data_list.append(data_record)
-            return self._dbm._save_documents(data_list)
+                data_record = {'uuid': str(uuid4()),
+                               'event_time': event_time,
+                               'data': [(label, value, dd_type)],
+                               'submission': submission
+                }
+                self._data['data'].expand(data_record)
         else:
-            data_record_doc = DataRecordDocument(
-                entity_doc=self._doc,
-                event_time=event_time,
-                data=data,
-                submission=submission
-            )
-            return self._dbm._save_document(data_record_doc)
+            data_record = {'uuid': str(uuid4()),
+                           'event_time': event_time,
+                           'data': data,
+                           'submission': submission
+            }
+            self._data['data'].expand(data_record)
+        self.save()
 
     def update_latest_data(self, data):
         for (label, value, dd_type) in data:

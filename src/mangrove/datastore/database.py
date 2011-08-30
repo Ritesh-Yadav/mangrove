@@ -259,3 +259,8 @@ class DatabaseManager(object):
     def get_entity(self, uuid): #This could be made generic, if the collection name is injected
         assert type(uuid) is str or type(uuid) is unicode
         return self.database[settings.ENTITY_COLLECTION].find_one({'uuid': uuid})
+
+    def get_datarecord(self, entity_uuid, datarecord_uuid):
+        assert type(entity_uuid) is str or type(entity_uuid) is unicode
+        assert type(datarecord_uuid) is str or type(datarecord_uuid) is unicode
+        return self.database_name[settings.ENTITY_COLLECTION].find_one({'uuid': entity_uuid, datarecord_uuid: {'$in': 'data'}})
