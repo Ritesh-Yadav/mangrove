@@ -1,18 +1,14 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from nose.plugins.attrib import attr
-from nose.plugins.skip import SkipTest
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
-from pages.dashboardpage.dashboard_page import DashboardPage
 from pages.loginpage.login_page import LoginPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.editprojecttests.edit_project_data import *
-import time
 
 
 class TestEditProject(BaseTest):
-
     def prerequisites_of_edit_project(self):
         # doing successful login with valid credentials
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
@@ -28,7 +24,8 @@ class TestEditProject(BaseTest):
         Function to test the successful editing of project with given details e.g. project name and subject
         """
         all_project_page = self.prerequisites_of_edit_project()
-        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME, from_(VALID_DATA)))
+        project_overview_page = all_project_page.navigate_to_project_overview_page(
+            fetch_(PROJECT_NAME, from_(VALID_DATA)))
         edit_project_page = project_overview_page.navigate_to_edit_project_page()
         self.assertEqual(VALID_DATA, edit_project_page.get_project_details())
         edit_project_page.type_project_name(WATER_POINT_DATA)
@@ -39,7 +36,8 @@ class TestEditProject(BaseTest):
         subject_questionnaire_page = edit_project_page.save_project_successfully()
         self.assertEquals(self.driver.get_title(), subject_questionnaire_page.get_page_title())
         create_questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
-        self.assertEqual(create_questionnaire_page.get_question_link_text(1), fetch_(DEFAULT_QUESTION, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT)))
+        self.assertEqual(create_questionnaire_page.get_question_link_text(1),
+                         fetch_(DEFAULT_QUESTION, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT)))
         create_questionnaire_page.navigate_to_previous_step()
         subject_questionnaire_page.navigate_to_previous_step()
         self.assertEqual(WATER_POINT_DATA, edit_project_page.get_project_details())
@@ -50,7 +48,8 @@ class TestEditProject(BaseTest):
         Function to test the successful editing of project with given details e.g. project name and report type
         """
         all_project_page = self.prerequisites_of_edit_project()
-        project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME, from_(VALID_DATA2)))
+        project_overview_page = all_project_page.navigate_to_project_overview_page(
+            fetch_(PROJECT_NAME, from_(VALID_DATA2)))
         edit_project_page = project_overview_page.navigate_to_edit_project_page()
         self.assertEqual(VALID_DATA2, edit_project_page.get_project_details())
         edit_project_page.type_project_name(REPORTER_ACTIVITIES_DATA)
@@ -62,7 +61,8 @@ class TestEditProject(BaseTest):
         subject_questionnaire_page = edit_project_page.save_project_successfully()
         self.assertEquals(self.driver.get_title(), subject_questionnaire_page.get_page_title())
         create_questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
-        self.assertEqual(create_questionnaire_page.get_question_link_text(1), fetch_(DEFAULT_QUESTION, from_(QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES)))
+        self.assertEqual(create_questionnaire_page.get_question_link_text(1),
+                         fetch_(DEFAULT_QUESTION, from_(QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES)))
         create_questionnaire_page.navigate_to_previous_step()
         subject_questionnaire_page.navigate_to_previous_step()
         self.assertEqual(REPORTER_ACTIVITIES_DATA, edit_project_page.get_project_details())

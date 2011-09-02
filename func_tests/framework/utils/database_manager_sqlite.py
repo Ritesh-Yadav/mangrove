@@ -1,13 +1,11 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 import sqlite3
 import os
-from framework.utils.couch_http_wrapper import CouchHttpWrapper
 
 DEFAULT_DB_FILE = '../../../src/datawinners/mangrovedb'
 
 
 class DatabaseManager(object):
-
     def get_connection(self, database_name=DEFAULT_DB_FILE):
         """
         Function to get the connection to SQLite3 database
@@ -84,7 +82,8 @@ class DatabaseManager(object):
             user_id = int(cur.fetchone()[0])
             cur.execute("select org_id from accountmanagement_ngouserprofile where user_id=?;", (user_id,))
             org_id = str(cur.fetchone()[0])
-            cur.execute("select document_store from accountmanagement_organizationsetting where organization_id=?;", (org_id,))
+            cur.execute("select document_store from accountmanagement_organizationsetting where organization_id=?;",
+                    (org_id,))
             organization_db_name = str(cur.fetchone()[0])
             cur.execute("delete from auth_user where id=?;", (user_id,))
             cur.execute("delete from accountmanagement_organization where org_id=?;", (org_id,))

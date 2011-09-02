@@ -6,7 +6,6 @@ from testdata.test_data import DATA_WINNER_ACTIVATE_ACCOUNT
 
 
 class ActivateAccountPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 

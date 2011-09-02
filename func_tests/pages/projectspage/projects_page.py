@@ -7,7 +7,6 @@ from pages.page import Page
 
 
 class ProjectsPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 

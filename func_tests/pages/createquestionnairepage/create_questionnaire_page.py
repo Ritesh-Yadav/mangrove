@@ -9,14 +9,13 @@ from pages.page import Page
 
 
 class CreateQuestionnairePage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
         self.SELECT_FUNC = {WORD: self.configure_word_type_question,
-                   NUMBER: self.configure_number_type_question,
-                   DATE: self.configure_date_type_question,
-                   LIST_OF_CHOICES: self.configure_list_of_choices_type_question,
-                   GEO: self.configure_geo_type_question}
+                            NUMBER: self.configure_number_type_question,
+                            DATE: self.configure_date_type_question,
+                            LIST_OF_CHOICES: self.configure_list_of_choices_type_question,
+                            GEO: self.configure_geo_type_question}
 
     def create_questionnaire_with(self, questionnaire_data):
         """
@@ -34,10 +33,13 @@ class CreateQuestionnairePage(Page):
         self.driver.find_text_box(QUESTIONNAIRE_CODE_TB).enter_text(questionnaire_code)
         self.create_default_question(questionnaire_data[DEFAULT_QUESTION], DEFAULT_QUESTION_LINK)
         for question in fetch_(QUESTIONS, from_(questionnaire_data)):
-            self.driver.find(ADD_A_QUESTION_LINK).click()
-            self.fill_question_and_code_tb(question)
-            self.SELECT_FUNC[fetch_(TYPE, from_(question))](question)
+            self.add_question(question)
         return self
+
+    def add_question(self, question):
+        self.driver.find(ADD_A_QUESTION_LINK).click()
+        self.fill_question_and_code_tb(question)
+        self.SELECT_FUNC[fetch_(TYPE, from_(question))](question)
 
     def save_questionnaire_successfully(self):
         """
@@ -149,7 +151,8 @@ class CreateQuestionnairePage(Page):
         for choice in fetch_(CHOICE, from_(question_data)):
             if index > 1:
                 self.driver.find(ADD_CHOICE_LINK).click()
-            self.driver.find_text_box(by_xpath(CHOICE_XPATH_LOCATOR + "[" + str(index) + "]" + CHOICE_TB_XPATH_LOCATOR)).enter_text(choice)
+            self.driver.find_text_box(
+                by_xpath(CHOICE_XPATH_LOCATOR + "[" + str(index) + "]" + CHOICE_TB_XPATH_LOCATOR)).enter_text(choice)
             index += 1
         choice_type = fetch_(ALLOWED_CHOICE, from_(question_data))
         if ONLY_ONE_ANSWER == choice_type:
@@ -199,7 +202,8 @@ class CreateQuestionnairePage(Page):
 
         Return link text
         """
-        question_locator = QUESTION_LINK_CSS_LOCATOR_PART1 + ":nth-child(" + str(question_number) + ")" + QUESTION_LINK_CSS_LOCATOR_PART2
+        question_locator = QUESTION_LINK_CSS_LOCATOR_PART1 + ":nth-child(" + str(
+            question_number) + ")" + QUESTION_LINK_CSS_LOCATOR_PART2
         return self.driver.find(by_css(question_locator)).text
 
     def select_question_link(self, question_number):
@@ -209,7 +213,8 @@ class CreateQuestionnairePage(Page):
         Args:
         question_number is index number of the question
         """
-        question_locator = QUESTION_LINK_CSS_LOCATOR_PART1 + ":nth-child(" + str(question_number) + ")" + QUESTION_LINK_CSS_LOCATOR_PART2
+        question_locator = QUESTION_LINK_CSS_LOCATOR_PART1 + ":nth-child(" + str(
+            question_number) + ")" + QUESTION_LINK_CSS_LOCATOR_PART2
         self.driver.find(by_css(question_locator)).click()
 
     def get_question(self):
@@ -236,6 +241,7 @@ class CreateQuestionnairePage(Page):
         """
         self.driver.find(PREVIOUS_STEP_LINK).click()
         from pages.createsubjectquestionnairepage.create_subject_questionnaire_page import CreateSubjectQuestionnairePage
+
         return CreateSubjectQuestionnairePage(self.driver)
 
     def get_page_title(self):
@@ -307,7 +313,7 @@ class CreateQuestionnairePage(Page):
         question = dict()
         if self.driver.find_radio_button(LIST_OF_CHOICE_RB).is_selected():
             question[TYPE] = LIST_OF_CHOICES
-        #options_tbs = self.driver.find_elements_(by_xpath(CHOICE_XPATH_LOCATOR))
+            #options_tbs = self.driver.find_elements_(by_xpath(CHOICE_XPATH_LOCATOR))
         options_tbs = self.driver.find_elements_(by_xpath(CHOICE_XPATH_LOCATOR + CHOICE_TB_XPATH_LOCATOR))
         count = options_tbs.__len__() + 1
         choices = []

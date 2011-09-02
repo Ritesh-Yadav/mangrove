@@ -1,8 +1,6 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from nose.plugins.attrib import attr
-from nose.plugins.skip import SkipTest
 from framework.base_test import BaseTest
-from framework.utils.data_fetcher import fetch_, from_
 from pages.loginpage.login_page import LoginPage
 from pages.addsubjectpage.add_subject_page import AddSubjectPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_ADD_SUBJECT
@@ -11,7 +9,6 @@ from tests.addsubjecttests.add_subject_data import *
 
 
 class TestAddSubject(BaseTest):
-
     def prerequisites_of_add_subject(self):
         # doing successful login with valid credentials
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)

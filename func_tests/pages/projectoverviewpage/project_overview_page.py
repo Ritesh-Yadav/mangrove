@@ -8,7 +8,6 @@ from pages.smstesterlightbox.sms_tester_light_box_page import SMSTesterLightBoxP
 
 
 class ProjectOverviewPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 

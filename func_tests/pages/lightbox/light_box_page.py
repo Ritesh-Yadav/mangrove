@@ -1,11 +1,8 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from pages.page import Page
 from pages.lightbox.light_box_locator import *
-from framework.utils.common_utils import *
-
+from pages.page import Page
 
 class LightBox(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 
@@ -17,6 +14,7 @@ class LightBox(Page):
          """
         self.driver.find(ACTIVATE_BTN).click()
         from pages.projectoverviewpage.project_overview_page import ProjectOverviewPage
+
         return ProjectOverviewPage(self.driver)
 
     def continue_change(self):
@@ -27,6 +25,7 @@ class LightBox(Page):
          """
         self.driver.find(CONFIRMATION_BTN).click()
         from pages.createprojectpage.create_project_page import CreateProjectPage
+
         return CreateProjectPage(self.driver)
 
     def cancel_light_box(self):

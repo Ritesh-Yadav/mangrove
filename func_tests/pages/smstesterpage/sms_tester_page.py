@@ -4,11 +4,9 @@ from pages.smstesterpage.sms_tester_locator import *
 from pages.page import Page
 from framework.utils.data_fetcher import *
 from tests.smstestertests.sms_tester_data import *
-from framework.utils.common_utils import *
 
 
 class SMSTesterPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 

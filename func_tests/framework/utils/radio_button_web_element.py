@@ -3,8 +3,7 @@
 from selenium.webdriver.remote.webelement import WebElement
 
 
-class RadioButton (WebElement):
-
+class RadioButton(WebElement):
     def __init__(self, radioButttonWebElement):
         super(RadioButton, self).__init__(radioButttonWebElement.parent, radioButttonWebElement.id)
         self.webElement = radioButttonWebElement

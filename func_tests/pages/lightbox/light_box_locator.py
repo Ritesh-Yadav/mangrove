@@ -21,6 +21,7 @@ BY = "by"
 ACTIVATE_BTN = by_xpath("//div[@role='dialog' and contains(@style,'block')]/div/a[@id='confirm']")
 CONFIRMATION_BTN = by_xpath("//div[@role='dialog' and contains(@style,'block')]/div/a[@id='continue']")
 CANCEL_LINK = by_xpath("//div[@role='dialog' and contains(@style,'block')]/div/a[@class='cancel_link']")
-CLOSE_BTN = by_xpath("//div[@role='dialog' and contains(@style,'block')]/div/a/span[@class='ui-icon ui-icon-closethick']")
+CLOSE_BTN = by_xpath(
+    "//div[@role='dialog' and contains(@style,'block')]/div/a/span[@class='ui-icon ui-icon-closethick']")
 MESSAGE_LABEL = by_xpath("//div[@role='dialog' and contains(@style,'block')]/div/p[@class='warning_message']")
 TITLE_LABEL = by_xpath("//div[@role='dialog' and contains(@style,'block')]/div/span[@class='ui-dialog-title']")

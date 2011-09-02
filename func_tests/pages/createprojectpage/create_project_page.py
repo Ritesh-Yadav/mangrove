@@ -2,15 +2,13 @@
 from framework.utils.common_utils import CommonUtilities, generateId
 from pages.createsubjectquestionnairepage.create_subject_questionnaire_page import CreateSubjectQuestionnairePage
 from pages.lightbox.light_box_page import LightBox
-from pages.page import Page
 from framework.utils.data_fetcher import *
 from pages.createprojectpage.create_project_locator import *
 from tests.createprojecttests.create_project_data import *
-import time
+from pages.page import Page
 
 
 class CreateProjectPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 
@@ -68,18 +66,18 @@ class CreateProjectPage(Page):
             if not(comm_utils.is_element_present(SMS_CB_CHECKED)):
                 self.driver.find(SMS_CB).click()
         elif comm_utils.is_element_present(SMS_CB_CHECKED):
-                self.driver.find(SMS_CB).click()
-#        if "smartphone" in devices:
-#            if not(comm_utils.is_element_present(SMART_PHONE_CB_CHECKED)):
-#                self.driver.find(SMART_PHONE_CB).toggle()
-#        elif comm_utils.is_element_present(SMART_PHONE_CB_CHECKED):
-#                self.driver.find(SMART_PHONE_CB).toggle()
-#        #Selecting and Deselecting Web checkbox for devices as per given option
-#        if "web" in devices:
-#            if not(comm_utils.is_element_present(WEB_CB_CHECKED)):
-#                self.driver.find(WEB_CB).toggle()
-#        elif comm_utils.is_element_present(WEB_CB_CHECKED):
-#                self.driver.find(WEB_CB).toggle()
+            self.driver.find(SMS_CB).click()
+        #        if "smartphone" in devices:
+        #            if not(comm_utils.is_element_present(SMART_PHONE_CB_CHECKED)):
+        #                self.driver.find(SMART_PHONE_CB).toggle()
+        #        elif comm_utils.is_element_present(SMART_PHONE_CB_CHECKED):
+        #                self.driver.find(SMART_PHONE_CB).toggle()
+        #        #Selecting and Deselecting Web checkbox for devices as per given option
+        #        if "web" in devices:
+        #            if not(comm_utils.is_element_present(WEB_CB_CHECKED)):
+        #                self.driver.find(WEB_CB).toggle()
+        #        elif comm_utils.is_element_present(WEB_CB_CHECKED):
+        #                self.driver.find(WEB_CB).toggle()
 
     def save_project_successfully(self):
         self.driver.find(SAVE_CHANGES_BTN).click()

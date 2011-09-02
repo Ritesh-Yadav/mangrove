@@ -25,27 +25,27 @@ VALID_DATA = {PROJECT_NAME: u"clinic3 test project",
               DEVICES: "sms"}
 
 WATER_POINT_DATA = {PROJECT_NAME: u"water point morondova",
-              PROJECT_BACKGROUND: u"This project is for automation",
-              PROJECT_TYPE: "survey",
-              SUBJECT: u"waterpoint",
-              REPORT_TYPE: OTHER_SUBJECT,
-              DEVICES: "sms"}
+                    PROJECT_BACKGROUND: u"This project is for automation",
+                    PROJECT_TYPE: "survey",
+                    SUBJECT: u"waterpoint",
+                    REPORT_TYPE: OTHER_SUBJECT,
+                    DEVICES: "sms"}
 
 QUESTIONNAIRE_DATA_FOR_WATER_POINT = {DEFAULT_QUESTION: "Which subject are you reporting on? eid"}
 
 VALID_DATA2 = {PROJECT_NAME: u"clinic4 test project",
-              PROJECT_BACKGROUND: u"This project is for automation",
-              PROJECT_TYPE: "survey",
-              SUBJECT: u"clinic",
-              REPORT_TYPE: OTHER_SUBJECT,
-              DEVICES: "sms"}
+               PROJECT_BACKGROUND: u"This project is for automation",
+               PROJECT_TYPE: "survey",
+               SUBJECT: u"clinic",
+               REPORT_TYPE: OTHER_SUBJECT,
+               DEVICES: "sms"}
 
 REPORTER_ACTIVITIES_DATA = {PROJECT_NAME: u"reporter activities",
-              PROJECT_BACKGROUND: u"This project is created by automation",
-              PROJECT_TYPE: "survey",
-              SUBJECT: "",
-              REPORT_TYPE: DATA_SENDER_WORK,
-              DEVICES: "sms"}
+                            PROJECT_BACKGROUND: u"This project is created by automation",
+                            PROJECT_TYPE: "survey",
+                            SUBJECT: "",
+                            REPORT_TYPE: DATA_SENDER_WORK,
+                            DEVICES: "sms"}
 
 QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES = {DEFAULT_QUESTION: "What is the reporting period for the activity? rpd"}
 

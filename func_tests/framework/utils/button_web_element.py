@@ -3,8 +3,7 @@
 from selenium.webdriver.remote.webelement import WebElement
 
 
-class Button (WebElement):
-
+class Button(WebElement):
     def __init__(self, buttonWebElement):
         super(Button, self).__init__(buttonWebElement.parent, buttonWebElement.id)
         self.webElement = buttonWebElement

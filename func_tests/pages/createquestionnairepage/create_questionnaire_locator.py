@@ -22,12 +22,17 @@ QUESTIONNAIRE_CODE_TB = by_css("input#questionnaire-code")
 QUESTION_TB = by_xpath("//input[@id='question_title']")
 CODE_TB = by_css("input#code")
 WORD_OR_PHRASE_RB = by_css("input[value='text']")
-NO_CHARACTER_LIMIT_RB = by_xpath("//li[not(contains(@style,'none')) and contains(@data-bind,'showAddTextLength')]/div/input[@value='length_unlimited']")
-CHARACTER_LIMIT_RB = by_xpath("//li[not(contains(@style,'none')) and contains(@data-bind,'showAddTextLength')]/div/div/input[@value='length_limited']")
-WORD_OR_PHRASE_MAX_LENGTH_TB = by_xpath("//li[not(contains(@style,'none')) and contains(@data-bind,'showAddTextLength')]/div/div/span/input[@id='max_length' and not(contains(@style,'none'))]")
+NO_CHARACTER_LIMIT_RB = by_xpath(
+    "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddTextLength')]/div/input[@value='length_unlimited']")
+CHARACTER_LIMIT_RB = by_xpath(
+    "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddTextLength')]/div/div/input[@value='length_limited']")
+WORD_OR_PHRASE_MAX_LENGTH_TB = by_xpath(
+    "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddTextLength')]/div/div/span/input[@id='max_length' and not(contains(@style,'none'))]")
 NUMBER_RB = by_css("input[value='integer']")
-NUMBER_MAX_LENGTH_TB = by_xpath("//li[not(contains(@style,'none')) and contains(@data-bind,'showAddRange')]/div/p/input[@id='range_max']")
-NUMBER_MIN_LENGTH_TB = by_xpath("//li[not(contains(@style,'none')) and contains(@data-bind,'showAddRange')]/div/p/input[@id='range_min']")
+NUMBER_MAX_LENGTH_TB = by_xpath(
+    "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddRange')]/div/p/input[@id='range_max']")
+NUMBER_MIN_LENGTH_TB = by_xpath(
+    "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddRange')]/div/p/input[@id='range_min']")
 
 DATE_RB = by_css("input[value='date']")
 MONTH_YEAR_RB = by_xpath("//input[@value='mm.yyyy']")
@@ -48,7 +53,8 @@ CHARACTER_COUNT = by_css("div#char-count")
 PREVIOUS_STEP_LINK = by_xpath("//a[@id='subjects_link' and text()='Subjects']")
 
 # Locators for Question List section of the page
-DEFAULT_QUESTION_LINK = by_xpath("//div[@class='question_list']/ol/div/li/a[contains(text(),'Which subject are you reporting on?')]")
+DEFAULT_QUESTION_LINK = by_xpath(
+    "//div[@class='question_list']/ol/div/li/a[contains(text(),'Which subject are you reporting on?')]")
 QUESTION_LINK_CSS_LOCATOR_PART1 = "div.question_list>ol>div"  # index number to identify question
 QUESTION_LINK_CSS_LOCATOR_PART2 = ">li>a"  # Add text to locate specific question
 QUESTION_DELETE_LINK_CSS_LOCATOR_PART1 = "div.question_list>ol>div>li>a"  # Add text or index number to identify question
@@ -56,4 +62,5 @@ QUESTION_DELETE_LINK_CSS_LOCATOR_PART1 = "~div>span.delete>a"
 ADD_A_QUESTION_LINK = by_css("div.add_question>a")
 SAVE_CHANGES_BTN = by_css("input#submit-button[value='Next Step: Data Senders']")
 
-SUCCESS_MESSAGE_LABEL = by_xpath("//div[@id='message-label']/label[@class='success_message' and not(contains(@style,'none'))]")
+SUCCESS_MESSAGE_LABEL = by_xpath(
+    "//div[@id='message-label']/label[@class='success_message' and not(contains(@style,'none'))]")

@@ -1,4 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
+from pages.alldatapage.all_data_page import AllDataPage
 from pages.allsubjectspage.all_subjects_page import AllSubjectsPage
 from pages.dashboardpage.dashboard_page import DashboardPage
 from pages.globalnavigationpage.global_navigation_locator import *
@@ -8,7 +9,6 @@ from pages.alldatasenderspage.all_data_senders_page import AllDataSendersPage
 
 
 class GlobalNavigationPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 
@@ -57,3 +57,12 @@ class GlobalNavigationPage(Page):
          """
         self.driver.find(DASHBOARD_PAGE_LINK).click()
         return DashboardPage(self.driver)
+
+    def navigate_to_all_data_page(self):
+        """
+        Function to navigate to all data page of the website.
+
+        Return add data sender page
+         """
+        self.driver.find(ALL_DATA_LINK).click()
+        return AllDataPage(self.driver)

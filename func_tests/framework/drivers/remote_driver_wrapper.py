@@ -5,7 +5,6 @@ from framework.drivers.driver_wrapper import DriverWrapper
 
 
 class RemoteDriverWrapper(WebDriver, DriverWrapper):
-
     def __init__(self, timeout=30):
         """ Create htmlunit Driver Wrapper"""
         WebDriver.__init__(self,

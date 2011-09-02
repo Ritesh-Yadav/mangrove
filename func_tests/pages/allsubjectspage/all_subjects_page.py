@@ -5,7 +5,6 @@ from pages.page import Page
 
 
 class AllSubjectsPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 

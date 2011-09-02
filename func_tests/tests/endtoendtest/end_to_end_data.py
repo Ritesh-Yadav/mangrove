@@ -93,7 +93,7 @@ MESSAGE = "message"
 
 RESPONSE_MESSAGE = "message"
 
-SUCCESS_MESSAGE_TEXT = "Thank you Donald Mouse. We received : WAN: Mr. Tessy WID: wat1 WC: DARK YELLOW WB: Aquificae,Bacteroids WL: 598.0 MDY: 04.12.2011 DMY: 12.04.2011 MY: 04.2011 GPS: 27.178057,-78.007789"
+SUCCESS_MESSAGE_TEXT = "Thank you Donald Mouse. We received : WAN: Mr. Tessy WID: wat1 WC: DARK YELLOW WB: Aquificae,Bacteroids WL: 98.0 MDY: 04.12.2011 DMY: 12.04.2011 MY: 04.2011 GPS: 27.178057,-78.007789"
 
 SMS_SUBMISSION = "sms"
 UNIQUE_VALUE = "unique_value"
@@ -162,7 +162,7 @@ VALID_DATA_FOR_DATA_SENDER_QUESTIONNAIRE = {PAGE_TITLE: "Reminders"}
 VALID_DATA_FOR_REMINDER = {PAGE_TITLE: "Review & Test"}
 
 QUESTIONNAIRE_DATA = {QUESTIONNAIRE_CODE: "WPS01", GEN_RANDOM: False,
-                      DEFAULT_QUESTION: {QUESTION: "What are you reporting on?", CODE: "WID", MIN: "1", MAX: "10"},
+                      DEFAULT_QUESTION: {QUESTION: "What are you reporting on?", CODE: "WID"},
                       QUESTIONS: [{QUESTION: "Water Level", CODE: "WL", TYPE: NUMBER, MIN: "1", MAX: "1000"},
                               {QUESTION: "Date of report in DD.MM.YYY format", CODE: "DMY", TYPE: DATE,
                                DATE_FORMAT: DD_MM_YYYY},
@@ -181,23 +181,41 @@ QUESTIONNAIRE_DATA = {QUESTIONNAIRE_CODE: "WPS01", GEN_RANDOM: False,
                       CHARACTER_REMAINING: "112 / 160 characters used",
                       PAGE_TITLE: "Data Senders"}
 
-VALID_DATA_REVIEW_AND_TEST = {PROJECT_PROFILE: {PROJECT_NAME: "waterpoint morondava",
-                                PROJECT_BACKGROUND: "This project is created by functional automation suite.",
-                                PROJECT_TYPE: "survey",
-                                DEVICES: "sms"},
-              SUBJECT_DETAILS: {SUBJECT: "waterpoint"},
-              DATA_SENDER_COUNT: "1",
-              QUESTIONNAIRE: [u'What are you reporting on?', u'Water Level', u'Date of report in DD.MM.YYY format', u'Date of report in MM.YYY format', u'Date of report in MM.DD.YYY format', u'Color of Water', u'Water point admin name', u'Bacterias in water', u'Geo points of Well'],
-              REMINDERS: "disabled"
-              }
+NEW_QUESTIONNAIRE_DATA = {QUESTIONS: [{QUESTION: "Water Level", CODE: "WL", TYPE: NUMBER, MIN: "100", MAX: "1000"},
+        {QUESTION: "What is water point name?", CODE: "WN", TYPE: WORD, LIMIT: LIMITED, MAX: ""}],
+                          CHARACTER_REMAINING: "117 / 160 characters used",
+                          PAGE_TITLE: "Data Senders"}
 
-VALID_DATA_FOR_SMS_LIGHT_BOX = {SMS: "WPS01 +WID wat1 +wl 598 +DMY 12.04.2011 +MY 04.2011 +MDY 04.12.2011  +wc c +WAN Mr. Tessy +wb ab +GPS 27.178057  -78.007789",
-                      RESPONSE_MESSAGE: "Thank you TEST. We received : WAN: Mr. Tessy WID: wat1 WC: DARK YELLOW WB: Aquificae,Bacteroids WL: 598.0 MDY: 04.12.2011 DMY: 12.04.2011 MY: 04.2011 GPS: 27.178057,-78.007789"}
+VALID_DATA_REVIEW_AND_TEST = {PROJECT_PROFILE: {PROJECT_NAME: "waterpoint morondava",
+                                                PROJECT_BACKGROUND: "This project is created by functional automation suite.",
+                                                PROJECT_TYPE: "survey",
+                                                DEVICES: "sms"},
+                              SUBJECT_DETAILS: {SUBJECT: "waterpoint"},
+                              DATA_SENDER_COUNT: "1",
+                              QUESTIONNAIRE: [u'What are you reporting on?', u'Water Level',
+                                              u'Date of report in DD.MM.YYY format', u'Date of report in MM.YYY format',
+                                              u'Date of report in MM.DD.YYY format', u'Color of Water',
+                                              u'Water point admin name', u'Bacterias in water', u'Geo points of Well'],
+                              REMINDERS: "disabled"
+}
+
+VALID_DATA_FOR_SMS_LIGHT_BOX = {
+    SMS: "WPS01 +WID wat1 +wl 98 +DMY 12.04.2011 +MY 04.2011 +MDY 04.12.2011  +wc c +WAN Mr. Tessy +wb ab +GPS 27.178057  -78.007789",
+    RESPONSE_MESSAGE: "Thank you TEST. We received : WAN: Mr. Tessy WID: wat1 WC: DARK YELLOW WB: Aquificae,Bacteroids WL: 98.0 MDY: 04.12.2011 DMY: 12.04.2011 MY: 04.2011 GPS: 27.178057,-78.007789"}
 
 VALID_DATA_FOR_SMS = {SENDER: "1234567890",
                       RECEIVER: "",
-                      SMS: "WPS01 +WID wat1 +wl 598 +DMY 12.04.2011 +MY 04.2011 +MDY 04.12.2011  +wc c +WAN Mr. Tessy +wb ab +GPS 27.178057  -78.007789",
-                      SUCCESS_MESSAGE: SUCCESS_MESSAGE_TEXT}
+                      SMS: "WPS01 +WID wat1 +wl 98 +DMY 12.04.2011 +MY 04.2011 +MDY 04.12.2011  +wc c +WAN Mr. Tessy +wb ab +GPS 27.178057  -78.007789",
+SUCCESS_MESSAGE: SUCCESS_MESSAGE_TEXT}
 
-SMS_DATA_LOG = {SMS_SUBMISSION: "True False wat1 598 12.04.2011 04.2011 04.12.2011 c Mr. Tessy ab 27.178057 -78.007789",
+SMS_DATA_LOG = {SMS_SUBMISSION: "True False wat1 98 12.04.2011 04.2011 04.12.2011 c Mr. Tessy ab 27.178057 -78.007789",
                 UNIQUE_VALUE: "Mr. Tessy"}
+
+NEW_VALID_DATA_FOR_SMS = {SENDER: "1234567890",
+                          RECEIVER: "",
+                          SMS: "WPS01 +WID wat1 +wl 98 +DMY 12.04.2011 +MY 04.2011 +MDY 04.12.2011  +wc c +WAN Mr. Jessy +wb ab +GPS 27.178057  -78.007789 +WN Water Point 1",
+                          ERROR_MESSAGE: "Error. Invalid Submission. Refer to printed Questionnaire. Resend the question ID and answer for wl"}
+
+NEW_SMS_DATA_LOG = {
+    SMS_SUBMISSION: "False True wat1 98 12.04.2011 04.2011 04.12.2011 c Mr. Jessy ab 27.178057 -78.007789 Water Point 1",
+    UNIQUE_VALUE: "Mr. Jessy"}

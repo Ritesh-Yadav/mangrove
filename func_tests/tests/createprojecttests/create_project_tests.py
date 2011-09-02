@@ -1,6 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from nose.plugins.attrib import attr
-from nose.plugins.skip import SkipTest
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
 from pages.dashboardpage.dashboard_page import DashboardPage
@@ -11,7 +10,6 @@ from tests.createprojecttests.create_project_data import *
 
 
 class TestCreateProject(BaseTest):
-
     def prerequisites_of_create_project(self):
         # doing successful login with valid credentials
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
@@ -45,4 +43,4 @@ class TestCreateProject(BaseTest):
         create_project_page.create_project_with(BLANK_FIELDS)
         create_project_page.save_project()
         self.assertEqual(create_project_page.get_error_message(),
-                                 fetch_(ERROR_MSG, from_(BLANK_FIELDS)))
+                         fetch_(ERROR_MSG, from_(BLANK_FIELDS)))

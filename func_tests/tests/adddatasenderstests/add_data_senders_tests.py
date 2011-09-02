@@ -1,10 +1,8 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 import time
 from nose.plugins.attrib import attr
-from unittest.case import SkipTest
 
 from framework.base_test import BaseTest
-from framework.utils.common_utils import CommonUtilities
 from framework.utils.data_fetcher import fetch_, from_
 from pages.loginpage.login_page import LoginPage
 from pages.adddatasenderspage.add_data_senders_page import AddDataSenderPage
@@ -14,7 +12,6 @@ from tests.adddatasenderstests.add_data_senders_data import *
 
 
 class TestAddDataSender(BaseTest):
-
     def prerequisites_of_add_data_sender(self):
         # doing successful login with valid credentials
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
@@ -45,7 +42,7 @@ class TestAddDataSender(BaseTest):
         add_data_sender_page.add_data_sender_with(BLANK_FIELDS)
         time.sleep(5)
         self.assertEqual(add_data_sender_page.get_error_message(),
-                                 fetch_(ERROR_MSG, from_(BLANK_FIELDS)))
+                         fetch_(ERROR_MSG, from_(BLANK_FIELDS)))
 
     @attr('functional_test')
     def test_addition_of_data_sender_with_existing_data(self):
@@ -57,7 +54,7 @@ class TestAddDataSender(BaseTest):
         add_data_sender_page.add_data_sender_with(EXISTING_DATA)
         time.sleep(5)
         self.assertEqual(add_data_sender_page.get_error_message(),
-                                 fetch_(ERROR_MSG, from_(EXISTING_DATA)))
+                         fetch_(ERROR_MSG, from_(EXISTING_DATA)))
 
     @attr('functional_test')
     def test_addition_of_data_sender_without_location_name(self):
@@ -86,8 +83,8 @@ class TestAddDataSender(BaseTest):
         """
         add_data_sender_page = self.prerequisites_of_add_data_sender()
         add_data_sender_page.add_data_sender_with(INVALID_GPS)
-        self.assertRegexpMatches(add_data_sender_page.get_error_message(),
-                                 fetch_(ERROR_MSG, from_(INVALID_GPS)))
+        self.assertEqual(add_data_sender_page.get_error_message(),
+                         fetch_(ERROR_MSG, from_(INVALID_GPS)))
 
     @attr('functional_test')
     def test_addition_of_data_sender_with_invalid_latitude_gps(self):
@@ -96,8 +93,8 @@ class TestAddDataSender(BaseTest):
         """
         add_data_sender_page = self.prerequisites_of_add_data_sender()
         add_data_sender_page.add_data_sender_with(INVALID_LATITUDE_GPS)
-        self.assertRegexpMatches(add_data_sender_page.get_error_message(),
-                                 fetch_(ERROR_MSG, from_(INVALID_LATITUDE_GPS)))
+        self.assertEqual(add_data_sender_page.get_error_message(),
+                         fetch_(ERROR_MSG, from_(INVALID_LATITUDE_GPS)))
 
     @attr('functional_test')
     def test_addition_of_data_sender_with_invalid_longitude_gps(self):
@@ -106,8 +103,8 @@ class TestAddDataSender(BaseTest):
         """
         add_data_sender_page = self.prerequisites_of_add_data_sender()
         add_data_sender_page.add_data_sender_with(INVALID_LONGITUDE_GPS)
-        self.assertRegexpMatches(add_data_sender_page.get_error_message(),
-                                 fetch_(ERROR_MSG, from_(INVALID_LONGITUDE_GPS)))
+        self.assertEqual(add_data_sender_page.get_error_message(),
+                         fetch_(ERROR_MSG, from_(INVALID_LONGITUDE_GPS)))
 
     @attr('functional_test')
     def test_addition_of_data_sender_with_unicode_in_gps(self):
@@ -116,8 +113,8 @@ class TestAddDataSender(BaseTest):
         """
         add_data_sender_page = self.prerequisites_of_add_data_sender()
         add_data_sender_page.add_data_sender_with(WITH_UNICODE_IN_GPS)
-        self.assertRegexpMatches(add_data_sender_page.get_error_message(),
-                                 fetch_(ERROR_MSG, from_(WITH_UNICODE_IN_GPS)))
+        self.assertEqual(add_data_sender_page.get_error_message(),
+                         fetch_(ERROR_MSG, from_(WITH_UNICODE_IN_GPS)))
 
     @attr('functional_test')
     def test_addition_of_data_sender_with_invalid_gps_with_comma(self):
@@ -126,5 +123,5 @@ class TestAddDataSender(BaseTest):
         """
         add_data_sender_page = self.prerequisites_of_add_data_sender()
         add_data_sender_page.add_data_sender_with(INVALID_GPS_WITH_COMMA)
-        self.assertRegexpMatches(add_data_sender_page.get_error_message(),
-                                 fetch_(ERROR_MSG, from_(INVALID_GPS_WITH_COMMA)))
+        self.assertEqual(add_data_sender_page.get_error_message(),
+                         fetch_(ERROR_MSG, from_(INVALID_GPS_WITH_COMMA)))

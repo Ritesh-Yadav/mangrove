@@ -1,14 +1,12 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from pages.page import Page
 from pages.reviewpage.review_locator import *
 from pages.smstesterlightbox.sms_tester_light_box_page import SMSTesterLightBoxPage
 from tests.reviewandtests.review_data import *
-from framework.utils.common_utils import *
 import time
+from pages.page import Page
 
 
 class ReviewPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 
@@ -20,6 +18,7 @@ class ReviewPage(Page):
          """
         self.driver.find(GO_TO_PROJECT_OVERVIEW_BTN).click()
         from pages.projectoverviewpage.project_overview_page import ProjectOverviewPage
+
         return ProjectOverviewPage(self.driver)
 
     def get_project_name(self):

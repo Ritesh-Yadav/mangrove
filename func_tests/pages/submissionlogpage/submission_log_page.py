@@ -7,7 +7,6 @@ from tests.submissionlogtests.submission_log_data import UNIQUE_VALUE
 
 
 class SubmissionLogPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 

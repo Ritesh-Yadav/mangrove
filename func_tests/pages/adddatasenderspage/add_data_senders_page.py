@@ -1,5 +1,4 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-
 from pages.page import Page
 from framework.utils.data_fetcher import *
 from pages.adddatasenderspage.add_data_senders_locator import *
@@ -7,7 +6,6 @@ from tests.adddatasenderstests.add_data_senders_data import *
 
 
 class AddDataSenderPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 

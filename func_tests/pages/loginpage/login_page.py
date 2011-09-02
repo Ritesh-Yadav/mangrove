@@ -1,17 +1,13 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from selenium.webdriver.common.by import By
-
 from pages.page import Page
 from pages.globalnavigationpage.global_navigation_page import GlobalNavigationPage
 from pages.registrationpage.registration_page import  RegistrationPage
-from framework.utils.common_utils import CommonUtilities
 from framework.utils.data_fetcher import *
 from pages.loginpage.login_locator import *
 from tests.logintests.login_data import *
 
 
 class LoginPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 

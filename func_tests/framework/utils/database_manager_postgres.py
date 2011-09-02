@@ -1,5 +1,6 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 import psycopg2
+
 try:
     from resources.local_settings import DATABASES
 except Exception as e:
@@ -9,7 +10,6 @@ DEFAULT_DNS = "dbname='" + DATABASES['default']['NAME'] + "' user='" + DATABASES
 
 
 class DatabaseManager(object):
-
     def get_connection(self, database_name=DEFAULT_DNS):
         """
         Function to get the connection to SQLite3 database
@@ -93,7 +93,8 @@ class DatabaseManager(object):
             user_id = int(cur.fetchone()[0])
             cur.execute("select org_id from accountmanagement_ngouserprofile where user_id=%s;", (user_id,))
             org_id = str(cur.fetchone()[0])
-            cur.execute("select document_store from accountmanagement_organizationsetting where organization_id=%s;", (org_id,))
+            cur.execute("select document_store from accountmanagement_organizationsetting where organization_id=%s;",
+                    (org_id,))
             organization_db_name = str(cur.fetchone()[0])
             cur.execute("delete from accountmanagement_organization where org_id=%s;", (org_id,))
             cur.execute("delete from registration_registrationprofile where user_id=%s;", (user_id,))

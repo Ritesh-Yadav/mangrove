@@ -25,17 +25,17 @@ VALID_DATA = {PROJECT_NAME: "Reporter Activities ", GEN_RANDOM: True,
               PAGE_TITLE: "Subjects"}
 
 VALID_DATA2 = {PROJECT_NAME: "Water Point2 Morondava ", GEN_RANDOM: True,
-              PROJECT_BACKGROUND: "This project is created by functional automation suite.",
-              PROJECT_TYPE: "survey",
-              SUBJECT: "waterpoint",
-              REPORT_TYPE: "other subject",
-              DEVICES: "sms",
-              PAGE_TITLE: "Subjects"}
+               PROJECT_BACKGROUND: "This project is created by functional automation suite.",
+               PROJECT_TYPE: "survey",
+               SUBJECT: "waterpoint",
+               REPORT_TYPE: "other subject",
+               DEVICES: "sms",
+               PAGE_TITLE: "Subjects"}
 
 BLANK_FIELDS = {PROJECT_NAME: "",
-              PROJECT_BACKGROUND: "",
-              PROJECT_TYPE: "",
-              SUBJECT: "",
-              REPORT_TYPE: "",
-              DEVICES: "",
-              ERROR_MSG: "Name  This field is required."}
+                PROJECT_BACKGROUND: "",
+                PROJECT_TYPE: "",
+                SUBJECT: "",
+                REPORT_TYPE: "",
+                DEVICES: "",
+                ERROR_MSG: "Name  This field is required."}

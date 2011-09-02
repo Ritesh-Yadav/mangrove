@@ -14,7 +14,6 @@ __all__ = ['by_css', 'by_id', 'by_xpath', 'by_name']
 
 
 class CommonUtilities(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 
@@ -46,12 +45,12 @@ class CommonUtilities(Page):
         return self
 
     def find_drop_down_by_id_and_select_option(self, drop_down_id,
-                                         option_to_be_selected):
+                                               option_to_be_selected):
         self.driver.find_drop_down(drop_down_id).set_selected(option_to_be_selected)
         return self
 
     def find_drop_down_by_name_and_select_option(self, drop_down_name,
-                                         option_to_be_selected):
+                                                 option_to_be_selected):
         self.driver.find_drop_down(drop_down_name).set_selected(option_to_be_selected)
         return self
 

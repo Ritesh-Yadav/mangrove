@@ -8,7 +8,6 @@ from tests.addsubjecttypetests.add_subject_type_data import *
 
 
 class AddSubjectTypePage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 

@@ -5,7 +5,6 @@ from pages.submissionlogpage.submission_log_page import SubmissionLogPage
 
 
 class DataPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 

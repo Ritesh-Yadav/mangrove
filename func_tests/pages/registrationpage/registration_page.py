@@ -9,7 +9,6 @@ from tests.registrationtests.registration_data import *
 
 
 class RegistrationPage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 

@@ -12,16 +12,15 @@ from testdata.test_data import DATA_WINNER_REGISTER_PAGE
 
 
 class TestRegistrationPage(BaseTest):
-
     @attr('functional_test', 'smoke')
     def test_successful_registration(self):
-
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
-        registration_confirmation_page, email = registration_page.successful_registration_with(REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION)
+        registration_confirmation_page, email = registration_page.successful_registration_with(
+            REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION)
         self.assertEquals(registration_confirmation_page.registration_success_message(),
-            fetch_(SUCCESS_MESSAGE,
-                   from_(REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION)))
+                          fetch_(SUCCESS_MESSAGE,
+                                 from_(REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION)))
         dbmanager = DatabaseManager()
         dbmanager.delete_organization_all_details(email)
 
@@ -32,7 +31,7 @@ class TestRegistrationPage(BaseTest):
         registration_page.register_with(EXISTING_EMAIL_ADDRESS)
         time.sleep(5)
         self.assertEquals(registration_page.get_error_message(), fetch_(ERROR_MESSAGE,
-                   from_(EXISTING_EMAIL_ADDRESS)))
+                                                                        from_(EXISTING_EMAIL_ADDRESS)))
 
     @SkipTest
     @attr('functional_test')

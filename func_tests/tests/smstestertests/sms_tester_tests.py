@@ -1,6 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from nose.plugins.attrib import attr
-from nose.plugins.skip import SkipTest
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
 from pages.smstesterpage.sms_tester_page import SMSTesterPage
@@ -9,7 +8,6 @@ from tests.smstestertests.sms_tester_data import *
 
 
 class TestSMSTester(BaseTest):
-
     @attr('functional_test', 'smoke')
     def test_successful_sms_submission(self):
         """
@@ -68,7 +66,8 @@ class TestSMSTester(BaseTest):
         self.driver.go_to(DATA_WINNER_SMS_TESTER_PAGE)
         sms_tester_page = SMSTesterPage(self.driver)
         sms_tester_page.send_sms_with(REGISTER_DATA_SENDER)
-        self.assertRegexpMatches(sms_tester_page.get_response_message(), fetch_(SUCCESS_MESSAGE, from_(REGISTER_DATA_SENDER)))
+        self.assertRegexpMatches(sms_tester_page.get_response_message(),
+                                 fetch_(SUCCESS_MESSAGE, from_(REGISTER_DATA_SENDER)))
 
     @attr('functional_test')
     def test_sms_player_for_addition_of_data_sender_from_unknown_number(self):
@@ -78,7 +77,8 @@ class TestSMSTester(BaseTest):
         self.driver.go_to(DATA_WINNER_SMS_TESTER_PAGE)
         sms_tester_page = SMSTesterPage(self.driver)
         sms_tester_page.send_sms_with(REGISTER_DATA_SENDER_FROM_UNKNOWN_NUMBER)
-        self.assertEqual(sms_tester_page.get_response_message(), fetch_(ERROR_MSG, from_(REGISTER_DATA_SENDER_FROM_UNKNOWN_NUMBER)))
+        self.assertEqual(sms_tester_page.get_response_message(),
+                         fetch_(ERROR_MSG, from_(REGISTER_DATA_SENDER_FROM_UNKNOWN_NUMBER)))
 
     @attr('functional_test')
     def test_sms_player_for_registration_of_new_subject(self):
@@ -98,7 +98,8 @@ class TestSMSTester(BaseTest):
         self.driver.go_to(DATA_WINNER_SMS_TESTER_PAGE)
         sms_tester_page = SMSTesterPage(self.driver)
         sms_tester_page.send_sms_with(REGISTER_EXISTING_SUBJECT_SHORT_CODE)
-        self.assertEqual(sms_tester_page.get_response_message(), fetch_(ERROR_MSG, from_(REGISTER_EXISTING_SUBJECT_SHORT_CODE)))
+        self.assertEqual(sms_tester_page.get_response_message(),
+                         fetch_(ERROR_MSG, from_(REGISTER_EXISTING_SUBJECT_SHORT_CODE)))
 
     @attr('functional_test')
     def test_sms_player_for_registration_with_invalid_geo_code(self):

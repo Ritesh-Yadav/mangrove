@@ -28,6 +28,8 @@ VALID_DATA = {PROJECT_PROFILE: {PROJECT_NAME: "clinic5 test project",
                                 DEVICES: "sms"},
               SUBJECT_DETAILS: {SUBJECT: "clinic"},
               DATA_SENDER_COUNT: "3",
-              QUESTIONNAIRE: [u"What is associatéd entity?", u"What is your namé?", u"What is age öf father?", u"What is réporting date?", u"What is your blood group?", u"What aré symptoms?", u"What is the GPS codé for clinic"],
+              QUESTIONNAIRE: [u"What is associatéd entity?", u"What is your namé?", u"What is age öf father?",
+                              u"What is réporting date?", u"What is your blood group?", u"What aré symptoms?",
+                              u"What is the GPS codé for clinic"],
               REMINDERS: "disabled"
-              }
+}

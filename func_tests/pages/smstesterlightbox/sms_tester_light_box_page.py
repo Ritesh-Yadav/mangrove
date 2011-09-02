@@ -7,7 +7,6 @@ from tests.smstestertests.sms_tester_data import *
 
 
 class SMSTesterLightBoxPage(LightBox):
-
     def __init__(self, driver):
         LightBox.__init__(self, driver)
 

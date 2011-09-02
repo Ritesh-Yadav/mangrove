@@ -2,11 +2,9 @@
 from pages.createreminderpage.create_reminder_page import CreateReminderPage
 from pages.page import Page
 from pages.createdatasenderquestionnairepage.create_data_sender_questionnaire_locator import *
-from framework.utils.common_utils import *
 
 
 class CreateDataSenderQuestionnairePage(Page):
-
     def __init__(self, driver):
         Page.__init__(self, driver)
 
