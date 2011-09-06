@@ -29,5 +29,5 @@ class SMSTesterLightBoxPage(LightBox):
 
         Return success/error message
         """
-        time.sleep(5)
+        time.sleep(10)
         return self.driver.find_text_box(SMS_TA).get_attribute("value")
