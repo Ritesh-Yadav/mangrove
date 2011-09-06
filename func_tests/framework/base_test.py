@@ -9,6 +9,7 @@ class BaseTest(unittest.TestCase):
     def setUp(self):
         self.driver = DriverInitializer.initialize("firefox")
         self.driver.implicitly_wait(WAIT)
+        self.driver.execute_script("window.innerWidth = screen.width;window.innerHeight = screen.height;window.screenX = 0;window.screenY = 0;alwaysLowered = false;")
 
     def tearDown(self):
         try:

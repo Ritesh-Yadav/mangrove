@@ -1,9 +1,9 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from pages.lightbox.light_box_page import LightBox
-from pages.smstesterpage.sms_tester_locator import *
+from pages.smstesterlightbox.sms_tester_light_box_locator import *
 import time
 from framework.utils.data_fetcher import *
-from tests.smstestertests.sms_tester_data import *
+from tests.smstesterlightboxtests.sms_tester_light_box_data import *
 
 
 class SMSTesterLightBoxPage(LightBox):
@@ -29,5 +29,5 @@ class SMSTesterLightBoxPage(LightBox):
 
         Return success/error message
         """
-        time.sleep(10)
+        time.sleep(5)
         return self.driver.find_text_box(SMS_TA).get_attribute("value")
