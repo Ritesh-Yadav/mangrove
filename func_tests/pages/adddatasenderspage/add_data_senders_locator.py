@@ -19,7 +19,7 @@ LOCATOR = "locator"
 BY = "by"
 
 FIRST_NAME_TB = by_css("input#id_first_name")
-TELEPHONE_NUMBER_TB = by_css("input#id_telephone_number")
+MOBILE_NUMBER_TB = by_css("input#id_telephone_number")
 COMMUNE_TB = by_css("input#id_location")
 GPS_TB = by_css("input#id_geo_code")
 

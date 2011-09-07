@@ -18,3 +18,4 @@ LOCATOR = "locator"
 BY = "by"
 
 ADD_A_DATA_SENDER_LINK = by_css("a[class~='add_subject_link']")
+DATA_SENDER_CHECK_BOX_XPATH = "//tr/td[7][text()='%s']/../td/input[]"

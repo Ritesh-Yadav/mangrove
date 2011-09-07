@@ -1,5 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from nose.plugins.attrib import attr
+from nose.plugins.skip import SkipTest
+from nose.tools import nottest
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
 from pages.loginpage.login_page import LoginPage
@@ -9,6 +11,8 @@ from tests.smstesterlightboxtests.sms_tester_light_box_data import *
 
 
 class TestSMSTesterLightBox(BaseTest):
+
+    @nottest
     def prerequisites_of_sms_tester_light_box1(self):
         # doing successful login with valid credentials
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
@@ -27,6 +31,7 @@ class TestSMSTesterLightBox(BaseTest):
         review_page = reminder_page.save_reminder_successfully()
         return review_page.open_sms_tester_light_box()
 
+    @nottest
     def prerequisites_of_sms_tester_light_box2(self):
         # doing successful login with valid credentials
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)

@@ -21,8 +21,8 @@ class AddDataSenderPage(Page):
         """
         self.driver.find_text_box(FIRST_NAME_TB).enter_text(
             fetch_(NAME, from_(registration_data)))
-        self.driver.find_text_box(TELEPHONE_NUMBER_TB).enter_text(
-            fetch_(TELEPHONE_NUMBER, from_(registration_data)))
+        self.driver.find_text_box(MOBILE_NUMBER_TB).enter_text(
+            fetch_(MOBILE_NUMBER, from_(registration_data)))
         self.driver.find_text_box(COMMUNE_TB).enter_text(
             fetch_(COMMUNE, from_(registration_data)))
         self.driver.find_text_box(GPS_TB).enter_text(
