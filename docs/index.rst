@@ -15,6 +15,7 @@ Project Home    http://mangroveorg.github.com
 Email           http://groups.google.com/group/mangroveorg
 IRC chat        `#mangrove`_  on freenode.net
 Source          https://github.com/mangroveorg/mangrove
+Jenkins CI      http://178.79.163.33:8080/
 ============    ==========================================
 
 .. _\#mangrove: irc://chat.freenode.net:6667/mangrove
