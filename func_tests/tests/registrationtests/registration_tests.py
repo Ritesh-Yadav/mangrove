@@ -33,6 +33,7 @@ class TestRegistrationPage(BaseTest):
         self.assertEquals(registration_page.get_error_message(), fetch_(ERROR_MESSAGE,
                                                                         from_(EXISTING_EMAIL_ADDRESS)))
 
+    @SkipTest
     @attr('functional_test')
     def test_register_ngo_with_invalid_email_address(self):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
