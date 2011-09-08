@@ -22,18 +22,53 @@ class AllDataSendersPage(Page):
     def select_a_data_sender_by_mobile(self, data_sender_mobile):
         """
         Function to select a data sender on all data sender page
-
-        Return self
          """
-        self.driver.find(ADD_A_DATA_SENDER_LINK).click()
-        return AddDataSenderPage(self.driver)
+        self.driver.find(by_xpath(DATA_SENDER_CHECK_BOX_BY_MOBILE_XPATH % data_sender_mobile)).click()
 
     def select_a_data_sender_by_id(self, data_sender_id):
         """
         Function to select a data sender on all data sender page
-
-        Return self
          """
-        mobile_number = fetch_(MOBILE_NUMBER)
-        self.driver.find(ADD_A_DATA_SENDER_LINK).click()
-        return AddDataSenderPage(self.driver)
+        self.driver.find(by_xpath(DATA_SENDER_CHECK_BOX_BY_UID_XPATH % data_sender_id)).click()
+
+    def select_project(self, project_name):
+        """
+        Function to select a project from drop down on all data sender page
+         """
+        self.driver.find_drop_down(PROJECT_DROP_DOWN).set_selected_by_text(project_name)
+
+    def associate_data_sender(self):
+        """
+        Function to associate data sender with project
+         """
+        self.driver.find_drop_down(ACTION_DROP_DOWN).set_selected(ASSOCIATE)
+
+    def dissociate_data_sender(self):
+        """
+        Function to dissociate data sender with project
+         """
+        self.driver.find_drop_down(ACTION_DROP_DOWN).set_selected(DISSOCIATE)
+
+    def get_success_message(self):
+        """
+        Function to fetch the success message from success label
+         """
+        return self.driver.find(SUCCESS_MESSAGE_LABEL).text
+
+    def get_error_message(self):
+        """
+        Function to fetch the error message from success label
+         """
+        return self.driver.find(ERROR_MESSAGE_LABEL).text
+
+    def get_project_names(self, data_sender_id):
+        """
+        Function to fetch the associated project names from the all data senders page
+         """
+        return self.driver.find(by_xpath(PROJECT_NAME_LABEL_XPATH % data_sender_id)).text
+
+    def get_uid(self, data_sender_mobile):
+        """
+        Function to fetch the mobile number from the all data senders page
+         """
+        return self.driver.find(by_xpath(UID_LABEL_BY_MOBILE_XPATH % data_sender_mobile)).text

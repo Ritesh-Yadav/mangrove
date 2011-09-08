@@ -5,32 +5,43 @@ from nose.plugins.skip import SkipTest
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
 from pages.loginpage.login_page import LoginPage
-from pages.adddatasenderspage.add_data_senders_page import AddDataSenderPage
-from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_CREATE_DATA_SENDERS
+from pages.alldatasenderspage.all_data_senders_page import AllDataSendersPage
+from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
-from tests.adddatasenderstests.add_data_senders_data import *
+from tests.alldatasendertests.all_data_sender_data import *
 
 
-class TestAddDataSender(BaseTest):
+class TestAllDataSender(BaseTest):
     def prerequisites_of_add_data_sender(self):
         # doing successful login with valid credentials
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
         login_page = LoginPage(self.driver)
-        login_page.do_successful_login_with(VALID_CREDENTIALS)
+        global_navigation = login_page.do_successful_login_with(VALID_CREDENTIALS)
+        return global_navigation.navigate_to_all_data_sender_page()
 
-        # doing Addition of DataSender
-        self.driver.go_to(DATA_WINNER_CREATE_DATA_SENDERS)
-        return AddDataSenderPage(self.driver)
-
-    @SkipTest
     @attr('functional_test', 'smoke')
-    def test_successful_addition_of_data_sender(self):
+    def test_successful_association_of_data_sender(self):
         """
-        Function to test the successful Addition of DataSender with given
-        details e.g. first name, last name, telephone number and commune
+        Function to test the successful association of DataSender with given project
         """
-        add_data_sender_page = self.prerequisites_of_add_data_sender()
-        add_data_sender_page.add_data_sender_with(VALID_DATA)
-        self.assertRegexpMatches(add_data_sender_page.get_success_message(),
-                                 fetch_(SUCCESS_MSG, from_(VALID_DATA)))
-  
+        all_data_sender_page = self.prerequisites_of_add_data_sender()
+        all_data_sender_page.select_a_data_sender_by_id(fetch_(UID, from_(ASSOCIATE_DATA_SENDER)))
+        all_data_sender_page.select_project(fetch_(PROJECT_NAME, from_(ASSOCIATE_DATA_SENDER)))
+        all_data_sender_page.associate_data_sender()
+        self.assertEqual(all_data_sender_page.get_success_message(),ASSOCIATE_SUCCESS_TEXT)
+        time.sleep(7)
+        self.assertEqual(all_data_sender_page.get_project_names(fetch_(UID, from_(ASSOCIATE_DATA_SENDER))),
+                                    fetch_(PROJECT_NAME, from_(ASSOCIATE_DATA_SENDER)))
+
+    @attr('functional_test', 'smoke')
+    def test_successful_dissociation_of_data_sender(self):
+        """
+        Function to test the successful dissociation of DataSender with given project
+        """
+        all_data_sender_page = self.prerequisites_of_add_data_sender()
+        all_data_sender_page.select_a_data_sender_by_id(fetch_(UID, from_(DISSOCIATE_DATA_SENDER)))
+        all_data_sender_page.select_project(fetch_(PROJECT_NAME, from_(DISSOCIATE_DATA_SENDER)))
+        all_data_sender_page.dissociate_data_sender()
+        self.assertEqual(all_data_sender_page.get_success_message(), DISSOCIATE_SUCCESS_TEXT)
+        time.sleep(7)
+        self.assertEqual(all_data_sender_page.get_project_names(fetch_(UID, from_(DISSOCIATE_DATA_SENDER))), "--")
