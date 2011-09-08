@@ -25,5 +25,5 @@ ACTION_DROP_DOWN = by_css("select#action")
 PROJECT_NAME_LABEL_XPATH = "//tr/td/input[@id='%s']/../../td[8]"
 UID_LABEL_BY_MOBILE_XPATH = "//tr/td[7][text()='%s']/../td[2]"
 
-ERROR_MESSAGE_LABEL = by_xpath("//div[@class='error_message message-box'] | //label[@class='error']/../../..")
+ERROR_MESSAGE_LABEL = by_css("div#error.message-box")
 SUCCESS_MESSAGE_LABEL = by_xpath("//div[@class='success-message-box' and not(contains(@id,'none'))]")

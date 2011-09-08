@@ -28,7 +28,7 @@ class TestAllDataSender(BaseTest):
         all_data_sender_page.select_a_data_sender_by_id(fetch_(UID, from_(ASSOCIATE_DATA_SENDER)))
         all_data_sender_page.select_project(fetch_(PROJECT_NAME, from_(ASSOCIATE_DATA_SENDER)))
         all_data_sender_page.associate_data_sender()
-        self.assertEqual(all_data_sender_page.get_success_message(),ASSOCIATE_SUCCESS_TEXT)
+        self.assertEqual(all_data_sender_page.get_success_message(), ASSOCIATE_SUCCESS_TEXT)
         time.sleep(7)
         self.assertEqual(all_data_sender_page.get_project_names(fetch_(UID, from_(ASSOCIATE_DATA_SENDER))),
                                     fetch_(PROJECT_NAME, from_(ASSOCIATE_DATA_SENDER)))
@@ -45,3 +45,43 @@ class TestAllDataSender(BaseTest):
         self.assertEqual(all_data_sender_page.get_success_message(), DISSOCIATE_SUCCESS_TEXT)
         time.sleep(7)
         self.assertEqual(all_data_sender_page.get_project_names(fetch_(UID, from_(DISSOCIATE_DATA_SENDER))), "--")
+
+    @attr('functional_test')
+    def test_dissociate_ds_without_selecting_project(self):
+        """
+        Function to test the dissociation of DataSender without selecting project
+        """
+        all_data_sender_page = self.prerequisites_of_add_data_sender()
+        all_data_sender_page.select_a_data_sender_by_id(fetch_(UID, from_(DISSOCIATE_DS_WITHOUT_SELECTING_PROJECT)))
+        all_data_sender_page.dissociate_data_sender()
+        self.assertEqual(all_data_sender_page.get_error_message(), fetch_(ERROR_MSG, from_(DISSOCIATE_DS_WITHOUT_SELECTING_PROJECT)))
+
+    @attr('functional_test')
+    def test_associate_ds_without_selecting_project(self):
+        """
+        Function to test the association of DataSender without selecting project
+        """
+        all_data_sender_page = self.prerequisites_of_add_data_sender()
+        all_data_sender_page.select_a_data_sender_by_id(fetch_(UID, from_(ASSOCIATE_DS_WITHOUT_SELECTING_PROJECT)))
+        all_data_sender_page.associate_data_sender()
+        self.assertEqual(all_data_sender_page.get_error_message(), fetch_(ERROR_MSG, from_(ASSOCIATE_DS_WITHOUT_SELECTING_PROJECT)))
+
+    @attr('functional_test')
+    def test_dissociate_ds_without_selecting_ds(self):
+        """
+        Function to test the dissociation of DataSender without selecting datasender
+        """
+        all_data_sender_page = self.prerequisites_of_add_data_sender()
+        all_data_sender_page.select_project(fetch_(PROJECT_NAME, from_(DISSOCIATE_DS_WITHOUT_SELECTING_DS)))
+        all_data_sender_page.dissociate_data_sender()
+        self.assertEqual(all_data_sender_page.get_error_message(), fetch_(ERROR_MSG, from_(DISSOCIATE_DS_WITHOUT_SELECTING_DS)))
+
+    @attr('functional_test')
+    def test_associate_ds_without_selecting_ds(self):
+        """
+        Function to test the association of DataSender without selecting datasender
+        """
+        all_data_sender_page = self.prerequisites_of_add_data_sender()
+        all_data_sender_page.select_project(fetch_(PROJECT_NAME, from_(ASSOCIATE_DS_WITHOUT_SELECTING_DS)))
+        all_data_sender_page.associate_data_sender()
+        self.assertEqual(all_data_sender_page.get_error_message(), fetch_(ERROR_MSG, from_(ASSOCIATE_DS_WITHOUT_SELECTING_DS)))

@@ -2,6 +2,7 @@
 from pages.lightbox.light_box_locator import *
 from pages.page import Page
 
+
 class LightBox(Page):
     def __init__(self, driver):
         Page.__init__(self, driver)
