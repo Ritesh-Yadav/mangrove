@@ -61,4 +61,4 @@ FILTER_BY_YEAR_TO_DATE = {PROJECT_NAME: "clinic test project",
                               u'cli16 K!llo 28 -- -- -- 19.672,92.33456 --',
                               u'cli17 Catty 98 25.06.2011 O- Memory loss,Pneumonia,Neurological disorders 33.23452,-68.3456 --',
                               u'cli18 àntra 58 22.06.2011 O+ Rapid weight loss,Memory loss,Dry cough -45.234,169.32345 --',
-                              u'cli9 Tinnita 27 -- B+ Rapid weight loss,Pneumonia,Neurological disorders -78.233,-28.3324 --']}
+                              u'cli9 Tinnita 27 27.05.2011 B+ Rapid weight loss,Pneumonia,Neurological disorders -78.233,-28.3324 --']}
