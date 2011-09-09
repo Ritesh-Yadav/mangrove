@@ -1,6 +1,6 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from pages.createprojectpage.create_project_page import *
-from pages.datapage.data_page import DataPage
+from pages.dataanalysispage.data_analysis_page import DataAnalysisPage
 from pages.lightbox.light_box_page import LightBox
 from pages.projectoverviewpage.project_overview_locator import *
 from pages.page import Page
@@ -18,7 +18,7 @@ class ProjectOverviewPage(Page):
         Return data page
          """
         self.driver.find(DATA_TAB).click()
-        return DataPage(self.driver)
+        return DataAnalysisPage(self.driver)
 
     def navigate_to_edit_project_page(self):
         """
