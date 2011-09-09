@@ -36,7 +36,8 @@ Design and Technical Documents
 
 ..  toctree::
     :maxdepth: 2
-    
+
+    tutorial
     datastore_api
     concepts
     api_toplevel_spec
