@@ -1,83 +1,111 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from mangrove.datastore.database import DatabaseManager
+from mangrove.datastore.database import DataObject
 from mangrove.datastore.documents import SubmissionLogDocument
-from mangrove.utils.types import is_string, sequence_to_str
+from mangrove.datastore.entity import DataRecord
+from mangrove.utils.types import is_string, sequence_to_str, is_sequence
 
 ENTITY_QUESTION_DISPLAY_CODE = "eid"
 
-class SubmissionLogger(object):
-    def __init__(self, dbm):
-        assert isinstance(dbm, DatabaseManager)
-        self.dbm = dbm
+def submission_count(dbm, form_code, from_time, to_time):
+    startkey, endkey = _get_start_and_end_key(form_code, from_time, to_time)
+    rows = dbm.load_all_rows_in_view('submissionlog', descending=True, startkey=startkey, endkey = endkey )
+    return 0 if len(rows) == 0 else rows[0]['value']['count']
 
-    def void_data_record(self, submission_id):
-        submission_log = self.dbm._load_document(submission_id, SubmissionLogDocument)
-        submission_log.data_record_id = None
-        submission_log.voided = True
-        self.dbm._save_document(submission_log)
+def get_submissions(dbm, form_code, from_time, to_time, page_number=0, page_size=None):
+    startkey, endkey = _get_start_and_end_key(form_code, from_time, to_time)
+    if page_size is None:
+        rows = dbm.load_all_rows_in_view('submissionlog', reduce=False, descending=True,
+                                         startkey=startkey,
+                                         endkey=endkey)
+    else:
+        rows = dbm.load_all_rows_in_view('submissionlog', reduce=False, descending=True,
+                                         startkey=startkey,
+                                         endkey=endkey, skip=page_number * page_size, limit=page_size)
+    submissions = [Submission.new_from_doc(dbm=dbm, doc = Submission.__document_class__.wrap(row['value'])) for row in rows]
+    return submissions
+
+class Submission(DataObject):
+
+    __document_class__ = SubmissionLogDocument
+
+    def __init__(self, dbm, transport_info=None, form_code=None, values=None):
+        DataObject.__init__(self, dbm)
+        if transport_info is not None:
+            doc = SubmissionLogDocument(channel=transport_info.transport, source=transport_info.source,
+                                      destination=transport_info.destination,
+                                      form_code=form_code,
+                                      values=values, status=False,
+                                      error_message="", test=False)
+
+            DataObject._set_document(self, doc)
+
+
+    @property
+    def data_record(self):
+        return DataRecord.get(self._dbm, self._doc.data_record_id) if self._doc.data_record_id is not None else None
+
+    @property
+    def destination(self):
+        return self._doc.destination
+
+    @property
+    def source(self):
+        return self._doc.source if not self._doc.test else "TEST"
+
+    @property
+    def test(self):
+        return self._doc.test
+
+    @property
+    def uuid(self):
+        return self.id
+
+    @property
+    def status(self):
+        return self._doc.status
+
+    @property
+    def values(self):
+        return self._doc.values
+
+    @property
+    def errors(self):
+        return self._doc.error_message
+
+    def void(self, void = True):
+        data_record_id = self._doc.data_record_id
+        if data_record_id is not None:
+            data_record = DataRecord.get(self._dbm, data_record_id)
+            data_record.void(void)
+
+        DataObject.void(self, void)
+
+    def delete(self):
+        data_record_id = self._doc.data_record_id
+        if data_record_id is not None:
+            data_record = DataRecord.get(self._dbm, data_record_id)
+            data_record.delete()
+        super(Submission, self).delete()
+
+    def update(self, status, errors, data_record_id = None, is_test_mode = False):
+        self._doc.status = status
+        self._doc.void = not status
+        self._doc.data_record_id = data_record_id
+        self._doc.error_message = self._to_string(errors)
+        self._doc.test = is_test_mode
+        self.save()
 
     def _to_string(self, errors):
         if is_string(errors):
             return errors
         if isinstance(errors, dict):
             return sequence_to_str(errors.values())
-        return sequence_to_str(errors)
-
-    def update_submission_log(self, submission_id, status, errors, data_record_id=None, in_test_mode=False):
-        log = self.dbm._load_document(submission_id, SubmissionLogDocument)
-        log.status = status
-        log.voided = not status
-        log.data_record_id = data_record_id
-        log.error_message += self._to_string(errors)
-        log.test = in_test_mode
-        self.dbm._save_document(log)
-
-    def create_submission_log(self, transportInfo, form_code, values, reporter_entity):
-        return self.dbm._save_document(
-            SubmissionLogDocument(channel=transportInfo.transport, source=transportInfo.source,
-                                  destination=transportInfo.destination,
-                                  form_code=form_code,
-                                  values=values, status=False,
-                                  error_message="", voided=True, test=False))
-
-    def update_submission_log_from_form_submission(self, submission_id, form_submission):
-        self.update_submission_log(submission_id, form_submission.saved,
-                                   form_submission.errors,
-                                   form_submission.data_record_id,
-                                   form_submission.form_model.is_in_test_mode())
-
-
-def _get_row_count(rows):
-    if rows is None:
+        if is_sequence(errors):
+            return sequence_to_str(errors)
         return None
-    result = rows[0].value
-    return result.get('count') if result else None
 
 
-def get_submission_count_for_form(dbm, form_code, start_time, end_time):
-    assert is_string(form_code)
-    start = [form_code] if start_time is  None else [form_code, start_time]
-    end = [form_code, {}] if end_time  is None else [form_code, end_time, {}]
-    rows = dbm.load_all_rows_in_view('submissionlog', startkey=start, endkey=end,
-                                     group=True, group_level=1, reduce=True)
-    count = _get_row_count(rows) if rows else 0
-    return count
-
-
-def get_submissions_made_for_form(dbm, form_code, start_time, end_time, page_number=0, page_size=20):
-    assert is_string(form_code)
-    end = [form_code] if start_time is  None else [form_code, start_time]
-    start = [form_code, {}] if end_time  is None else [form_code, end_time, {}]
-    if page_size is None:
-        rows = dbm.load_all_rows_in_view('submissionlog', reduce=False, descending=True,
-                                         startkey=start,
-                                         endkey=end)
-    else:
-        rows = dbm.load_all_rows_in_view('submissionlog', reduce=False, descending=True,
-                                         startkey=start,
-                                         endkey=end, skip=page_number * page_size, limit=page_size)
-    answers, ids = list(), list()
-    for each in rows:
-        answers.append(each.value)
-        ids.append(each.value["data_record_id"])
-    return answers, ids
+def _get_start_and_end_key(form_code, from_time, to_time):
+    end = [form_code] if from_time is  None else [form_code, from_time]
+    start = [form_code,{}] if to_time  is None else [form_code, to_time]
+    return start, end

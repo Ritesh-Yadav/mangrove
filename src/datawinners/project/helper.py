@@ -13,7 +13,8 @@ from django.utils.translation import  ugettext
 import models
 import xlwt
 from datetime import datetime
-from mangrove.transport.submissions import ENTITY_QUESTION_DISPLAY_CODE
+from mangrove.transport.submissions import ENTITY_QUESTION_DISPLAY_CODE, Submission, get_submissions
+from models import Reminder
 
 NUMBER_TYPE_OPTIONS = ["Latest", "Sum", "Count", "Min", "Max", "Average"]
 MULTI_CHOICE_TYPE_OPTIONS = ["Latest"]
@@ -143,17 +144,16 @@ def _create_select_question(post_dict, single_select_flag, ddtype):
                        instruction=post_dict.get("instruction"))
 
 
-def get_submissions(questions, submissions):
+def adapt_submissions_for_template(questions, submissions):
     assert is_sequence(questions)
     assert is_sequence(submissions)
     for s in submissions:
-        assert isinstance(s, dict) and s.get('values') is not None
+        assert type(s) is Submission and s._doc is not None
     formatted_list = []
     for each in submissions:
-        submission_source = TEST_FLAG if each.get('test') else each.get('source')
         formatted_list.append(
-            [each.get('destination'), submission_source, each.get('created'), each.get('status'), each.get('voided'),
-             each.get('error_message')] + [each.get('values').get(q[0].lower()) for q in questions])
+            [each.uuid, each.destination, each.source, each.created, each.errors, each.status]+
+            [each.data_record.is_void() if each.data_record is not None else True] + [each.values.get(q.code.lower()) for q in questions])
 
     return [tuple(each) for each in formatted_list]
 
@@ -286,12 +286,14 @@ def deadline_and_reminder(post_dict):
     _add_to_dict(dict, post_dict,'reminders_enabled')
     return dict
 
-
-def _get_associated_data_senders(all_data, project):
-    return [data for data in all_data if data['short_name'] in project.data_senders]
-
-
 def get_project_data_senders(manager, project):
     all_data = load_all_subjects_of_type(manager)
-    associated_datasenders = _get_associated_data_senders(all_data, project)
-    return associated_datasenders
+    return [data for data in all_data if data['short_name'] in project.data_senders]
+
+def delete_project(manager, project, void = True):
+    project_id, qid = project.id, project.qid
+    [reminder.void(void) for reminder in (Reminder.objects.filter(project_id=project_id))]
+    questionnaire = FormModel.get(manager, qid)
+    [submission.void(void) for submission in get_submissions(manager, questionnaire.form_code, None, None)]
+    questionnaire.void(void)
+    project.set_void(manager, void)

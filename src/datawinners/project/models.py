@@ -1,7 +1,7 @@
 # vim: ai ts=4 sts=4 et sw= encoding=utf-8
 
 from couchdb.mapping import  TextField, ListField, DictField
-from django.db.models.fields import IntegerField, CharField
+from django.db.models.fields import IntegerField, CharField, BooleanField
 from django.db.models.fields.related import ForeignKey
 from datawinners.accountmanagement.models import Organization
 from mangrove.datastore.database import  DatabaseManager
@@ -18,10 +18,14 @@ class Reminder(models.Model):
     message = CharField(max_length=160)
     reminder_mode = CharField(null=False, blank=False, max_length=20, default='before_deadline')
     organization = ForeignKey(Organization)
+    voided = BooleanField(default=False)
 
     def to_dict(self):
         return {'day': self.day, 'message': self.message, 'reminder_mode': self.reminder_mode}
 
+    def void(self, void = True):
+        self.voided = void
+        self.save()
 
 class ProjectState(object):
     INACTIVE = 'Inactive'
@@ -54,7 +58,7 @@ class Project(DocumentBase):
         self.state = state
         self.activity_report = activity_report
         self.sender_group = sender_group
-        self.reminder_and_deadline = reminder_and_deadline
+        self.reminder_and_deadline = reminder_and_deadline if reminder_and_deadline is not None else {}
 
     def get_reminder_frequency_period(self):
         return self.reminder_and_deadline.get('frequency_period')
@@ -111,6 +115,14 @@ class Project(DocumentBase):
         form_model.set_test_mode()
         form_model.save()
         self.state = ProjectState.TEST
+        self.save(dbm)
+
+    def delete(self, dbm):
+        dbm.database.delete(self)
+
+    #The method name sucks but until we make Project DataObject we can't make the method name 'void'
+    def set_void(self, dbm, void = True):
+        self.void = void
         self.save(dbm)
 
 def get_project(pid, dbm):

@@ -15,8 +15,8 @@ from mangrove.form_model.field import TextField, IntegerField, SelectField
 from mangrove.form_model.form_model import FormModel, NAME_FIELD, MOBILE_NUMBER_FIELD
 from mangrove.form_model.validation import NumericRangeConstraint, TextLengthConstraint
 from mangrove.transport.player.player import SMSPlayer, Request, TransportInfo
-from mangrove.transport.submissions import  get_submissions_made_for_form
 from mangrove.datastore.datadict import DataDictType
+from mangrove.transport.submissions import get_submissions
 
 
 class LocationTree(object):
@@ -167,23 +167,19 @@ class TestShouldSaveSMSSubmission(unittest.TestCase):
 
         oneDay = datetime.timedelta(days=1)
         tomorrow = datetime.datetime.now() + oneDay
-        submission_list, ids = get_submissions_made_for_form(self.dbm, "abc", 0,
-                                                             int(mktime(tomorrow.timetuple())) * 1000)
-        self.assertEquals(2, len(submission_list))
-        self.assertEquals({'Q1': 'ans12', 'Q2': 'ans22'}, submission_list[0]['values'])
-        self.assertEquals({'Q1': 'ans1', 'Q2': 'ans2'}, submission_list[1]['values'])
-        self.assertEquals(2, len(ids))
-        self.assertListEqual(['1234567', '2345678'], ids)
+        submissions = get_submissions(self.dbm, "abc", 0, int(mktime(tomorrow.timetuple())) * 1000)
+        self.assertEquals(2, len(submissions))
+        self.assertEquals({'Q1': 'ans12', 'Q2': 'ans22'}, submissions[0].values)
+        self.assertEquals({'Q1': 'ans1', 'Q2': 'ans2'}, submissions[1].values)
 
     def test_error_messages_are_being_logged_in_submissions(self):
         text = "clinic .EID %s .ARV 150 " % self.entity.id
         self.send_sms(text)
         oneDay = datetime.timedelta(days=1)
         tomorrow = datetime.datetime.now() + oneDay
-        submission_list, ids = get_submissions_made_for_form(self.dbm, "clinic", 0,
-                                                             int(mktime(tomorrow.timetuple())) * 1000)
-        self.assertEquals(1, len(submission_list))
-        self.assertEquals(u"Answer 150 for question ARV is greater than allowed.", submission_list[0]['error_message'])
+        submissions= get_submissions(self.dbm, "clinic", 0, int(mktime(tomorrow.timetuple())) * 1000)
+        self.assertEquals(1, len(submissions))
+        self.assertEquals(u"Answer 150 for question ARV is greater than allowed.", submissions[0].errors)
 
 
     def test_should_register_new_entity(self):
