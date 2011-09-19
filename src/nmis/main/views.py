@@ -5,10 +5,11 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedire
 from django.template import RequestContext, loader as template_loader
 from django.template.defaultfilters import slugify
 from mangrove.datastore.database import DatabaseManager
-from mangrove.datastore.entity import get_entities_by_type, get_entities_in
+from mangrove.datastore.entity import get_entities_in
 from main.region_thing import RegionThing, import_region_thing_from_dict
 from helpers import read_required
 import json
+from mangrove.datastore.queries import get_entities_by_type
 import widgets
 import os
 NIGERIA_REGION_CACHE = 'nigeria_regions.json'

@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedire
 from django.template import RequestContext, loader as template_loader
 from django.template.defaultfilters import slugify
 from mangrove.datastore.database import DatabaseManager
-from mangrove.datastore.entity import get_entities_by_type, get_entities_in
+from mangrove.datastore.queries import get_entities_by_type
 import json
 import os
 

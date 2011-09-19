@@ -7,7 +7,7 @@ import json
 
 from django.conf import settings
 from mangrove.datastore.database import DatabaseManager, get_db_manager
-from mangrove.datastore.entity import get_entities_by_type, get_entities_in
+from mangrove.datastore.entity import get_entities_in
 
 WIDGETS_BY_REGION_LEVEL = [
         #country:

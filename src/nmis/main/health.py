@@ -201,5 +201,5 @@ class HealthScores(object):
 
     @classmethod
     def _get_health_facilities(cls, dbm):
-        from mangrove.datastore.entity import get_entities_by_type
+        from mangrove.datastore.queries import get_entities_by_type
         return get_entities_by_type(dbm, "Health Clinic")
