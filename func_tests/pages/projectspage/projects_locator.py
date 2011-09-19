@@ -19,5 +19,5 @@ BY = "by"
 
 PROJECT_LINK_XPATH = "//a[@class='project-id-class' and text()='%s']"
 CREATE_A_NEW_PROJECT_LINK = by_css("a.button:contains('Create a new project')")
-ACTIVATE_PROJECT_LINK_XPATH = "//a[@class='project-id-class' and text()='%s']/../../td[5]/a"
+ACTIVATE_PROJECT_LINK_XPATH = "//a[@class='project-id-class' and text()='%s']/../../td[5]/a[text()='Activate']"
 PROJECT_STATUS_LABEL_XPATH = "//a[@class='project-id-class' and text()='%s']/../../td[4]"
