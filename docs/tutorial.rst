@@ -6,6 +6,17 @@ Introduction
 ------------
 Follow the below steps to create a questionnaire form and submit data for the same:
 
+*   **create Entity Type*
+     entity_type = ["HealthFacility", "Clinic"]
+     # entity type is hierarchy. example "Education School" etc
+     define_type(self.dbm, entity_type)
+
+*   **create Entity*
+     entity_type = ["HealthFacility", "Clinic"]
+     # entity type is hierarchy. example "Education School" etc
+     create_entity(self.dbm, entity_type=entity_type, short_code="1")
+
+
 *   **Create a Form**
 
     default_ddtype = DataDictType(self.dbm, name='Default String Datadict Type', slug='string_default',
@@ -47,3 +58,4 @@ Follow the below steps to create a questionnaire form and submit data for the sa
 
 *   **Perform aggregations for the form**
     <code sample>
+
