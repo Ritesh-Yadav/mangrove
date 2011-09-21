@@ -21,3 +21,4 @@ django-extensions
 apscheduler
 south
 supervisor
+python-dateutil
