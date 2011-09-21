@@ -16,6 +16,9 @@ Follow the below steps to create a questionnaire form and submit data for the sa
      # entity type is hierarchy. example "Education School" etc
      create_entity(self.dbm, entity_type=entity_type, short_code="1")
 
+*   **get datarecord*
+     DataRecord.get(self.dbm,data_record_id)
+
 
 *   **Create a Form**
 
