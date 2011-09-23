@@ -33,9 +33,32 @@ class AllDataSendersPage(Page):
 
     def select_project(self, project_name):
         """
-        Function to select a project from drop down on all data sender page
+        Function to select a project on all data sender page
          """
-        self.driver.find_drop_down(PROJECT_DROP_DOWN).set_selected_by_text(project_name)
+        self.driver.find(by_xpath(PROJECT_CB_XPATH % project_name)).click()
+
+    def select_projects(self, project_names):
+        """
+        Function to select multiple projects on all data sender page
+
+        Args:
+        project_names is list of all the projects
+
+         """
+        for project_name in project_names:
+            self.select_project(project_name)
+
+    def click_confirm(self):
+        """
+        Function to confirm the association/dissociation with projects on all data sender page
+         """
+        self.driver.find(CONFIRM_BUTTON).click()
+
+    def click_cancel(self):
+        """
+        Function to cancel the association/dissociation with projects on all data sender page
+         """
+        self.driver.find(CANCEL_LINK).click()
 
     def associate_data_sender(self):
         """

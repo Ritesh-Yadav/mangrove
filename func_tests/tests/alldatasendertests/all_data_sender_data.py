@@ -23,10 +23,10 @@ DISSOCIATE_DATA_SENDER = {PROJECT_NAME: "clinic test project",
                          UID: "rep1",
                          MOBILE_NUMBER: "1234567890"}
 
-DISSOCIATE_DS_WITHOUT_SELECTING_PROJECT = {UID: "rep1", ERROR_MSG: "Please select atleast 1 project"}
+DISSOCIATE_DS_WITHOUT_SELECTING_PROJECT = {UID: "rep1", ERROR_MSG: "Please select atleast 1 Project"}
 
-ASSOCIATE_DS_WITHOUT_SELECTING_PROJECT = {UID: "rep2", ERROR_MSG: "Please select atleast 1 project"}
+ASSOCIATE_DS_WITHOUT_SELECTING_PROJECT = {UID: "rep2", ERROR_MSG: "Please select atleast 1 Project"}
 
-DISSOCIATE_DS_WITHOUT_SELECTING_DS = {PROJECT_NAME: "clinic test project", ERROR_MSG: "Please select atleast 1 data sender"}
+DISSOCIATE_DS_WITHOUT_SELECTING_DS = {PROJECT_NAME: "clinic test project", ERROR_MSG: u"Please select atleast 1 data sender"}
 
-ASSOCIATE_DS_WITHOUT_SELECTING_DS = {PROJECT_NAME: "clinic test project", ERROR_MSG: "Please select atleast 1 data sender"}
+ASSOCIATE_DS_WITHOUT_SELECTING_DS = {PROJECT_NAME: "clinic test project", ERROR_MSG: u"Please select atleast 1 data sender"}
