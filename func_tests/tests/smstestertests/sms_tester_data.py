@@ -13,7 +13,7 @@ SUCCESS_MESSAGE_TEXT = "Thank you Shweta for your data record. We successfully r
 
 VALID_DATA = {SENDER: "1234567890",
               RECEIVER: "261333782943",
-              SMS: "cli001 .EID cid003 .NA Mr. Tessy .FA 58 .RD 17.05.2011 .BG b .SY ade .GPS 27.178057  -78.007789",
+              SMS: "cli009 .EID cid003 .NA Mr. Tessy .FA 58 .RD 17.05.2011 .BG b .SY ade .GPS 27.178057  -78.007789",
               SUCCESS_MESSAGE: "Thank you Shweta. We received : SY: Rapid weight loss,Memory loss,Neurological disorders BG: O- NA: Mr. Tessy RD: 17.05.2011 FA: 58.0 EID: cid003 GPS: 27.178057,-78.007789"}
 
 VALID_DATA2 = {SENDER: "1234567890",
@@ -23,7 +23,7 @@ VALID_DATA2 = {SENDER: "1234567890",
 
 EXCEED_NAME_LENGTH = {SENDER: "1234567890",
                       RECEIVER: "261333782943",
-                      SMS: "cli001 .EID CID003 .NA Mr. O'brain .FA 58 .RD 17.05.2011 .BG b .SY ade .GPS 27.178057  -78.007789",
+                      SMS: "cli009 .EID CID003 .NA Mr. O'brain .FA 58 .RD 17.05.2011 .BG b .SY ade .GPS 27.178057  -78.007789",
                       ERROR_MSG: "Error. Invalid Submission. Refer to printed Questionnaire. Resend the question ID and answer for na"}
 
 EXCEED_NAME_LENGTH2 = {SENDER: "1234567890",

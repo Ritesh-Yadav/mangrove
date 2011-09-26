@@ -15,5 +15,5 @@
 LOCATOR = "locator"
 BY = "by"
 
-All_DATA_RECORDS_LINK_XPATH = "//a[@class='project-id-class' and text()='%s']/../../td[4]/span/a[@class!='disable_link' and text()='All Data Records']"
-ANALYSIS_LINK_XPATH = "//a[@class='project-id-class' and text()='%s']/../../td[4]/span/a[@class!='disable_link' and text()='Analysis']"
+All_DATA_RECORDS_LINK_XPATH = "//a[@class='project-id-class ' and text()='%s']/../../td[4]/span/a[@class!='disable_link' and text()='All Data Records']"
+ANALYSIS_LINK_XPATH = "//a[@class='project-id-class ' and text()='%s']/../../td[4]/span/a[@class!='disable_link' and text()='Analysis']"

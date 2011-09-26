@@ -6,6 +6,7 @@ from pages.loginpage.login_page import LoginPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.editprojecttests.edit_project_data import *
+from nose.plugins.skip import SkipTest
 
 
 class TestEditProject(BaseTest):
@@ -42,6 +43,7 @@ class TestEditProject(BaseTest):
         subject_questionnaire_page.navigate_to_previous_step()
         self.assertEqual(WATER_POINT_DATA, edit_project_page.get_project_details())
 
+    @SkipTest
     @attr('functional_test', 'smoke')
     def test_successful_project_editing_with_report_type_change(self):
         """
@@ -62,7 +64,9 @@ class TestEditProject(BaseTest):
         self.assertEquals(self.driver.get_title(), subject_questionnaire_page.get_page_title())
         create_questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
         self.assertEqual(create_questionnaire_page.get_question_link_text(1),
-                         fetch_(DEFAULT_QUESTION, from_(QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES)))
+                         fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES))[0])
+        self.assertEqual(create_questionnaire_page.get_question_link_text(2),
+                         fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES))[1])
         create_questionnaire_page.navigate_to_previous_step()
         subject_questionnaire_page.navigate_to_previous_step()
         self.assertEqual(REPORTER_ACTIVITIES_DATA, edit_project_page.get_project_details())

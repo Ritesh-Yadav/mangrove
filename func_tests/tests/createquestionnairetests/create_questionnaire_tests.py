@@ -35,7 +35,7 @@ class TestCreateQuestionnaire(BaseTest):
         create_questionnaire_page.create_questionnaire_with(QUESTIONNAIRE_DATA)
         index = 2
         for question in fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA)):
-            question_link_text = fetch_(QUESTION, from_(question)) + " " + fetch_(CODE, from_(question))
+            question_link_text = fetch_(CODE, from_(question)) + " " + fetch_(QUESTION, from_(question))
             self.assertEquals(create_questionnaire_page.get_question_link_text(index), question_link_text)
             index += 1
         time.sleep(5)

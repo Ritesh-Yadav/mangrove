@@ -1,4 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
+import time
 from pages.dataanalysispage.data_analysis_locator import *
 from pages.page import Page
 from pages.submissionlogpage.submission_log_page import SubmissionLogPage
@@ -128,6 +129,7 @@ class DataAnalysisPage(Page):
         Function to filter the data according to date range
         """
         self.driver.find(FILTER_BUTTON).click()
+        time.sleep(3)
 
     def go_to_next_page(self):
         """
