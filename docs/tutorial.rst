@@ -4,10 +4,7 @@ Mangrove Tutorial
 
 Introduction
 ------------
-Follow the below steps to create a questionnaire form and submit data for the same:
-
-*   **create Entity Type*::
-
+Follow are the main concepts in mangrove.
 
 Entity Type:
 ---------------
@@ -75,6 +72,44 @@ Load all submissions for the form::
 
     get_submissions_made_for_form()
 
-Perform aggregations for the form::
-    <code sample>
+Aggregation:
+---------------
+Monthly Aggregate on all data records for a field per entity for the form code::
 
+    values = aggregate_for_time_period(
+        self.manager,
+        form_code='CL1',
+        aggregates=[Sum("patients"), Min('meds'), Max('beds'),Latest("director")],
+        period=Month(2, 2010)
+        )
+
+    Returns one row per entity, with the aggregated values for each
+    field.
+    {"<entity_id>": {"patients": 10, 'meds': 20, 'beds': 300 , 'director': "Dr. A"}}
+
+
+Weekly Aggregate on all data records for a field per entity for the form code::
+    values = aggregate_for_time_period(
+        self.manager,
+        form_code='CL1',
+        aggregates=[Sum("patients"), Min('meds'), Max('beds'),Latest("director")],
+        period=Week(52, 2009)
+        )
+
+    52 is the weeknumber and 2009 is the year.
+    Returns one row per entity, with the aggregated values for each field.
+    {"<entity_id>": {"patients": 10, 'meds': 20, 'beds': 300 , 'director': "Dr. A"}}
+
+
+Yearly Aggregate on all data records for a field per entity for the form code::
+
+    values = aggregate_for_time_period(
+        self.manager,
+        form_code='CL1',
+        aggregates=[Sum("patients"), Min('meds'), Max('beds'),Latest("director")],
+        period=Year(2010)
+        )
+
+    2010 is the year.
+    Returns one row per entity, with the aggregated values for each field.
+    {"<entity_id>": {"patients": 10, 'meds': 20, 'beds': 300 , 'director': "Dr. A"}}
