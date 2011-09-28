@@ -6,21 +6,35 @@ Introduction
 ------------
 Follow the below steps to create a questionnaire form and submit data for the same:
 
-*   **create Entity Type*
+*   **create Entity Type*::
+
+
+Entity Type:
+---------------
+create entity type::
+
      entity_type = ["HealthFacility", "Clinic"]
      # entity type is hierarchy. example "Education School" etc
      define_type(self.dbm, entity_type)
 
-*   **create Entity*
+Entity:
+---------------
+create entity ::
+
      entity_type = ["HealthFacility", "Clinic"]
      # entity type is hierarchy. example "Education School" etc
      create_entity(self.dbm, entity_type=entity_type, short_code="1")
 
-*   **get datarecord*
+Data Record:
+---------------
+get datarecord::
+
      DataRecord.get(self.dbm,data_record_id)
 
 
-*   **Create a Form**
+Form Model:
+---------------
+Create a Form:
 
     default_ddtype = DataDictType(self.dbm, name='Default String Datadict Type', slug='string_default',
                                            primitive_type='string')
@@ -41,13 +55,15 @@ Follow the below steps to create a questionnaire form and submit data for the sa
                                     fields=[question1, question2, question3])
     form_model.save()
 
-*   **Submit data to the form directly**
+Data Submission:
+---------------
+Submit data to the form directly::
 
     values = { "ID" : "rep45", "DATE" : "10.2010", "NETS" : "50" }
     form = get_form_model_by_code(dbm, "MNET")
     form_submission = form.submit(dbm, values, submission_id)
 
-*   **Submit data to the player**
+Submit data to the player::
     text = "MNET .ID rep45 .DATE 10.2010 .NETS 50"
     transport_info = TransportInfo(transport="sms", source="9923712345", destination="5678")
     sms_player = SMSPlayer(dbm)
@@ -55,10 +71,10 @@ Follow the below steps to create a questionnaire form and submit data for the sa
 
     The player will also log the submission for you in Mangrove.
 
-*   **Load all submissions for the form**
+Load all submissions for the form::
 
     get_submissions_made_for_form()
 
-*   **Perform aggregations for the form**
+Perform aggregations for the form::
     <code sample>
 
