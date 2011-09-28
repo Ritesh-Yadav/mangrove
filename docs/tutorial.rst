@@ -54,15 +54,19 @@ Create a Form::
 
 Data Submission:
 ---------------
-Submit data to the form directly::
+Submit data to the form directly
 ++++++++++++++++++++++++++++++++
+
+::
 
     values = { "ID" : "rep45", "DATE" : "10.2010", "NETS" : "50" }
     form = get_form_model_by_code(dbm, "MNET")
     form_submission = form.submit(dbm, values, submission_id)
 
-Submit data to the player::
+Submit data to the player
 ++++++++++++++++++++++++++++++++
+
+::
 
     text = "MNET .ID rep45 .DATE 10.2010 .NETS 50"
     transport_info = TransportInfo(transport="sms", source="9923712345", destination="5678")
@@ -73,14 +77,18 @@ Submit data to the player::
 
 Load all submissions for the form::
 ++++++++++++++++++++++++++++++++
+::
+
 
     get_submissions_made_for_form()
 
 Aggregation:
 ---------------
 
-Monthly Aggregate on all data records for a field per entity for the form code::
+Monthly Aggregate on all data records for a field per entity for the form code
 ++++++++++++++++++++++++++++++++
+
+::
 
     values = aggregate_for_time_period(
         self.manager,
@@ -94,8 +102,10 @@ Monthly Aggregate on all data records for a field per entity for the form code::
     {"<entity_id>": {"patients": 10, 'meds': 20, 'beds': 300 , 'director': "Dr. A"}}
 
 
-Weekly Aggregate on all data records for a field per entity for the form code::
+Weekly Aggregate on all data records for a field per entity for the form code
 ++++++++++++++++++++++++++++++++
+
+::
 
     values = aggregate_for_time_period(
         self.manager,
@@ -109,8 +119,10 @@ Weekly Aggregate on all data records for a field per entity for the form code::
     {"<entity_id>": {"patients": 10, 'meds': 20, 'beds': 300 , 'director': "Dr. A"}}
 
 
-Yearly Aggregate on all data records for a field per entity for the form code::
+Yearly Aggregate on all data records for a field per entity for the form code
 ++++++++++++++++++++++++++++++++
+
+::
 
     values = aggregate_for_time_period(
         self.manager,
