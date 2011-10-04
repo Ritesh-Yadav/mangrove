@@ -178,12 +178,12 @@ QUESTIONNAIRE_DATA = {QUESTIONNAIRE_CODE: "WPS01", GEN_RANDOM: False,
                                CHOICE: ["Aquificae", "Bacteroids", "Chlorobia"],
                                ALLOWED_CHOICE: MULTIPLE_ANSWERS},
                               {QUESTION: "Geo points of Well", CODE: "GPS", TYPE: GEO}],
-                      CHARACTER_REMAINING: "112 / 160 characters used",
+                      CHARACTER_REMAINING: "127 / 160 characters used",
                       PAGE_TITLE: "Data Senders"}
 
 NEW_QUESTIONNAIRE_DATA = {QUESTIONS: [{QUESTION: "Water Level", CODE: "WL", TYPE: NUMBER, MIN: "100", MAX: "1000"},
         {QUESTION: "What is water point name?", CODE: "WN", TYPE: WORD, LIMIT: LIMITED, MAX: ""}],
-                          CHARACTER_REMAINING: "117 / 160 characters used",
+                          CHARACTER_REMAINING: "132 / 160 characters used",
                           PAGE_TITLE: "Data Senders"}
 
 VALID_DATA_REVIEW_AND_TEST = {PROJECT_PROFILE: {PROJECT_NAME: "waterpoint morondava",
@@ -192,7 +192,7 @@ VALID_DATA_REVIEW_AND_TEST = {PROJECT_PROFILE: {PROJECT_NAME: "waterpoint morond
                                                 DEVICES: "sms"},
                               SUBJECT_DETAILS: {SUBJECT: "waterpoint"},
                               DATA_SENDER_COUNT: "1",
-                              QUESTIONNAIRE: [u'What are you reporting on?', u'Water Level',
+                              QUESTIONNAIRE: [u'What are you reporting on?', u'What is the reporting period for the activity?', u'Water Level',
                                               u'Date of report in DD.MM.YYY format', u'Date of report in MM.YYY format',
                                               u'Date of report in MM.DD.YYY format', u'Color of Water',
                                               u'Water point admin name', u'Bacterias in water', u'Geo points of Well'],
