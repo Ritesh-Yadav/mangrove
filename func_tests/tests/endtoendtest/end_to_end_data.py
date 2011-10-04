@@ -214,7 +214,7 @@ SMS_DATA_LOG = {SMS_SUBMISSION: "True False wat1 98 12.04.2011 04.2011 04.12.201
 NEW_VALID_DATA_FOR_SMS = {SENDER: "1234567890",
                           RECEIVER: "",
                           SMS: "WPS01 .WID wat1 .wl 98 .DMY 12.04.2011 .MY 04.2011 .MDY 04.12.2011  .wc c .WAN Mr. Jessy .wb ab .GPS 27.178057  -78.007789 .WN Water Point 1",
-                          ERROR_MESSAGE: "Error. Invalid Submission. Refer to printed Questionnaire. Resend the question ID and answer for wl"}
+                          ERROR_MESSAGE: "Error. Incorrect answer for question wl. Please resend entire message."}
 
 NEW_SMS_DATA_LOG = {
     SMS_SUBMISSION: "False True wat1 98 12.04.2011 04.2011 04.12.2011 c Mr. Jessy ab 27.178057 -78.007789 Water Point 1",
