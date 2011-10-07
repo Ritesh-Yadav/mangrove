@@ -208,7 +208,7 @@ VALID_DATA_FOR_SMS = {SENDER: "1234567890",
                       SMS: "WPS01 .WID wat1 .wl 98 .DMY 12.04.2011 .MY 04.2011 .MDY 04.12.2011  .wc c .WAN Mr. Tessy .wb ab .GPS 27.178057  -78.007789",
 SUCCESS_MESSAGE: SUCCESS_MESSAGE_TEXT}
 
-SMS_DATA_LOG = {SMS_SUBMISSION: "True False wat1 98 12.04.2011 04.2011 04.12.2011 c Mr. Tessy ab 27.178057 -78.007789",
+SMS_DATA_LOG = {SMS_SUBMISSION: "True False wat1 None 98 12.04.2011 04.2011 04.12.2011 c Mr. Tessy ab 27.178057 -78.007789",
                 UNIQUE_VALUE: "Mr. Tessy"}
 
 NEW_VALID_DATA_FOR_SMS = {SENDER: "1234567890",
@@ -217,5 +217,5 @@ NEW_VALID_DATA_FOR_SMS = {SENDER: "1234567890",
                           ERROR_MESSAGE: "Error. Incorrect answer for question wl. Please resend entire message."}
 
 NEW_SMS_DATA_LOG = {
-    SMS_SUBMISSION: "False True wat1 98 12.04.2011 04.2011 04.12.2011 c Mr. Jessy ab 27.178057 -78.007789 Water Point 1",
+    SMS_SUBMISSION: "False True wat1 None 98 12.04.2011 04.2011 04.12.2011 c Mr. Jessy ab 27.178057 -78.007789 Water Point 1",
     UNIQUE_VALUE: "Mr. Jessy"}
