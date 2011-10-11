@@ -203,6 +203,7 @@ class TestApplicationEndToEnd(BaseTest):
 
         dashboard_page = global_navigation.navigate_to_dashboard_page()
         create_project_page = dashboard_page.navigate_to_create_project_page()
+        create_project_page.select_project_type(VALID_DATA_FOR_PROJECT)
         self.add_subject_type(create_project_page, VALID_SUBJECT_TYPE2)
         self.add_subject_type(create_project_page, VALID_SUBJECT_TYPE1)
         create_subject_questionnaire_page = self.create_project(create_project_page)
