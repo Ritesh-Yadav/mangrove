@@ -22,3 +22,5 @@ apscheduler
 south
 supervisor
 python-dateutil
+http://github.com/jbalogh/django-nose/tarball/master#egg=django-nose
+
