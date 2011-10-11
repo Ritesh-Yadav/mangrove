@@ -93,7 +93,7 @@ MESSAGE = "message"
 
 RESPONSE_MESSAGE = "message"
 
-SUCCESS_MESSAGE_TEXT = "Thank you Donald Mouse. We received : WID: wat1 WL: 98.0 DMY: 12.04.2011 MY: 04.2011 MDY: 04.12.2011 WC: DARK YELLOW WAN: Mr. Tessy WB: Aquificae,Bacteroids GPS: 27.178057,-78.007789"
+SUCCESS_MESSAGE_TEXT = "Thank you Donald Mouse. We received : WID: wat1 q2: 11.10.2011 WL: 98.0 DMY: 12.04.2011 MY: 04.2011 MDY: 04.12.2011 WC: DARK YELLOW WAN: Mr. Tessy WB: Aquificae,Bacteroids GPS: 27.178057,-78.007789"
 
 SMS_SUBMISSION = "sms"
 UNIQUE_VALUE = "unique_value"
@@ -200,22 +200,22 @@ VALID_DATA_REVIEW_AND_TEST = {PROJECT_PROFILE: {PROJECT_NAME: "waterpoint morond
 }
 
 VALID_DATA_FOR_SMS_LIGHT_BOX = {
-    SMS: "WPS01 .WID wat1 .wl 98 .DMY 12.04.2011 .MY 04.2011 .MDY 04.12.2011  .wc c .WAN Mr. Tessy .wb ab .GPS 27.178057  -78.007789",
-    RESPONSE_MESSAGE: "Thank you TEST. We received : WAN: Mr. Tessy WID: wat1 WC: DARK YELLOW WB: Aquificae,Bacteroids WL: 98.0 MDY: 04.12.2011 DMY: 12.04.2011 MY: 04.2011 GPS: 27.178057,-78.007789"}
+    SMS: "WPS01 .WID wat1  .q2 11.10.2011 .wl 98 .DMY 12.04.2011 .MY 04.2011 .MDY 04.12.2011  .wc c .WAN Mr. Tessy .wb ab .GPS 27.178057  -78.007789",
+    RESPONSE_MESSAGE: "Thank you TEST. We received : WAN: Mr. Tessy q2: 11.10.2011 WID: wat1 WC: DARK YELLOW WB: Aquificae,Bacteroids WL: 98.0 MDY: 04.12.2011 DMY: 12.04.2011 MY: 04.2011 GPS: 27.178057,-78.007789"}
 
 VALID_DATA_FOR_SMS = {SENDER: "1234567890",
                       RECEIVER: "",
-                      SMS: "WPS01 .WID wat1 .wl 98 .DMY 12.04.2011 .MY 04.2011 .MDY 04.12.2011  .wc c .WAN Mr. Tessy .wb ab .GPS 27.178057  -78.007789",
+                      SMS: "WPS01 .WID wat1 .q2 11.10.2011 .wl 98 .DMY 12.04.2011 .MY 04.2011 .MDY 04.12.2011  .wc c .WAN Mr. Tessy .wb ab .GPS 27.178057  -78.007789",
 SUCCESS_MESSAGE: SUCCESS_MESSAGE_TEXT}
 
-SMS_DATA_LOG = {SMS_SUBMISSION: "True False wat1 None 98 12.04.2011 04.2011 04.12.2011 c Mr. Tessy ab 27.178057 -78.007789",
+SMS_DATA_LOG = {SMS_SUBMISSION: "True False wat1 11.10.2011 98 12.04.2011 04.2011 04.12.2011 c Mr. Tessy ab 27.178057 -78.007789",
                 UNIQUE_VALUE: "Mr. Tessy"}
 
 NEW_VALID_DATA_FOR_SMS = {SENDER: "1234567890",
                           RECEIVER: "",
-                          SMS: "WPS01 .WID wat1 .wl 98 .DMY 12.04.2011 .MY 04.2011 .MDY 04.12.2011  .wc c .WAN Mr. Jessy .wb ab .GPS 27.178057  -78.007789 .WN Water Point 1",
+                          SMS: "WPS01 .WID wat1  .q2 12.10.2011 .wl 98 .DMY 12.04.2011 .MY 04.2011 .MDY 04.12.2011  .wc c .WAN Mr. Jessy .wb ab .GPS 27.178057  -78.007789 .WN Water Point 1",
                           ERROR_MESSAGE: "Error. Incorrect answer for question wl. Please resend entire message."}
 
 NEW_SMS_DATA_LOG = {
-    SMS_SUBMISSION: "False True wat1 None 98 12.04.2011 04.2011 04.12.2011 c Mr. Jessy ab 27.178057 -78.007789 Water Point 1",
+    SMS_SUBMISSION: "False True wat1 12.10.2011 98 12.04.2011 04.2011 04.12.2011 c Mr. Jessy ab 27.178057 -78.007789 Water Point 1",
     UNIQUE_VALUE: "Mr. Jessy"}
