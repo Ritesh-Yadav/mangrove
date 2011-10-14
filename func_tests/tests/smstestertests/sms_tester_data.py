@@ -54,7 +54,7 @@ UNREGISTERED_FROM_NUMBER = {SENDER: "123445567",
 REGISTER_DATA_SENDER = {SENDER: "1234567890",
                         RECEIVER: "919880734937",
                         SMS: "REG .t Reporter .m 0123456789 .L  Jaipur .g 26.917 75.817 .N Donald Duck",
-                        ERROR_MSG: "Registration successful. Unique identification number\(ID\) is: rep\d.We received : t: Reporter m: 0123456789 l: jaipur g: 26.917,75.817 n: Donald Duck s: rep\d"}
+                        ERROR_MSG: "Registration successful. Unique identification number\(ID\) is: rep[\d]+.We received : t: Reporter m: 0123456789 l: jaipur g: 26.917,75.817 n: Donald Duck s: rep[\d]+"}
 
 REGISTER_DATA_SENDER_FROM_UNKNOWN_NUMBER = {SENDER: "12345678453",
                                             RECEIVER: "919880734937",
