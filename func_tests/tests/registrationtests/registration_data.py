@@ -52,8 +52,8 @@ REGISTRATION_DATA_FOR_SUCCESSFUL_TRIAL_REGISTRATION = {ORGANIZATION_NAME: u"ÑG�
                                                  FIRST_NAME: u"Nö",
                                                  LAST_NAME: u"Gö",
                                                  EMAIL: u"ngo",
-                                                 REGISTRATION_PASSWORD: u"ngo001",
-                                                 REGISTRATION_CONFIRM_PASSWORD: u"ngo001"}
+                                                 REGISTRATION_PASSWORD: REGISTRATION_PASSWORD,
+                                                 REGISTRATION_CONFIRM_PASSWORD: REGISTRATION_PASSWORD}
 
 
 EXISTING_EMAIL_ADDRESS = {ORGANIZATION_NAME: u"NGO 001",

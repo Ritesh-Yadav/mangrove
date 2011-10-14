@@ -14,6 +14,17 @@ from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_SMS_TESTER_PA
 from tests.endtoendtest.end_to_end_data import *
 from tests.registrationtests.registration_tests import register_and_get_email
 
+def activate_account(driver, email):
+    account_activate_page = ActivateAccountPage(driver)
+    dbmanager = DatabaseManager()
+    activation_code = dbmanager.get_activation_code(email)
+    account_activate_page.activate_account(activation_code)
+    return account_activate_page
+
+def do_login(driver, email, password):
+    driver.go_to(DATA_WINNER_LOGIN_PAGE)
+    login_page = LoginPage(driver)
+    return login_page.do_successful_login_with({USERNAME:email, PASSWORD:password})
 
 class TestApplicationEndToEnd(BaseTest):
     def tearDown(self):
@@ -29,10 +40,7 @@ class TestApplicationEndToEnd(BaseTest):
             pass
 
     def activate_account(self):
-        account_activate_page = ActivateAccountPage(self.driver)
-        dbmanager = DatabaseManager()
-        activation_code = dbmanager.get_activation_code(self.email)
-        account_activate_page.activate_account(activation_code)
+        account_activate_page = activate_account(self.driver, self.email)
         self.assertRegexpMatches(account_activate_page.get_message(),
                                  fetch_(SUCCESS_MESSAGE, from_(VALID_ACTIVATION_DETAILS)))
 
@@ -47,12 +55,9 @@ class TestApplicationEndToEnd(BaseTest):
         self.assertEquals(registration_confirmation_page.registration_success_message(),
                           fetch_(SUCCESS_MESSAGE, from_(REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION)))
 
-    def do_login(self, valid_credentials):
-        self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
-        valid_credentials[USERNAME] = self.email
-        login_page = LoginPage(self.driver)
-        global_navigation = login_page.do_successful_login_with(valid_credentials)
-        self.assertEqual(global_navigation.welcome_message(), fetch_(WELCOME_MESSAGE, from_(valid_credentials)))
+    def do_login(self):
+        global_navigation = do_login(self.driver, self.email, REGISTRATION_PASSWORD)
+        self.assertEqual(global_navigation.welcome_message(), "Welcome Mickey!")
         return global_navigation
 
     def add_a_data_sender(self, dashboard_page):
@@ -195,7 +200,7 @@ class TestApplicationEndToEnd(BaseTest):
 
         organization_sms_tel_number = self.set_organization_number()
         self.activate_account()
-        global_navigation = self.do_login(VALID_CREDENTIALS)
+        global_navigation = self.do_login()
 
         dashboard_page = global_navigation.navigate_to_dashboard_page()
         create_project_page = dashboard_page.navigate_to_create_project_page()
