@@ -1,4 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
+from selenium.common.exceptions import WebDriverException
 
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -9,8 +10,11 @@ class TextBox(WebElement):
         self.webElement = textBoxWebElement
 
     def enter_text(self, textToBeEntered):
-        self.webElement.click()
-        self.webElement.clear()
+        try:
+            self.webElement.click()
+            self.webElement.clear()
+        except WebDriverException:
+            pass
         self.webElement.send_keys(textToBeEntered)
         return self
 
