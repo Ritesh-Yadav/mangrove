@@ -117,7 +117,7 @@ UNMATCHED_PASSWORD = {ORGANIZATION_NAME: u"NGO 001",
                       REGISTRATION_PASSWORD: u"password",
                       REGISTRATION_CONFIRM_PASSWORD: u"different_password"}
 
-UNMATCHED_PASSWORD_ERROR_MESSAGE = u"Password The two password fields didn't match."
+UNMATCHED_PASSWORD_ERROR_MESSAGE = u"* Password The two password fields didn't match."
 
 WITHOUT_ENTERING_REQUIRED_FIELDS = {ORGANIZATION_NAME: u"",
                                     ORGANIZATION_SECTOR: u"PublicHealth",
@@ -138,7 +138,7 @@ WITHOUT_ENTERING_REQUIRED_FIELDS = {ORGANIZATION_NAME: u"",
                                     REGISTRATION_PASSWORD: u"",
                                     REGISTRATION_CONFIRM_PASSWORD: u""}
 
-WITHOUT_ENTERING_REQUIRED_FIELDS_ERROR_MESSAGE = u"* Organization Name This field is required.* Address This field is required.* City This field is required.* Postal / Zip Code This field is required.* Country This field is required.* First name This field is required.* Last name This field is required.* Email address This field is required.Password This field is required.Password (again) This field is required."
+WITHOUT_ENTERING_REQUIRED_FIELDS_ERROR_MESSAGE = u"* Organization Name This field is required.* Address This field is required.* City This field is required.* Postal / Zip Code This field is required.* Country This field is required.* First name This field is required.* Last name This field is required.* Email address This field is required.* Password This field is required.* Password (again) This field is required."
 
 INVALID_WEBSITE_URL = {ORGANIZATION_NAME: u"NGO 001",
                        ORGANIZATION_SECTOR: u"PublicHealth",
