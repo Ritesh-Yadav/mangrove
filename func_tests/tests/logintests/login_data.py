@@ -15,6 +15,18 @@ TRIAL_CREDENTIALS = {USERNAME: "chinatwu@gmail.com",
                      PASSWORD: "chinatwu",
                      WELCOME_MESSAGE: "Welcome Trial Organisation Owner!"}
 
+TRIAL_CREDENTIALS_TWO = {USERNAME: "chinatwu2@gmail.com",
+                     PASSWORD: "chinatwu",
+                     WELCOME_MESSAGE: "Welcome Trial Organisation Owner!"}
+
+TRIAL_CREDENTIALS_THREE = {USERNAME: "chinatwu3@gmail.com",
+                     PASSWORD: "chinatwu",
+                     WELCOME_MESSAGE: "Welcome Trial Organisation Owner!"}
+
+TRIAL_CREDENTIALS_FOUR = {USERNAME: "chinatwu4@gmail.com",
+                     PASSWORD: "chinatwu",
+                     WELCOME_MESSAGE: "Welcome Trial Organisation Owner!"}
+
 # invalid format email id
 INVALID_EMAIL_ID_FORMAT = {USERNAME: "com.invalid@mail",
                            PASSWORD: "nogo123",

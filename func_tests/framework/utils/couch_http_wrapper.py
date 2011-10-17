@@ -73,7 +73,7 @@ class CouchHttpWrapper(object):
         r = self.post(''.join(['/', dbName, '/_bulk_docs']), body)
         prettyPrint(r)
 
-    def deleteDoc(self, dbName, docId):
+    def deleteDoc(self, dbName, docId, rev_id):
         # XXX Crashed if resource is non-existent; not so for DELETE on db. Bug?
         # XXX Does not work any more, on has to specify an revid
         #     Either do html head to get the recten revid or provide it as parameter
