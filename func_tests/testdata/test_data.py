@@ -2,11 +2,21 @@
 
 ACTIVATE = "activate"
 CANCEL = "cancel"
-DATA_WINNER_LOGIN_PAGE = "http://localhost:8000/login"
-DATA_WINNER_DASHBOARD_PAGE = "http://localhost:8000/dashboard"
-DATA_WINNER_REGISTER_PAGE = "http://localhost:8000/register"
-DATA_WINNER_SMS_TESTER_PAGE = "http://localhost:8000/smstester"
-DATA_WINNER_SUBMISSION_LOG_PAGE = "http://localhost:8000/project/results/cli002/"
-DATA_WINNER_ADD_SUBJECT = "http://localhost:8000/entity/subject/create"
-DATA_WINNER_ACTIVATE_ACCOUNT = "http://localhost:8000/activate/"
-DATA_WINNER_CREATE_DATA_SENDERS = "http://localhost:8000/entity/datasender/create"
+
+def url(path):
+    full_path = "http://localhost:8000" + path
+    if not full_path.endswith("/"):
+        full_path += "/"
+    return full_path
+
+DATA_WINNER_LOGIN_PAGE = url("/login")
+DATA_WINNER_DASHBOARD_PAGE = url("/dashboard")
+DATA_WINNER_REGISTER_PAGE = url("/register")
+DATA_WINNER_REGISTER_TRIAL_PAGE = url("/register/trial")
+DATA_WINNER_SMS_TESTER_PAGE = url("/smstester")
+DATA_WINNER_SUBMISSION_LOG_PAGE = url("/project/results/cli002/")
+DATA_WINNER_ADD_SUBJECT = url("/entity/subject/create")
+DATA_WINNER_ACTIVATE_ACCOUNT = url("/activate/")
+DATA_WINNER_CREATE_DATA_SENDERS = url("/entity/datasender/create")
+DATA_WINNER_HOMEPAGE = url("/home/")
+DATA_WINNER_EN_PRICING_PAGE = url("/en/pricing/")

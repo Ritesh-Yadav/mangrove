@@ -12,6 +12,7 @@ from pages.loginpage.login_page import LoginPage
 from pages.smstesterpage.sms_tester_page import SMSTesterPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_DASHBOARD_PAGE
 from tests.endtoendtest.end_to_end_data import *
+from tests.registrationtests.registration_tests import register_and_get_email
 
 
 class TestApplicationEndToEnd(BaseTest):
@@ -42,12 +43,7 @@ class TestApplicationEndToEnd(BaseTest):
         return organization_sms_tel_number
 
     def do_org_registartion(self):
-        self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
-        login_page = LoginPage(self.driver)
-        registration_page = login_page.navigate_to_registration_page()
-        self.assertEqual(self.driver.get_title(), "Register")
-        registration_confirmation_page, self.email = registration_page.successful_registration_with(
-            REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION)
+        registration_confirmation_page, self.email = register_and_get_email(self.driver)
         self.assertEquals(registration_confirmation_page.registration_success_message(),
                           fetch_(SUCCESS_MESSAGE, from_(REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION)))
 
