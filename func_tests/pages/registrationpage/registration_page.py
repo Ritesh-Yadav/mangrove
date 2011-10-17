@@ -13,92 +13,22 @@ class RegistrationPage(Page):
         Page.__init__(self, driver)
 
     def successful_registration_with(self, registration_data):
-        self.driver.find_text_box(ORGANIZATION_NAME_TB).enter_text(
-            fetch_(ORGANIZATION_NAME, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_SECTOR_DD).enter_text(
-            fetch_(ORGANIZATION_SECTOR, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_ADDRESS_TB).enter_text(
-            fetch_(ORGANIZATION_ADDRESS, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_CITY_TB).enter_text(
-            fetch_(ORGANIZATION_CITY, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_STATE_TB).enter_text(
-            fetch_(ORGANIZATION_STATE, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_COUNTRY_TB).enter_text(
-            fetch_(ORGANIZATION_COUNTRY, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_ZIPCODE_TB).enter_text(
-            fetch_(ORGANIZATION_ZIPCODE, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_OFFICE_PHONE_TB).enter_text(
-            fetch_(ORGANIZATION_OFFICE_PHONE, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_WEBSITE_TB).enter_text(
-            fetch_(ORGANIZATION_WEBSITE, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_TITLE_TB).enter_text(
-            fetch_(TITLE, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_FIRST_NAME_TB).enter_text(
-            fetch_(FIRST_NAME, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_LAST_NAME_TB).enter_text(
-            fetch_(LAST_NAME, from_(registration_data)))
-        email = fetch_(EMAIL, from_(registration_data)) + generateId() + "@ngo.com"
-        self.driver.find_text_box(ORGANIZATION_EMAIL_TB).enter_text(email)
-        self.driver.find_text_box(ADMIN_OFFICE_NUMBER_TB).enter_text(
-            fetch_(ADMIN_OFFICE_NUMBER, from_(registration_data)))
-        self.driver.find_text_box(ADMIN_MOBILE_NUMBER_TB).enter_text(
-            fetch_(ADMIN_MOBILE_NUMBER, from_(registration_data)))
-        self.driver.find_text_box(SKYPE_ID_TB).enter_text(
-            fetch_(ADMIN_SKYPE_ID, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_PASSWORD_TB).enter_text(
-            fetch_(REGISTRATION_PASSWORD, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_CONFIRM_PASSWORD_TB).enter_text(
-            fetch_(REGISTRATION_CONFIRM_PASSWORD, from_(registration_data)))
-        self.driver.find(ORGANIZATION_REGISTER_BTN).click()
-        return (RegistrationConfirmationPage(self.driver), email)
+        registration_data = dict(registration_data) # create a copy so we don't modify in place
+        email = registration_data[EMAIL] + generateId() + "@ngo.com"
+        registration_data[EMAIL] = email
+        self.register_with(registration_data)
+        return RegistrationConfirmationPage(self.driver), email
 
     def register_with(self, registration_data):
-        self.driver.find_text_box(ORGANIZATION_NAME_TB).enter_text(
-            fetch_(ORGANIZATION_NAME, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_SECTOR_DD).enter_text(
-            fetch_(ORGANIZATION_SECTOR, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_ADDRESS_TB).enter_text(
-            fetch_(ORGANIZATION_ADDRESS, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_CITY_TB).enter_text(
-            fetch_(ORGANIZATION_CITY, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_STATE_TB).enter_text(
-            fetch_(ORGANIZATION_STATE, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_COUNTRY_TB).enter_text(
-            fetch_(ORGANIZATION_COUNTRY, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_ZIPCODE_TB).enter_text(
-            fetch_(ORGANIZATION_ZIPCODE, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_OFFICE_PHONE_TB).enter_text(
-            fetch_(ORGANIZATION_OFFICE_PHONE, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_WEBSITE_TB).enter_text(
-            fetch_(ORGANIZATION_WEBSITE, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_TITLE_TB).enter_text(
-            fetch_(TITLE, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_FIRST_NAME_TB).enter_text(
-            fetch_(FIRST_NAME, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_LAST_NAME_TB).enter_text(
-            fetch_(LAST_NAME, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_EMAIL_TB).enter_text(
-            fetch_(EMAIL, from_(registration_data)))
-        self.driver.find_text_box(ADMIN_OFFICE_NUMBER_TB).enter_text(
-            fetch_(ADMIN_OFFICE_NUMBER, from_(registration_data)))
-        self.driver.find_text_box(ADMIN_MOBILE_NUMBER_TB).enter_text(
-            fetch_(ADMIN_MOBILE_NUMBER, from_(registration_data)))
-        self.driver.find_text_box(SKYPE_ID_TB).enter_text(
-            fetch_(ADMIN_SKYPE_ID, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_PASSWORD_TB).enter_text(
-            fetch_(REGISTRATION_PASSWORD, from_(registration_data)))
-        self.driver.find_text_box(ORGANIZATION_CONFIRM_PASSWORD_TB).enter_text(
-            fetch_(REGISTRATION_CONFIRM_PASSWORD, from_(registration_data)))
+        for key,value in registration_data.items():
+            if key in [ORGANIZATION_SECTOR]:
+                self.driver.find_drop_down(by_css("select[name=%s]" % key)).set_selected(value)
+            else:
+                self.driver.find_text_box(by_css("input[name=%s]" % key)).enter_text(value)
         self.driver.find(ORGANIZATION_REGISTER_BTN).click()
         return self
 
     def get_error_message(self):
-        """
-        Function to fetch the error messages from error label of the login
-        page
-
-        Return error message
-        """
         error_message = ""
         locators = self.driver.find_elements_(ERROR_MESSAGE_LABEL)
         if locators:

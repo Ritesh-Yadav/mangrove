@@ -52,8 +52,7 @@ class AddSubjectPage(Page):
         Return self
         """
         entity_type = fetch_(ENTITY_TYPE, from_(addition_data))
-        self.driver.find_drop_down(ENTITY_TYPE_DD).click()
-        self.driver.find(by_css(DROP_DOWN_OPTION_CSS % entity_type)).click()
+        self.driver.find_drop_down(ENTITY_TYPE_DD).set_selected(entity_type)
         self.driver.find_text_box(NAME_TB).enter_text(
             fetch_(NAME, from_(addition_data)))
         short_name = fetch_(SHORT_NAME, from_(addition_data))
