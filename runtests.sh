@@ -37,7 +37,7 @@ cd src/datawinners
 if [ "${RECREATEDB}" != "N" -a "${RECREATEDB}" != "n" ]; then
     python manage.py syncdb --noinput
     python manage.py migrate
-    python manage.py recreatedb syncall
+    python manage.py recreatedb
 fi
 
 if [ "${TESTCHOICE}" != "ut" ]; then
