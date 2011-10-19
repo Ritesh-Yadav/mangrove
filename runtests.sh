@@ -1,26 +1,37 @@
 #!/bin/bash
 
-if [ $# -eq 0 ]; then
-    export TESTCHOICE="all"
-else
-    case $1 in
-	"ft")
-	    export TESTCHOICE="ft"
-	    ;;
-	"ut")
-	    export TESTCHOICE="ut"
-	    ;;
-	"sm")
-	    export TESTCHOICE="sm"
-	    ;;
-	"all")
-	    export TESTCHOICE="all"
-	    ;;
-	*)
-	    export TESTCHOICE="all"
-	    ;;
-    esac
-fi
+function usage() {
+    cat <<EOF
+Usage: ./runtests.sh SUITE
+
+Where SUITE is one of:
+
+ut  - unit tests
+sm  - smoke tests
+ft  - functional tests
+all - run all the tests
+EOF
+}
+
+case $1 in
+    "ft")
+	export TESTCHOICE="ft"
+	;;
+    "ut")
+	export TESTCHOICE="ut"
+	;;
+    "sm")
+	export TESTCHOICE="sm"
+	;;
+    "all")
+	export TESTCHOICE="all"
+	;;
+    *)
+        usage
+        exit 1;
+        ;;
+esac
+
 
 set RECREATEDB = "x"
 while [ "${RECREATEDB}" != "Y" -a "${RECREATEDB}" != "y" -a "${RECREATEDB}" != "N" -a "${RECREATEDB}" != "n" ]
