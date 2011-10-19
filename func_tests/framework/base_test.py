@@ -9,7 +9,7 @@ from tests.testsettings import CLOSE_BROWSER_AFTER_TEST, WAIT
 class BaseTest(unittest.TestCase):
     def get_driver_name(self):
         driver_name = "firefox"
-        if os.system('which -s chromedriver') == 0:
+        if os.system('which chromedriver > /dev/null') == 0:
             driver_name = "chrome"
         print "*** Using Selenium Driver: %s ***" % driver_name
         return driver_name
