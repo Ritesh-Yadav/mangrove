@@ -86,6 +86,7 @@ class DatabaseManager(object):
                     (org_id,))
             organization_db_name = str(cur.fetchone()[0])
             cur.execute("delete from auth_user where id=?;", (user_id,))
+            cur.execute("delete from accountmanagement_datasenderontrialaccount where organization_id=?;", (org_id,))
             cur.execute("delete from accountmanagement_organization where org_id=?;", (org_id,))
             cur.execute("delete from registration_registrationprofile where user_id=?;", (user_id,))
             cur.execute("delete from accountmanagement_ngouserprofile where org_id=?;", (org_id,))

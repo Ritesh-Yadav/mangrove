@@ -98,6 +98,8 @@ SUCCESS_MESSAGE_TEXT = "Thank you Donald Mouse. We received : WID: wat1 q2: 11.1
 SMS_SUBMISSION = "sms"
 UNIQUE_VALUE = "unique_value"
 
+REGISTRATION_PASSWORD = "ngo001"
+
 #Registration Page Data for Successful Registration Page
 REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION = {ORGANIZATION_NAME: "Automation NGO",
                                                  ORGANIZATION_SECTOR: "PublicHealth",
@@ -115,23 +117,18 @@ REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION = {ORGANIZATION_NAME: "Automation 
                                                  ADMIN_MOBILE_NUMBER: "23-45-678-567",
                                                  ADMIN_OFFICE_NUMBER: "23-45-678-567",
                                                  ADMIN_SKYPE_ID: "tty01",
-                                                 REGISTRATION_PASSWORD: "ngo001",
-                                                 REGISTRATION_CONFIRM_PASSWORD: "ngo001",
+                                                 REGISTRATION_PASSWORD: REGISTRATION_PASSWORD,
+                                                 REGISTRATION_CONFIRM_PASSWORD: REGISTRATION_PASSWORD,
                                                  SUCCESS_MESSAGE: "You have successfully registered!!\nAn activation email has been sent to your email address. Please activate before login."}
 
 VALID_ACTIVATION_DETAILS = {ACTIVATION_CODE: "",
                             SUCCESS_MESSAGE: "You have successfully activated your account"}
 
-# valid credentials
-VALID_CREDENTIALS = {USERNAME: "",
-                     PASSWORD: "ngo001",
-                     WELCOME_MESSAGE: "Welcome Mickey!"}
-
 VALID_DATA_FOR_DATA_SENDER = {DATA_SENDER_NAME: "Donald Mouse",
                               MOBILE_NUMBER: "1234567890",
                               COMMUNE: "urbaine",
                               GPS: "48.955267  1.816013",
-                              SUCCESS_MESSAGE: "Registration successful. Unique identification number(ID) is: rep2."}
+                              SUCCESS_MESSAGE: u"Registration successful. Unique identification number(ID) is: rep2."}
 
 # valid entity data
 VALID_SUBJECT_TYPE1 = {ENTITY_TYPE: "Waterpoint", SUCCESS_MESSAGE: "Entity definition successful"}
