@@ -45,5 +45,5 @@ BLANK_CREDENTIALS = {USERNAME: "",
 
 EXPIRED_TRAIL_ACCOUNT = {USERNAME: "chinatwu@gmail.com",
                      PASSWORD: "chinatwu",
-                     ERROR_MESSAGE: "Trial account has been expired!"}
+                     ERROR_MESSAGE: "Your 30 Day Test Drive is expired"}
 

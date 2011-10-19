@@ -2,7 +2,7 @@
 from nose.plugins.attrib import attr
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import from_, fetch_
-from pages import page
+from pages.globalnavigationpage.global_navigation_locator import EXPIRED_TRIAL_ACCOUNT_MESSAGE
 from pages.loginpage.login_page import LoginPage
 from pages.page import Page
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
@@ -21,7 +21,7 @@ class ExpiredTrailPage(Page):
      Return error message
      """
      error_message = ""
-     locators = self.driver.find_elements_(ERROR_MESSAGE_LABEL)
+     locators = self.driver.find_elements_(EXPIRED_TRIAL_ACCOUNT_MESSAGE)
      if locators:
          for locator in locators:
              error_message = error_message + locator.text
@@ -104,5 +104,3 @@ class TestLoginPage(BaseTest):
 
         self.assertEqual(expired_trail_account_page.get_error_message(),
                          fetch_(ERROR_MESSAGE, from_(EXPIRED_TRAIL_ACCOUNT)))
-
-
