@@ -22,13 +22,13 @@ class TestActivateAccount(BaseTest):
         self.activation_code = self.dbmanager.get_activation_code(self.email)
         self.account_activate_page.activate_account(self.activation_code)
 
-#    def tearDown(self):
-#        if self.email is not None:
-#            dbmanager = DatabaseManager()
-#            dbname = dbmanager.delete_organization_all_details(self.email)
-#            couchwrapper = CouchHttpWrapper("localhost")
-#            couchwrapper.deleteDb(dbname)
-#        super(TestActivateAccount, self).tearDown()
+    def tearDown(self):
+        if self.email is not None:
+            dbmanager = DatabaseManager()
+            dbname = dbmanager.delete_organization_all_details(self.email)
+            couchwrapper = CouchHttpWrapper("localhost")
+            couchwrapper.deleteDb(dbname)
+        super(TestActivateAccount, self).tearDown()
 
     @attr('functional_test', 'smoke')
     def test_successful_activation_of_account(self):
@@ -36,7 +36,5 @@ class TestActivateAccount(BaseTest):
         self.assertRegexpMatches(self.account_activate_page.get_message(),
                                  fetch_(SUCCESS_MESSAGE, from_(VALID_ACTIVATION_DETAILS)))
 
-    @attr('functional_test')
-    def test_correct_activate_date_when_account_is_activated(self):
-        self.assertIsNotNone(self.dbmanager.get_active_date(self.email))
+
 
