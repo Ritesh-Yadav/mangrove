@@ -69,7 +69,7 @@ case "${TESTCHOICE}" in
      nosetests -a 'smoke'
      ;;
 "ut") echo "-------- Unit test execution Started --------"
-     nosetests --with-xunit --xunit-file=../../xunit.xml
+     python manage.py test --with-xunit --xunit-file=../../xunit.xml
      cd ..
      cd mangrove && nosetests --with-xunit --xunit-file=../../xunit2.xml
      ;;
