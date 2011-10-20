@@ -213,8 +213,8 @@ class TestApplicationEndToEnd(BaseTest):
         reminder_page = self.create_data_sender_questionnaire(create_data_sender_questionnaire_page)
         review_page = self.create_reminder(reminder_page)
         self.review_project_summary(review_page)
-        #        sms_tester_light_box = review_page.open_sms_tester_light_box()
-        #        self.sms_light_box_verification(sms_tester_light_box)
+#        sms_tester_light_box = review_page.open_sms_tester_light_box()
+#        self.sms_light_box_verification(sms_tester_light_box)
 
         all_subjects_page = global_navigation.navigate_to_all_subject_page()
         add_subject_page = all_subjects_page.navigate_to_add_a_subject_page()
