@@ -52,4 +52,4 @@ REPORTER_ACTIVITIES_DATA = {PROJECT_NAME: u"reporter activities",
 QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES = {QUESTIONS: ["q1 Which subject are you reporting on?", "q2 What is the reporting period for the activity?"]}
 
 LIGHT_BOX_DATA = {TITLE: "Warning !!",
-                  MESSAGE: "Warning: Updating the associated type of the project questionnaire will remove all existing data."}
+                  MESSAGE: "Warning: Changing the subject type will remove all questions from your questionnaire as well as all your collected data. Are you sure you want to continue?"}
