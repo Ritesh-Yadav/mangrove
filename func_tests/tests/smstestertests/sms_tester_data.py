@@ -44,7 +44,7 @@ EXTRA_PLUS_IN_BTW = {SENDER: "1234567890",
 PLUS_IN_THE_BEGINNING = {SENDER: "1234567890",
                          RECEIVER: "919880734937",
                          SMS: ". .cli002 .EID CID005 .NA Mr. Fessy .FA 58 .RD 17.05.2011 .BG b .SY ade",
-                         ERROR_MSG: "Error: SMS Incorrect. Review printed questionnaire and re-send SMS."}
+                         ERROR_MSG: "Error with Questionnaire code .. Find the Questionnaire code on the printed questionnaire and resend SMS starting with this questionnaire code."}
 
 UNREGISTERED_FROM_NUMBER = {SENDER: "123445567",
                             RECEIVER: "919880734937",
