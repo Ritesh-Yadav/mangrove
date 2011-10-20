@@ -186,7 +186,7 @@ NEW_QUESTIONNAIRE_DATA = {QUESTIONS: [{QUESTION: "Water Level", CODE: "WL", TYPE
 VALID_DATA_REVIEW_AND_TEST = {PROJECT_PROFILE: {PROJECT_NAME: "waterpoint morondava",
                                                 PROJECT_BACKGROUND: "This project is created by functional automation suite.",
                                                 PROJECT_TYPE: "survey",
-                                                DEVICES: "sms"},
+                                                DEVICES: "sms,web"},
                               SUBJECT_DETAILS: {SUBJECT: "waterpoint"},
                               DATA_SENDER_COUNT: "1",
                               QUESTIONNAIRE: [u'What are you reporting on?', u'What is the reporting period for the activity?', u'Water Level',
