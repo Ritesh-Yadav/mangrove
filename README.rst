@@ -19,7 +19,9 @@ Requirements
 1. Create a virtualenv
 --------------------
 virtualenv ve && source ve/bin/activate
+
     or with virtualenvwrapper
+
 mkvirtualenv mangrove
 
 2. Install required python packages
@@ -46,10 +48,38 @@ python src/datawinners/manage.py syncdb
 python src/datawinners/manage.py migrate
 python src/datawinners/manage.py loadshapes
 
+Test dependencies!
+=====================
+
+In order to properly run Django tests our database user will need
+permissions to create a new database. Here's how to do it:
+
+psql -d postgres -c 'ALTER ROLE jenkins WITH CREATEDB;'
+
+Also, a template called template_postgis should be created. This might
+be part of your PostGIS installation, but you can also create it
+yourself by following the instructions at
+http://geospatial.nomad-labs.com/2006/12/24/postgis-template-database/
+
+To run functional tests you will either need a version of Firefox
+supported by Selenium (this generally means not the latest version) or
+you will need Google Chrome. For local development tests tend to run
+more reliably with Chrome.
+
+If you choose to do this you will also need to download chromedriver
+from http://code.google.com/p/chromium/downloads/list
+
+For best results put the chromedriver binary in your virtual
+environment's bin folder. You may also put it in /usr/local/bin or
+somewhere else in PATH. However, symlinking ve/bin/chromedriver =>
+/usr/local/bin/chromedriver doesn't seem to work.
+
 Run tests!
 =====================
-./runtests.sh
+
+./runtests.sh ut
+./runtests.sh ft
 
 Push to GitHub
 =====================
-And hopefully hudson will run tests, and they will pass.
+And hopefully Jenkins will run tests, and they will pass.
