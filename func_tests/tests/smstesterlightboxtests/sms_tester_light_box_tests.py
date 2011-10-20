@@ -8,6 +8,7 @@ from pages.loginpage.login_page import LoginPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.smstesterlightboxtests.sms_tester_light_box_data import *
+from settings import USE_ORDERED_SMS_PARSER
 
 
 class TestSMSTesterLightBox(BaseTest):
@@ -69,6 +70,11 @@ class TestSMSTesterLightBox(BaseTest):
         """
         sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
         sms_tester_page.send_sms_with(VALID_DATA2)
+        self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA2)))
+
+    def test_successful_ordered_sms_submission(self):
+        sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
+        sms_tester_page.send_sms_with(VALID_DATA3)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA2)))
 
     @attr('functional_test')
