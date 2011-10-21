@@ -42,3 +42,8 @@ UNACTIVATED_ACCOUNT_CREDENTIALS = {USERNAME: "tester@gmail.com",
 BLANK_CREDENTIALS = {USERNAME: "",
                      PASSWORD: "",
                      ERROR_MESSAGE: "Email This field is required.Password This field is required."}
+
+EXPIRED_TRAIL_ACCOUNT = {USERNAME: "chinatwu@gmail.com",
+                     PASSWORD: "chinatwu",
+                     ERROR_MESSAGE: "Your 30 Day Test Drive is expired"}
+
