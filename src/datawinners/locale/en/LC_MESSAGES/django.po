@@ -202,12 +202,6 @@ msgstr ""
 msgid "Enter lat and long eg: 19.3 42.37"
 msgstr ""
 
-#: entity/forms.py:55
-msgid ""
-"Incorrect GPS format. The GPS coordinates must be in the following format: "
-"xx.xxxx yy.yyyy. Example -18.8665 47.5315"
-msgstr ""
-
 #: entity/forms.py:67
 msgid "Please fill out at least one location field correctly."
 msgstr ""
@@ -2412,10 +2406,10 @@ msgid "Contact"
 msgstr ""
 
 msgid "Your project has been deleted"
-msgstr "Votre projet a été supprimé"
+msgstr ""
 
 msgid "Undo Delete"
-msgstr "Annuler la suppression"
+msgstr ""
 
 msgid "Inactive"
 msgstr ""
@@ -2457,4 +2451,53 @@ msgid "characters"
 msgstr ""
 
 msgid "Minimum"
+msgstr ""
+
+
+msgid "All fields are required unless marked optional."
+msgstr ""
+
+msgid "Optional"
+msgstr ""
+
+msgid "This %s is not yet registered in the system. Please check the %s’s unique ID number and resubmit."
+msgstr ""
+
+msgid "Answer %s for question %s is longer than allowed."
+msgstr ""
+
+msgid "Answer %s for question %s is %s than allowed."
+msgstr ""
+
+msgid "Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315"
+msgstr ""
+
+msgid "greater"
+msgstr ""
+
+msgid "smaller"
+msgstr ""
+
+msgid "Answer %s for question %s is invalid. Expected date in %s format"
+msgstr ""
+
+msgid "Tuesday"
+msgstr ""
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Thursday"
+msgstr ""
+
+msgid "Friday"
+msgstr ""
+
+msgid "Saturday"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Warning: Changing the subject type will remove all questions from your questionnaire as well as all your collected data. Are you sure you want to continue?"
 msgstr ""
