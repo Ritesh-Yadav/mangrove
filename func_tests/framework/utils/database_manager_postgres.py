@@ -8,7 +8,6 @@ except Exception as e:
 
 DEFAULT_DNS = "dbname='" + DATABASES['default']['NAME'] + "' user='" + DATABASES['default']['USER'] + "'"
 
-
 class DatabaseManager(object):
     def get_connection(self, database_name=DEFAULT_DNS):
         """
@@ -38,7 +37,8 @@ class DatabaseManager(object):
             con = self.get_connection(database_name)
             cur = con.cursor()
             cur.execute(
-                "select activation_key from registration_registrationprofile where user_id=(select id from auth_user where email=%s);", (email,))
+                "select activation_key from registration_registrationprofile where user_id=(select id from auth_user where email=%s);"
+                , (email,))
             values = cur.fetchone()
             if values is not None:
                 return values[0]
@@ -94,7 +94,7 @@ class DatabaseManager(object):
             cur.execute("select org_id from accountmanagement_ngouserprofile where user_id=%s;", (user_id,))
             org_id = str(cur.fetchone()[0])
             cur.execute("select document_store from accountmanagement_organizationsetting where organization_id=%s;",
-                    (org_id,))
+                (org_id,))
             organization_db_name = str(cur.fetchone()[0])
             cur.execute("delete from accountmanagement_datasenderontrialaccount where organization_id=%s;", (org_id,))
             cur.execute("delete from accountmanagement_organization where org_id=%s;", (org_id,))
@@ -110,6 +110,26 @@ class DatabaseManager(object):
                 cur.close()
             if con:
                 con.close()
+
+    def get_active_date(self, email, database_name=DEFAULT_DNS):
+        try:
+            con = self.get_connection(database_name)
+            cur = con.cursor()
+            print email
+            cur.execute(
+                "select active_date from accountmanagement_organization,accountmanagement_ngouserprofile,auth_user \
+                where accountmanagement_organization.org_id=accountmanagement_ngouserprofile.org_id \
+                and user_id=auth_user.id and auth_user.email=%s;", (email,))
+            values = cur.fetchone()
+            if values is not None:
+                return values[0]
+            else:
+                return values
+        except Exception as e:
+            print e
+        finally:
+            cur.close()
+            con.close()
 
 if __name__ == "__main__":
     db = DatabaseManager()
