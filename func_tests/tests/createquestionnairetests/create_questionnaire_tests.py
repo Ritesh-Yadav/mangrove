@@ -4,7 +4,6 @@ from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
 from pages.dashboardpage.dashboard_page import DashboardPage
 from pages.loginpage.login_page import LoginPage
-from settings import USE_ORDERED_SMS_PARSER
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.createquestionnairetests.create_questionnaire_data import *
@@ -45,11 +44,3 @@ class TestCreateQuestionnaire(BaseTest):
         create_questionnaire_page.save_questionnaire()
         time.sleep(3)
         self.assertEqual(self.driver.get_title(), fetch_(PAGE_TITLE, from_(QUESTIONNAIRE_DATA)))
-
-    def test_successful_questionnaire_creation_with_ordered_sms(self):
-        USE_ORDERED_SMS_PARSER = True
-        create_questionnaire_page = self.prerequisites_of_create_questionnaire()
-        self.assertTrue(create_questionnaire_page.question_code_box_is_disabled())
-        self.assertEqual(create_questionnaire_page.get_SMS_example_text(), )
-
-        USE_ORDERED_SMS_PARSER = False

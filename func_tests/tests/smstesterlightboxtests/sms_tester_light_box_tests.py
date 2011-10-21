@@ -8,7 +8,6 @@ from pages.loginpage.login_page import LoginPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.smstesterlightboxtests.sms_tester_light_box_data import *
-from settings import USE_ORDERED_SMS_PARSER
 
 
 class TestSMSTesterLightBox(BaseTest):
