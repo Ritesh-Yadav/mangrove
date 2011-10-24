@@ -1,4 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4utf-8
+import datetime
+from accountmanagement.models import NGOUserProfile, Organization
+from django.contrib.auth.models import User
 from nose.plugins.attrib import attr
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import from_, fetch_
@@ -93,14 +96,21 @@ class TestLoginPage(BaseTest):
         register_page = login_page.navigate_to_registration_page()
         self.assertEqual(self.driver.get_title(), "Register")
 
+    def set_activate_date_in_the_past(self, days_before, username):
+        user = User.objects.get(username=username)
+        org = Organization.objects.get(org_id=user.get_profile().org_id)
+        org.active_date = datetime.datetime.today().replace(microsecond=0) - datetime.timedelta(days_before)
+        org.save()
+
     @attr('functional_test')
     def test_login_with_expired_trial_account(self):
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
-
+        username = 'chinatwu@gmail.com'
+        days_before = 31
+        
+        self.set_activate_date_in_the_past(days_before, username)
         login_page = LoginPage(self.driver)
         login_page.login_with(EXPIRED_TRAIL_ACCOUNT)
-
         expired_trail_account_page = ExpiredTrailPage(self.driver)
-
         self.assertEqual(expired_trail_account_page.get_error_message(),
                          fetch_(ERROR_MESSAGE, from_(EXPIRED_TRAIL_ACCOUNT)))
