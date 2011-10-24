@@ -22,7 +22,7 @@ VALID_DATA = {NAME: "Mickey Duck",
               SUCCESS_MSG: "Registration successful. Unique identification number\(ID\) is: rep"}
 
 EXISTING_DATA = {NAME: "Mickey Mouse",
-                 MOBILE_NUMBER: "1234567890",
+                 MOBILE_NUMBER: "123-4567-890",
                  COMMUNE: "MAHAVELO,AMBOTAKA,MANAKARA ATSIMO,VATOVAVY FITOVINANY",
                  GPS: "-21.7622088847 48.0690991394",
                  ERROR_MSG: "Mobile Number Sorry, the telephone number 1234567890 has already been registered"}

@@ -62,6 +62,7 @@ class TestAddDataSender(unittest.TestCase):
         self.assertEqual(add_data_sender_page.get_error_message(),
                          fetch_(ERROR_MSG, from_(EXISTING_DATA)))
 
+
     @attr('functional_test')
     def test_addition_of_data_sender_without_location_name(self):
         """
