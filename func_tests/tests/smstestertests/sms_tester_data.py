@@ -80,3 +80,4 @@ WITH_INVALID_GEO_CODE_FORMAT = {SENDER: "1234567890",
                                 RECEIVER: "919880734937",
                                 SMS: 'cli002 .EID cid002 . .NA Mr. De`Melo .FA 58 .RD 17.05.2011 .BG ab .SY ade .GPS 127.178057  -78.007789',
                                 ERROR_MSG: "Error. Incorrect answer for question na, bg, gps. Please resend entire message."}
+
