@@ -18,6 +18,7 @@ LOCATOR = "locator"
 BY = "by"
 
 DATA_TAB = by_xpath("//div[contains(@class,'tab_navigation')]/ul/li/a[text()='Data']")
+MESSAGES_AND_REMINDERS_TAB = by_css("div.tab_navigation a.messages_and_reminders_tab")
 ACTIVATE_PROJECT_LINK = by_css("a.activate_project")
 PROJECT_EDIT_LINK = by_css("a#edit_project")
 PROJECT_STATUS_LABEL = by_css("span.project_status>span")
