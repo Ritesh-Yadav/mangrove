@@ -9,6 +9,7 @@ def url(path):
         full_path += "/"
     return full_path
 
+DATA_WINNER_HOME_PAGE = "/home"
 DATA_WINNER_LOGIN_PAGE = url("/login")
 DATA_WINNER_DASHBOARD_PAGE = url("/dashboard")
 DATA_WINNER_REGISTER_PAGE = url("/register")
@@ -20,3 +21,4 @@ DATA_WINNER_ACTIVATE_ACCOUNT = url("/activate/")
 DATA_WINNER_CREATE_DATA_SENDERS = url("/entity/datasender/create")
 DATA_WINNER_HOMEPAGE = url("/home/")
 DATA_WINNER_EN_PRICING_PAGE = url("/en/pricing/")
+
