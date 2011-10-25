@@ -2,6 +2,7 @@
 import datetime
 import os
 from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.remote.webdriver import WebDriver
 from framework.exception import CouldNotLocateElementException
 
@@ -27,7 +28,10 @@ def get_driver_for_browser(browser):
     elif browser == "ie":
         return webdriver.Ie()
     elif browser == "chrome":
-        return webdriver.Chrome()
+        capabilities = dict(DesiredCapabilities.CHROME, **{
+            'chrome.switches': ["--incognito"]
+        })
+        return webdriver.Chrome(desired_capabilities=capabilities)
     elif browser == "htmlunit":
         return webdriver.Remote()
     else:
