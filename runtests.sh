@@ -55,16 +55,21 @@ if [ "${TESTCHOICE}" != "ut" ]; then
     cp local_settings.py ../../func_tests/resources/local_settings.py
 fi 
 
+function start_server() {
+    xterm -e "python manage.py runserver --settings=datawinners.settings_automated_testing" &
+    sleep 2
+}
+
 case "${TESTCHOICE}" in
 "ft")
      echo "-------- Funtional test execution Started --------"
-     xterm -e "python manage.py runserver" &
+     start_server
      cd ../../func_tests
      nosetests -a 'functional_test'
      ;;
 "sm")
      echo "-------- Funtional test execution Started --------"
-     xterm -e "python manage.py runserver" &
+     start_server
      cd ../../func_tests
      nosetests -a 'smoke'
      ;;
