@@ -1,6 +1,6 @@
 # vim: ai ts=4 sts=4 et sw=4utf-8
 import datetime
-from accountmanagement.models import NGOUserProfile, Organization
+from datawinners.accountmanagement.models import Organization
 from django.contrib.auth.models import User
 from nose.plugins.attrib import attr
 from framework.base_test import BaseTest
