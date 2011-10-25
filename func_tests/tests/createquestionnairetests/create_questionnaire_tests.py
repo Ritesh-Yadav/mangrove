@@ -38,9 +38,8 @@ class TestCreateQuestionnaire(BaseTest):
             question_link_text = fetch_(CODE, from_(question)) + " " + fetch_(QUESTION, from_(question))
             self.assertEquals(create_questionnaire_page.get_question_link_text(index), question_link_text)
             index += 1
-        time.sleep(5)
         self.assertEquals(create_questionnaire_page.get_remaining_character_count(),
                           fetch_(CHARACTER_REMAINING, from_(QUESTIONNAIRE_DATA)))
         create_questionnaire_page.save_questionnaire()
-        time.sleep(3)
-        self.assertEqual(self.driver.get_title(), fetch_(PAGE_TITLE, from_(QUESTIONNAIRE_DATA)))
+        title = self.driver.wait_for_page_with_title(3, "Data Senders")
+        self.assertEquals("Data Senders", title)

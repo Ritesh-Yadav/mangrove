@@ -48,11 +48,13 @@ class AllDataSendersPage(Page):
         for project_name in project_names:
             self.select_project(project_name)
 
-    def click_confirm(self):
+    def click_confirm(self, wait=False):
         """
         Function to confirm the association/dissociation with projects on all data sender page
          """
         self.driver.find(CONFIRM_BUTTON).click()
+        if wait:
+            self.driver.wait_until_modal_dismissed(7)
 
     def click_cancel(self):
         """

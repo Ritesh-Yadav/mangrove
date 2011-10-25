@@ -28,7 +28,6 @@ class AddSubjectPage(Page):
         if not fetch_(AUTO_GENERATE, from_(addition_data)):
             self.driver.find(AUTO_GENERATE_CB).click()
             short_name = short_name + generateId()
-            time.sleep(3)
             self.driver.find_text_box(SHORT_NAME_ENABLED_TB).enter_text(short_name)
         self.driver.find_text_box(LOCATION_TB).enter_text(
             fetch_(LOCATION, from_(addition_data)))
@@ -58,7 +57,6 @@ class AddSubjectPage(Page):
         short_name = fetch_(SHORT_NAME, from_(addition_data))
         if not fetch_(AUTO_GENERATE, from_(addition_data)):
             self.driver.find(AUTO_GENERATE_CB).click()
-            time.sleep(3)
             self.driver.find_text_box(SHORT_NAME_ENABLED_TB).enter_text(short_name)
         self.driver.find_text_box(LOCATION_TB).enter_text(
             fetch_(LOCATION, from_(addition_data)))

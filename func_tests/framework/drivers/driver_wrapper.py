@@ -125,6 +125,22 @@ class DriverWrapper(object):
         except CouldNotLocateElementException:
             return False
 
+    def wait_until_modal_dismissed(self, time_out_in_seconds):
+        current_time = datetime.datetime.now()
+        end_time = current_time + datetime.timedelta(0, time_out_in_seconds)
+
+        while True:
+            try:
+                element = self.find(by_css(".blockUI"))
+                if element and not element.is_displayed():
+                    return True
+                else:
+                    current_time = datetime.datetime.now()
+                    if current_time >= end_time:
+                        raise NoSuchElementException("Timer expired and blockUI is still present")
+            except CouldNotLocateElementException:
+                return
+
     def wait_for_element(self, time_out_in_seconds, object_id):
         """Finds elements by their id by waiting till timeout.
 
@@ -136,10 +152,22 @@ class DriverWrapper(object):
         while True:
             try:
                 return self.find(object_id)
-            except NoSuchElementException, ne:
+            except CouldNotLocateElementException:
                 current_time = datetime.datetime.now()
                 if current_time >= end_time:
                     raise ne
+
+    def wait_for_page_with_title(self, time_out_in_seconds, title):
+        current_time = datetime.datetime.now()
+        end_time = current_time + datetime.timedelta(0, time_out_in_seconds)
+
+        while True:
+            if self.title == title:
+                return title
+            else:
+                current_time = datetime.datetime.now()
+                if current_time >= end_time:
+                    raise CouldNotLocateElementException("Could not locate page with title " + title)
 
     def __getattr__(self, item):
         return getattr(self._driver, item)
