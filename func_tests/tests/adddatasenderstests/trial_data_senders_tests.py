@@ -61,7 +61,7 @@ class TestTrialDataSenders(BaseTest):
         self.assertIn("Registration successful.", add_data_sender_page.get_success_message())
         self.driver.go_to('http://localhost:8000/logout/')
         add_data_sender_page = self.add_trial_organization_with_data_sender()
-        self.assertEqual("* Mobile Number Sorry, this number has already been used for a different DataWinners trial account.", add_data_sender_page.get_error_message())
+        self.assertEqual("Mobile Number Sorry, this number has already been used for a different DataWinners trial account.", add_data_sender_page.get_error_message())
 
 
     def tearDown(self):

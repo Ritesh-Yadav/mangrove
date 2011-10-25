@@ -75,7 +75,7 @@ EXISTING_EMAIL_ADDRESS = {ORGANIZATION_NAME: u"NGO 001",
                           REGISTRATION_PASSWORD: u"ngo001",
                           REGISTRATION_CONFIRM_PASSWORD: u"ngo001"}
 
-EXISTING_EMAIL_ADDRESS_ERROR_MESSAGE = u"Office Phone Number Optional Please enter a valid phone numberEmail address This email address is already in use. Please supply a different email address.Office Phone Optional Please enter a valid phone numberMobile Phone Optional Please enter a valid phone number"
+EXISTING_EMAIL_ADDRESS_ERROR_MESSAGE = u"Office Phone Number Optional Please enter a valid phone number.Email address This email address is already in use. Please supply a different email address.Office Phone Optional Please enter a valid phone number.Mobile Phone Optional Please enter a valid phone number."
 
 INVALID_EMAIL_FORMAT = {ORGANIZATION_NAME: u"NGO 001",
                         ORGANIZATION_SECTOR: u"PublicHealth",
@@ -96,7 +96,7 @@ INVALID_EMAIL_FORMAT = {ORGANIZATION_NAME: u"NGO 001",
                         REGISTRATION_PASSWORD: u"ngo001",
                         REGISTRATION_CONFIRM_PASSWORD: u"ngo001"}
 
-INVALID_EMAIL_FORMAT_ERROR_MESSAGE = u"Office Phone Number Please enter a valid phone numberEmail address Enter a valid email address. Example:name@organization.comOffice Phone Please enter a valid phone numberMobile Phone Please enter a valid phone number"
+INVALID_EMAIL_FORMAT_ERROR_MESSAGE = u"Office Phone Number Please enter a valid phone number.Email address Enter a valid email address. Example:name@organization.comOffice Phone Please enter a valid phone number.Mobile Phone Please enter a valid phone number."
 
 UNMATCHED_PASSWORD = {ORGANIZATION_NAME: u"NGO 001",
                       ORGANIZATION_SECTOR: u"PublicHealth",
@@ -159,4 +159,4 @@ INVALID_WEBSITE_URL = {ORGANIZATION_NAME: u"NGO 001",
                        REGISTRATION_PASSWORD: u"ngo001",
                        REGISTRATION_CONFIRM_PASSWORD: u"ngo001"}
 
-INVALID_WEBSITE_URL_ERROR_MESSAGE= u"Office Phone Number Optional Please enter a valid phone numberWebsite Url Optional Enter a valid URL.Office Phone Optional Please enter a valid phone numberMobile Phone Optional Please enter a valid phone number"
+INVALID_WEBSITE_URL_ERROR_MESSAGE= u"Office Phone Number Optional Please enter a valid phone number.Website Url Optional Enter a valid URL.Office Phone Optional Please enter a valid phone number.Mobile Phone Optional Please enter a valid phone number."
