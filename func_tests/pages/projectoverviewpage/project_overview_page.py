@@ -5,6 +5,7 @@ from pages.dataanalysispage.data_analysis_page import DataAnalysisPage
 from pages.lightbox.light_box_page import LightBox
 from pages.projectoverviewpage.project_overview_locator import *
 from pages.page import Page
+from pages.reminderpage.all_reminder_page import AllReminderPage
 from pages.smstesterlightbox.sms_tester_light_box_page import SMSTesterLightBoxPage
 
 
@@ -19,6 +20,11 @@ class ProjectOverviewPage(Page):
     def navigate_to_messages_and_reminders_page(self):
         self.driver.find(MESSAGES_AND_REMINDERS_TAB).click()
         return BroadcastSmsPage(self.driver)
+
+    def navigate_to_reminder_page(self):
+        self.driver.find(MESSAGES_AND_REMINDERS_TAB).click()
+        AllReminderPage(self.driver).click_schedule_reminder_tab()
+        return AllReminderPage(self.driver)
 
     def navigate_to_data_page(self):
         self.driver.find(DATA_TAB).click()
