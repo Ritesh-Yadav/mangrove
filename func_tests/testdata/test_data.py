@@ -21,4 +21,5 @@ DATA_WINNER_ACTIVATE_ACCOUNT = url("/activate/")
 DATA_WINNER_CREATE_DATA_SENDERS = url("/entity/datasender/create")
 DATA_WINNER_HOMEPAGE = url("/home/")
 DATA_WINNER_EN_PRICING_PAGE = url("/en/pricing/")
-
+DATA_WINNER_REGISTRATION_COMPLETE_PAGE = url("/registration_complete#")
+DATA_WINNER_TRIAL_ACCOUNT_EXPIRED_PAGE = url("/trial/expired/")

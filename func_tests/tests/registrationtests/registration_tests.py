@@ -7,7 +7,7 @@ from framework.base_test import BaseTest, setup_driver, teardown_driver
 from framework.utils.database_manager_postgres import DatabaseManager
 from pages.registrationpage.registration_page import RegistrationPage
 from registration_data import *
-from testdata.test_data import DATA_WINNER_REGISTER_PAGE
+from testdata.test_data import DATA_WINNER_REGISTER_PAGE, DATA_WINNER_REGISTRATION_COMPLETE_PAGE
 
 def register_and_get_email(driver):
     driver.go_to(DATA_WINNER_REGISTER_PAGE)
@@ -58,3 +58,33 @@ class TestRegistrationPage(unittest.TestCase):
         registration_page.register_with(INVALID_WEBSITE_URL)
         self.assertEquals(registration_page.get_error_message(),INVALID_WEBSITE_URL_ERROR_MESSAGE)
 
+    @attr('functional_test')
+    def test_register_organization_sector_have_the_right_select_options(self):
+        self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
+        sectors_drop_down = self.driver.find_drop_down(ORGANIZATION_SECTOR_DROP_DOWN_LIST)
+        self.assertIn('Please Select', sectors_drop_down.text)
+        self.assertIn('Food Security', sectors_drop_down.text)
+        self.assertIn('Other', sectors_drop_down.text)
+
+    @attr('functional_test')
+    def test_content_box_exist_in_registration_page(self):
+        self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
+        about_datawinners_box = self.driver.find_elements_(by_css("h5"))
+        self.assertEqual('About DataWinners', about_datawinners_box[0].text)
+        self.assertEqual('Subscription Details', about_datawinners_box[1].text)
+
+    @attr('functional_test')
+    def test_content_box_exist_in_registration_complete_page(self):
+        self.driver.go_to(DATA_WINNER_REGISTRATION_COMPLETE_PAGE)
+        about_datawinners_box = self.driver.find_elements_(by_css("h5"))
+        self.assertEqual('About DataWinners', about_datawinners_box[0].text)
+        self.assertEqual('Subscription Details', about_datawinners_box[1].text)
+
+    @attr('functional_test')
+    def test_price_page_link_in_content_box(self):
+        self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
+        price_link = self.driver.find(by_xpath("//div[@class='grid_7 right_hand_section alpha omega subscription_details']//a"))
+        price_link.click()
+        self.assertEqual("Pricing", self.driver.get_title())
+
+            
