@@ -1,4 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
+import datetime
 import psycopg2
 
 try:
@@ -111,20 +112,15 @@ class DatabaseManager(object):
             if con:
                 con.close()
 
-    def get_active_date(self, email, database_name=DEFAULT_DNS):
+    def update_active_date_to_expired(self, email, date, database_name=DEFAULT_DNS):
         try:
             con = self.get_connection(database_name)
             cur = con.cursor()
-            print email
+            active_date = datetime.datetime.today().replace(microsecond=0) - datetime.timedelta(date)
+            print active_date
             cur.execute(
-                "select active_date from accountmanagement_organization,accountmanagement_ngouserprofile,auth_user \
-                where accountmanagement_organization.org_id=accountmanagement_ngouserprofile.org_id \
-                and user_id=auth_user.id and auth_user.email=%s;", (email,))
-            values = cur.fetchone()
-            if values is not None:
-                return values[0]
-            else:
-                return values
+                "update accountmanagement_organization set active_date = %s where org_id = (select profile.org_id from accountmanagement_ngouserprofile profile,auth_user usr where profile.user_id = usr.id and usr.email = %s)", (active_date, email,))
+            con.commit()
         except Exception as e:
             print e
         finally:

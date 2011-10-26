@@ -1,8 +1,8 @@
 # vim: ai ts=4 sts=4 et sw=4utf-8
-import datetime
 from nose.plugins.attrib import attr
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import from_, fetch_
+from framework.utils.database_manager_postgres import DatabaseManager
 from pages.globalnavigationpage.global_navigation_locator import EXPIRED_TRIAL_ACCOUNT_MESSAGE
 from pages.loginpage.login_page import LoginPage
 from pages.page import Page
@@ -97,6 +97,8 @@ class TestLoginPage(BaseTest):
     @attr('functional_test')
     def test_login_with_expired_trial_account(self):
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
+        dbmanager = DatabaseManager()
+        dbmanager.update_active_date_to_expired(EXPIRED_TRAIL_ACCOUNT[USERNAME], 31)
         login_page = LoginPage(self.driver)
         login_page.login_with(EXPIRED_TRAIL_ACCOUNT)
         expired_trail_account_page = ExpiredTrailPage(self.driver)
