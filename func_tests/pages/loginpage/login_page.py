@@ -23,6 +23,7 @@ class LoginPage(Page):
         self.driver.find_text_box(EMAIL_TB).enter_text(fetch_(USERNAME, from_(login_credential)))
         self.driver.find_text_box(PASSWORD_TB).enter_text(fetch_(PASSWORD, from_(login_credential)))
         self.driver.find(LOGIN_BTN).click()
+        self.driver.wait_for_page_with_title(3, 'Dashboard')
         return GlobalNavigationPage(self.driver)
 
     def login_with(self, login_credential):
