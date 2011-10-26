@@ -140,6 +140,8 @@ class DriverWrapper(object):
                         raise NoSuchElementException("Timer expired and blockUI is still present")
             except CouldNotLocateElementException:
                 return
+            except StaleElementReferenceException:
+                return
 
     def wait_for_element(self, time_out_in_seconds, object_id):
         """Finds elements by their id by waiting till timeout.
