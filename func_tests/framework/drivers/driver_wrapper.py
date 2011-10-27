@@ -126,22 +126,7 @@ class DriverWrapper(object):
             return False
 
     def wait_until_modal_dismissed(self, time_out_in_seconds):
-        current_time = datetime.datetime.now()
-        end_time = current_time + datetime.timedelta(0, time_out_in_seconds)
-
-        while True:
-            try:
-                element = self.find(by_css(".blockUI"))
-                if element and not element.is_displayed():
-                    return True
-                else:
-                    current_time = datetime.datetime.now()
-                    if current_time >= end_time:
-                        raise NoSuchElementException("Timer expired and blockUI is still present")
-            except CouldNotLocateElementException:
-                return
-            except StaleElementReferenceException:
-                return
+        self.wait_until_element_is_not_present(time_out_in_seconds, by_css(".blockUI"))
 
     def wait_for_element(self, time_out_in_seconds, object_id):
         """Finds elements by their id by waiting till timeout.
@@ -173,3 +158,25 @@ class DriverWrapper(object):
 
     def __getattr__(self, item):
         return getattr(self._driver, item)
+
+    def wait_until_element_is_not_present(self, time_out_in_seconds, locator):
+        current_time = datetime.datetime.now()
+        end_time = current_time + datetime.timedelta(0, time_out_in_seconds)
+
+        while True:
+            try:
+                element = self.find(locator)
+                if element and not element.is_displayed():
+                    return True
+                else:
+                    current_time = datetime.datetime.now()
+                    if current_time >= end_time:
+                        raise ElementStillPresentException("Timer expired and %s is still present" % locator)
+            except CouldNotLocateElementException:
+                return
+            except StaleElementReferenceException:
+                return
+
+
+class ElementStillPresentException(Exception):
+    pass

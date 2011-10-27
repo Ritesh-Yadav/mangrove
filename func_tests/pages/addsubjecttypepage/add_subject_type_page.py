@@ -23,6 +23,7 @@ class AddSubjectTypePage(Page):
         entity_type = fetch_(ENTITY_TYPE, from_(entity_data)) + generateId()
         self.driver.find_text_box(NEW_SUBJECT_TB).enter_text(entity_type)
         self.driver.find(ADD_BTN).click()
+        self.driver.wait_until_element_is_not_present(5, by_css("#type_message .ajax_loader"))
         return entity_type
 
     def add_entity_type_with(self, entity_data):
