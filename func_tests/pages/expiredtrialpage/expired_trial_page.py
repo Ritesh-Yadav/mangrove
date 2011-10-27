@@ -1,7 +1,7 @@
-from pages.expiredtrailpage.expired_trail_locator import EXPIRED_TRIAL_ACCOUNT_MESSAGE, SUBSCRIBE_NOW
+from pages.expiredtrialpage.expired_trail_locator import EXPIRED_TRIAL_ACCOUNT_MESSAGE, SUBSCRIBE_NOW
 from pages.page import Page
 
-class ExpiredTrailPage(Page):
+class ExpiredTrialPage(Page):
     def __init__(self, driver):
         Page.__init__(self, driver)
 
@@ -21,3 +21,4 @@ class ExpiredTrailPage(Page):
 
     def get_subscribe_button(self):
         return self.driver.find_elements_(SUBSCRIBE_NOW)
+    
