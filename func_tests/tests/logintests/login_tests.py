@@ -84,6 +84,7 @@ class TestLoginPage(BaseTest):
         expired_trail_account_page = ExpiredTrialPage(self.driver)
         self.assertEqual(expired_trail_account_page.get_error_message(),
                          fetch_(ERROR_MESSAGE, from_(EXPIRED_TRIAL_ACCOUNT)))
+
         subscribe_button = expired_trail_account_page.get_subscribe_button()
         self.assertEqual("Subscribe Now", subscribe_button[0].text)
 
