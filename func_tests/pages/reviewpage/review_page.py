@@ -113,33 +113,24 @@ class ReviewPage(Page):
         #subject_details[SUBJECT_COUNT] = self.get_subject_count()
         return subject_details
 
-    def open_subject_accordion(self):
+    def open_accordion(self, accordion):
         """
         Function to open the subjects accordion
         """
-        self.driver.find(SUBJECTS_ACCORDION).click()
-        time.sleep(2)
+        self.driver.find(by_css("div#%s>div[class~='ui-state-default']" % accordion)).click()
+        self.driver.wait_for_element(2, by_css("div#%s.ui-accordion .ui-accordion-content" % accordion), want_visible=True)
+
+    def open_subject_accordion(self):
+        self.open_accordion("subjects")
 
     def open_data_sender_accordion(self):
-        """
-        Function to open the subjects accordion
-        """
-        self.driver.find(DATA_SENDERS_ACCORDION).click()
-        time.sleep(2)
+        self.open_accordion("data_senders")
 
     def open_questionnaire_accordion(self):
-        """
-        Function to open the subjects accordion
-        """
-        self.driver.find(QUESTIONNAIRE_ACCORDION).click()
-        time.sleep(2)
+        self.open_accordion("questionnaire")
 
     def open_reminder_accordion(self):
-        """
-        Function to open the subjects accordion
-        """
-        self.driver.find(REMINDERS_ACCORDION).click()
-        time.sleep(2)
+        self.open_accordion("reminders")
 
     def open_sms_tester_light_box(self):
         """

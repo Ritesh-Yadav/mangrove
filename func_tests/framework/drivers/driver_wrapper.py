@@ -3,7 +3,7 @@ import datetime
 import os
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.common.exceptions import StaleElementReferenceException
 from framework.exception import CouldNotLocateElementException
 
 from framework.utils.drop_down_web_element import DropDown
@@ -128,7 +128,7 @@ class DriverWrapper(object):
     def wait_until_modal_dismissed(self, time_out_in_seconds):
         self.wait_until_element_is_not_present(time_out_in_seconds, by_css(".blockUI"))
 
-    def wait_for_element(self, time_out_in_seconds, object_id):
+    def wait_for_element(self, time_out_in_seconds, object_id, want_visible=None):
         """Finds elements by their id by waiting till timeout.
 
         Note that implicitly_wait mostly largely eliminates the need for this"""
@@ -138,7 +138,13 @@ class DriverWrapper(object):
 
         while True:
             try:
-                return self.find(object_id)
+                element = self.find(object_id)
+                current_time = datetime.datetime.now()
+
+                if want_visible is None or element.is_displayed() == want_visible:
+                    return element
+                elif current_time >= end_time:
+                    raise ElementFoundWithoutDesiredVisibility("Expected visibility %s for element %s" % (want_visible, object_id))
             except CouldNotLocateElementException:
                 current_time = datetime.datetime.now()
                 if current_time >= end_time:
@@ -179,4 +185,7 @@ class DriverWrapper(object):
 
 
 class ElementStillPresentException(Exception):
+    pass
+
+class ElementFoundWithoutDesiredVisibility(Exception):
     pass
