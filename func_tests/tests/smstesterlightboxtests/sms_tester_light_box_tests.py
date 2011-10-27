@@ -1,6 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
+from unittest.case import skipUnless
+from datawinners import settings
 from nose.plugins.attrib import attr
-from nose.plugins.skip import SkipTest
 from nose.tools import nottest
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
@@ -71,11 +72,10 @@ class TestSMSTesterLightBox(BaseTest):
         sms_tester_page.send_sms_with(VALID_DATA2)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA2)))
 
-    @SkipTest
     @attr('functional_test', 'smoke')
     def test_successful_ordered_sms_submission(self):
         sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
-        sms_tester_page.send_sms_with(VALID_DATA3)
+        sms_tester_page.send_sms_with(VALID_ORDERED_SMS_DATA)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA2)))
 
     @attr('functional_test')
