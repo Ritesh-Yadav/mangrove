@@ -47,12 +47,6 @@ class TestReminderSend(BaseTest):
         project_overview_page = light_box.activate_project()
         return project_overview_page.navigate_to_reminder_page()
 
-    def create_reminder_for_all_week(self, reminder_page):
-        for day in range(1, 8):
-            reminder_page.add_new_reminder_for_days_before(day)
-        reminder_page.save_reminders()
-
-
     @attr("functional_test")
     def test_trial_account_should_see_reminder_not_work_message_at_reminder_tab_in_active_project(self):
         create_project_page = self.start_create_normal_project()
