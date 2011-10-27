@@ -1,5 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from unittest.case import skipUnless
+from unittest.case import skipUnless, skipIf
 from datawinners import settings
 from nose.plugins.attrib import attr
 from nose.tools import nottest
@@ -46,6 +46,7 @@ class TestSMSTesterLightBox(BaseTest):
         return project_overview_page.open_sms_tester_light_box()
 
     @attr('functional_test', 'smoke')
+    @skipIf(settings.USE_ORDERED_SMS_PARSER, "USE_ORDERED_SMS_PARSER is set, only ordered sms can be used while this is the case")
     def test_successful_sms_submission(self):
         """
         Function to test the successful SMS submission
@@ -55,6 +56,7 @@ class TestSMSTesterLightBox(BaseTest):
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA)))
 
     @attr('functional_test')
+    @skipIf(settings.USE_ORDERED_SMS_PARSER, "USE_ORDERED_SMS_PARSER is set, only ordered sms can be used while this is the case")
     def test_sms_player_for_exceeding_word_length(self):
         """
         Function to test the error message on the sms submission page for exceeding word limit for word type question
@@ -64,6 +66,7 @@ class TestSMSTesterLightBox(BaseTest):
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(EXCEED_NAME_LENGTH)))
 
     @attr('functional_test', 'smoke')
+    @skipIf(settings.USE_ORDERED_SMS_PARSER, "USE_ORDERED_SMS_PARSER is set, only ordered sms can be used while this is the case")
     def test_successful_sms_submission(self):
         """
         Function to test the successful SMS submission
@@ -79,6 +82,7 @@ class TestSMSTesterLightBox(BaseTest):
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA2)))
 
     @attr('functional_test')
+    @skipIf(settings.USE_ORDERED_SMS_PARSER, "USE_ORDERED_SMS_PARSER is set, only ordered sms can be used while this is the case")
     def test_sms_submission_for_unicode(self):
         """
         Function to test the SMS submission with unicodes
