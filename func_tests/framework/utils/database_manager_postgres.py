@@ -7,10 +7,19 @@ try:
 except Exception as e:
     print "local_settings file is not available"
 
-DEFAULT_DNS = "dbname='" + DATABASES['default']['NAME'] + "' user='" + DATABASES['default']['USER'] + "'"
+def get_connection_args():
+    db = DATABASES['default']
+    args = dict(database = db['NAME'],
+                user = db['USER'])
+
+    for arg in ['HOST', 'PORT', 'PASSWORD']:
+        value = db.get(arg)
+        if value:
+            args[arg.lower()] = value
+    return args
 
 class DatabaseManager(object):
-    def get_connection(self, database_name=DEFAULT_DNS):
+    def get_connection(self, connection_args = get_connection_args()):
         """
         Function to get the connection to SQLite3 database
 
@@ -20,10 +29,10 @@ class DatabaseManager(object):
 
         Return connection
         """
-        con = psycopg2.connect(database_name)
+        con = psycopg2.connect(**connection_args)
         return con
 
-    def get_activation_code(self, email, database_name=DEFAULT_DNS):
+    def get_activation_code(self, email, connection_args = get_connection_args()):
         """
         Function to get activation code for the given email id from SQLite3 database
 
@@ -34,8 +43,10 @@ class DatabaseManager(object):
 
         Return activation code
         """
+        con = None
+        cur = None
         try:
-            con = self.get_connection(database_name)
+            con = self.get_connection(connection_args)
             cur = con.cursor()
             cur.execute(
                 "select activation_key from registration_registrationprofile where user_id=(select id from auth_user where email=%s);"
@@ -46,10 +57,12 @@ class DatabaseManager(object):
             else:
                 return values
         finally:
-            cur.close()
-            con.close()
+            if cur:
+                cur.close()
+            if con:
+                con.close()
 
-    def set_sms_telephone_number(self, telephone_number, email, database_name=DEFAULT_DNS):
+    def set_sms_telephone_number(self, telephone_number, email, connection_args = get_connection_args()):
         """
         Function to set the SMS telephone number for the organization
 
@@ -62,7 +75,7 @@ class DatabaseManager(object):
         con = None
         cur = None
         try:
-            con = self.get_connection(database_name)
+            con = self.get_connection(connection_args)
             cur = con.cursor()
             cur.execute("update accountmanagement_organizationsetting set sms_tel_number=%s where \
                   organization_id=(select org_id from accountmanagement_ngouserprofile where \
@@ -76,7 +89,7 @@ class DatabaseManager(object):
             if con:
                 con.close()
 
-    def delete_organization_all_details(self, email, database_name=DEFAULT_DNS):
+    def delete_organization_all_details(self, email, connection_args = get_connection_args()):
         """
         Function to delete all the organization related details
 
@@ -88,7 +101,7 @@ class DatabaseManager(object):
         con = None
         cur = None
         try:
-            con = self.get_connection(database_name)
+            con = self.get_connection(connection_args)
             cur = con.cursor()
             cur.execute("select id from auth_user where email=%s;", (email,))
             user_id = int(cur.fetchone()[0])
@@ -112,9 +125,9 @@ class DatabaseManager(object):
             if con:
                 con.close()
 
-    def update_active_date_to_expired(self, email, date, database_name=DEFAULT_DNS):
+    def update_active_date_to_expired(self, email, date, connection_args = get_connection_args()):
         try:
-            con = self.get_connection(database_name)
+            con = self.get_connection(connection_args)
             cur = con.cursor()
             active_date = datetime.datetime.today().replace(microsecond=0) - datetime.timedelta(date)
             print active_date
