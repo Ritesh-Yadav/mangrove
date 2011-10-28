@@ -3,14 +3,13 @@ import datetime
 import os
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.common.exceptions import StaleElementReferenceException
-from framework.exception import CouldNotLocateElementException, ElementStillPresentException, CouldNotLocatePageException, ElementFoundWithoutDesiredVisibility
-
+from framework.exception import ElementStillPresentException, CouldNotLocatePageException, ElementFoundWithoutDesiredVisibility
+from framework.exception import CouldNotLocateElementException
 from framework.utils.drop_down_web_element import DropDown
 from framework.utils.text_box_web_element import TextBox
 from framework.utils.radio_button_web_element import RadioButton
 from pages.loginpage.login_locator import *
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 
 def get_default_browser_name():
     import sys

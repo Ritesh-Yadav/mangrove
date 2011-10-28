@@ -54,6 +54,7 @@ if [ "${RECREATEDB}" != "N" -a "${RECREATEDB}" != "n" ]; then
     python manage.py syncdb --noinput
     python manage.py migrate
     python manage.py recreatedb
+    python manage.py updatedb
 fi
 
 if [ "${TESTCHOICE}" != "ut" ]; then
