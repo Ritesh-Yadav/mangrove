@@ -27,16 +27,19 @@ class TestAllDataSender(unittest.TestCase):
     def tearDownClass(cls):
         teardown_driver(cls.driver)
 
+    def associate(self, all_data_sender_page):
+        all_data_sender_page.select_a_data_sender_by_id(fetch_(UID, from_(ASSOCIATE_DATA_SENDER)))
+        all_data_sender_page.associate_data_sender()
+        all_data_sender_page.select_project(fetch_(PROJECT_NAME, from_(ASSOCIATE_DATA_SENDER)))
+        all_data_sender_page.click_confirm(wait=True)
+
     @attr('functional_test', 'smoke')
     def test_successful_association_of_data_sender(self):
         """
         Function to test the successful association of DataSender with given project
         """
         all_data_sender_page = self.page
-        all_data_sender_page.select_a_data_sender_by_id(fetch_(UID, from_(ASSOCIATE_DATA_SENDER)))
-        all_data_sender_page.associate_data_sender()
-        all_data_sender_page.select_project(fetch_(PROJECT_NAME, from_(ASSOCIATE_DATA_SENDER)))
-        all_data_sender_page.click_confirm(wait=True)
+        self.associate(all_data_sender_page)
         self.assertEqual(all_data_sender_page.get_project_names(fetch_(UID, from_(ASSOCIATE_DATA_SENDER))),
                                     fetch_(PROJECT_NAME, from_(ASSOCIATE_DATA_SENDER)))
 
@@ -46,6 +49,8 @@ class TestAllDataSender(unittest.TestCase):
         Function to test the successful dissociation of DataSender with given project
         """
         all_data_sender_page = self.page
+        if all_data_sender_page.get_project_names(fetch_(UID, from_(ASSOCIATE_DATA_SENDER))) == "--":
+            self.associate(all_data_sender_page)
         all_data_sender_page.select_a_data_sender_by_id(fetch_(UID, from_(DISSOCIATE_DATA_SENDER)))
         all_data_sender_page.dissociate_data_sender()
         all_data_sender_page.select_project(fetch_(PROJECT_NAME, from_(DISSOCIATE_DATA_SENDER)))

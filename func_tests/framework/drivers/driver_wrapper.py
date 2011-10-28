@@ -126,7 +126,7 @@ class DriverWrapper(object):
             return False
 
     def wait_until_modal_dismissed(self, time_out_in_seconds):
-        self.wait_until_element_is_not_present(time_out_in_seconds, by_css(".blockUI"))
+        self.wait_until_element_is_not_present(time_out_in_seconds, by_css(".loading"))
 
     def wait_for_element(self, time_out_in_seconds, object_id, want_visible=None):
         """Finds elements by their id by waiting till timeout.
