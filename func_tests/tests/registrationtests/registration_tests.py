@@ -87,9 +87,9 @@ class TestRegistrationPage(unittest.TestCase):
         price_link.click()
         self.assertEqual("Pricing", self.driver.get_title())
 
+    @attr('functional_test')
     def test_register_without_preferred_payment(self):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
         registration_confirmation_page, email = registration_page.successful_registration_with(WITHOUT_PREFERRED_PAYMENT)
-        time.sleep(5)
         self.assertEquals(registration_confirmation_page.registration_success_message(), REGISTRATION_SUCCESS_MESSAGE)
