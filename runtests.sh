@@ -10,6 +10,8 @@ ut  - unit tests
 sm  - smoke tests
 ft  - functional tests
 all - run all the tests
+
+server - don't run the tests, just start the server
 EOF
 }
 
@@ -22,6 +24,9 @@ case $1 in
 	;;
     "sm")
 	export TESTCHOICE="sm"
+	;;
+    "server")
+	export TESTCHOICE="server"
 	;;
     "all")
 	export TESTCHOICE="all"
@@ -77,6 +82,9 @@ case "${TESTCHOICE}" in
      python manage.py test --with-xunit --xunit-file=../../xunit.xml
      cd ..
      cd mangrove && nosetests --with-xunit --xunit-file=../../xunit2.xml
+     ;;
+"server") echo "----- Starting the server ----"
+     start_server
      ;;
 "all") echo "-------- All test execution Started --------"
      xterm -e "python manage.py runserver" &
