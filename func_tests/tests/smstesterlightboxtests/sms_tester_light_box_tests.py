@@ -1,6 +1,6 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from unittest.case import skipUnless, skipIf
-from datawinners import settings
+from django.conf import settings
 from nose.plugins.attrib import attr
 from nose.tools import nottest
 from framework.base_test import BaseTest
@@ -52,6 +52,7 @@ class TestSMSTesterLightBox(BaseTest):
         Function to test the successful SMS submission
         """
         sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
+        sms_tester_page = self.prerequisites_of_sms_tester_light_box1()
         sms_tester_page.send_sms_with(VALID_DATA)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA)))
 
@@ -62,15 +63,13 @@ class TestSMSTesterLightBox(BaseTest):
         Function to test the error message on the sms submission page for exceeding word limit for word type question
         """
         sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
+        sms_tester_page = self.prerequisites_of_sms_tester_light_box1()
         sms_tester_page.send_sms_with(EXCEED_NAME_LENGTH)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(EXCEED_NAME_LENGTH)))
 
     @attr('functional_test', 'smoke')
     @skipIf(settings.USE_ORDERED_SMS_PARSER, "USE_ORDERED_SMS_PARSER is set, only ordered sms can be used while this is the case")
     def test_successful_sms_submission(self):
-        """
-        Function to test the successful SMS submission
-        """
         sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
         sms_tester_page.send_sms_with(VALID_DATA2)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA2)))
@@ -84,9 +83,6 @@ class TestSMSTesterLightBox(BaseTest):
     @attr('functional_test')
     @skipIf(settings.USE_ORDERED_SMS_PARSER, "USE_ORDERED_SMS_PARSER is set, only ordered sms can be used while this is the case")
     def test_sms_submission_for_unicode(self):
-        """
-        Function to test the SMS submission with unicodes
-        """
         sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
         sms_tester_page.send_sms_with(SMS_WITH_UNICODE)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(SMS_WITH_UNICODE)))
