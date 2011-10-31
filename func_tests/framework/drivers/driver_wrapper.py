@@ -4,7 +4,7 @@ import os
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import StaleElementReferenceException
-from framework.exception import CouldNotLocateElementException
+from framework.exception import CouldNotLocateElementException, ElementStillPresentException, CouldNotLocatePageException, ElementFoundWithoutDesiredVisibility
 
 from framework.utils.drop_down_web_element import DropDown
 from framework.utils.text_box_web_element import TextBox
@@ -144,7 +144,8 @@ class DriverWrapper(object):
                 if want_visible is None or element.is_displayed() == want_visible:
                     return element
                 elif current_time >= end_time:
-                    raise ElementFoundWithoutDesiredVisibility("Expected visibility %s for element %s" % (want_visible, object_id))
+                    message = "Expected visibility %s for element %s -- found %s after %s seconds" % (want_visible, object_id, element.is_displayed(), time_out_in_seconds)
+                    raise ElementFoundWithoutDesiredVisibility(message)
             except CouldNotLocateElementException:
                 current_time = datetime.datetime.now()
                 if current_time >= end_time:
@@ -160,7 +161,7 @@ class DriverWrapper(object):
             else:
                 current_time = datetime.datetime.now()
                 if current_time >= end_time:
-                    raise CouldNotLocateElementException("Could not locate page with title " + title)
+                    raise CouldNotLocatePageException("Could not locate page with title %s after %s seconds" % (title, time_out_in_seconds))
 
     def __getattr__(self, item):
         return getattr(self._driver, item)
@@ -184,8 +185,3 @@ class DriverWrapper(object):
                 return
 
 
-class ElementStillPresentException(Exception):
-    pass
-
-class ElementFoundWithoutDesiredVisibility(Exception):
-    pass
