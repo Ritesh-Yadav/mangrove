@@ -23,7 +23,7 @@ class TestReviewProject(BaseTest):
         
         try:
             if CLOSE_BROWSER_AFTER_TEST:
-                driver.quit()
+                self.driver.quit()
         except TypeError as e:
             pass
 
