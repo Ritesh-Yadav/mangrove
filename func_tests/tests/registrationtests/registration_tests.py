@@ -22,6 +22,17 @@ class TestRegistrationPage(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         teardown_driver(cls.driver)
+
+    def tearDown(self):
+        import sys
+
+        exception_info = sys.exc_info()
+        if exception_info != (None, None, None):
+            import os
+            if not os.path.exists("screenshots"):
+                os.mkdir("screenshots")
+            self.driver.get_screenshot_as_file("screenshots/screenshot-%s-%s.png" % (self.__class__.__name__, self._testMethodName))
+
         
     @attr('functional_test', 'smoke')
     def test_successful_registration(self):

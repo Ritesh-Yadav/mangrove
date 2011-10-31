@@ -6,9 +6,27 @@ from pages.loginpage.login_page import LoginPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.reviewandtests.review_data import *
+from tests.testsettings import CLOSE_BROWSER_AFTER_TEST
 
 
 class TestReviewProject(BaseTest):
+
+    def tearDown(self):
+        import sys
+
+        exception_info = sys.exc_info()
+        if exception_info != (None, None, None):
+            import os
+            if not os.path.exists("screenshots"):
+                os.mkdir("screenshots")
+            self.driver.get_screenshot_as_file("screenshots/screenshot-%s-%s.png" % (self.__class__.__name__, self._testMethodName))
+        
+        try:
+            if CLOSE_BROWSER_AFTER_TEST:
+                driver.quit()
+        except TypeError as e:
+            pass
+
     def prerequisites_of_create_project(self):
         # doing successful login with valid credentials
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
