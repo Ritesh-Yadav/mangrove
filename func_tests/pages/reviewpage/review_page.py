@@ -118,7 +118,7 @@ class ReviewPage(Page):
         Function to open the subjects accordion
         """
         self.driver.find(by_css("div#%s>div[class~='ui-state-default']" % accordion)).click()
-        self.driver.wait_for_element(2, by_css("div#%s.ui-accordion .ui-accordion-content" % accordion), want_visible=True)
+        self.driver.wait_for_element(7, by_css("div#%s.ui-accordion .ui-accordion-content" % accordion), want_visible=True)
 
     def open_subject_accordion(self):
         self.open_accordion("subjects")
