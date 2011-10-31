@@ -15,4 +15,5 @@ class CreateDataSenderQuestionnairePage(Page):
         Return CreateReminderPage
         """
         self.driver.find(SAVE_CHANGES_BTN).click()
+        self.driver.wait_for_page_with_title(3, "Reminders")
         return CreateReminderPage(self.driver)

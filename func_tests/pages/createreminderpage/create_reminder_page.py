@@ -15,4 +15,5 @@ class CreateReminderPage(Page):
         Return ReviewPage
         """
         self.driver.find(SAVE_CHANGES_BTN).click()
+        self.driver.wait_for_page_with_title(3, "Review & Test")
         return ReviewPage(self.driver)
