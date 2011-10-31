@@ -76,6 +76,12 @@ class TestRegistrationPage(unittest.TestCase):
         self.assertIn('Please Select', sectors_drop_down.text)
         self.assertIn('Food Security', sectors_drop_down.text)
         self.assertIn('Other', sectors_drop_down.text)
+        
+    @attr('functional_test')
+    def test_register_organization_phone_number_sector_have_the_country_code_select_options(self):
+        self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
+        sectors_drop_down = self.driver.find_drop_down(ORGANIZATION_OFFICE_PHONE_NUMBER_DROP_DOWN_LIST)
+        self.assertIn('Select', sectors_drop_down.text)
 
     @attr('functional_test')
     def test_content_box_exist_in_registration_page(self):
