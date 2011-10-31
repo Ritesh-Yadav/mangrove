@@ -79,7 +79,7 @@ class TestSMSTesterLightBox(BaseTest):
     def test_successful_ordered_sms_submission(self):
         sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
         sms_tester_page.send_sms_with(VALID_ORDERED_SMS_DATA)
-        self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA2)))
+        self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_ORDERED_SMS_DATA)))
 
     @attr('functional_test')
     @skipIf(settings.USE_ORDERED_SMS_PARSER, "USE_ORDERED_SMS_PARSER is set, only ordered sms can be used while this is the case")
