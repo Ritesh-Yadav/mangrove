@@ -66,12 +66,10 @@ class TestApplicationEndToEnd(BaseTest):
         self.assertRegexpMatches(add_data_sender_page.get_success_message(),
                                  fetch_(SUCCESS_MESSAGE, from_(VALID_DATA_FOR_DATA_SENDER)))
 
-    def add_subject_type(self, create_project_page, valid_subject_type):
+    def add_subject_type(self, create_project_page, entity_type):
         add_subject_type_page = AddSubjectTypePage(self.driver)
         add_subject_type_page.click_on_accordian_link()
-        add_subject_type_page.add_entity_type_with(valid_subject_type)
-        entity_type = fetch_(ENTITY_TYPE, from_(valid_subject_type))
-        time.sleep(2)
+        add_subject_type_page.add_entity_type_with(entity_type)
         self.assertEqual(create_project_page.get_selected_subject(), entity_type.lower())
 
     def add_a_subject(self, add_subject_page):
@@ -115,7 +113,6 @@ class TestApplicationEndToEnd(BaseTest):
             question_link_text = fetch_(CODE, from_(question)) + " " + fetch_(QUESTION, from_(question))
             self.assertEquals(create_questionnaire_page.get_question_link_text(index), question_link_text)
             index += 1
-        time.sleep(5)
         self.assertEquals(create_questionnaire_page.get_remaining_character_count(),
                           fetch_(CHARACTER_REMAINING, from_(QUESTIONNAIRE_DATA)))
         create_data_sender_questionnaire_page = create_questionnaire_page.save_questionnaire_successfully()
@@ -205,8 +202,8 @@ class TestApplicationEndToEnd(BaseTest):
         dashboard_page = global_navigation.navigate_to_dashboard_page()
         create_project_page = dashboard_page.navigate_to_create_project_page()
         create_project_page.select_report_type(VALID_DATA_FOR_PROJECT)
-        self.add_subject_type(create_project_page, VALID_SUBJECT_TYPE2)
-        self.add_subject_type(create_project_page, VALID_SUBJECT_TYPE1)
+        self.add_subject_type(create_project_page, VALID_SUBJECT_TYPE2[ENTITY_TYPE])
+        self.add_subject_type(create_project_page, VALID_SUBJECT_TYPE1[ENTITY_TYPE])
         create_subject_questionnaire_page = self.create_project(create_project_page)
         create_questionnaire_page = self.create_subject_questionnaire(create_subject_questionnaire_page)
         create_data_sender_questionnaire_page = self.create_questionnaire(create_questionnaire_page)

@@ -11,7 +11,7 @@ class AddSubjectTypePage(Page):
     def __init__(self, driver):
         Page.__init__(self, driver)
 
-    def successfully_add_entity_type_with(self, entity_data):
+    def successfully_add_entity_type_with(self, entity_type):
         """
         Function to enter randomly generated entity type in the text box and click on the Add button
          .
@@ -20,13 +20,12 @@ class AddSubjectTypePage(Page):
 
         Return self
         """
-        entity_type = fetch_(ENTITY_TYPE, from_(entity_data)) + generateId()
         self.driver.find_text_box(NEW_SUBJECT_TB).enter_text(entity_type)
         self.driver.find(ADD_BTN).click()
         self.driver.wait_until_element_is_not_present(5, by_css("#type_message .ajax_loader"))
-        return entity_type
+        return self
 
-    def add_entity_type_with(self, entity_data):
+    def add_entity_type_with(self, entity_type, wait=True):
         """
         Function to enter entity type in the text box and click on the Add button
          .
@@ -35,8 +34,10 @@ class AddSubjectTypePage(Page):
 
         Return self
         """
-        self.driver.find_text_box(NEW_SUBJECT_TB).enter_text(fetch_(ENTITY_TYPE, from_(entity_data)))
+        self.driver.find_text_box(NEW_SUBJECT_TB).enter_text(entity_type)
         self.driver.find(ADD_BTN).click()
+        if wait:
+            self.driver.wait_until_element_is_not_present(5, by_css("#type_message .ajax_loader"))
         return self
 
     def get_error_message(self):
