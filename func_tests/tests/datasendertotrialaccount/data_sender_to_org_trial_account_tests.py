@@ -1,15 +1,13 @@
-from time import sleep
-from framework.utils.data_fetcher import fetch_, from_
-from framework.utils.database_manager_postgres import DatabaseManager
-from pages.addsubjecttypepage.add_subject_type_page import AddSubjectTypePage
-from pages.smstesterpage.sms_tester_page import SMSTesterPage
-from testdata.test_data import DATA_WINNER_SMS_TESTER_PAGE
-from tests.datasendertotrialaccount.data_sender_to_org_trial_account_data import *
-from tests.endtoendtest.end_to_end_tests import activate_account, do_login
-from tests.registrationtests.registration_data import REGISTRATION_PASSWORD
-from tests.registrationtests.trial_registration_tests import register_and_get_email_for_trial
-from framework.utils.couch_http_wrapper import CouchHttpWrapper
+from testdata.test_data import DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_LOGIN_PAGE
 from framework.base_test import BaseTest
+from data_sender_to_org_trial_account_data import VALID_DATA, PROJECT_NAME, TRIAL_SMS_DATA, VALID_PAID_DATA, PAID_SMS_DATA
+from pages.loginpage.login_page import LoginPage
+from pages.smstesterpage.sms_tester_page import SMSTesterPage
+from tests.logintests.login_data import TRIAL_CREDENTIALS_TWO, VALID_CREDENTIALS
+from nose.plugins.attrib import attr
+from framework.utils.couch_http_wrapper import CouchHttpWrapper
+import json
+
 
 # add data sender to trial account
 
@@ -21,70 +19,73 @@ from framework.base_test import BaseTest
 # send sms to paid account
     #check sms submission paid paid display, not paid display
 
-from tests.datasendertotrialaccount.data_sender_to_org_trial_account_data import VALID_SMS_DATA_FROM_DATA_SENDER, VALID_DATA_FOR_DATA_SENDER
-from tests.smstesterlightboxtests.sms_tester_light_box_data import PROJECT_NAME
 
 class TestDataSenderAssociationWithTrialAccount(BaseTest):
 
-    emails = []
-
-    def add_trial_organization_and_login(driver):
-        registration_confirmation_page, email = register_and_get_email_for_trial(driver)
-        activate_account(driver, email)
-        return do_login(driver, email, REGISTRATION_PASSWORD)
-
-    def create_questionnaire(self, create_questionnaire_page):
-        create_questionnaire_page.create_questionnaire_to_work_performed_subjects_with(QUESTIONNAIRE_DATA)
-        create_data_sender_questionnaire_page = create_questionnaire_page.save_questionnaire_successfully()
-        create_data_sender_questionnaire_page.save_questionnnaire_successfully().save_reminder_successfully()
-        return create_data_sender_questionnaire_page
-
-    def add_subject_type(self, valid_subject_type):
-        add_subject_type_page = AddSubjectTypePage(self.driver)
-        add_subject_type_page.click_on_accordian_link()
-        add_subject_type_page.add_entity_type_with(valid_subject_type)
-
-    def create_project(self, create_project_page):
-        create_project_page.select_report_type(VALID_DATA_FOR_PROJECT)
-        return create_project_page.create_project_with(VALID_DATA_FOR_PROJECT).save_project_successfully()
-
-    def test_data_sender_send_SMS_to_trial_accounts_check_results(self):
-
-        registration_confirmation_page, email = register_and_get_email_for_trial(self.driver)
-        self.emails.append(email)
-        activate_account(self.driver, email)
-        global_navigation = do_login(self.driver, email, REGISTRATION_PASSWORD)
-
-        dashboard_page = global_navigation.navigate_to_dashboard_page()
-        self.create_questionnaire(
-        self.create_project(dashboard_page.navigate_to_create_project_page()).save_questionnaire_successfully())
-
-        projectsPage = global_navigation.navigate_to_view_all_project_page();
-        lightBox = projectsPage.open_activate_project_light_box(VALID_DATA_FOR_PROJECT[PROJECT_NAME])
-        lightBox.activate_project()
-
-        add_data_sender_page = global_navigation.navigate_to_all_data_sender_page().navigate_to_add_a_data_sender_page()
-        add_data_sender_page.add_data_sender_with(VALID_DATA_FOR_DATA_SENDER)
+    @attr('functional_test', 'smoke')
+    def test_data_sender_registered_to_paid_and_trial_accounts_send_SMS_to_trial_accounts_check_results(self):
         self.driver.go_to(DATA_WINNER_SMS_TESTER_PAGE)
-
         sms_tester_page = SMSTesterPage(self.driver)
-        sms_tester_page.send_sms_with(VALID_SMS_DATA_FROM_DATA_SENDER)
-        sleep(60 * 4)
-        self.assertEqual(sms_tester_page.get_response_message(), fetch_(SUCCESS_MESSAGE, from_(VALID_SMS_DATA_FROM_DATA_SENDER)))
+        sms_tester_page.send_sms_with(VALID_DATA)
 
+        self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
+        login_page = LoginPage(self.driver)
+        global_navigation = login_page.do_successful_login_with(TRIAL_CREDENTIALS_TWO)
+        all_data_page = global_navigation.navigate_to_all_data_page()
+        analysis_page = all_data_page.navigate_to_data_analysis_page(PROJECT_NAME)
+        data_rows = analysis_page.get_data_rows()
+        row_data = analysis_page.get_data_from_row(data_rows[0])
+        self.assertEqual(row_data, TRIAL_SMS_DATA)
 
+    @attr('functional_test')
+    def test_data_sender_registered_to_paid_and_trial_accounts_send_SMS_to_trial_account_check_absent_from_paid(self):
+        self.driver.go_to(DATA_WINNER_SMS_TESTER_PAGE)
+        sms_tester_page = SMSTesterPage(self.driver)
+        sms_tester_page.send_sms_with(VALID_DATA)
+
+        self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
+        login_page = LoginPage(self.driver)
+        global_navigation = login_page.do_successful_login_with(VALID_CREDENTIALS)
+        all_data_page = global_navigation.navigate_to_all_data_page()
+        analysis_page = all_data_page.navigate_to_data_analysis_page(PROJECT_NAME)
+
+        data_rows = analysis_page.get_all_data_records()
+        analysis_page.go_to_next_page()
+        data_rows.extend(analysis_page.get_all_data_records())
+        for row_data in data_rows:
+            self.assertNotEqual(row_data, TRIAL_SMS_DATA)
+
+    @attr('functional_test')
+    def test_data_sender_registered_to_paid_and_trial_accounts_send_SMS_to_paid_account_check_results(self):
+        self.driver.go_to(DATA_WINNER_SMS_TESTER_PAGE)
+        sms_tester_page = SMSTesterPage(self.driver)
+        sms_tester_page.send_sms_with(VALID_PAID_DATA)
+
+        self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
+        login_page = LoginPage(self.driver)
+        global_navigation = login_page.do_successful_login_with(VALID_CREDENTIALS)
+        all_data_page = global_navigation.navigate_to_all_data_page()
+        analysis_page = all_data_page.navigate_to_data_analysis_page(PROJECT_NAME)
+
+        data_rows = analysis_page.get_all_data_records()
+        analysis_page.go_to_next_page()
+        data_rows.extend(analysis_page.get_all_data_records())
+        sms_exist = False
+        for row_data in data_rows:
+            if row_data==PAID_SMS_DATA:
+                sms_exist = True
+                break
+        self.assertTrue(sms_exist)
 
     def tearDown(self):
-        try:
-            self.driver.quit()
-            for email in self.emails:
-                dbmanager = DatabaseManager()
-                dbname = dbmanager.delete_organization_all_details(email)
-                couchwrapper = CouchHttpWrapper("localhost")
-                couchwrapper.deleteDb(dbname)
-            pass
-        except TypeError as e:
-            pass
+        self.driver.close()
+        couchdb_wrapper = CouchHttpWrapper("localhost")
+        json_data = couchdb_wrapper.get("/hni_testorg_coj00001/_design/submissionlog/_view/submissionlog?reduce=false")
+        json_parsed_data = json.load(json_data)
+        for data in range(json_parsed_data["total_rows"]):
+            id = json_parsed_data["rows"][data]["id"]
+            rev = json_parsed_data["rows"][data]["value"]["_rev"]
+            couchdb_wrapper.delete("/hni_testorg_coj00001/"+id+"?rev="+rev)
 
 #def test_send_SMS_to_paid_accounts_check_results(self):
 

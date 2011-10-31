@@ -1,82 +1,24 @@
-
-DATA_SENDER_NAME = "name"
-MOBILE_NUMBER = "mobile_number"
-COMMUNE = "commune"
-GPS = "gps"
-SUCCESS_MESSAGE = "message"
-
 SENDER = "from"
 RECEIVER = "to"
 SMS = "sms"
+SUCCESS_MESSAGE = "message"
 
-QUESTIONNAIRE_CODE = "questionnaire_code"
-GEN_RANDOM = "gen_random"
-DEFAULT_QUESTION = "default_question"
-QUESTION = "question"
-QUESTIONS = "questions"
-CODE = "code"
-TYPE = "type"
-LIMIT = "limit"
-NO_LIMIT = "no_limit"
-LIMITED = "limited"
-MIN = "min"
-MAX = "max"
-DATE_FORMAT = "date_format"
-CHOICE = "choice"
-ALLOWED_CHOICE = "allowed_choice"
-NUMBER = "number"
-WORD = "word"
-DATE = "date"
-LIST_OF_CHOICES = "list_of_choices"
-GEO = "geo"
-DD_MM_YYYY = "dd.mm.yyyy"
-MM_DD_YYYY = "mm.dd.yyyy"
-MM_YYYY = "mm.yyyy"
-ONLY_ONE_ANSWER = "only_one_answer"
-MULTIPLE_ANSWERS = "multiple_answers"
-CHARACTER_REMAINING = "character_remaining"
-PAGE_TITLE = "page_title"
-PROJECT_NAME = "project_name"
-RESPONSE_MESSAGE = "message"
-MESSAGE = "message"
+VALID_DATA = {SENDER: "1234567890",
+              RECEIVER: '17752374679',
+              SMS: "cli001 .EID cid003 .NA Mr. Tessy .FA 38 .RD 17.08.2011 .BG b .SY ade .GPS 27.178057  -78.007789",
+              SUCCESS_MESSAGE: "Thank you Shweta. We received : EID: cid003 NA: Mr. Tessy FA: 58.0 RD: 17.05.2011 BG: O- SY: Rapid weight loss,Memory loss,Neurological disorders GPS: 27.178057,-78.007789"}
 
-PROJECT_NAME = "project_name"
-SMS = "sms"
-RESPONSE_MESSAGE = "message"
-PROJECT_BACKGROUND = "project_background"
-SUBJECT = "subject"
-PROJECT_TYPE = "project_type"
-REPORT_TYPE = "report_type"
-DEVICES = "devices"
+TRIAL_SMS_DATA = "cid003 Mr. Tessy 38 17.08.2011 O- Rapid weight loss,Memory loss,Neurological disorders 27.178057,-78.007789 --"
+
+VALID_PAID_DATA = {SENDER: "1234567890",
+              RECEIVER: '919880734937',
+              SMS: "cli001 .EID cid003 .NA Mr. Tessy .FA 77 .RD 23.08.2010 .BG b .SY ade .GPS 27.178057  -78.007789",
+              SUCCESS_MESSAGE: "Thank you Shweta. We received : EID: cid003 NA: Mr. Tessy FA: 77.0 RD: 23.08.2010 BG: O- SY: Rapid weight loss,Memory loss,Neurological disorders GPS: 27.178057,-78.007789"}
+
+PAID_SMS_DATA = "cid003 Mr. Tessy 77 23.08.2010 O- Rapid weight loss,Memory loss,Neurological disorders 27.178057,-78.007789 --"
+
+PROJECT_NAME = 'clinic test project'
 
 
-VALID_DATA_FOR_DATA_SENDER = {DATA_SENDER_NAME: "Shweta",
-                              MOBILE_NUMBER: "12121212",
-                              COMMUNE: "urbaine",
-                              GPS: "48.955267  1.816013",
-                              SUCCESS_MESSAGE: u"Registration successful. Unique identification number(ID) is: rep2."}
-
-VALID_SMS_DATA_FROM_DATA_SENDER = {SENDER: "12121212",
-              RECEIVER: "1-775-237-4679",
-              SMS: "WWWW .q1 12.11.2000 .WL 20 .DMY 23.11.2011",
-              SUCCESS_MESSAGE: "Thank you Shweta. We received : q1: 12.11.2000 WL: 20.0 DMY: 23.11.2011 eid: rep2"}
-
-
-QUESTIONNAIRE_DATA = {QUESTIONNAIRE_CODE: "WWWW", GEN_RANDOM: False,
-                      DEFAULT_QUESTION: {QUESTION: "What are you reporting on?", CODE: "WID"},
-                      QUESTIONS: [{QUESTION: "Water Level", CODE: "WL", TYPE: NUMBER, MIN: "1", MAX: "1000"},
-                              {QUESTION: "Date of report in DD.MM.YYYY format", CODE: "DMY", TYPE: DATE,
-                               DATE_FORMAT: DD_MM_YYYY}],
-                      CHARACTER_REMAINING: "127 / 160 characters used",
-                      PAGE_TITLE: "Data Senders"}
-
-
-VALID_DATA_FOR_PROJECT = {PROJECT_NAME: "Waterpoint morondava", GEN_RANDOM: False,
-                          PROJECT_BACKGROUND: "This project is created by functional automation suite.",
-                          PROJECT_TYPE: "survey",
-                          SUBJECT:"",
-                          REPORT_TYPE: "data sender work",
-                          DEVICES: "sms",
-                          PAGE_TITLE: "Subjects"}
 
 
