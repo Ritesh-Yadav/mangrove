@@ -72,6 +72,10 @@ case "${TESTCHOICE}" in
      start_server
      cd ../../func_tests
      nosetests -a 'functional_test'
+     have_say=`which say`
+     if [ -n "$have_say" ];then
+       say "MISSION ACCOMPLISHED!"
+     fi
      ;;
 "sm")
      echo "-------- Funtional test execution Started --------"

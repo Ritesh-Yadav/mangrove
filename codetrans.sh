@@ -16,5 +16,9 @@ fi
 if [ "$ip0" = "" -a "$ip1" = "" ];then
     echo 'connect to network first and rerun this code.'
 fi
+have_say=`which say`
+if [ -n "$have_say" ];then
+	say "Pair, get the code!"
+fi
 echo 'ctrl+c to stop.'
 git daemon --base-path=. --export-all
