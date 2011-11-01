@@ -23,8 +23,11 @@ class RegistrationPage(Page):
         for key,value in registration_data.items():
             if key in [ORGANIZATION_SECTOR]:
                 self.driver.find_drop_down(by_css("select[name=%s]" % key)).set_selected(value)
+            elif key in [PAY_MONTHLY, WIRE_TRANSFER]:
+                self.driver.find_radio_button(by_css("input[value=%s]" % key)).click()
             else:
                 self.driver.find_text_box(by_css("input[name=%s]" % key)).enter_text(value)
+
         self.driver.find(ORGANIZATION_REGISTER_BTN).click()
         return self
 

@@ -48,6 +48,13 @@ python src/datawinners/manage.py syncdb
 python src/datawinners/manage.py migrate
 python src/datawinners/manage.py loadshapes
 
+6. Make trans tag work
+--------------------
+brew install gettext
+ln -s /usr/local/Cellar/gettext/0.18.1.1/bin/msgfmt .ve/bin/msgfmt(Notes, the virtual environment path)
+cd src/datawinners/
+python manage.py compilemessages
+
 Test dependencies!
 =====================
 

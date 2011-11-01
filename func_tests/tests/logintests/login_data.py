@@ -11,7 +11,19 @@ VALID_CREDENTIALS = {USERNAME: "tester150411@gmail.com",
                      PASSWORD: "tester150411",
                      WELCOME_MESSAGE: "Welcome Tester!"}
 
-TRIAL_CREDENTIALS = {USERNAME: "chinatwu@gmail.com",
+TRIAL_CREDENTIALS_EXPIRED = {USERNAME: "chinatwu@gmail.com",
+                     PASSWORD: "chinatwu",
+                     WELCOME_MESSAGE: "Welcome Trial Organisation Owner!"}
+
+TRIAL_CREDENTIALS_VALIDATES = {USERNAME: "chinatwu2@gmail.com",
+                     PASSWORD: "chinatwu",
+                     WELCOME_MESSAGE: "Welcome Trial Organisation Owner!"}
+
+TRIAL_CREDENTIALS_THREE = {USERNAME: "chinatwu3@gmail.com",
+                     PASSWORD: "chinatwu",
+                     WELCOME_MESSAGE: "Welcome Trial Organisation Owner!"}
+
+TRIAL_CREDENTIALS_FOUR = {USERNAME: "chinatwu4@gmail.com",
                      PASSWORD: "chinatwu",
                      WELCOME_MESSAGE: "Welcome Trial Organisation Owner!"}
 
@@ -43,7 +55,7 @@ BLANK_CREDENTIALS = {USERNAME: "",
                      PASSWORD: "",
                      ERROR_MESSAGE: "Email This field is required.Password This field is required."}
 
-EXPIRED_TRAIL_ACCOUNT = {USERNAME: "chinatwu@gmail.com",
+EXPIRED_TRIAL_ACCOUNT = {USERNAME: "chinatwu@gmail.com",
                      PASSWORD: "chinatwu",
                      ERROR_MESSAGE: "Your 30 Day Test Drive is expired"}
 

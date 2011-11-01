@@ -2,30 +2,11 @@
 from nose.plugins.attrib import attr
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import from_, fetch_
-from pages.globalnavigationpage.global_navigation_locator import EXPIRED_TRIAL_ACCOUNT_MESSAGE
+from framework.utils.database_manager_postgres import DatabaseManager
+from pages.expiredtrialpage.expired_trial_page import ExpiredTrialPage
 from pages.loginpage.login_page import LoginPage
-from pages.page import Page
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import *
-
-
-class ExpiredTrailPage(Page):
-    def __init__(self, driver):
-        Page.__init__(self, driver)
-
-    def get_error_message(self):
-     """
-     Function to fetch the error messages from error label of the login
-     page
-
-     Return error message
-     """
-     error_message = ""
-     locators = self.driver.find_elements_(EXPIRED_TRIAL_ACCOUNT_MESSAGE)
-     if locators:
-         for locator in locators:
-             error_message = error_message + locator.text
-     return error_message.replace("\n", " ")
 
 
 class TestLoginPage(BaseTest):
@@ -96,11 +77,14 @@ class TestLoginPage(BaseTest):
     @attr('functional_test')
     def test_login_with_expired_trial_account(self):
         self.driver.go_to(DATA_WINNER_LOGIN_PAGE)
-
+        dbmanager = DatabaseManager()
+        dbmanager.update_active_date_to_expired(EXPIRED_TRIAL_ACCOUNT[USERNAME], 31)
         login_page = LoginPage(self.driver)
-        login_page.login_with(EXPIRED_TRAIL_ACCOUNT)
-
-        expired_trail_account_page = ExpiredTrailPage(self.driver)
-
+        login_page.login_with(EXPIRED_TRIAL_ACCOUNT)
+        expired_trail_account_page = ExpiredTrialPage(self.driver)
         self.assertEqual(expired_trail_account_page.get_error_message(),
-                         fetch_(ERROR_MESSAGE, from_(EXPIRED_TRAIL_ACCOUNT)))
+                         fetch_(ERROR_MESSAGE, from_(EXPIRED_TRIAL_ACCOUNT)))
+
+        subscribe_button = expired_trail_account_page.get_subscribe_button()
+        self.assertEqual("Subscribe Now", subscribe_button[0].text)
+

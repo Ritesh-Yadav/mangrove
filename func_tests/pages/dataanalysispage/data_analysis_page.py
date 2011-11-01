@@ -129,7 +129,7 @@ class DataAnalysisPage(Page):
         Function to filter the data according to date range
         """
         self.driver.find(FILTER_BUTTON).click()
-        time.sleep(3)
+        self.driver.wait_until_element_is_not_present(10, by_css("#h1 .loading"))
 
     def go_to_next_page(self):
         """

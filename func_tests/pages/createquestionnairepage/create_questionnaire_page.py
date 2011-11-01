@@ -48,6 +48,7 @@ class CreateQuestionnairePage(Page):
         return self
         """
         self.driver.find(SAVE_CHANGES_BTN).click()
+        self.driver.wait_for_page_with_title(3, "Data Senders")
         return CreateDataSenderQuestionnairePage(self.driver)
 
     def save_questionnaire(self):

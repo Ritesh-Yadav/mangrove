@@ -32,32 +32,6 @@ class CommonUtilities(Page):
                 current_time = datetime.datetime.now()
         return self
 
-    def find_text_box_by_id_and_enter_text(self, text_box_id, text_to_be_entered):
-        self.driver.find_element_by_id(text_box_id).send_keys(text_to_be_entered)
-        return self
-
-    def find_text_box_by_name_and_enter_text(self, text_box_name, text_to_be_entered):
-        self.driver.find_element_by_name(text_box_name).send_keys(text_to_be_entered)
-        return self
-
-    def find_text_box_by_css_and_enter_text(self, text_box_css, text_to_be_entered):
-        self.driver.find_element_by_css_selector(text_box_css).send_keys(text_to_be_entered)
-        return self
-
-    def find_drop_down_by_id_and_select_option(self, drop_down_id,
-                                               option_to_be_selected):
-        self.driver.find_drop_down(drop_down_id).set_selected(option_to_be_selected)
-        return self
-
-    def find_drop_down_by_name_and_select_option(self, drop_down_name,
-                                                 option_to_be_selected):
-        self.driver.find_drop_down(drop_down_name).set_selected(option_to_be_selected)
-        return self
-
-    def find_element_and_click(self, element_id):
-        self.driver.find_element_by_id(element_id).click()
-        return self
-
     def is_element_present(self, element_locator):
         try:
             locator = self.driver.find(element_locator)

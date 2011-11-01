@@ -26,6 +26,10 @@ DATA_SENDER_RB = by_css("input#id_activity_report_0")
 OTHER_SUBJECT_RB = by_css("input#id_activity_report_1")
 SUBJECTS_DD = by_css("select#id_entity_type")
 
+FREQUENCY_NEED_DATA_RB = by_css("input#id_frequency_enabled_1")
+HAS_DEADLINE = by_css('input#id_has_deadline_1')
+REMINDERS_ENABLED = by_css('input#id_reminders_enabled_1')
+
 SMS_CB = by_css("input[value='sms']")
 SMS_CB_CHECKED = by_css("input[value='sms']:checked")
 SMART_PHONE_CB = by_css("input[value='smartphone']")

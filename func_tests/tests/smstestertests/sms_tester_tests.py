@@ -110,3 +110,4 @@ class TestSMSTester(BaseTest):
         sms_tester_page = SMSTesterPage(self.driver)
         sms_tester_page.send_sms_with(REGISTER_INVALID_GEO_CODE)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(ERROR_MSG, from_(REGISTER_INVALID_GEO_CODE)))
+   

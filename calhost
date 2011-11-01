@@ -1,0 +1,47 @@
+<table border="1">
+  <caption>List of databases</caption>
+  <tr>
+    <th align="center">Name</th>
+    <th align="center">Owner</th>
+    <th align="center">Encoding</th>
+    <th align="center">Collation</th>
+    <th align="center">Ctype</th>
+    <th align="center">Access privileges</th>
+  </tr>
+  <tr valign="top">
+    <td align="left">geodjango</td>
+    <td align="left">hhuang</td>
+    <td align="left">UTF8</td>
+    <td align="left">en_AU.UTF-8</td>
+    <td align="left">en_AU.UTF-8</td>
+    <td align="left">&nbsp; </td>
+  </tr>
+  <tr valign="top">
+    <td align="left">postgres</td>
+    <td align="left">hhuang</td>
+    <td align="left">UTF8</td>
+    <td align="left">en_AU.UTF-8</td>
+    <td align="left">en_AU.UTF-8</td>
+    <td align="left">&nbsp; </td>
+  </tr>
+  <tr valign="top">
+    <td align="left">template0</td>
+    <td align="left">hhuang</td>
+    <td align="left">UTF8</td>
+    <td align="left">en_AU.UTF-8</td>
+    <td align="left">en_AU.UTF-8</td>
+    <td align="left">=c/hhuang<br />
+hhuang=CTc/hhuang</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">template1</td>
+    <td align="left">hhuang</td>
+    <td align="left">UTF8</td>
+    <td align="left">en_AU.UTF-8</td>
+    <td align="left">en_AU.UTF-8</td>
+    <td align="left">=c/hhuang<br />
+hhuang=CTc/hhuang</td>
+  </tr>
+</table>
+<p>(4 rows)<br />
+</p>

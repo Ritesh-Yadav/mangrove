@@ -41,6 +41,12 @@ class CreateProjectPage(Page):
             project_name = project_name + generateId()
         self.driver.find_text_box(PROJECT_NAME_TB).enter_text(project_name)
 
+    def create_project_with_reminder(self):
+        self.create_project_with(VALID_DATA)
+        self.driver.find(FREQUENCY_NEED_DATA_RB).click()
+        self.driver.find(HAS_DEADLINE).click()
+        self.driver.find(REMINDERS_ENABLED).click()
+
     def create_project_with(self, project_data):
         """
         Function to enter and save the data on set up project page

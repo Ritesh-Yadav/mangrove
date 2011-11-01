@@ -18,6 +18,7 @@ class CreateSubjectQuestionnairePage(Page):
         Return CreateQuestionnairePage
         """
         self.driver.find(SAVE_CHANGES_BTN).click()
+        self.driver.wait_for_page_with_title(3, "Questionnaire")
         return CreateQuestionnairePage(self.driver)
 
     def navigate_to_previous_step(self):

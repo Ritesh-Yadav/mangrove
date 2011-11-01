@@ -26,6 +26,13 @@ VALID_DATA = {PROJECT_NAME: u"clinic3 test project",
               REPORT_TYPE: OTHER_SUBJECT,
               DEVICES: "sms"}
 
+ACTIVATED_PROJECT_DATA = {PROJECT_NAME: u"clinic test project",
+              PROJECT_BACKGROUND: u"This project is for automation",
+              PROJECT_TYPE: "survey",
+              SUBJECT: u"clinic",
+              REPORT_TYPE: OTHER_SUBJECT,
+              DEVICES: "sms"}
+
 WATER_POINT_DATA = {PROJECT_NAME: u"water point morondova",
                     PROJECT_BACKGROUND: u"This project is for automation",
                     PROJECT_TYPE: "survey",
