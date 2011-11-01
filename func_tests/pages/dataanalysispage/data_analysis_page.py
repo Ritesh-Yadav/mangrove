@@ -67,6 +67,15 @@ class DataAnalysisPage(Page):
             data_record_list.append(self.get_data_from_row(row_web_element))
         return data_record_list
 
+    def get_all_data_records_from_multiple_pages(self):
+        data_record_list = []
+        while True:
+            data_record_list.extend(self.get_all_data_records())
+            if self.driver.is_element_present(NEXT_BUTTON_DISABLED) :
+                break
+            self.go_to_next_page()
+        return data_record_list
+
     def get_number_of_rows(self):
         """
         Function to get the number of data records
