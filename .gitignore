@@ -51,6 +51,7 @@ xunit*.xml
 .coverage
 coverage.xml
 .idea
+screenshots
 
 # gitflow specific files #
 ##########################
