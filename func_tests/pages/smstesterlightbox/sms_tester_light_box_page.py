@@ -29,5 +29,5 @@ class SMSTesterLightBoxPage(LightBox):
 
         Return success/error message
         """
-        time.sleep(5)
+        self.driver.wait_for_element(5, by_css("#flash-message"))
         return self.driver.find_text_box(SMS_TA).get_attribute("value")
