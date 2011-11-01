@@ -21,7 +21,7 @@ class CreateReminderPage(Page):
 
     def click_add_reminder(self):
         self.driver.find(ADD_REMINDER_BTN).click()
-        time.sleep(1)
+        self.driver.wait_for_element(1,by_css(".reminder_content_section"))
 
     def add_new_reminder_for_days_before(self,days_before):
         self.click_add_reminder()
