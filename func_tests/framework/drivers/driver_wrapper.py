@@ -145,7 +145,7 @@ class DriverWrapper(object):
                 elif current_time >= end_time:
                     message = "Expected visibility %s for element %s -- found %s after %s seconds" % (want_visible, object_id, element.is_displayed(), time_out_in_seconds)
                     raise ElementFoundWithoutDesiredVisibility(message)
-            except CouldNotLocateElementException:
+            except CouldNotLocateElementException as ne:
                 current_time = datetime.datetime.now()
                 if current_time >= end_time:
                     raise ne
