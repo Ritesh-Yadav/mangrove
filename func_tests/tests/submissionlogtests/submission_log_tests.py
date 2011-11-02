@@ -1,8 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-import time
 import unittest
 from nose.plugins.attrib import attr
-from framework.base_test import BaseTest, setup_driver, teardown_driver
+from framework.base_test import  setup_driver, teardown_driver
 from framework.utils.data_fetcher import fetch_, from_
 from pages.loginpage.login_page import LoginPage
 from pages.smstesterpage.sms_tester_page import SMSTesterPage

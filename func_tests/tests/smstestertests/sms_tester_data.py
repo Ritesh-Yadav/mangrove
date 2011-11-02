@@ -44,7 +44,7 @@ EXTRA_PLUS_IN_BTW = {SENDER: "1234567890",
 PLUS_IN_THE_BEGINNING = {SENDER: "1234567890",
                          RECEIVER: "919880734937",
                          SMS: ". .cli002 .EID CID005 .NA Mr. Fessy .FA 58 .RD 17.05.2011 .BG b .SY ade",
-                         ERROR_MSG: "Error with Questionnaire code .. Find the Questionnaire code on the printed questionnaire and resend SMS starting with this questionnaire code."}
+                         ERROR_MSG: "Error: SMS Incorrect. Review printed questionnaire and re-send SMS."}
 
 UNREGISTERED_FROM_NUMBER = {SENDER: "123445567",
                             RECEIVER: "919880734937",
@@ -63,8 +63,8 @@ REGISTER_DATA_SENDER_FROM_UNKNOWN_NUMBER = {SENDER: "12345678453",
 
 REGISTER_NEW_SUBJECT = {SENDER: "1234567890",
                         RECEIVER: "919880734937",
-                        SMS: "REG .T Clinic .m   123456 .l Jaipur .G 26.917 75.817 ..  .n Clinic Jaipur .S CLIJPR . ",
-                        ERROR_MSG: "Registration successful. Unique identification number(ID) is: clijpr.We received : t: Clinic m: 123456 l: jaipur g: 26.917,75.817 n: Clinic Jaipur s: CLIJPR"}
+                        SMS: "REG .T Clinic .m   123456 .l Jaipur .G 26.917 75.817 ..  .n Clinic Jaipur .S cid112 . ",
+                        ERROR_MSG: "Registration successful. Unique identification number(ID) is: cid112.We received : t: Clinic m: 123456 l: jaipur g: 26.917,75.817 n: Clinic Jaipur s: cid112"}
 
 REGISTER_EXISTING_SUBJECT_SHORT_CODE = {SENDER: "1234567890",
                                         RECEIVER: "919880734937",
