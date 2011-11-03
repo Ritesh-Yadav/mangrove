@@ -29,7 +29,7 @@ class TestCreateProject(BaseTest):
         """
         create_project_page = self.prerequisites_of_create_project()
         create_project_page.create_project_with(VALID_DATA)
-        create_subject_questionnaire_page = create_project_page.save_project_successfully()
+        create_project_page.save_and_create_project_successfully()
         self.assertRegexpMatches(self.driver.get_title(),
                                  fetch_(PAGE_TITLE, from_(VALID_DATA)))
 
@@ -41,6 +41,6 @@ class TestCreateProject(BaseTest):
         """
         create_project_page = self.prerequisites_of_create_project()
         create_project_page.create_project_with(BLANK_FIELDS)
-        create_project_page.save_project()
+        create_project_page.save_and_create_project()
         self.assertEqual(create_project_page.get_error_message(),
                          fetch_(ERROR_MSG, from_(BLANK_FIELDS)))

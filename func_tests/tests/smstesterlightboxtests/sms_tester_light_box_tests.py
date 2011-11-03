@@ -24,7 +24,7 @@ class TestSMSTesterLightBox(BaseTest):
         project_overview_page = all_project_page.navigate_to_project_overview_page(
             fetch_(PROJECT_NAME, from_(PROJECT_DATA)))
         edit_project_page = project_overview_page.navigate_to_edit_project_page()
-        subject_questionnaire_page = edit_project_page.save_project_successfully()
+        subject_questionnaire_page = edit_project_page.save_and_create_project_successfully()
         questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
         datsender_questionnaire_page = questionnaire_page.save_questionnaire_successfully()
         reminder_page = datsender_questionnaire_page.save_questionnnaire_successfully()
@@ -53,6 +53,7 @@ class TestSMSTesterLightBox(BaseTest):
         sms_tester_page.send_sms_with(VALID_DATA)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA)))
 
+    @SkipTest
     @attr('functional_test')
     def test_sms_player_for_exceeding_word_length(self):
         """
@@ -62,6 +63,7 @@ class TestSMSTesterLightBox(BaseTest):
         sms_tester_page.send_sms_with(EXCEED_NAME_LENGTH)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(EXCEED_NAME_LENGTH)))
 
+    @SkipTest
     @attr('functional_test', 'smoke')
     def test_successful_sms_submission(self):
         """
@@ -71,11 +73,13 @@ class TestSMSTesterLightBox(BaseTest):
         sms_tester_page.send_sms_with(VALID_DATA2)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA2)))
 
+    @attr('functional_test', 'smoke')
     def test_successful_ordered_sms_submission(self):
         sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
         sms_tester_page.send_sms_with(VALID_DATA3)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA2)))
 
+    @SkipTest
     @attr('functional_test')
     def test_sms_submission_for_unicode(self):
         """

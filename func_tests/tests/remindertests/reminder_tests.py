@@ -21,7 +21,7 @@ class TestReminderSend(BaseTest):
         return create_project_page
 
     def create_project_to_reminder_page(self, create_project_page):
-        create_subject_questionnaire_page = create_project_page.save_project_successfully()
+        create_subject_questionnaire_page = create_project_page.save_and_create_project_successfully()
         create_questionnaire_page = create_subject_questionnaire_page.save_questionnaire_successfully()
         create_data_sender_questionnaire_page = create_questionnaire_page.save_questionnaire_successfully()
         reminder_page = create_data_sender_questionnaire_page.save_questionnnaire_successfully()

@@ -4,6 +4,7 @@ from pages.createsubjectquestionnairepage.create_subject_questionnaire_page impo
 from pages.lightbox.light_box_page import LightBox
 from framework.utils.data_fetcher import *
 from pages.createprojectpage.create_project_locator import *
+from pages.projectoverviewpage.project_overview_page import ProjectOverviewPage
 from tests.createprojecttests.create_project_data import *
 from pages.page import Page
 
@@ -58,10 +59,10 @@ class CreateProjectPage(Page):
         """
         self.type_project_name(project_data)
         self.type_project_description(project_data)
-        self.select_project_type(project_data)
+        #self.select_project_type(project_data)
         self.select_report_type(project_data)
         self.set_subject(project_data)
-        self.select_devices(project_data)
+        #self.select_devices(project_data)
         return self
 
     def select_devices(self, project_data):
@@ -85,12 +86,12 @@ class CreateProjectPage(Page):
         #        elif comm_utils.is_element_present(WEB_CB_CHECKED):
         #                self.driver.find(WEB_CB).toggle()
 
-    def save_project_successfully(self):
-        self.driver.find(SAVE_CHANGES_BTN).click()
-        return CreateSubjectQuestionnairePage(self.driver)
+    def save_and_create_project_successfully(self):
+        self.driver.find(SAVE_AND_CREATE_BTN).click()
+        return ProjectOverviewPage(self.driver)
 
-    def save_project(self):
-        self.driver.find(SAVE_CHANGES_BTN).click()
+    def save_and_create_project(self):
+        self.driver.find(SAVE_AND_CREATE_BTN).click()
         return self
 
     def set_subject(self, project_data):
@@ -116,12 +117,12 @@ class CreateProjectPage(Page):
         locator = comm_utils.is_element_present(PROJECT_NAME_ERROR_MSG_LABEL)
         if locator:
             error_message = error_message + "Name  " + locator.text
-        locator = comm_utils.is_element_present(PROJECT_TYPE_ERROR_MSG_LABEL)
-        if locator:
-            error_message = error_message + "Project Type  " + locator.text
-        locator = comm_utils.is_element_present(QUESTIONNAIRE_ABOUT_MSG_LABEL)
-        if locator:
-            error_message = error_message + "Activity Report Type  " + locator.text
+#        locator = comm_utils.is_element_present(PROJECT_TYPE_ERROR_MSG_LABEL)
+#        if locator:
+#            error_message = error_message + "Project Type  " + locator.text
+#        locator = comm_utils.is_element_present(QUESTIONNAIRE_ABOUT_MSG_LABEL)
+#        if locator:
+#            error_message = error_message + "Activity Report Type  " + locator.text
         return error_message == "" and "No error message on the page" or error_message
 
     def get_selected_subject(self):

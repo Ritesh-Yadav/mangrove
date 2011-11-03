@@ -7,6 +7,7 @@ from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.reviewandtests.review_data import *
 from tests.testsettings import CLOSE_BROWSER_AFTER_TEST
+from nose.plugins.skip import SkipTest
 
 
 class TestReviewProject(BaseTest):
@@ -38,12 +39,13 @@ class TestReviewProject(BaseTest):
         project_overview_page = all_project_page.navigate_to_project_overview_page(fetch_(PROJECT_NAME, from_(
             fetch_(PROJECT_PROFILE, from_(VALID_DATA)))))
         edit_project_page = project_overview_page.navigate_to_edit_project_page()
-        subject_questionnaire_page = edit_project_page.save_project_successfully()
+        subject_questionnaire_page = edit_project_page.save_and_create_project_successfully()
         questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
         datsender_questionnaire_page = questionnaire_page.save_questionnaire_successfully()
         reminder_page = datsender_questionnaire_page.save_questionnnaire_successfully()
         return reminder_page.save_reminder_successfully()
 
+    @SkipTest
     @attr('functional_test', 'smoke')
     def test_successful_review_of_project(self):
         """
