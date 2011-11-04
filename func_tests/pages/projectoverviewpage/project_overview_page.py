@@ -20,6 +20,10 @@ class ProjectOverviewPage(Page):
         self.driver.find(MESSAGES_AND_REMINDERS_TAB).click()
         return BroadcastSmsPage(self.driver)
 
+    def navigate_to_send_message_page(self):
+        self.driver.find(SEND_MESSAGE_TAB).click()
+        return BroadcastSmsPage(self.driver)
+
     def navigate_to_reminder_page(self):
         self.driver.find(MESSAGES_AND_REMINDERS_TAB).click()
         AllReminderPage(self.driver).click_schedule_reminder_tab()
