@@ -493,7 +493,6 @@ def create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     form_model.save()
     return form_model
 
-
 def _create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     form_model = _construct_registration_form(manager, name, form_code, entity_type)
     return form_model
