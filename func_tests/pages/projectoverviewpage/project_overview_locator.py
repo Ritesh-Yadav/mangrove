@@ -22,4 +22,4 @@ MESSAGES_AND_REMINDERS_TAB = by_css("div.tab_navigation a.messages_and_reminders
 ACTIVATE_PROJECT_LINK = by_css("a.activate_project")
 PROJECT_EDIT_LINK = by_css("a#edit_project")
 PROJECT_STATUS_LABEL = by_css("span.project_status>span")
-TEST_QUESTIONNAIRE_LINK = by_css("a#sms_tester")
+TEST_QUESTIONNAIRE_LINK = by_css("a.sms_tester")

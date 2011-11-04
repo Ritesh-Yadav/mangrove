@@ -1,6 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from pages.broadcastSMSpage.broadcast_sms_page import BroadcastSmsPage
-from pages.createprojectpage.create_project_page import *
 from pages.dataanalysispage.data_analysis_page import DataAnalysisPage
 from pages.lightbox.light_box_page import LightBox
 from pages.projectoverviewpage.project_overview_locator import *
@@ -32,6 +31,7 @@ class ProjectOverviewPage(Page):
 
     def navigate_to_edit_project_page(self):
         self.driver.find(PROJECT_EDIT_LINK).click()
+        from pages.createprojectpage.create_project_page import CreateProjectPage
         return CreateProjectPage(self.driver)
 
     def open_activate_project_light_box(self):

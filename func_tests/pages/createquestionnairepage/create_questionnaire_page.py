@@ -3,14 +3,15 @@
 from framework.utils.data_fetcher import *
 from pages.createdatasenderquestionnairepage.create_data_sender_questionnaire_page import CreateDataSenderQuestionnairePage
 from pages.createquestionnairepage.create_questionnaire_locator import *
+from pages.page import Page
 from tests.createquestionnairetests.create_questionnaire_data import *
 from framework.utils.common_utils import generateId, CommonUtilities
-from pages.page import Page
+from pages.createprojectpage.create_project_page import CreateProjectPage
 
 
-class CreateQuestionnairePage(Page):
+class CreateQuestionnairePage(CreateProjectPage):
     def __init__(self, driver):
-        Page.__init__(self, driver)
+        CreateProjectPage.__init__(self, driver)
         self.SELECT_FUNC = {WORD: self.configure_word_type_question,
                             NUMBER: self.configure_number_type_question,
                             DATE: self.configure_date_type_question,

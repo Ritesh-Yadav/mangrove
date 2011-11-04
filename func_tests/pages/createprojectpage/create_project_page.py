@@ -1,12 +1,11 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from framework.utils.common_utils import CommonUtilities, generateId
-from pages.createsubjectquestionnairepage.create_subject_questionnaire_page import CreateSubjectQuestionnairePage
 from pages.lightbox.light_box_page import LightBox
 from framework.utils.data_fetcher import *
 from pages.createprojectpage.create_project_locator import *
 from pages.projectoverviewpage.project_overview_page import ProjectOverviewPage
 from tests.createprojecttests.create_project_data import *
 from pages.page import Page
+from framework.utils.common_utils import generateId
 
 
 class CreateProjectPage(Page):
@@ -192,11 +191,11 @@ class CreateProjectPage(Page):
         project_details = dict()
         project_details[PROJECT_NAME] = self.get_project_name()
         project_details[PROJECT_BACKGROUND] = self.get_project_description()
-        project_details[PROJECT_TYPE] = self.get_project_type()
+        #project_details[PROJECT_TYPE] = self.get_project_type()
         project_details[REPORT_TYPE] = self.get_report_type()
         if project_details[REPORT_TYPE] == OTHER_SUBJECT:
             project_details[SUBJECT] = self.get_selected_subject()
         else:
             project_details[SUBJECT] = ""
-        project_details[DEVICES] = self.get_devices()
+        #project_details[DEVICES] = self.get_devices()
         return project_details

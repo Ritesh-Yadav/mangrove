@@ -3,6 +3,7 @@ from nose.plugins.attrib import attr
 from nose.plugins.skip import SkipTest
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
+from pages.createquestionnairepage.create_questionnaire_page import CreateQuestionnairePage
 from pages.loginpage.login_page import LoginPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
@@ -20,11 +21,9 @@ class TestEditQuestionnaire(BaseTest):
         all_project_page = global_navigation.navigate_to_view_all_project_page()
         project_overview_page = all_project_page.navigate_to_project_overview_page(
             fetch_(PROJECT_NAME, from_(VALID_PROJECT_DATA)))
-        edit_project_page = project_overview_page.navigate_to_edit_project_page()
-        subject_questionnaire_page = edit_project_page.save_and_create_project_successfully()
-        return subject_questionnaire_page.save_questionnaire_successfully()
+        project_overview_page.navigate_to_edit_project_page()
+        return CreateQuestionnairePage(self.driver)
 
-    @SkipTest
     @attr('functional_test', 'smoke')
     def test_successful_questionnaire_editing(self):
         """
