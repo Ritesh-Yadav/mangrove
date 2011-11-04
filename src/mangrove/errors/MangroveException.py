@@ -279,7 +279,7 @@ class LocationFieldNotPresentException(MangroveException):
 class AccountExpiredException(MangroveException):
     def __init__(self, message = "Trial account has been expired!"):
         MangroveException.__init__(self, message)
-
+        
 class WrongFormCodeException(MangroveException):
     def __init__(self, code):
         MangroveException.__init__(self, "Register entity with its own code: %s" % (code,))

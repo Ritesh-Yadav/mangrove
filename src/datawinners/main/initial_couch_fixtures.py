@@ -106,7 +106,6 @@ def load_datadict_types(manager):
 def create_clinic_registration_form(CLINIC_ENTITY_TYPE, manager):
     description_type = get_or_create_data_dict(manager, name='description Type', slug='description',
                                                primitive_type='string')
-
     question1 = TextField(name="description", code="d", label="Describe the subject",
                           defaultValue="some default value", language="en", ddtype=description_type,
                           instruction="Describe your subject in more details (optional)", required=False)
