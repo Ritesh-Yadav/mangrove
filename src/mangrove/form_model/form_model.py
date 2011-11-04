@@ -493,7 +493,7 @@ def get_default_questions(manager):
     mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
                                                  primitive_type='string')
 
-    question1 = TextField(name=NAME_FIELD, code=NAME_FIELD_CODE, label="What is the subject's lastname?",
+    question1 = TextField(name=NAME_FIELD, code=NAME_FIELD_CODE, label="What is the subject's name?",
                           defaultValue="some default value", language="en", ddtype=name_type,
                           instruction="Enter a subject name")
     question2 = TextField(name=SHORT_CODE_FIELD, code=SHORT_CODE, label="What is the subject's Unique ID Number",
