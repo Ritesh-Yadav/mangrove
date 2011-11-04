@@ -470,14 +470,17 @@ def _create_default_reg_form_model(manager, name=None, form_code=None, entity_ty
     form_model.add_field(question3)
     return form_model
 
+
 def create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     form_model = _construct_registration_form(manager, name, form_code, entity_type)
     form_model.save()
     return form_model
 
+
 def _create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     form_model = _construct_registration_form(manager, name, form_code, entity_type)
     return form_model
+
 
 def create_constraints_for_mobile_number():
     #constraints on questionnaire
