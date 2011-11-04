@@ -37,22 +37,22 @@ class TestFormModel(unittest.TestCase):
         self.datadict_patcher.stop()
 
     def test_should_create_default_registration_form_model(self):
-        form = _create_default_reg_form_model(self.dbm)
+        form = create_default_reg_form_model(self.dbm)
         self.assertEqual(7, len(form.fields))
         self.assertEqual(REGISTRATION_FORM_CODE, form.form_code)
 
     def test_should_create_registration_form_model(self):
-        form = _create_reg_form_model(self.dbm, "cli", "cli", ["clinic"])
+        form = create_reg_form_model(self.dbm, "cli", "cli", ["clinic"])
         self.assertEqual(4, len(form.fields))
         self.assertEqual("cli", form.form_code)
 
     def test_default_registration_form_should_have_entity_type_field(self):
-        form = _create_default_reg_form_model(self.dbm)
+        form = create_default_reg_form_model(self.dbm)
         field = form.get_field_by_code("T")
         self.assertIsNotNone(field)
 
     def test_registration_form_should_have_multiple_constraints_on_mobile(self):
-        form = _create_default_reg_form_model(self.dbm)
+        form = create_default_reg_form_model(self.dbm)
         field = form.get_field_by_code(MOBILE_NUMBER_FIELD_CODE)
         self.assertEqual(15, field.constraints[0].max)
         self.assertEqual("^[0-9]+$", field.constraints[1].pattern)
@@ -156,14 +156,14 @@ class TestFormModel(unittest.TestCase):
 
     def test_create_form_submission_with_entity_type_as_lowercase_list_of_string(self):
         answers = {"s": "1", "t": "Reporter", "g": "1 1", "m": "1212121212"}
-        registration_form = _create_default_reg_form_model(self.dbm)
+        registration_form = create_default_reg_form_model(self.dbm)
         form_submission = registration_form.validate_submission(answers)
         self.assertEqual(["reporter"], form_submission.entity_type)
 
 
     def test_should_throw_exception_if_no_location_field_provided_while_registering_an_entity(self):
         answers = {"s": "1", "t": "Reporter", "m": "1212121212"}
-        registration_form = _create_default_reg_form_model(self.dbm)
+        registration_form = create_default_reg_form_model(self.dbm)
         with self.assertRaises(LocationFieldNotPresentException):
             registration_form.validate_submission(answers)
 
