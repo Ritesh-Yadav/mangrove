@@ -83,7 +83,7 @@ def sms(request):
         log.save()
     except NumberNotRegisteredException as exception:
         message = get_exception_message_for(exception=exception, channel=SMS)
-        log = DatawinnerLog(message=_message, from_number=_from, to_number=_to, form_code=None, error=message)
+        log = DatawinnerLog(message=_message, from_number=_from, to_number=_to, error=message)
         log.save()
     except DataObjectNotFound as exception:
         message = exception_messages.get(DataObjectNotFound).get(SMS)
