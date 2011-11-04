@@ -440,6 +440,7 @@ def create_default_reg_form_model(manager):
     form_model.save()
     return form_model
 
+
 def _create_default_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     entity_id_type = get_or_create_data_dict(manager, name='Entity Id Type', slug='entity_id', primitive_type='string')
     mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
