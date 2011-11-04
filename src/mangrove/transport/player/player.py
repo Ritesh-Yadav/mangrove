@@ -6,7 +6,7 @@ from datawinners.entity.entity_exceptions import InvalidFileFormatException
 from datawinners.location.LocationTree import get_location_hierarchy
 from mangrove.datastore.queries import get_entity_count_for_type
 from mangrove.errors.MangroveException import MangroveException, GeoCodeFormatException
-from mangrove.form_model.form_model import get_form_model_by_code, ENTITY_TYPE_FIELD_CODE, NAME_FIELD, LOCATION_TYPE_FIELD_CODE, GEO_CODE
+from mangrove.form_model.form_model import get_form_model_by_code, ENTITY_TYPE_FIELD_CODE, NAME_FIELD, LOCATION_TYPE_FIELD_CODE, GEO_CODE, REGISTRATION_FORM_CODE
 from mangrove.transport import reporter
 from mangrove.transport.player.parser import KeyBasedSMSParser, WebParser, CsvParser, XlsParser
 from mangrove.transport.submissions import  Submission
@@ -73,10 +73,13 @@ def _generate_short_code(dbm, entity_type):
 
 def _set_short_code(dbm, form_model, values):
     entity_q_code = form_model.entity_question.code
-    try:
-        values[entity_q_code] = _generate_short_code(dbm, values[ENTITY_TYPE_FIELD_CODE].lower())
-    except KeyError:
-        raise MangroveException(ENTITY_TYPE_FIELD_CODE + " should be present")
+    if form_model.form_code == REGISTRATION_FORM_CODE:
+        try:
+            values[entity_q_code] = _generate_short_code(dbm, values[ENTITY_TYPE_FIELD_CODE].lower())
+        except KeyError:
+            raise MangroveException(ENTITY_TYPE_FIELD_CODE + " should be present")
+    else:
+        values[entity_q_code] = _generate_short_code(dbm, form_model.entity_type[0].lower())
 
 class Player(object):
     def __init__(self, dbm, location_tree=None):
