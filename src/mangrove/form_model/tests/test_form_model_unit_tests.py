@@ -6,7 +6,7 @@ from mangrove.datastore.database import DatabaseManager
 from mangrove.datastore.datadict import DataDictType
 from mangrove.errors.MangroveException import EntityQuestionCodeNotSubmitted, NoQuestionsSubmittedException, LocationFieldNotPresentException
 from mangrove.form_model.field import TextField, IntegerField, SelectField
-from mangrove.form_model.form_model import FormModel, REGISTRATION_FORM_CODE, MOBILE_NUMBER_FIELD_CODE, _create_reg_form_model, _create_default_reg_form_model
+from mangrove.form_model.form_model import _construct_registration_form, FormModel, REGISTRATION_FORM_CODE, MOBILE_NUMBER_FIELD_CODE, create_reg_form_model, create_default_reg_form_model
 from mangrove.form_model.validation import NumericRangeConstraint, TextLengthConstraint
 
 
