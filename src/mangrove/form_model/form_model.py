@@ -7,7 +7,7 @@ from mangrove.datastore.documents import FormModelDocument, attributes
 from mangrove.datastore.entity import    entities_exists_with_value
 from mangrove.errors.MangroveException import FormModelDoesNotExistsException, QuestionCodeAlreadyExistsException,\
     EntityQuestionAlreadyExistsException, MangroveException, DataObjectAlreadyExists, \
-    NoQuestionsSubmittedException, MultipleReportersForANumberException, InactiveFormModelException, LocationFieldNotPresentException, MobileNumberMissing
+    NoQuestionsSubmittedException, MultipleReportersForANumberException, InactiveFormModelException, LocationFieldNotPresentException, MobileNumberMissing, WrongFormCodeException
 from mangrove.form_model.field import TextField, GeoCodeField, HierarchyField, TelephoneNumberField
 from mangrove.form_model.validation import TextLengthConstraint, RegexConstraint
 from mangrove.form_model.validators import MandatoryValidator
@@ -50,7 +50,7 @@ class FormModel(DataObject):
     __document_class__ = FormModelDocument
 
     def __init__(self, dbm, name=None, label=None, form_code=None, fields=None, entity_type=None, type=None,
-                 language="en", state=attributes.ACTIVE_STATE, validators=[MandatoryValidator()]):
+                 language="en", state=attributes.ACTIVE_STATE, flag_reg=False, validators=[MandatoryValidator()]):
         assert isinstance(dbm, DatabaseManager)
         assert name is None or is_not_empty(name)
         assert fields is None or is_sequence(fields)
@@ -79,6 +79,7 @@ class FormModel(DataObject):
         doc.type = type
         doc.state = state
         doc.active_languages = language
+        doc.flag_reg = flag_reg
         DataObject._set_document(self, doc)
 
     @property
@@ -137,6 +138,10 @@ class FormModel(DataObject):
     @property
     def activeLanguages(self):
         return self._doc.active_languages
+
+    @property
+    def flag_reg(self):
+        return self._doc.flag_reg
 
     @activeLanguages.setter
     def activeLanguages(self, value):
@@ -201,7 +206,7 @@ class FormModel(DataObject):
 
 
     def is_registration_form(self):
-        return self.form_code.lower() == REGISTRATION_FORM_CODE.lower()
+        return self.flag_reg
 
     def entity_defaults_to_reporter(self):
         return self.entity_type == [REPORTER]
@@ -278,6 +283,17 @@ class FormModel(DataObject):
                 return answers[key]
         return None
 
+    def _find_form_model_by_entity_type(self, entity_type):
+        rows = self._dbm.load_all_rows_in_view('questionnaire')
+        for row in rows:
+            if row.value['flag_reg'] and row.value['entity_type'][0] == entity_type: return True
+        return False
+
+
+    def _validate_entity_registered_with_own_form_model(self, entity_type):
+        if self.form_code == REGISTRATION_FORM_CODE and self._find_form_model_by_entity_type(entity_type):
+            raise WrongFormCodeException(self.form_code)
+
     def _validate_mandatory_fields_have_values(self, values):
         if self.is_registration_form() and self.get_entity_type(values) == REPORTER.lower() and is_empty(
             self._case_insensitive_lookup(values, MOBILE_NUMBER_FIELD_CODE)):
@@ -300,6 +316,7 @@ class FormModel(DataObject):
         assert values is not None
         cleaned_values = OrderedDict()
         errors = OrderedDict()
+        self._validate_entity_registered_with_own_form_model(self.get_entity_type(values))
         for validator in self.validators:
             errors.update(validator.validate(values, self.fields))
         self._validate_mandatory_fields_have_values(values)
@@ -372,7 +389,7 @@ class FormSubmission(object):
             self.cleaned_data[MOBILE_NUMBER_FIELD_CODE] = phone_number
 
     def _get_entity_type(self, form_model):
-        if form_model.is_registration_form():
+        if form_model.is_registration_form() and form_model.form_code == REGISTRATION_FORM_CODE:
             entity_type = self._get_answer_for(ENTITY_TYPE_FIELD_CODE)
         else:
             entity_type = self.form_model.entity_type
@@ -408,12 +425,36 @@ class FormSubmission(object):
 
 
 def create_default_reg_form_model(manager):
-    form_model = _construct_registration_form(manager)
+    entity_id_type = get_or_create_data_dict(manager, name='Entity Id Type', slug='entity_id', primitive_type='string')
+    mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
+                                                 primitive_type='string')
+    description_type = get_or_create_data_dict(manager, name='description Type', slug='description',
+                                               primitive_type='string')
+    question1 = HierarchyField(name=ENTITY_TYPE_FIELD_NAME, code=ENTITY_TYPE_FIELD_CODE,
+                               label="What is associated subject type?",
+                               language="en", ddtype=entity_id_type, instruction="Enter a type for the subject")
+    question2 = TextField(name=DESCRIPTION_FIELD, code=DESCRIPTION_FIELD_CODE, label="Describe the subject",
+                          defaultValue="some default value", language="en", ddtype=description_type,
+                          instruction="Describe your subject in more details (optional)", required=False)
+    question3 = TelephoneNumberField(name=MOBILE_NUMBER_FIELD, code=MOBILE_NUMBER_FIELD_CODE,
+                                     label="What is the mobile number associated with the subject?",
+                                     defaultValue="some default value", language="en", ddtype=mobile_number_type,
+                                     instruction="Enter the subject's number", constraints=(
+            create_constraints_for_mobile_number()), required=False)
+
+    form_model = _construct_registration_form(manager, "reg", REGISTRATION_FORM_CODE, ["Registration"])
+    form_model.add_field(question1)
+    form_model.add_field(question2)
+    form_model.add_field(question3)
     form_model.save()
     return form_model
 
+def create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
+    form_model = _construct_registration_form(manager, name, form_code, entity_type)
+    form_model.save()
+    return form_model
 
-def _create_constraints_for_mobile_number():
+def create_constraints_for_mobile_number():
     #constraints on questionnaire
     mobile_number_length = TextLengthConstraint(max=15)
     mobile_number_pattern = RegexConstraint(reg='^[0-9]+$')
@@ -421,40 +462,24 @@ def _create_constraints_for_mobile_number():
     return mobile_constraints
 
 
-def _construct_registration_form(manager):
+def _construct_registration_form(manager, name=None, form_code=None, entity_type=None):
     location_type = get_or_create_data_dict(manager, name='Location Type', slug='location', primitive_type='string')
     geo_code_type = get_or_create_data_dict(manager, name='GeoCode Type', slug='geo_code', primitive_type='geocode')
-    description_type = get_or_create_data_dict(manager, name='description Type', slug='description',
-                                               primitive_type='string')
-    mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
-                                                 primitive_type='string')
     name_type = get_or_create_data_dict(manager, name='Name', slug='name', primitive_type='string')
-    entity_id_type = get_or_create_data_dict(manager, name='Entity Id Type', slug='entity_id', primitive_type='string')
 
-    question1 = HierarchyField(name=ENTITY_TYPE_FIELD_NAME, code=ENTITY_TYPE_FIELD_CODE,
-                               label="What is associated subject type?",
-                               language="en", ddtype=entity_id_type, instruction="Enter a type for the subject")
-
-    question2 = TextField(name=NAME_FIELD, code=NAME_FIELD_CODE, label="What is the subject's name?",
+    question1 = TextField(name=NAME_FIELD, code=NAME_FIELD_CODE, label="What is the subject's name?",
                           defaultValue="some default value", language="en", ddtype=name_type,
                           instruction="Enter a subject name")
-    question3 = TextField(name=SHORT_CODE_FIELD, code=SHORT_CODE, label="What is the subject's Unique ID Number",
+    question2 = TextField(name=SHORT_CODE_FIELD, code=SHORT_CODE, label="What is the subject's Unique ID Number",
                           defaultValue="some default value", language="en", ddtype=name_type,
                           instruction="Enter a id, or allow us to generate it",
                           entity_question_flag=True, constraints=[TextLengthConstraint(max=12)], required=False)
-    question4 = HierarchyField(name=LOCATION_TYPE_FIELD_NAME, code=LOCATION_TYPE_FIELD_CODE,
+    question3 = HierarchyField(name=LOCATION_TYPE_FIELD_NAME, code=LOCATION_TYPE_FIELD_CODE,
                                label="What is the subject's location?",
                                language="en", ddtype=location_type, instruction="Enter a region, district, or commune", required=False)
-    question5 = GeoCodeField(name=GEO_CODE_FIELD, code=GEO_CODE, label="What is the subject's GPS co-ordinates?",
+    question4 = GeoCodeField(name=GEO_CODE_FIELD, code=GEO_CODE, label="What is the subject's GPS co-ordinates?",
                              language="en", ddtype=geo_code_type, instruction="Enter lat and long. Eg 20.6, 47.3", required=False)
-    question6 = TextField(name=DESCRIPTION_FIELD, code=DESCRIPTION_FIELD_CODE, label="Describe the subject",
-                          defaultValue="some default value", language="en", ddtype=description_type,
-                          instruction="Describe your subject in more details (optional)", required=False)
-    question7 = TelephoneNumberField(name=MOBILE_NUMBER_FIELD, code=MOBILE_NUMBER_FIELD_CODE,
-                                     label="What is the mobile number associated with the subject?",
-                                     defaultValue="some default value", language="en", ddtype=mobile_number_type,
-                                     instruction="Enter the subject's number", constraints=(
-            _create_constraints_for_mobile_number()), required=False)
-    form_model = FormModel(manager, name="reg", form_code=REGISTRATION_FORM_CODE, fields=[
-        question1, question2, question3, question4, question5, question6, question7], entity_type=["Registration"])
+
+    form_model = FormModel(manager, name=name, form_code=form_code, fields=[
+        question1, question2, question3, question4], flag_reg=True, entity_type=entity_type)
     return form_model

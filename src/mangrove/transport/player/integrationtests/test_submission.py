@@ -11,9 +11,10 @@ from mangrove.datastore.database import get_db_manager, _delete_db_and_remove_db
 from mangrove.datastore.documents import SubmissionLogDocument, DataRecordDocument
 from mangrove.datastore.entity import get_by_short_code, create_entity
 from mangrove.datastore.entity_type import define_type
-from mangrove.errors.MangroveException import  DataObjectAlreadyExists, EntityTypeDoesNotExistsException, InactiveFormModelException, GeoCodeFormatException, MultipleReportersForANumberException, MobileNumberMissing
+from mangrove.errors.MangroveException import  DataObjectAlreadyExists, EntityTypeDoesNotExistsException, \
+    InactiveFormModelException, GeoCodeFormatException, MultipleReportersForANumberException, MobileNumberMissing, WrongFormCodeException
 
-from mangrove.form_model.field import TextField, IntegerField, SelectField
+from mangrove.form_model.field import TextField, IntegerField, SelectField, HierarchyField, GeoCodeField
 from mangrove.form_model.form_model import FormModel, NAME_FIELD, MOBILE_NUMBER_FIELD
 from mangrove.form_model.validation import NumericRangeConstraint, TextLengthConstraint
 from mangrove.transport.player.parser import KeyBasedSMSParser
@@ -35,6 +36,7 @@ class TestShouldSaveSMSSubmission(unittest.TestCase):
         self.dbm = get_db_manager(database='mangrove-test')
         initializer.run(self.dbm)
         define_type(self.dbm, ["dog"])
+        define_type(self.dbm, ["cat"])
         self.entity_type = ["healthfacility", "clinic"]
         define_type(self.dbm, self.entity_type)
         self.name_type = DataDictType(self.dbm, name='Name', slug='name', primitive_type='string')
@@ -43,6 +45,8 @@ class TestShouldSaveSMSSubmission(unittest.TestCase):
         self.entity_id_type = DataDictType(self.dbm, name='Entity Id Type', slug='entity_id', primitive_type='string')
         self.stock_type = DataDictType(self.dbm, name='Stock Type', slug='stock', primitive_type='integer')
         self.color_type = DataDictType(self.dbm, name='Color Type', slug='color', primitive_type='string')
+        self.location_type = DataDictType(self.dbm, name='Location Type', slug='location', primitive_type='string')
+        self.geo_code_type = DataDictType(self.dbm, name='GeoCode Type', slug='geo_code', primitive_type='geocode')
 
         self.name_type.save()
         self.telephone_number_type.save()
@@ -78,6 +82,24 @@ class TestShouldSaveSMSSubmission(unittest.TestCase):
                                     form_code="clinic", type='survey', fields=[question1, question2, question3])
         self.form_model.add_field(question4)
         self.form_model__id = self.form_model.save()
+
+        reg_question1 = TextField(name="name", code="na", label="What is the subject's name?",
+                              defaultValue="some default value", language="en", ddtype=self.name_type,
+                              instruction="Enter a subject name")
+        reg_question2 = TextField(name="short_code", code="sc", label="What is the subject's Unique ID Number",
+                              defaultValue="some default value", language="en", ddtype=self.name_type,
+                              instruction="Enter a id, or allow us to generate it",
+                              entity_question_flag=True, constraints=[TextLengthConstraint(max=12)], required=False)
+        reg_question3 = HierarchyField(name="location", code="l",
+                                   label="What is the subject's location?",
+                                   language="en", ddtype=self.location_type, instruction="Enter a region, district, or commune", required=False)
+        reg_question4 = GeoCodeField(name="geo_code", code="g", label="What is the subject's GPS co-ordinates?",
+                                 language="en", ddtype=self.geo_code_type, instruction="Enter lat and long. Eg 20.6, 47.3", required=False)
+
+        self.reg_form_model = FormModel(self.dbm, name="cat", form_code="cat", fields=[
+            reg_question1, reg_question2, reg_question3, reg_question4], flag_reg=True, entity_type=["cat"])
+        self.reg_form_model.save()
+
 
         self.submission_handler = None
         self.sms_player = SMSPlayer(self.dbm, LocationTree())
@@ -215,6 +237,15 @@ class TestShouldSaveSMSSubmission(unittest.TestCase):
         b = get_by_short_code(self.dbm, expected_short_code, ["dog"])
         self.assertEqual(b.short_code, expected_short_code)
 
+        message2 = "cat .na  Hello Kitty .l Mananjary .g -12.35 49.3"
+        response = self.send_sms(message2)
+        self.assertTrue(response.success)
+        self.assertIsNotNone(response.datarecord_id)
+        expected_short_code = "cat1"
+        self.assertEqual(response.short_code, expected_short_code)
+        a = get_by_short_code(self.dbm, expected_short_code, ["cat"])
+        self.assertEqual(a.short_code, expected_short_code)
+
     def test_should_return_error_for_registration_having_invalid_geo_data(self):
         INVALID_LATITUDE = 380
         text = "reg .N buddy2 .T dog .G %s 80 .D its another dog! .M 78541" % (INVALID_LATITUDE,)
@@ -223,8 +254,20 @@ class TestShouldSaveSMSSubmission(unittest.TestCase):
         self.assertFalse(response.success)
         self.assertEqual({'g': 'The answer 380 must be between -90 and 90'}, response.errors)
 
+        text = "cat .na hello kitty .g %s 80" % (INVALID_LATITUDE,)
+
+        response = self.send_sms(text)
+        self.assertFalse(response.success)
+        self.assertEqual({'g': 'The answer 380 must be between -90 and 90'}, response.errors)
+
         INVALID_LONGITUDE = -184
         text = "reg .N buddy2 .T dog .G 80 %s .D its another dog! .M 78541" % (INVALID_LONGITUDE,)
+
+        response = self.send_sms(text)
+        self.assertFalse(response.success)
+        self.assertEqual({'g': 'The answer -184 must be between -180 and 180'}, response.errors)
+
+        text = "cat .na hello kitty .g 80 %s" % (INVALID_LONGITUDE,)
 
         response = self.send_sms(text)
         self.assertFalse(response.success)
@@ -279,7 +322,12 @@ class TestShouldSaveSMSSubmission(unittest.TestCase):
 
     def test_should_throw_error_if_entityType_doesnt_exist(self):
         with self.assertRaises(EntityTypeDoesNotExistsException):
-            text = "reg .N buddy1 .S DOG3 .T cat .L 80 80 .D its another dog! .M 1234567"
+            text = "reg .N buddy1 .S DOG3 .T cow .L 80 80 .D its another dog! .M 1234567"
+            self.send_sms(text)
+
+    def test_should_throw_error_if_entity_with_own_form_registered_with_default_form(self):
+        with self.assertRaises(WrongFormCodeException):
+            text = "reg .na Hello Kitty .T cat .L 80 80 .D its a cat .M 1234567"
             self.send_sms(text)
 
     def test_entity_instance_is_case_insensitive(self):
@@ -311,7 +359,7 @@ class TestShouldSaveSMSSubmission(unittest.TestCase):
         text = "reg .s Āgra .n Agra .m 080 .t clinic .g 45O 56"
         self.assertEqual(False, self.send_sms(text).success)
 
-    def test_should_reject_registration_sms_if_type_not_provided(self):
+    def test_should_reject_registration_sms_with_default_form_if_type_not_provided(self):
         text = "reg .s Āgra .n Agra .m 080 .g 45 56"
         response = self.send_sms(text)
         self.assertFalse(response.success)
@@ -350,6 +398,15 @@ class TestShouldSaveSMSSubmission(unittest.TestCase):
         dog = get_by_short_code(self.dbm, expected_short_code, ["dog"])
         self.assertEqual([-12.35, 49.3], dog.geometry.get("coordinates"))
 
+        message2 = "cat .na Tomcat .g -12.35  49.3"
+        response = self.send_sms(message2)
+        self.assertTrue(response.success)
+        self.assertIsNotNone(response.datarecord_id)
+        expected_short_code = 'cat1'
+        self.assertEqual(response.short_code, expected_short_code)
+        cat = get_by_short_code(self.dbm, expected_short_code, ["cat"])
+        self.assertEqual([-12.35, 49.3], cat.geometry.get("coordinates"))
+
     def test_should_register_entity_with_geocode_if_only_location_provided(self):
         message1 = """reg .t dog .n Dog in AMPIZARANTANY .l AMPIZARANTANY .d This is a Dog in
         AMPIZARANTANY . m
@@ -362,6 +419,15 @@ class TestShouldSaveSMSSubmission(unittest.TestCase):
         self.assertEqual(response.short_code, expected_short_code)
         dog = get_by_short_code(self.dbm, expected_short_code, ["dog"])
         self.assertEqual([-12, 60], dog.geometry.get("coordinates"))
+
+        message2 = "cat .na Tomcat in AMPIZARANTANY .l AMPIZARANTANY"
+        response = self.send_sms(message2)
+        self.assertTrue(response.success)
+        self.assertIsNotNone(response.datarecord_id)
+        expected_short_code = 'cat1'
+        self.assertEqual(response.short_code, expected_short_code)
+        cat = get_by_short_code(self.dbm, expected_short_code, ["cat"])
+        self.assertEqual([-12, 60], cat.geometry.get("coordinates"))
 
     def test_should_register_entity_with_geocode_and_location_provided(self):
         message1 = """reg .t dog .n Dog in AMPIZARANTANY .l ARANTANY .g 10 10 .d This is a Dog in
@@ -376,6 +442,16 @@ class TestShouldSaveSMSSubmission(unittest.TestCase):
         dog = get_by_short_code(self.dbm, expected_short_code, ["dog"])
         self.assertEqual([10, 10], dog.geometry.get("coordinates"))
         self.assertEqual([u'arantany'], dog.location_path)
+
+        message2 = "cat .na Cat in AMPIZARANTANY .l ARANTANY .g 10 10"
+        response = self.send_sms(message2)
+        self.assertTrue(response.success)
+        self.assertIsNotNone(response.datarecord_id)
+        expected_short_code = 'cat1'
+        self.assertEqual(response.short_code, expected_short_code)
+        cat = get_by_short_code(self.dbm, expected_short_code, ["cat"])
+        self.assertEqual([10, 10], cat.geometry.get("coordinates"))
+        self.assertEqual([u'arantany'], cat.location_path)
 
     def test_get_submissions_for_form_for_an_activity_period(self):
         self.dbm._save_document(SubmissionLogDocument(channel="transport", source=1234,
