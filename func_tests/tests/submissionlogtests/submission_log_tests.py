@@ -1,14 +1,13 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 import time
 import unittest
-from mock import self
 from nose.plugins.attrib import attr
 from framework.base_test import BaseTest, setup_driver, teardown_driver
 from framework.utils.data_fetcher import fetch_, from_
 from pages.loginpage.login_page import LoginPage
 from pages.smstesterpage.sms_tester_page import SMSTesterPage
-from testdata.test_data import DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_LOGIN_PAGE, DATA_WINNER_DASHBOARD_PAGE, DATA_WINNER_ADD_SUBJECT
-from tests.logintests.login_data import VALID_CREDENTIALS, WELCOME_MESSAGE
+from testdata.test_data import DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_LOGIN_PAGE, DATA_WINNER_DASHBOARD_PAGE
+from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.smstestertests.sms_tester_data import *
 from tests.submissionlogtests.submission_log_data import *
 

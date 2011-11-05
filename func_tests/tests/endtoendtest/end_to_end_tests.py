@@ -15,7 +15,7 @@ from pages.smstesterpage.sms_tester_page import SMSTesterPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_DASHBOARD_PAGE
 from tests.endtoendtest.end_to_end_data import *
 from tests.registrationtests.registration_tests import register_and_get_email
-from nose.plugins.skip import SkipTest
+
 
 def activate_account(driver, email):
     account_activate_page = ActivateAccountPage(driver)

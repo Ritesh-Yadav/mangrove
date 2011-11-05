@@ -7,7 +7,6 @@ from pages.loginpage.login_page import LoginPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.editprojecttests.edit_project_data import *
-from nose.plugins.skip import SkipTest
 
 
 class TestEditProject(BaseTest):

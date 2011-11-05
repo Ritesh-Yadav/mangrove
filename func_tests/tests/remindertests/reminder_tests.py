@@ -4,7 +4,7 @@ from pages.dashboardpage.dashboard_page import DashboardPage
 from pages.loginpage.login_page import LoginPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.createprojecttests.create_project_data import VALID_DATA
-from tests.logintests.login_data import TRIAL_CREDENTIALS_EXPIRED, TRIAL_CREDENTIALS_VALIDATES
+from tests.logintests.login_data import TRIAL_CREDENTIALS_VALIDATES
 from tests.remindertests.reminder_data import WARNING_MESSAGE, REMINDER_NOT_WORK_FOR_TRIAL_MSG
 
 class TestReminderSend(BaseTest):
