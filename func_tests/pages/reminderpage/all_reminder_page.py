@@ -1,13 +1,9 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-import time
 from framework.utils.common_utils import CommonUtilities
 from pages.broadcastSMSpage.broadcast_sms_page import BroadcastSmsPage
-from pages.dataanalysispage.data_analysis_locator import *
 from pages.page import Page
-from pages.projectoverviewpage.project_overview_locator import SEND_MESSAGE_TAB
-from pages.reminderpage.all_reminder_locator import SENT_REMINDERS_LINK, SCHEDULED_REMINDERS_LINK
-from pages.submissionlogpage.submission_log_page import SubmissionLogPage
-from tests.dataanalysistests.data_analysis_data import CURRENT_MONTH, LAST_MONTH, YEAR_TO_DATE
+from pages.reminderpage.all_reminder_locator import *
+from pages.reminderpage.reminder_settings_page import ReminderSettingsPage
 
 
 class AllReminderPage(Page):
@@ -24,3 +20,7 @@ class AllReminderPage(Page):
     def navigate_send_message_tab(self):
         self.driver.find(SEND_MESSAGE_TAB).click()
         return BroadcastSmsPage(self.driver)
+
+    def navigate_reminder_settings_tab(self):
+        self.driver.find(REMINDER_SETTINGS_TAB).click()
+        return ReminderSettingsPage(self.driver)

@@ -17,5 +17,7 @@ from framework.utils.common_utils import *
 LOCATOR = "locator"
 BY = "by"
 
-SENT_REMINDERS_LINK = by_xpath("//ul[@class='secondary_tab']/li/a[text()='Sent Reminders']")
-SCHEDULED_REMINDERS_LINK = by_xpath("//ul[@class='secondary_tab']/li/a[text()='Scheduled Reminders']")
+SENT_REMINDERS_LINK = by_css("a#sent_reminders_tab")
+SCHEDULED_REMINDERS_LINK = by_css("a#scheduled_reminders_tab")
+SEND_MESSAGE_TAB = by_css("a#send_message_tab")
+REMINDER_SETTINGS_TAB = by_css("a#reminder_settings_tab")
