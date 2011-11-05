@@ -37,7 +37,7 @@ class TestEditProject(BaseTest):
         edit_project_page = light_box.continue_change()
         create_questionnaire_page = CreateQuestionnairePage(self.driver)
         self.assertEqual(create_questionnaire_page.get_question_link_text(1),
-                         fetch_(DEFAULT_QUESTION, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT))[0])
+                         fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT))[0])
         self.assertEqual(create_questionnaire_page.get_question_link_text(2),
                          fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT))[1])
         self.assertEqual(WATER_POINT_DATA, edit_project_page.get_project_details())

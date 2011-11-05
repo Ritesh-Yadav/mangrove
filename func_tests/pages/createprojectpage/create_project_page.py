@@ -1,11 +1,12 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
+from pages.lightbox.light_box_locator import TITLE_LABEL
 from pages.lightbox.light_box_page import LightBox
 from framework.utils.data_fetcher import *
 from pages.createprojectpage.create_project_locator import *
 from pages.projectoverviewpage.project_overview_page import ProjectOverviewPage
 from tests.createprojecttests.create_project_data import *
 from pages.page import Page
-from framework.utils.common_utils import generateId
+from framework.utils.common_utils import generateId, CommonUtilities
 
 
 class CreateProjectPage(Page):
@@ -59,8 +60,13 @@ class CreateProjectPage(Page):
         self.type_project_name(project_data)
         self.type_project_description(project_data)
         #self.select_project_type(project_data)
-        self.select_report_type(project_data)
+        light_box = self.select_report_type(project_data)
+        comm_util = CommonUtilities(self.driver)
+        if comm_util.is_element_present(TITLE_LABEL):
+            light_box.continue_change()
         self.set_subject(project_data)
+        if comm_util.is_element_present(TITLE_LABEL):
+            light_box.continue_change()
         #self.select_devices(project_data)
         return self
 
