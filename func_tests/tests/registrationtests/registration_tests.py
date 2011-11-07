@@ -14,6 +14,7 @@ def register_and_get_email(driver):
     registration_page = RegistrationPage(driver)
     return registration_page.successful_registration_with(REGISTRATION_DATA_FOR_SUCCESSFUL_REGISTRATION)
 
+
 class TestRegistrationPage(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -29,11 +30,13 @@ class TestRegistrationPage(unittest.TestCase):
         exception_info = sys.exc_info()
         if exception_info != (None, None, None):
             import os
+
             if not os.path.exists("screenshots"):
                 os.mkdir("screenshots")
-            self.driver.get_screenshot_as_file("screenshots/screenshot-%s-%s.png" % (self.__class__.__name__, self._testMethodName))
+            self.driver.get_screenshot_as_file(
+                "screenshots/screenshot-%s-%s.png" % (self.__class__.__name__, self._testMethodName))
 
-        
+
     @attr('functional_test', 'smoke')
     def test_successful_registration(self):
         registration_confirmation_page, email = register_and_get_email(self.driver)
@@ -53,21 +56,35 @@ class TestRegistrationPage(unittest.TestCase):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
         registration_page.register_with(UNMATCHED_PASSWORD)
-        self.assertEquals(registration_page.get_error_message(),UNMATCHED_PASSWORD_ERROR_MESSAGE)
+        self.assertEquals(registration_page.get_error_message(), UNMATCHED_PASSWORD_ERROR_MESSAGE)
 
     @attr('functional_test')
     def test_register_ngo_without_entering_data(self):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
         registration_page.register_with(WITHOUT_ENTERING_REQUIRED_FIELDS)
-        self.assertEquals(registration_page.get_error_message(),WITHOUT_ENTERING_REQUIRED_FIELDS_ERROR_MESSAGE)
+        self.assertEquals(registration_page.get_error_message(), WITHOUT_ENTERING_REQUIRED_FIELDS_ERROR_MESSAGE)
 
     @attr('functional_test')
     def test_register_ngo_with_invalid_web_url(self):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
         registration_page.register_with(INVALID_WEBSITE_URL)
-        self.assertEquals(registration_page.get_error_message(),INVALID_WEBSITE_URL_ERROR_MESSAGE)
+        self.assertEquals(registration_page.get_error_message(), INVALID_WEBSITE_URL_ERROR_MESSAGE)
+
+    @attr('functional_test')
+    def test_register_ngo_with_invalid_phone_numbers(self):
+        self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
+        registration_page = RegistrationPage(self.driver)
+        registration_page.register_with(INVALID_PHONE_NUMBERS)
+        self.assertEqual(registration_page.get_error_message(), INVALID_PHONE_NUMBERS_ERROR_MESSAGE)
+
+    @attr('functional_test')
+    def test_register_ngo_with_phone_numbers_but_no_country_code(self):
+        self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
+        registration_page = RegistrationPage(self.driver)
+        registration_page.register_with(PHONE_NUMBERS_WITHOUT_COUNTRY_CODE)
+        self.assertEquals(registration_page.get_error_message(), PHONE_NUMBERS_WITHOUT_COUNTRY_CODE_ERROR_MESSAGE)
 
     @attr('functional_test')
     def test_register_organization_sector_have_the_right_select_options(self):
@@ -76,7 +93,7 @@ class TestRegistrationPage(unittest.TestCase):
         self.assertIn('Please Select', sectors_drop_down.text)
         self.assertIn('Food Security', sectors_drop_down.text)
         self.assertIn('Other', sectors_drop_down.text)
-        
+
     @attr('functional_test')
     def test_register_organization_phone_number_sector_have_the_country_code_select_options(self):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
@@ -100,7 +117,8 @@ class TestRegistrationPage(unittest.TestCase):
     @attr('functional_test')
     def test_price_page_link_in_content_box(self):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
-        price_link = self.driver.find(by_xpath("//div[@class='grid_7 right_hand_section alpha omega subscription_details']//a"))
+        price_link = self.driver.find(
+            by_xpath("//div[@class='grid_7 right_hand_section alpha omega subscription_details']//a"))
         price_link.click()
         self.assertEqual("Pricing", self.driver.get_title())
 
@@ -108,5 +126,6 @@ class TestRegistrationPage(unittest.TestCase):
     def test_register_without_preferred_payment(self):
         self.driver.go_to(DATA_WINNER_REGISTER_PAGE)
         registration_page = RegistrationPage(self.driver)
-        registration_confirmation_page, email = registration_page.successful_registration_with(WITHOUT_PREFERRED_PAYMENT)
+        registration_confirmation_page, email = registration_page.successful_registration_with(
+            WITHOUT_PREFERRED_PAYMENT)
         self.assertEquals(registration_confirmation_page.registration_success_message(), REGISTRATION_SUCCESS_MESSAGE)
