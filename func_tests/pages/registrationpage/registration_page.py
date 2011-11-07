@@ -20,8 +20,9 @@ class RegistrationPage(Page):
         return RegistrationConfirmationPage(self.driver), email
 
     def register_with(self, registration_data):
-        for key,value in registration_data.items():
-            if key in [ORGANIZATION_SECTOR]:
+        for key, value in registration_data.items():
+            if key in [ORGANIZATION_SECTOR, ADMIN_OFFICE_NUMBER_COUNTRY_CODE, ADMIN_MOBILE_NUMBER_COUNTRY_CODE,
+                       ORGANIZATION_OFFICE_PHONE_COUNTRY_CODE]:
                 self.driver.find_drop_down(by_css("select[name=%s]" % key)).set_selected(value)
             elif key in [PAY_MONTHLY, WIRE_TRANSFER]:
                 self.driver.find_radio_button(by_css("input[value=%s]" % key)).click()

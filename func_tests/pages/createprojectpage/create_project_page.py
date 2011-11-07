@@ -1,12 +1,12 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from framework.utils.common_utils import CommonUtilities, generateId
-from pages.createsubjectquestionnairepage.create_subject_questionnaire_page import CreateSubjectQuestionnairePage
+from pages.lightbox.light_box_locator import TITLE_LABEL
 from pages.lightbox.light_box_page import LightBox
 from framework.utils.data_fetcher import *
 from pages.createprojectpage.create_project_locator import *
 from pages.projectoverviewpage.project_overview_page import ProjectOverviewPage
 from tests.createprojecttests.create_project_data import *
 from pages.page import Page
+from framework.utils.common_utils import generateId, CommonUtilities
 
 
 class CreateProjectPage(Page):
@@ -42,12 +42,6 @@ class CreateProjectPage(Page):
             project_name = project_name + generateId()
         self.driver.find_text_box(PROJECT_NAME_TB).enter_text(project_name)
 
-    def create_project_with_reminder(self):
-        self.create_project_with(VALID_DATA)
-        self.driver.find(FREQUENCY_NEED_DATA_RB).click()
-        self.driver.find(HAS_DEADLINE).click()
-        self.driver.find(REMINDERS_ENABLED).click()
-
     def create_project_with(self, project_data):
         """
         Function to enter and save the data on set up project page
@@ -60,8 +54,13 @@ class CreateProjectPage(Page):
         self.type_project_name(project_data)
         self.type_project_description(project_data)
         #self.select_project_type(project_data)
-        self.select_report_type(project_data)
+        light_box = self.select_report_type(project_data)
+        comm_util = CommonUtilities(self.driver)
+        if comm_util.is_element_present(TITLE_LABEL):
+            light_box.continue_change()
         self.set_subject(project_data)
+        if comm_util.is_element_present(TITLE_LABEL):
+            light_box.continue_change()
         #self.select_devices(project_data)
         return self
 
@@ -192,11 +191,11 @@ class CreateProjectPage(Page):
         project_details = dict()
         project_details[PROJECT_NAME] = self.get_project_name()
         project_details[PROJECT_BACKGROUND] = self.get_project_description()
-        project_details[PROJECT_TYPE] = self.get_project_type()
+        #project_details[PROJECT_TYPE] = self.get_project_type()
         project_details[REPORT_TYPE] = self.get_report_type()
         if project_details[REPORT_TYPE] == OTHER_SUBJECT:
             project_details[SUBJECT] = self.get_selected_subject()
         else:
             project_details[SUBJECT] = ""
-        project_details[DEVICES] = self.get_devices()
+        #project_details[DEVICES] = self.get_devices()
         return project_details

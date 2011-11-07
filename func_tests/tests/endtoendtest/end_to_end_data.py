@@ -146,10 +146,10 @@ VALID_DATA_FOR_SUBJECT = {ENTITY_TYPE: "waterpoint",
 
 VALID_DATA_FOR_PROJECT = {PROJECT_NAME: "Waterpoint morondava", GEN_RANDOM: False,
                           PROJECT_BACKGROUND: "This project is created by functional automation suite.",
-                          PROJECT_TYPE: "survey",
+                          #PROJECT_TYPE: "survey",
                           SUBJECT: "waterpoint",
                           REPORT_TYPE: "other subject",
-                          DEVICES: "sms",
+                          #DEVICES: "sms",
                           PAGE_TITLE: "Subjects"}
 
 VALID_DATA_FOR_SUBJECT_QUESTIONNAIRE = {PAGE_TITLE: "Questionnaire"}
@@ -185,8 +185,9 @@ NEW_QUESTIONNAIRE_DATA = {QUESTIONS: [{QUESTION: "Water Level", CODE: "WL", TYPE
 
 VALID_DATA_REVIEW_AND_TEST = {PROJECT_PROFILE: {PROJECT_NAME: "waterpoint morondava",
                                                 PROJECT_BACKGROUND: "This project is created by functional automation suite.",
-                                                PROJECT_TYPE: "survey",
-                                                DEVICES: "sms,web"},
+                                                #PROJECT_TYPE: "survey",
+                                                #DEVICES: "sms,web"
+                                                },
                               SUBJECT_DETAILS: {SUBJECT: "waterpoint"},
                               DATA_SENDER_COUNT: "1",
                               QUESTIONNAIRE: [u'What are you reporting on?', u'What is the reporting period for the activity?', u'Water Level',

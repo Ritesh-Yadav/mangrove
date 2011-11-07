@@ -2,11 +2,11 @@
 from nose.plugins.attrib import attr
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
+from pages.createquestionnairepage.create_questionnaire_page import CreateQuestionnairePage
 from pages.loginpage.login_page import LoginPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.editprojecttests.edit_project_data import *
-from nose.plugins.skip import SkipTest
 
 
 class TestEditProject(BaseTest):
@@ -19,7 +19,6 @@ class TestEditProject(BaseTest):
         # going on all project page
         return global_navigation.navigate_to_view_all_project_page()
 
-    @SkipTest
     @attr('functional_test', 'smoke')
     def test_successful_project_editing_with_subject_change(self):
         """
@@ -35,16 +34,13 @@ class TestEditProject(BaseTest):
         self.assertEquals(light_box.get_title_of_light_box(), fetch_(TITLE, from_(LIGHT_BOX_DATA)))
         self.assertEquals(light_box.get_message_from_light_box(), fetch_(MESSAGE, from_(LIGHT_BOX_DATA)))
         edit_project_page = light_box.continue_change()
-        subject_questionnaire_page = edit_project_page.save_and_create_project_successfully()
-        self.assertEquals(self.driver.get_title(), subject_questionnaire_page.get_page_title())
-        create_questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
+        create_questionnaire_page = CreateQuestionnairePage(self.driver)
         self.assertEqual(create_questionnaire_page.get_question_link_text(1),
-                         fetch_(DEFAULT_QUESTION, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT)))
-        create_questionnaire_page.navigate_to_previous_step()
-        subject_questionnaire_page.navigate_to_previous_step()
+                         fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT))[0])
+        self.assertEqual(create_questionnaire_page.get_question_link_text(2),
+                         fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT))[1])
         self.assertEqual(WATER_POINT_DATA, edit_project_page.get_project_details())
 
-    @SkipTest
     @attr('functional_test', 'smoke')
     def test_successful_project_editing_with_report_type_change(self):
         """
@@ -61,13 +57,7 @@ class TestEditProject(BaseTest):
         self.assertEquals(light_box.get_title_of_light_box(), fetch_(TITLE, from_(LIGHT_BOX_DATA)))
         self.assertEquals(light_box.get_message_from_light_box(), fetch_(MESSAGE, from_(LIGHT_BOX_DATA)))
         edit_project_page = light_box.continue_change()
-        subject_questionnaire_page = edit_project_page.save_and_create_project_successfully()
-        self.assertEquals(self.driver.get_title(), subject_questionnaire_page.get_page_title())
-        create_questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
+        create_questionnaire_page = CreateQuestionnairePage(self.driver)
         self.assertEqual(create_questionnaire_page.get_question_link_text(1),
                          fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES))[0])
-        self.assertEqual(create_questionnaire_page.get_question_link_text(2),
-                         fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES))[1])
-        create_questionnaire_page.navigate_to_previous_step()
-        subject_questionnaire_page.navigate_to_previous_step()
         self.assertEqual(REPORTER_ACTIVITIES_DATA, edit_project_page.get_project_details())

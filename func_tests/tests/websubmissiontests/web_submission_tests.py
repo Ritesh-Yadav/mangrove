@@ -2,9 +2,8 @@ from framework.utils.data_fetcher import fetch_, from_
 from nose.plugins.attrib import attr
 from framework.base_test import BaseTest
 from pages.loginpage.login_page import LoginPage
-from pages.websubmissionpage.web_submission_locator import  SUBMIT_BTN
 from tests.websubmissiontests.web_submission_data import *
-from tests.logintests.login_data import VALID_CREDENTIALS, TRIAL_CREDENTIALS_VALIDATES, TRIAL_CREDENTIALS_THREE
+from tests.logintests.login_data import VALID_CREDENTIALS, TRIAL_CREDENTIALS_VALIDATES
 
 class TestWebSubmission(BaseTest):
     dashboard_page = None

@@ -49,21 +49,19 @@ class TestSMSTesterLightBox(BaseTest):
         """
         Function to test the successful SMS submission
         """
-        sms_tester_page = self.prerequisites_of_sms_tester_light_box1()
+        sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
         sms_tester_page.send_sms_with(VALID_DATA)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA)))
 
-    @SkipTest
     @attr('functional_test')
     def test_sms_player_for_exceeding_word_length(self):
         """
         Function to test the error message on the sms submission page for exceeding word limit for word type question
         """
-        sms_tester_page = self.prerequisites_of_sms_tester_light_box1()
+        sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
         sms_tester_page.send_sms_with(EXCEED_NAME_LENGTH)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(EXCEED_NAME_LENGTH)))
 
-    @SkipTest
     @attr('functional_test', 'smoke')
     def test_successful_sms_submission(self):
         """
@@ -73,13 +71,13 @@ class TestSMSTesterLightBox(BaseTest):
         sms_tester_page.send_sms_with(VALID_DATA2)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA2)))
 
+    @SkipTest
     @attr('functional_test', 'smoke')
     def test_successful_ordered_sms_submission(self):
         sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
         sms_tester_page.send_sms_with(VALID_DATA3)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA2)))
 
-    @SkipTest
     @attr('functional_test')
     def test_sms_submission_for_unicode(self):
         """

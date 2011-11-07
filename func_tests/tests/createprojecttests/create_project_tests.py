@@ -30,7 +30,8 @@ class TestCreateProject(BaseTest):
         create_project_page = self.prerequisites_of_create_project()
         create_project_page.create_project_with(VALID_DATA)
         create_project_page.save_and_create_project_successfully()
-        self.assertRegexpMatches(self.driver.get_title(),
+        self.driver.wait_for_page_with_title(3, fetch_(PAGE_TITLE, from_(VALID_DATA)))
+        self.assertEqual(self.driver.get_title(),
                                  fetch_(PAGE_TITLE, from_(VALID_DATA)))
 
     @attr('functional_test')

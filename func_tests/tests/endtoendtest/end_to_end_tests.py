@@ -8,12 +8,14 @@ from framework.utils.data_fetcher import from_, fetch_
 from framework.utils.database_manager_postgres import DatabaseManager
 from pages.activateaccountpage.activate_account_page import ActivateAccountPage
 from pages.addsubjecttypepage.add_subject_type_page import AddSubjectTypePage
+from pages.createquestionnairepage.create_questionnaire_page import CreateQuestionnairePage
+from pages.lightbox.light_box_page import LightBox
 from pages.loginpage.login_page import LoginPage
 from pages.smstesterpage.sms_tester_page import SMSTesterPage
 from testdata.test_data import DATA_WINNER_LOGIN_PAGE, DATA_WINNER_SMS_TESTER_PAGE, DATA_WINNER_DASHBOARD_PAGE
 from tests.endtoendtest.end_to_end_data import *
 from tests.registrationtests.registration_tests import register_and_get_email
-from nose.plugins.skip import SkipTest
+
 
 def activate_account(driver, email):
     account_activate_page = ActivateAccountPage(driver)
@@ -26,6 +28,7 @@ def do_login(driver, email, password):
     driver.go_to(DATA_WINNER_LOGIN_PAGE)
     login_page = LoginPage(driver)
     return login_page.do_successful_login_with({USERNAME:email, PASSWORD:password})
+
 
 class TestApplicationEndToEnd(BaseTest):
     def tearDown(self):
@@ -93,28 +96,25 @@ class TestApplicationEndToEnd(BaseTest):
 
     def create_project(self, create_project_page):
         create_project_page.create_project_with(VALID_DATA_FOR_PROJECT)
-        create_subject_questionnaire_page = create_project_page.save_and_create_project_successfully()
-        self.assertEqual(self.driver.get_title(),
-                         fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_PROJECT)))
-        return create_subject_questionnaire_page
+        return CreateQuestionnairePage(self.driver)
 
-    def create_subject_questionnaire(self, create_subject_questionnaire_page):
-        create_questionnaire_page = create_subject_questionnaire_page.save_questionnaire_successfully()
-        self.assertRegexpMatches(self.driver.get_title(),
-                                 fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_SUBJECT_QUESTIONNAIRE)))
-        return create_questionnaire_page
-
-    def create_data_sender_questionnaire(self, create_data_sender_questionnaire_page):
-        reminder_page = create_data_sender_questionnaire_page.save_questionnnaire_successfully()
-        self.assertRegexpMatches(self.driver.get_title(),
-                                 fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_DATA_SENDER_QUESTIONNAIRE)))
-        return reminder_page
-
-    def create_reminder(self, reminder_page):
-        review_and_test_page = reminder_page.save_reminder_successfully()
-        self.assertRegexpMatches(self.driver.get_title(),
-                                 fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_REMINDER)))
-        return review_and_test_page
+#    def create_subject_questionnaire(self, create_subject_questionnaire_page):
+#        create_questionnaire_page = create_subject_questionnaire_page.save_questionnaire_successfully()
+#        self.assertRegexpMatches(self.driver.get_title(),
+#                                 fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_SUBJECT_QUESTIONNAIRE)))
+#        return create_questionnaire_page
+#
+#    def create_data_sender_questionnaire(self, create_data_sender_questionnaire_page):
+#        reminder_page = create_data_sender_questionnaire_page.save_questionnnaire_successfully()
+#        self.assertRegexpMatches(self.driver.get_title(),
+#                                 fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_DATA_SENDER_QUESTIONNAIRE)))
+#        return reminder_page
+#
+#    def create_reminder(self, reminder_page):
+#        review_and_test_page = reminder_page.save_reminder_successfully()
+#        self.assertRegexpMatches(self.driver.get_title(),
+#                                 fetch_(PAGE_TITLE, from_(VALID_DATA_FOR_REMINDER)))
+#        return review_and_test_page
 
     def create_questionnaire(self, create_questionnaire_page):
         create_questionnaire_page.create_questionnaire_with(QUESTIONNAIRE_DATA)
@@ -125,8 +125,8 @@ class TestApplicationEndToEnd(BaseTest):
             index += 1
         self.assertEquals(create_questionnaire_page.get_remaining_character_count(),
                           fetch_(CHARACTER_REMAINING, from_(QUESTIONNAIRE_DATA)))
-        create_data_sender_questionnaire_page = create_questionnaire_page.save_questionnaire_successfully()
-        return create_data_sender_questionnaire_page
+        project_overview_page = create_questionnaire_page.save_and_create_project_successfully()
+        return project_overview_page
 
     def send_sms(self, organization_sms_tel_number, sms):
         sms_tester_page = SMSTesterPage(self.driver)
@@ -196,9 +196,8 @@ class TestApplicationEndToEnd(BaseTest):
         edit_questionnaire_page.add_question(questions[1])
         self.assertEquals(edit_questionnaire_page.get_remaining_character_count(),
                           fetch_(CHARACTER_REMAINING, from_(NEW_QUESTIONNAIRE_DATA)))
-        edit_questionnaire_page.save_questionnaire()
+        edit_questionnaire_page.save_and_create_project_successfully()
 
-    @SkipTest
     @attr('functional_test', 'smoke', "intregation")
     def test_end_to_end(self):
         """
@@ -215,15 +214,12 @@ class TestApplicationEndToEnd(BaseTest):
         create_project_page = dashboard_page.navigate_to_create_project_page()
         create_project_page.select_report_type(VALID_DATA_FOR_PROJECT)
         self.add_subject_type(create_project_page, VALID_SUBJECT_TYPE2[ENTITY_TYPE])
+        light_box = LightBox(self.driver)
+        create_project_page = light_box.continue_change()
         self.add_subject_type(create_project_page, VALID_SUBJECT_TYPE1[ENTITY_TYPE])
-        create_subject_questionnaire_page = self.create_project(create_project_page)
-        create_questionnaire_page = self.create_subject_questionnaire(create_subject_questionnaire_page)
-        create_data_sender_questionnaire_page = self.create_questionnaire(create_questionnaire_page)
-        reminder_page = self.create_data_sender_questionnaire(create_data_sender_questionnaire_page)
-        review_page = self.create_reminder(reminder_page)
-        self.review_project_summary(review_page)
-#        sms_tester_light_box = review_page.open_sms_tester_light_box()
-#        self.sms_light_box_verification(sms_tester_light_box)
+        create_project_page = light_box.continue_change()
+        create_questionnaire_page = self.create_project(create_project_page)
+        project_overview_page = self.create_questionnaire(create_questionnaire_page)
 
         all_subjects_page = global_navigation.navigate_to_all_subject_page()
         add_subject_page = all_subjects_page.navigate_to_add_a_subject_page()
@@ -243,8 +239,7 @@ class TestApplicationEndToEnd(BaseTest):
         project_overview_page = all_projects_page.navigate_to_project_overview_page(
             fetch_(PROJECT_NAME, from_(VALID_DATA_FOR_PROJECT)))
         edit_project_page = project_overview_page.navigate_to_edit_project_page()
-        subject_questionnaire_page = edit_project_page.save_and_create_project_successfully()
-        edit_questionnaire_page = subject_questionnaire_page.save_questionnaire_successfully()
+        edit_questionnaire_page = create_questionnaire_page
         self.verify_questionnaire(edit_questionnaire_page)
         self.edit_questionnaire(edit_questionnaire_page)
 
