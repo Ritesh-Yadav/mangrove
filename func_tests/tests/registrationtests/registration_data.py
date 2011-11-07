@@ -27,7 +27,6 @@ ADMIN_OFFICE_NUMBER = "office_phone"
 ADMIN_MOBILE_NUMBER = "mobile_phone"
 ADMIN_SKYPE_ID = "skype"
 ORGANIZATION_SECTOR_DROP_DOWN_LIST = by_css("select#id_organization_sector")
-ORGANIZATION_OFFICE_PHONE_NUMBER_DROP_DOWN_LIST = by_css("select#id_office_phone_country_code")
 ABOUT_DATAWINNERS_BOX = by_xpath('//div[@class="grid_7 right_hand_section alpha omega about_datawinners"')
 
 #Registration Page Data for Successful Registration Page
