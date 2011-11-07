@@ -1,5 +1,5 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
-from unittest.case import skipUnless, skipIf
+from unittest.case import skipUnless, skipIf, skip
 
 from nose.plugins.attrib import attr
 from nose.tools import nottest
@@ -69,6 +69,7 @@ class TestOrderedSMSTesterLightBox(BasePrepare):
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_ORDERED_SMS_DATA)))
 
     @attr('functional_test')
+    @skip
     def test_sms_submission_for_project_with_activity_report(self):
         sms_tester_page = self.prerequisites_of_sms_tester_light_box(PROJECT_DATA_WITH_ACTIVITY_REPORT)
         sms_tester_page.send_sms_with(VALID_ORDERED_SMS_DATA_WITH_ACTIVITY_REPORT)
