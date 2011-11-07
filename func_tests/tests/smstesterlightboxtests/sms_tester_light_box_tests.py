@@ -65,7 +65,6 @@ class TestSMSTesterLightBox(BasePrepare):
         Function to test the successful SMS submission
         """
         sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
-        sms_tester_page = self.prerequisites_of_sms_tester_light_box1()
         sms_tester_page.send_sms_with(VALID_DATA)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(VALID_DATA)))
 
@@ -75,7 +74,6 @@ class TestSMSTesterLightBox(BasePrepare):
         Function to test the error message on the sms submission page for exceeding word limit for word type question
         """
         sms_tester_page = self.prerequisites_of_sms_tester_light_box2()
-        sms_tester_page = self.prerequisites_of_sms_tester_light_box1()
         sms_tester_page.send_sms_with(EXCEED_NAME_LENGTH)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(EXCEED_NAME_LENGTH)))
 
