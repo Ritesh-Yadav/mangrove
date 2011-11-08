@@ -14,7 +14,7 @@ VALID_DATA = {SMS: "cli005 .EID cid003 .NA Mr. Tessy .FA 58 .RD 17.05.2011 .BG b
 
 EXCEED_NAME_LENGTH = {
     SMS: "cli009 .EID CID003 .NA Mr. O'brain .FA 58 .RD 17.05.2011 .BG b .SY ade .GPS 27.178057  -78.007789",
-    RESPONSE_MESSAGE: "Error. Incorrect answer for question na. Please resend entire message."}
+    RESPONSE_MESSAGE: "Error. Incorrect answer for na. Please resend entire message."}
 
 VALID_DATA2 = {SMS: "cli005 .EID cid004 .NA Mr. O'man .FA 58 .RD 17.05.2011 .BG b .SY ade .GPS 27.178057  -78.007789",
                RESPONSE_MESSAGE: "Thank you TEST. We received : EID: cid004 NA: Mr. O'man FA: 58.0 RD: 17.05.2011 BG: O- SY: Rapid weight loss,Memory loss,Neurological disorders  GPS: 27.178057,-78.007789"}
@@ -25,4 +25,4 @@ VALID_DATA3 = {SMS: "cli005 cid004 O'man 58 17.05.2011 b ade 27.178057'-78.00778
 
 SMS_WITH_UNICODE = {
     SMS: u"cli005 .EID CID003 .NA Mr. O'brain .FA 58 .RD 17.05.2º11 .BG å .SY åde .GPS 27.178057º  -78.007789",
-    RESPONSE_MESSAGE: "Error. Incorrect answer for question na, rd, bg, sy, gps. Please resend entire message."}
+    RESPONSE_MESSAGE: "Error. Incorrect answer for na, rd, bg, sy, gps. Please resend entire message."}
