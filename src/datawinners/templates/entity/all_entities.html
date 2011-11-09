@@ -1,0 +1,102 @@
+{% extends 'layout_application.html' %}
+{% load i18n %}
+{% block page_title %}{% endblock %}
+
+
+{% load dw_tabs %}
+{% block body %}
+
+{{ block.super }}
+{% endblock %}
+
+{% block page_scss %}
+    {{ block.super }}
+    <link href="/media/css/scss/section_dashboard.scss" rel="stylesheet" />
+{% endblock %}
+
+
+{% block page_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="/media/javascript/subjects/index.js"></script>
+    <script type="text/javascript" src="/media/javascript/file_uploader/fileuploader.js"></script>
+{% endblock %}
+
+{% block section_title %}{% trans "Subjects" %}
+<span class="title_links">
+     <a id="register_link" class="float_right add_subject_link" href="{% url datawinners.entity.views.create_subject %}">{% trans "Add a subject" %}</a><img src="/media/images/help_icon.png" class="help_icon" style="margin-top:-6px;">
+    <div class="tooltip">
+        <p>
+            <strong>{% trans "What is this?" %}</strong><br />
+            {% trans "Add subjects one-by-one using the online registration form" %}<br /><br />
+            <strong>{% trans "What do I need to do?" %}</strong><br />
+            {% trans 'Click the blue "Add a subject" link and follow the step-by-step instructions' %}
+        </p>
+    </div>
+</span>
+{% endblock %}
+
+{% block content %}
+    <div>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="error {{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="import_subject_form">
+            <div id="file-uploader">
+                <noscript>
+                    <p>{% trans "Please enable JavaScript to use file uploader." %}</p>
+                    <!-- or put a simple form for upload here -->
+                </noscript>
+                <h6>{% trans "Upload a CSV or a XL file" %}</h6>
+
+                <div id="file_uploader" class="float_left"></div><img src="/media/images/help_icon.png" class="help_icon" style="margin-top:6px;">
+                <div class="tooltip"><p>
+                    <strong>{% trans "What is this?" %}</strong><br />
+                    {% trans "q_all_subjects" %}
+                    <br /><br />
+                    <strong>{% trans "What do I need to do?" %}</strong><br />
+                    {% trans "r_all_subjects" %}
+                </p></div>
+                <div class="clear"></div>
+            </div>
+            <div id='error_table'>
+                <table class="styled_table">
+                    <thead>
+                    <th>{% trans "Row Number" %}</th>
+                    <th>{% trans "Row" %}</th>
+                    <th>{% trans "Error" %}</th>
+                    </thead>
+                    <tbody id='error_tbody'>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+           {% for entity_type in results %}
+
+                <h3>{% trans entity_type.type %}</h3>
+           <table class="styled_table">
+               <thead>
+                    <tr>
+                    {% for field in entity_type.table.fields %}
+                        <th>
+                            {% trans field.label.en %}
+                        </th>
+                    {% endfor %}
+                    </tr>
+               </thead>
+                {%  for row in entity_type.table.data %}
+                    <tr>
+                        {% for dt in row %}
+                        <td>{{ dt }}</td>
+                        {%  endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+            {% endfor %}
+   </div>
+{% endblock %}
+
