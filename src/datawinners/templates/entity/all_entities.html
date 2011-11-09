@@ -63,20 +63,6 @@
                 <div class="clear"></div>
             </div>
             <div class="error">Don't know the format? Download <a href="/media/files/{% if current_language == 'en' %}DataWinners_ImportSubjects.xls {% else %}DataWinners_ImporterLesSujets.xls{% endif %}">here</a></div>
-            <div id='error_table'>
-                <table class="styled_table">
-                    <thead>
-                    <th>{% trans "Row Number" %}</th>
-                    <th>{% trans "Row" %}</th>
-                    <th>{% trans "Error" %}</th>
-                    </thead>
-                    <tbody id='error_tbody'>
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
             <h3>Registration</h3>
             <table class="styled_table">
                <thead>
@@ -118,6 +104,6 @@
                 {% endfor %}
             </table>
             {% endfor %}
+        </div>
    </div>
 {% endblock %}
-
