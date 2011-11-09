@@ -46,6 +46,17 @@ def get_form_model_by_code(dbm, code):
     form = FormModel.new_from_doc(dbm, doc)
     return form
 
+def get_form_model_by_entity_type(dbm, entity_type):
+    assert isinstance(dbm, DatabaseManager)
+    assert is_string(entity_type)
+    rows = dbm.load_all_rows_in_view('questionnaire')
+    for row in rows:
+        if row['value']['flag_reg'] and row['value']['entity_type'][0] == entity_type:
+            doc = dbm._load_document(row['value']['_id'], FormModelDocument)
+            form = FormModel.new_from_doc(dbm, doc)
+            return form
+    return None
+
 class FormModel(DataObject):
     __document_class__ = FormModelDocument
 
@@ -431,6 +442,11 @@ class FormSubmission(object):
 
 
 def create_default_reg_form_model(manager):
+    form_model = _create_default_reg_form_model(manager, "reg", REGISTRATION_FORM_CODE, ["Registration"])
+    form_model.save()
+    return form_model
+
+def _create_default_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     entity_id_type = get_or_create_data_dict(manager, name='Entity Id Type', slug='entity_id', primitive_type='string')
     mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
                                                  primitive_type='string')
@@ -452,12 +468,15 @@ def create_default_reg_form_model(manager):
     form_model.add_field(question1)
     form_model.add_field(question2)
     form_model.add_field(question3)
-    form_model.save()
     return form_model
 
 def create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     form_model = _construct_registration_form(manager, name, form_code, entity_type)
     form_model.save()
+    return form_model
+
+def _create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
+    form_model = _construct_registration_form(manager, name, form_code, entity_type)
     return form_model
 
 def create_constraints_for_mobile_number():

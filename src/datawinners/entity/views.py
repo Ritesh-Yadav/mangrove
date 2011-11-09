@@ -6,7 +6,7 @@ from django.utils import translation
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseServerError
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_view_exempt, csrf_response_exempt
@@ -21,12 +21,13 @@ from datawinners.messageprovider.message_handler import get_success_msg_for_regi
 from datawinners.project.models import Project
 from mangrove.datastore.entity_type import get_all_entity_types, define_type
 from datawinners.project import helper as project_helper, models
-from mangrove.errors.MangroveException import EntityTypeAlreadyDefined, MangroveException, DataObjectAlreadyExists
+from mangrove.errors.MangroveException import EntityTypeAlreadyDefined, MangroveException, DataObjectAlreadyExists, QuestionCodeAlreadyExistsException, EntityQuestionAlreadyExistsException
 from datawinners.entity.forms import EntityTypeForm, ReporterRegistrationForm, SubjectForm
-from mangrove.form_model.form_model import REGISTRATION_FORM_CODE, MOBILE_NUMBER_FIELD_CODE, GEO_CODE, NAME_FIELD_CODE, LOCATION_TYPE_FIELD_CODE, ENTITY_TYPE_FIELD_CODE, REPORTER
+from mangrove.form_model.form_model import get_form_model_by_code, REGISTRATION_FORM_CODE, MOBILE_NUMBER_FIELD_CODE, GEO_CODE, NAME_FIELD_CODE, LOCATION_TYPE_FIELD_CODE, ENTITY_TYPE_FIELD_CODE, REPORTER
 from mangrove.transport.player.player import Request, WebPlayer, TransportInfo
 from datawinners.entity import import_data as import_module
 from mangrove.utils.types import is_empty
+from datawinners.entity.helper import update_questionnaire_with_questions
 
 COUNTRY = ',MADAGASCAR'
 
@@ -118,6 +119,31 @@ def submit(request):
         success = False
         entity_id = None
     return HttpResponse(json.dumps({'success': success, 'message': message, 'entity_id': entity_id}))
+
+@login_required(login_url='/login')
+def save_questionnaire(request):
+    manager = get_database_manager(request.user)
+    if request.method == 'POST':
+        questionnaire_code = request.POST['saved-questionnaire-code']
+        json_string = request.POST['question-set']
+        question_set = json.loads(json_string)
+        form_model = get_form_model_by_code(manager, questionnaire_code)
+        try:
+            form_model = update_questionnaire_with_questions(form_model, question_set, manager)
+        except QuestionCodeAlreadyExistsException as e:
+            return HttpResponseServerError(e)
+        except EntityQuestionAlreadyExistsException as e:
+            return HttpResponseServerError(e.message)
+        else:
+            try:
+                form_model.form_code = questionnaire_code.lower()
+            except DataObjectAlreadyExists as e:
+                if e.message.find("Form") >= 0:
+                    return HttpResponseServerError("Questionnaire with this code already exists")
+                return HttpResponseServerError(e.message)
+            form_model.form_code = request.POST['questionnaire-code'].lower()
+            form_model.save()
+            return HttpResponse(json.dumps({"response": "ok"}))
 
 @login_required(login_url='/login')
 def create_datasender(request):
