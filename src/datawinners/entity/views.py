@@ -23,18 +23,17 @@ from datawinners.location.LocationTree import get_location_tree
 from datawinners.main.utils import get_database_manager
 from datawinners.messageprovider.message_handler import get_success_msg_for_registration_using, get_submission_error_message_for, get_exception_message_for
 from datawinners.project.models import Project
-from mangrove.datastore.entity_type import get_all_entity_types, define_type
+from mangrove.datastore.entity_type import define_type, get_all_entity_types
 from datawinners.project import helper as project_helper, models
 from mangrove.errors.MangroveException import EntityTypeAlreadyDefined, MangroveException, DataObjectAlreadyExists, QuestionCodeAlreadyExistsException, EntityQuestionAlreadyExistsException, DataObjectNotFound
 from datawinners.entity.forms import EntityTypeForm, ReporterRegistrationForm, SubjectForm
 from mangrove.form_model.form_model import get_form_model_by_code, REGISTRATION_FORM_CODE, MOBILE_NUMBER_FIELD_CODE, GEO_CODE, NAME_FIELD_CODE, LOCATION_TYPE_FIELD_CODE, ENTITY_TYPE_FIELD_CODE, REPORTER, create_reg_form_model, get_form_model_by_entity_type
-from mangrove.transport.player import player
 from datawinners.entity import import_data as import_module
 from mangrove.utils.types import is_empty, sequence_to_str
 from datawinners.entity.helper import update_questionnaire_with_questions
 from mangrove.transport.player import player
 from mangrove.transport.player.player import WebPlayer, Request, TransportInfo
-from mangrove.form_model.form_model import get_default_questions
+from datawinners.utils import get_excel_sheet
 import logging
 
 logger = logging.getLogger("django")
@@ -85,7 +84,7 @@ def _process_form(dbm, form, org_id):
 
 
 def _get_data(form_data):
-    #TODO need to refactor this code. The master dictionary should be maintained by the registration form  model
+    #TODO need to refactor this code. The master dictionary should be maintained by the registration form model
     mapper = {'telephone_number': MOBILE_NUMBER_FIELD_CODE, 'geo_code': GEO_CODE, 'Name': NAME_FIELD_CODE,
               'location': LOCATION_TYPE_FIELD_CODE}
     data = dict()
@@ -191,43 +190,10 @@ def create_type(request):
             message = _("Entity definition successful")
             success = True
         except EntityTypeAlreadyDefined:
-            message = _("%s already registered as a subject type. Please select %s from the drop down menu.") %  (entity_name[0], entity_name[0])
+            message = _("%s already registered as a subject type. Please select %s from the drop down menu.") % (entity_name[0], entity_name[0])
     else:
         message = form.fields['entity_type_regex'].error_messages['invalid']
     return HttpResponse(json.dumps({'success': success, 'message': _(message)}))
-
-@csrf_view_exempt
-@csrf_response_exempt
-@login_required(login_url='/login')
-@is_new_user
-@is_datasender
-def render_all_entities(request):
-    manager = get_database_manager(request.user)
-    if request.method == 'POST':
-        error_message, failure_imports, success_message, imported_entities = import_module.import_data(request, manager)
-        subjects_data = import_module.load_all_subjects(request)
-        return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
-                                        'failure_imports': failure_imports, 'all_data': subjects_data}))
-
-    subjects_data = import_module.load_all_subjects(request)
-    return render_to_response('entity/all_subjects.html', {'all_data': subjects_data, 'current_language': translation.get_language()},
-                                  context_instance=RequestContext(request))
-
-
-def _get_field_code(fields):
-    codes = []
-    for field in fields:
-        if field['name'] == 'short_code':
-            field_name = 'short_name'
-        elif field['name'] == 'geo_code':
-            field_name = 'geocode'
-        elif field['name'] == 'entity_type':
-            field_name = 'type'
-        else:
-            field_name = field['name']
-        codes.append(field_name)
-    return codes
-
 
 def _get_entity_types(manager):
     entity_types = get_all_entity_types(manager)
@@ -250,7 +216,7 @@ def _get_entity_types_with_form(manager):
 
 def _get_entity_types_without_form(manager):
     entity_types = _get_entity_types(manager)
-    entity_types =  set(entity_types)
+    entity_types = set(entity_types)
     entity_with_form = _get_entity_types_with_form(manager)
     entity_with_form = set(entity_with_form)
     entity_without_form = set.difference(entity_types, entity_with_form)
@@ -259,16 +225,6 @@ def _get_entity_types_without_form(manager):
     entity_without_form.sort()
     return entity_without_form
 
-
-def _get_registration_form_models(manager):
-    subjects = {}
-    form_models = manager.load_all_rows_in_view('questionnaire')
-    for form_model in form_models:
-        if form_model.value['flag_reg'] and form_model.value['name'] != 'Reporter':
-            subjects[form_model.value['entity_type'][0]] = form_model
-    return subjects
-
-
 @csrf_view_exempt
 @csrf_response_exempt
 @login_required(login_url='/login')
@@ -276,49 +232,13 @@ def _get_registration_form_models(manager):
 @is_datasender
 def all_subjects(request):
     manager = get_database_manager(request.user)
-    entity_types_names = _get_entity_types(manager)
-    subjects = _get_registration_form_models(manager)
-
-    subjects_list = {}
-    for entity in entity_types_names:
-        if entity in subjects.keys():
-            form_model = subjects[entity]
-        else:
-            form_model = subjects['Registration']
-        create_link = reverse(create_subject, args=[entity])
-        edit_link = reverse(edit_subject, args=[entity])
-
-        subjects_list[entity] = dict(
-            name = entity,
-            code = form_model.value["form_code"],
-            fields = _get_field_code(form_model.value['json_fields']),
-            data = [],
-            create_link = create_link,
-            edit_link = edit_link
-        )
-
-    registered_subjects = import_module.load_all_subjects(request)
-    for subject in registered_subjects:
-        entity = subject['type']
-        if entity in subjects_list.keys():
-            fields = subjects_list[entity]['fields']
-            row = []
-            for i in range(len(fields)):
-                if fields[i] in subject:
-                    row.append(subject[fields[i]])
-                else:
-                    row.append('')
-
-            subjects_list[entity]['data'].append(row)
-
-    all_data = [subjects_list[entity] for entity in entity_types_names]
+    all_data = import_module.load_all_subjects(request)
 
     if request.method == 'POST':
         error_message, failure_imports, success_message, imported_entities = import_module.import_data(request, manager)
-        subjects_data = import_module.load_all_subjects(request)
         return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                         'failure_imports': failure_imports, 'all_data': all_data}))
-    
+
     return render_to_response('entity/all_subjects.html', {'all_data': all_data, 'current_language': translation.get_language()},
                                   context_instance=RequestContext(request))
 
@@ -350,7 +270,7 @@ def create_web_users(request):
         errors = []
         post_data = json.loads(request.POST['post_data'])
         for data in post_data:
-            users  = User.objects.filter(email=data['email'])
+            users = User.objects.filter(email=data['email'])
             if len(users) > 0:
                 errors.append("User with email %s already exists" % data['email'])
         if len(errors) > 0:
@@ -371,6 +291,21 @@ def create_web_users(request):
         return HttpResponse(json.dumps({'success':True, 'message':"Users has been created"}))
 
 
+def _get_field_code(fields):
+    codes = []
+    for field in fields:
+        if field['name'] == 'short_code':
+            field_name = 'short_name'
+        elif field['name'] == 'geo_code':
+            field_name = 'geocode'
+        elif field['name'] == 'entity_type':
+            field_name = 'type'
+        else:
+            field_name = field['name']
+        codes.append(field_name)
+    return codes
+
+
 @csrf_view_exempt
 @csrf_response_exempt
 @login_required(login_url='/login')
@@ -387,16 +322,14 @@ def all_datasenders(request):
         all_data_senders = _get_all_datasenders(manager, projects, request.user)
         return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                         'failure_imports': failure_imports, 'all_data': all_data_senders}))
-    
-    form_model = manager.load_all_rows_in_view("questionnaire", key="rep")
 
+    form_model = manager.load_all_rows_in_view("questionnaire", key="rep")
     fields = _get_field_code(form_model[0]["value"]["json_fields"])
     all_data_senders = import_module.load_subject_registration_data(manager, type="reporter", filter_entities=import_module.include_of_type,tabulate_function=_tabulate, fields=fields)
-    
+
     data_senders = []
     for data_sender in all_data_senders:
         data_senders.append(_get_cleaned_data(fields, data_sender))
-        
     return render_to_response('entity/all_datasenders.html', {'all_data': data_senders, 'projects':projects, 'fields': fields, 'grant_web_access':grant_web_access,
                                                               'current_language': translation.get_language()},
                               context_instance=RequestContext(request))
@@ -445,35 +378,6 @@ def import_subjects_from_project_wizard(request):
                                     'failure_imports': failure_imports}))
 
 
-def _get_submissions(request, type):
-    dbm = get_database_manager(request.user)
-    if type != "Registration":
-        submissions = import_module.load_all_subjects_of_type(dbm, type=type)
-    else:
-        submissions = import_module.load_all_subjects(request)
-    return submissions
-
-def _create_select_field(field, choices):
-    if field.single_select_flag:
-        return forms.ChoiceField(choices=choices, required=field.is_required(), label=field.name, initial=field.value, help_text=field.instruction)
-    return forms.MultipleChoiceField(label=field.name, widget=forms.CheckboxSelectMultiple, choices=choices,
-                                  initial=field.value, required=field.is_required(), help_text=field.instruction)
-
-
-def _get_django_field(field):
-    if isinstance(field, SelectField):
-        return  _create_select_field(field, _create_choices(field))
-    display_field = forms.CharField(label=field.name, initial=field.value, required=field.is_required(), help_text=field.instruction)
-    display_field.widget.attrs["watermark"] = field.get_constraint_text()
-    display_field.widget.attrs['style'] = 'padding-top: 7px;'
-    return display_field
-
-def _create_django_form(form_model):
-    properties = {field.code: _get_django_field(field) for field in form_model.fields}
-    properties.update({'form_code': forms.CharField(widget=HiddenInput, initial=form_model.form_code)})
-    return type('QuestionnaireForm', (Form, ), properties)
-
-
 def _get_cleaned_data(fields, subject):
     row = {}
     for i in range(len(fields)):
@@ -484,11 +388,12 @@ def _get_cleaned_data(fields, subject):
     row.update({'id': subject.get("id")})
     return row
 
-def _tabulate(entity,fields):
+def _tabulate(entity, fields=None):
     tabulated = {}
-    for field in fields:
-        value = entity.value(field) if entity.value(field) is not None else "-"
-        tabulated.update({field: value})
+    if fields is not None:
+        for field in fields:
+            value = entity.value(field) if entity.value(field) is not None else "-"
+            tabulated.update({field: value})
 
     geocode = entity.geometry.get('coordinates')
     geocode_string = ", ".join([str(i) for i in geocode]) if geocode is not None else "--"
@@ -525,6 +430,53 @@ def _create_request(questionnaire_form, username):
                                  destination=""
                    ))
 
+def _create_select_field(field, choices):
+    if field.single_select_flag:
+        return forms.ChoiceField(choices=choices, required=field.is_required(), label=field.name, initial=field.value, help_text=field.instruction)
+    return forms.MultipleChoiceField(label=field.name, widget=forms.CheckboxSelectMultiple, choices=choices,
+                                  initial=field.value, required=field.is_required(), help_text=field.instruction)
+
+
+def _get_django_field(field):
+    if isinstance(field, SelectField):
+        return _create_select_field(field, _create_choices(field))
+    display_field = forms.CharField(label=field.label['en'], initial=field.value, required=field.is_required(), help_text=field.instruction)
+    display_field.widget.attrs["watermark"] = field.get_constraint_text()
+    display_field.widget.attrs['style'] = 'padding-top: 7px;'
+    return display_field
+
+def _create_django_form(form_model):
+    properties = {field.code: _get_django_field(field) for field in form_model.fields}
+    properties.update({'form_code': forms.CharField(widget=HiddenInput, initial=form_model.form_code)})
+    return type('QuestionnaireForm', (Form, ), properties)
+
+
+def _to_list(errors, fields):
+    error_dict = dict()
+    for key, value in errors.items():
+        error_dict.update({key: [value] if not isinstance(value, list) else value})
+    return translate_messages(error_dict, fields)
+
+def translate_messages(error_dict, fields):
+    errors = dict()
+
+    for field in fields:
+        if field.code in error_dict:
+            error = error_dict[field.code][0]
+            if type(field) == TextField:
+                text, code = error.split(' ')[1], field.code
+                errors[code] = [_("Answer %s for question %s is longer than allowed.") % (text, code)]
+            if type(field) == IntegerField:
+                number, error_context = error.split(' ')[1], error.split(' ')[6]
+                errors[field.code] = [_("Answer %s for question %s is %s than allowed.") % (number, field.code, _(error_context),)]
+            if type(field) == GeoCodeField:
+                errors[field.code] = [_("Incorrect GPS format. The GPS coordinates must be in the following format: xx.xxxx yy.yyyy. Example -18.8665 47.5315")]
+            if type(field) == DateField:
+                answer, format = error.split(' ')[1], field.date_format
+                errors[field.code] = [_("Answer %s for question %s is invalid. Expected date in %s format") % (answer, field.code, format)]
+
+    return errors
+
 
 @login_required(login_url='/login')
 def create_subject(request, entity_type=None):
@@ -544,7 +496,7 @@ def create_subject(request, entity_type=None):
     if request.method == 'POST':
         questionnaire_form = QuestionnaireForm(request.POST)
         if not questionnaire_form.is_valid():
-            return _get_response(questionnaire_form, entity_type, request)
+            return _get_response(request, questionnaire_form, entity_type)
 
         success_message = None
         error_message = None
@@ -555,7 +507,7 @@ def create_subject(request, entity_type=None):
                 questionnaire_form = QuestionnaireForm()
             else:
                 questionnaire_form._errors = _to_list(response.errors, form_model.fields)
-                return _get_response(questionnaire_form, entity_type, request)
+                return _get_response(request, questionnaire_form, entity_type)
 
         except DataObjectNotFound as exception:
             message = exception_messages.get(DataObjectNotFound).get(WEB)
@@ -569,6 +521,28 @@ def create_subject(request, entity_type=None):
                  'success_message': success_message, 'error_message': error_message},
                                   context_instance=RequestContext(request))
 
+
+@login_required(login_url='/login')
+def edit_subject(request, entity_type=None):
+    manager = get_database_manager(request.user)
+    form_model = None
+    if entity_type is not None:
+        form_model = get_form_model_by_entity_type(manager, entity_type.lower())
+        if form_model is None:
+            entity_list = _get_entity_types_without_form(manager)
+            if entity_type in entity_list:
+                form_model = get_form_model_by_code(manager, 'reg')
+
+    if form_model is None:
+        return HttpResponseRedirect(reverse(all_subjects))
+
+    fields = form_model.fields
+    existing_questions = json.dumps(fields, default=field_to_json)
+    return render_to_response('entity/edit_form.html',
+            {'existing_questions': repr(existing_questions),
+             'questionnaire_code': form_model.form_code,
+             'entity_type': entity_type},
+             context_instance=RequestContext(request))
 
 def _check_form_code_exists(manager, name, num=''):
     form_code = "%s%s" % (name, num)
@@ -597,7 +571,7 @@ def edit_subject(request, entity_type=None):
 
     if form_model is None:
         return HttpResponseRedirect(reverse(all_subjects))
-    
+
     fields = form_model.fields
     existing_questions = json.dumps(fields, default=field_to_json)
     return render_to_response('entity/edit_form.html',
@@ -606,3 +580,34 @@ def edit_subject(request, entity_type=None):
              'entity_type': entity_type},
              context_instance=RequestContext(request))
 
+
+@login_required(login_url='/login')
+def create_entity_type(request):
+    manager = get_database_manager(request.user)
+
+    form_model = get_form_model_by_code(manager, 'reg')
+    fields = form_model.fields
+    existing_questions = json.dumps(fields, default=field_to_json)
+
+    return render_to_response('entity/create_entity_type.html',
+            {'existing_questions': repr(existing_questions),
+             'questionnaire_code': 'reg'},
+             context_instance=RequestContext(request))
+
+@login_required(login_url='/login')
+def export_subject(request):
+    subject = request.POST.get("entity_type")
+    all_data = import_module.load_all_subjects(request, type=subject, short_codes=request.POST.getlist("checked"))
+    response = HttpResponse(mimetype="application/ms-excel")
+    response['Content-Disposition'] = 'attachment; filename="%s.xls"' % (subject)
+    header = all_data[0].get("short_codes")
+    header.insert(0, "form_code")
+    form_code = all_data[0].get("code")
+    raw_data = [header]
+    for data in all_data[0].get("data"):
+        row = data[1:]
+        row.insert(0, form_code)
+        raw_data.append(row)
+    wb = get_excel_sheet(raw_data, subject)
+    wb.save(response)
+    return response
