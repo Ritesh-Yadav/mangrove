@@ -104,7 +104,7 @@ class TestFormModel(unittest.TestCase):
         self.assertTrue(len(errors) == 0)
         self.assertEqual(0, len(errors))
         self.assertEqual(cleaned_answers, expected_cleaned_data)
-        
+
     def test_should_validate_field_case_insensitive(self):
         answers = {"Id": "1", "Q1": "Asif Momin", "q2": "40"}
         cleaned_answers, errors = self.form_model._is_valid(answers)
@@ -198,20 +198,3 @@ class TestFormModel(unittest.TestCase):
         self.assertEqual(len(errors), 0)
         for field in self.form_model.fields:
             self.assertEqual([], field.errors)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
