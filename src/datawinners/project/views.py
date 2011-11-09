@@ -24,6 +24,7 @@ from datawinners.accountmanagement.models import Organization, OrganizationSetti
 from datawinners.entity.forms import ReporterRegistrationForm, SubjectForm
 from datawinners.entity.forms import SubjectUploadForm
 from datawinners.entity.views import import_subjects_from_project_wizard
+from datawinners.settings import USE_ORDERED_SMS_PARSER
 from datawinners.project.wizard_view import edit_project, reminder_settings, reminders
 import helper
 from datawinners.project import models, wizard_view
@@ -677,7 +678,7 @@ def subjects(request, project_id=None):
                  'current_language': translation.get_language()},
                                   context_instance=RequestContext(request))
 
-    
+
 def _make_project_context(form_model, project):
     return {'form_model': form_model, 'project': project,
             'project_links': _make_project_links(project,
