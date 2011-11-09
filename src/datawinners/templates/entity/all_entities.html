@@ -87,15 +87,14 @@
                 {% endfor %}
                 </tr>
            </thead>
-            {%  for row in registration.table.data %}
+            {% for row in registration.table.data %}
                 <tr>
                     {% for dt in row %}
                     <td>{{ dt }}</td>
-                    {%  endfor %}
+                    {% endfor %}
                 </tr>
             {% endfor %}
         </table>
-
         {% for entity_type in results %}
         <h3>{% trans entity_type.name %}</h3>
         <table class="styled_table">
@@ -108,15 +107,14 @@
                 {% endfor %}
                 </tr>
             </thead>
-            {%  for row in entity_type.table.data %}
+            {% for row in entity_type.table.data %}
                 <tr>
                     {% for dt in row %}
                     <td>{{ dt }}</td>
-                    {%  endfor %}
+                    {% endfor %}
                 </tr>
             {% endfor %}
         </table>
         {% endfor %}
    </div>
 {% endblock %}
-
