@@ -174,9 +174,24 @@ def create_type(request):
         try:
             manager = get_database_manager(request.user)
             define_type(manager, entity_name)
+<<<<<<< HEAD
 
             if request.POST["default_form_model"] == "false":
                 _create_new_reg_form_model(manager,entity_name[0])
+=======
+            form_code = entity_name[0][0:3]
+            i = 1
+            exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
+            while exists:
+                form_code += "%s" % i
+                exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
+                i += 1
+                if i == 10 :
+                    break
+
+            if request.POST["default_form_model"] == "false":
+                form_model = create_reg_form_model(manager, entity_name[0], form_code, entity_name)
+>>>>>>> Adding render all entities
 
             message = _("Entity definition successful")
             success = True
@@ -325,7 +340,6 @@ def import_subjects_from_project_wizard(request):
         _associate_data_senders_to_project(imported_entities, manager, project_id)
     return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                     'failure_imports': failure_imports}))
-
 
 
 def _get_subject_data(fields, subject):
