@@ -23,7 +23,7 @@ from mangrove.datastore.entity_type import get_all_entity_types, define_type
 from datawinners.project import helper as project_helper, models
 from mangrove.errors.MangroveException import EntityTypeAlreadyDefined, MangroveException, DataObjectAlreadyExists, QuestionCodeAlreadyExistsException, EntityQuestionAlreadyExistsException
 from datawinners.entity.forms import EntityTypeForm, ReporterRegistrationForm, SubjectForm
-from mangrove.form_model.form_model import get_form_model_by_code, REGISTRATION_FORM_CODE, MOBILE_NUMBER_FIELD_CODE, GEO_CODE, NAME_FIELD_CODE, LOCATION_TYPE_FIELD_CODE, ENTITY_TYPE_FIELD_CODE, REPORTER
+from mangrove.form_model.form_model import get_form_model_by_code, REGISTRATION_FORM_CODE, MOBILE_NUMBER_FIELD_CODE, GEO_CODE, NAME_FIELD_CODE, LOCATION_TYPE_FIELD_CODE, ENTITY_TYPE_FIELD_CODE, REPORTER, create_reg_form_model
 from mangrove.transport.player.player import Request, WebPlayer, TransportInfo
 from datawinners.entity import import_data as import_module
 from mangrove.utils.types import is_empty
@@ -173,6 +173,19 @@ def create_type(request):
         try:
             manager = get_database_manager(request.user)
             define_type(manager, entity_name)
+            form_code = entity_name[0][0:3]
+            i = 1
+            exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
+            while exists:
+                form_code += "%s" % i
+                exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
+                i += 1
+                if i == 10 :
+                    break
+
+            if request.POST["default_form_model"] == "false":
+                form_model = create_reg_form_model(manager, entity_name[0], form_code, entity_name)
+
             message = _("Entity definition successful")
             success = True
         except EntityTypeAlreadyDefined:
@@ -320,3 +333,52 @@ def import_subjects_from_project_wizard(request):
         _associate_data_senders_to_project(imported_entities, manager, project_id)
     return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                     'failure_imports': failure_imports}))
+
+
+@login_required(login_url='/login')
+def render_all_entities(request):
+    dbm = get_database_manager(request.user)
+    form_models = dbm.load_all_rows_in_view("questionnaire")
+    entities = []
+    results = []
+
+    for form_model in form_models:
+        if form_model.value["flag_reg"] and form_model.value["entity_type"][0] != "Registration":
+            form_code = form_model.value["form_code"]
+            form_model = get_form_model_by_code(dbm, form_code)
+            fields = form_model.fields
+            if form_model.entity_defaults_to_reporter():
+                fields = project_helper.hide_entity_question(fields)
+            
+            submissions = import_module.load_all_subjects_of_type(dbm, type=form_model.entity_type[0])
+            data = []
+            for submission in  submissions:
+                row = []
+                for field in fields:
+                    key = "short_name" if field.name == "short_code" else field.name
+                    row.append(submission.get(key,"-"))
+                data.append(row)
+            key = 0
+            actual = False
+            new_type = False
+            for entity_type_data in results:
+                if entity_type_data["type"] == form_model.entity_type[0]:
+                    actual = entity_type_data
+                    break
+                key += 1
+
+            if not actual:
+                actual = {"type": form_model.entity_type[0], "table":  {}}
+                new_type = True
+
+            temp = actual["table"]
+            temp.update({'fields':fields,'data': data})
+
+            actual.update({"table": temp })
+            if not new_type:
+                results[key] = actual
+            else:
+                results.append(actual)
+
+    return render_to_response('entity/all_entities.html',
+            {'fields': [], 'results':results, 'types': fields, 'entities':entities})
