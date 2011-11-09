@@ -33,7 +33,7 @@ from mangrove.datastore.entity_type import get_all_entity_types
 from mangrove.errors.MangroveException import QuestionCodeAlreadyExistsException, EntityQuestionAlreadyExistsException, DataObjectAlreadyExists, DataObjectNotFound
 from mangrove.form_model import form_model
 from mangrove.form_model.field import field_to_json, SelectField, TextField, IntegerField, GeoCodeField, DateField
-from mangrove.form_model.form_model import get_form_model_by_code, FormModel, REGISTRATION_FORM_CODE
+from mangrove.form_model.form_model import get_form_model_by_code, get_form_model_by_entity_type, FormModel, REGISTRATION_FORM_CODE
 from mangrove.transport.player import player
 from mangrove.transport.player.player import WebPlayer, Request, TransportInfo
 from mangrove.transport.submissions import Submission, get_submissions, submission_count
@@ -555,23 +555,6 @@ def _get_project_and_project_link(manager, project_id):
     project_links = _make_project_links(project, questionnaire.form_code)
     return project, project_links
 
-@login_required(login_url='/login')
-def subjects(request, project_id=None):
-    manager = get_database_manager(request.user)
-    project, project_links = _get_project_and_project_link(manager, project_id)
-    reg_form = get_form_model_by_code(manager, REGISTRATION_FORM_CODE)
-    import_subject_form = SubjectUploadForm()
-    create_subject_form = SubjectForm()
-    entity_types = helper.remove_reporter(get_all_entity_types(manager))
-    return render_to_response('project/subjects.html',
-            {'fields': reg_form.fields, 'project': project,
-             'project_links': project_links,
-             'import_subject_form': import_subject_form,
-             'form': create_subject_form,
-             "entity_types": entity_types,
-             'post_url': reverse(import_subjects_from_project_wizard),
-             'current_language': translation.get_language()},
-                              context_instance=RequestContext(request))
 
 @login_required(login_url='/login')
 def registered_subjects(request, project_id=None):
@@ -645,7 +628,6 @@ def questionnaire(request, project_id=None):
                  'project': project, 'project_links': project_links},
                                   context_instance=RequestContext(request))
 
-
 @login_required(login_url='/login')
 def subjects(request, project_id=None):
     manager = get_database_manager(request.user)
@@ -654,7 +636,7 @@ def subjects(request, project_id=None):
 
     if form_model is None:
         form_model = get_form_model_by_code(manager, "reg")
-        
+
     if form_model is not None:
         fields = form_model.fields
         if form_model.entity_defaults_to_reporter():
@@ -680,7 +662,6 @@ def subjects(request, project_id=None):
                  'post_url': reverse(import_subjects_from_project_wizard),
                  'current_language': translation.get_language()},
                                   context_instance=RequestContext(request))
-
 
 def _make_project_context(form_model, project):
     return {'form_model': form_model, 'project': project,

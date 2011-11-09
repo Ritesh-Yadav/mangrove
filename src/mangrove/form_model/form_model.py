@@ -465,6 +465,27 @@ def create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     form_model.save()
     return form_model
 
+def _create_default_reg_form_model(manager, name=None, form_code=None, entity_type=None):
+    entity_id_type = get_or_create_data_dict(manager, name='Entity Id Type', slug='entity_id', primitive_type='string')
+    description_type = get_or_create_data_dict(manager, name='description Type', slug='description',
+                                               primitive_type='string')
+    question1 = HierarchyField(name=ENTITY_TYPE_FIELD_NAME, code=ENTITY_TYPE_FIELD_CODE,
+                               label="What is associated subject type?",
+                               language="en", ddtype=entity_id_type, instruction="Enter a type for the subject")
+    question2 = TextField(name=DESCRIPTION_FIELD, code=DESCRIPTION_FIELD_CODE, label="Describe the subject",
+                          defaultValue="some default value", language="en", ddtype=description_type,
+                          instruction="Describe your subject in more details (optional)", required=False)
+
+    form_model = _construct_registration_form(manager, "reg", REGISTRATION_FORM_CODE, ["Registration"])
+    form_model.add_field(question1)
+    form_model.add_field(question2)
+    return form_model
+
+
+def create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
+    form_model = _construct_registration_form(manager, name, form_code, entity_type)
+    form_model.save()
+    return form_model
 
 def _create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     form_model = _construct_registration_form(manager, name, form_code, entity_type)
@@ -480,35 +501,48 @@ def create_constraints_for_mobile_number():
 
 
 def _construct_registration_form(manager, name=None, form_code=None, entity_type=None):
-    questions = get_default_questions(manager)
+    reporter = True if form_code == "rep" else False
+    questions = get_default_questions(manager, reporter)
 
     form_model = FormModel(manager, name=name, form_code=form_code, fields=questions , flag_reg=True, entity_type=entity_type)
     return form_model
 
 
-def get_default_questions(manager):
+def get_default_questions(manager, reporter=False):
     location_type = get_or_create_data_dict(manager, name='Location Type', slug='location', primitive_type='string')
     geo_code_type = get_or_create_data_dict(manager, name='GeoCode Type', slug='geo_code', primitive_type='geocode')
     name_type = get_or_create_data_dict(manager, name='Name', slug='name', primitive_type='string')
+    type = "reporter" if reporter else "subject"
+
     mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
                                                  primitive_type='string')
 
-    question1 = TextField(name=NAME_FIELD, code=NAME_FIELD_CODE, label="What is the subject's name?",
+    question1 = TextField(name=NAME_FIELD, code=NAME_FIELD_CODE, label="What is the %s's lastname?" % type,
                           defaultValue="some default value", language="en", ddtype=name_type,
-                          instruction="Enter a subject name")
-    question2 = TextField(name=SHORT_CODE_FIELD, code=SHORT_CODE, label="What is the subject's Unique ID Number",
+                          instruction="Enter a %s name" % type, defaultQuestion=True)
+    question2 = TextField(name=SHORT_CODE_FIELD, code=SHORT_CODE, label="What is the %s's Unique ID Number" % type,
                           defaultValue="some default value", language="en", ddtype=name_type,
-                          instruction="Enter a id, or allow us to generate it",
-                          entity_question_flag=True, constraints=[TextLengthConstraint(max=12)], required=False)
+                          instruction="Enter an id, or allow us to generate it",
+                          entity_question_flag=True,
+                          constraints=[TextLengthConstraint(max=12)], required=False, defaultQuestion=True)
     question3 = HierarchyField(name=LOCATION_TYPE_FIELD_NAME, code=LOCATION_TYPE_FIELD_CODE,
-                               label="What is the subject's location?",
-                               language="en", ddtype=location_type, instruction="Enter a region, district, or commune", required=False)
-    question4 = GeoCodeField(name=GEO_CODE_FIELD, code=GEO_CODE, label="What is the subject's GPS co-ordinates?",
-                             language="en", ddtype=geo_code_type, instruction="Enter lat and long. Eg 20.6, 47.3", required=False)
+                               label="What is the %s's location?" % type,
+                               language="en", ddtype=location_type, instruction="Enter a region, district, or commune",
+                               required=False, defaultQuestion=True)
+    question4 = GeoCodeField(name=GEO_CODE_FIELD, code=GEO_CODE, label="What is the %s's GPS co-ordinates?" % type,
+                             defaultQuestion=True, language="en", ddtype=geo_code_type,
+                             instruction="Enter lat and long. Eg 20.6, 47.3", required=False)
     question5 = TelephoneNumberField(name=MOBILE_NUMBER_FIELD, code=MOBILE_NUMBER_FIELD_CODE,
                                      label="What is the mobile number associated with the subject?",
                                      defaultValue="some default value", language="en", ddtype=mobile_number_type,
-                                     instruction="Enter the subject's number", constraints=(
+                                     defaultQuestion=True,
+                                    instruction="Enter the %s's number" % type, constraints=(
             create_constraints_for_mobile_number()), required=False)
-
-    return [question1, question2, question3, question4, question5]
+    if not reporter:
+        return [question1, question2, question3, question4, question5]
+    else:
+        first_name_type = get_or_create_data_dict(manager, name='First Name', slug='first_name', primitive_type='string')
+        first_name = TextField(name="first_name", code="fn", label="What is the reporter's first name?",
+                          defaultValue="some default value", language="en", ddtype=first_name_type,
+                          defaultQuestion=True, instruction="Enter a reporter first name")
+        return [first_name, question1, question2, question3, question4, question5]
