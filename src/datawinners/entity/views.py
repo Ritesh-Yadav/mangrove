@@ -174,10 +174,6 @@ def create_type(request):
         try:
             manager = get_database_manager(request.user)
             define_type(manager, entity_name)
-<<<<<<< HEAD
-=======
-
->>>>>>> Updating create entity type
             if request.POST["default_form_model"] == "false":
                 _create_new_reg_form_model(manager,entity_name[0])
 
