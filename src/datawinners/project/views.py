@@ -648,9 +648,9 @@ def entities(request, project_id=None, type='subjects'):
 @login_required(login_url='/login')
 def subjects(request, project_id=None):
     manager = get_database_manager(request.user)
-    if request.method == 'GET':
-        project = Project.load(manager.database, project_id)
-        form_model = get_form_model_by_entity_type(manager, project.entity_type)
+    project, project_links = _get_project_and_project_link(manager, project_id)
+    form_model = get_form_model_by_entity_type(manager, project.entity_type)
+    if form_model is not None:
         fields = form_model.fields
         if form_model.entity_defaults_to_reporter():
             fields = helper.hide_entity_question(form_model.fields)
@@ -659,6 +659,20 @@ def subjects(request, project_id=None):
         return render_to_response('project/subject_questionnaire.html',
                 {"existing_questions": repr(existing_questions), 'questionnaire_code': form_model.form_code,
                  'project': project, 'project_links': project_links},
+                                  context_instance=RequestContext(request))
+    else:
+        reg_form = get_form_model_by_code(manager, REGISTRATION_FORM_CODE)
+        import_subject_form = SubjectUploadForm()
+        create_subject_form = SubjectForm()
+        entity_types = helper.remove_reporter(get_all_entity_types(manager))
+        return render_to_response('project/subjects.html',
+                {'fields': reg_form.fields, 'project': project,
+                 'project_links': project_links,
+                 'import_subject_form': import_subject_form,
+                 'form': create_subject_form,
+                 "entity_types": entity_types,
+                 'post_url': reverse(import_subjects_from_project_wizard),
+                 'current_language': translation.get_language()},
                                   context_instance=RequestContext(request))
 
     
