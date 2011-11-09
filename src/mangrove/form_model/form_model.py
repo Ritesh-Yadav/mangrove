@@ -443,6 +443,7 @@ def create_default_reg_form_model(manager):
     form_model.save()
     return form_model
 
+
 def _create_default_reg_form_model(manager):
     entity_id_type = get_or_create_data_dict(manager, name='Entity Id Type', slug='entity_id', primitive_type='string')
     description_type = get_or_create_data_dict(manager, name='description Type', slug='description',
@@ -507,7 +508,6 @@ def _construct_registration_form(manager, name=None, form_code=None, entity_type
                                     instruction="Enter the %s's number" % type, constraints=(
             create_constraints_for_mobile_number()), required=False)
     questions = [question1, question2, question3, question4, question5]
-    
     if entity_type == REPORTER:
         first_name = TextField(name="first_name", code="fn", label="What is the reporter's first name?",
                           defaultValue="some default value", language="en", ddtype=name_type,

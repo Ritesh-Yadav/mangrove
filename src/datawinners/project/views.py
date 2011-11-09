@@ -33,7 +33,7 @@ from mangrove.datastore.entity_type import get_all_entity_types
 from mangrove.errors.MangroveException import QuestionCodeAlreadyExistsException, EntityQuestionAlreadyExistsException, DataObjectAlreadyExists, DataObjectNotFound
 from mangrove.form_model import form_model
 from mangrove.form_model.field import field_to_json, SelectField, TextField, IntegerField, GeoCodeField, DateField
-from mangrove.form_model.form_model import get_form_model_by_code, FormModel, REGISTRATION_FORM_CODE
+from mangrove.form_model.form_model import get_form_model_by_code, get_form_model_by_entity_type, FormModel, REGISTRATION_FORM_CODE
 from mangrove.transport.player import player
 from mangrove.transport.player.player import WebPlayer, Request, TransportInfo
 from mangrove.transport.submissions import Submission, get_submissions, submission_count
@@ -555,7 +555,6 @@ def _get_project_and_project_link(manager, project_id):
     project_links = _make_project_links(project, questionnaire.form_code)
     return project, project_links
 
-
 @login_required(login_url='/login')
 def registered_datasenders(request, project_id=None):
     manager = get_database_manager(request.user)
@@ -646,6 +645,23 @@ def entities(request, project_id=None, type='subjects'):
                                   context_instance=RequestContext(request))
 
 
+@login_required(login_url='/login')
+def subjects(request, project_id=None):
+    manager = get_database_manager(request.user)
+    if request.method == 'GET':
+        project = Project.load(manager.database, project_id)
+        form_model = get_form_model_by_entity_type(manager, project.entity_type)
+        fields = form_model.fields
+        if form_model.entity_defaults_to_reporter():
+            fields = helper.hide_entity_question(form_model.fields)
+        existing_questions = json.dumps(fields, default=field_to_json)
+        project_links = _make_project_links(project, form_model.form_code)
+        return render_to_response('project/subject_questionnaire.html',
+                {"existing_questions": repr(existing_questions), 'questionnaire_code': form_model.form_code,
+                 'project': project, 'project_links': project_links},
+                                  context_instance=RequestContext(request))
+
+    
 def _make_project_context(form_model, project):
     return {'form_model': form_model, 'project': project,
             'project_links': _make_project_links(project,
