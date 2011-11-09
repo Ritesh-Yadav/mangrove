@@ -2,7 +2,7 @@
 import re
 from mangrove.errors.MangroveException import NumberNotRegisteredException, DataObjectNotFound
 from mangrove.form_model.form_model import create_constraints_for_mobile_number
-from mangrove.transport.reporter import  find_reporter_entity
+from mangrove.transport.reporter import find_reporter_entity
 from django.utils.encoding import smart_unicode
 from mangrove.utils.types import is_empty, is_not_empty
 from mangrove.form_model.validation import NumericRangeConstraint, TextLengthConstraint
@@ -23,10 +23,10 @@ def unique(dbm, telephone_number):
 
 def get_or_create_data_dict(dbm, name, slug, primitive_type, description=None):
     try:
-        #  Check if is existing
+        # Check if is existing
         ddtype = get_datadict_type_by_slug(dbm, slug)
     except DataObjectNotFound:
-        #  Create new one
+        # Create new one
         ddtype = create_datadict_type(dbm=dbm, name=name, slug=slug,
                                       primitive_type=primitive_type, description=description)
     return ddtype
@@ -35,12 +35,15 @@ def create_question(post_dict, dbm):
     options = post_dict.get('options')
     datadict_type = options.get('ddtype') if options is not None else None
     if is_not_empty(datadict_type):
-        #  question already has a data dict type
+        # question already has a data dict type
         datadict_slug = datadict_type.get('slug')
     else:
         datadict_slug = str(slugify(unicode(post_dict.get('title'))))
     ddtype = get_or_create_data_dict(dbm=dbm, name=post_dict.get('code'), slug=datadict_slug,
                                      primitive_type=post_dict.get('type'), description=post_dict.get('title'))
+
+    if "name" not in post_dict:
+        post_dict["name"] = post_dict["code"]
 
     if post_dict["type"] == "text":
         return _create_text_question(post_dict, ddtype)
@@ -70,12 +73,13 @@ def _create_text_question(post_dict, ddtype):
     min_length_from_post = post_dict.get("min_length")
     max_length = max_length_from_post if not is_empty(max_length_from_post) else None
     min_length = min_length_from_post if not is_empty(min_length_from_post) else None
+    is_default_question = post_dict.get("options").get("defaultQuestion", False)
     constraints = []
     if not (max_length is None and min_length is None):
         constraints.append(TextLengthConstraint(min=min_length, max=max_length))
-    return TextField(name=post_dict["title"], code=post_dict["code"].strip(), label="default",
+    return TextField(name=post_dict["name"], code=post_dict["code"].strip(), label=post_dict["title"],
                      entity_question_flag=post_dict.get("is_entity_question"), constraints=constraints, ddtype=ddtype,
-                     instruction=post_dict.get("instruction"),required=post_dict.get("required"))
+                     instruction=post_dict.get("instruction"),required=post_dict.get("required"), defaultQuestion=is_default_question)
 
 
 def _create_integer_question(post_dict, ddtype):
@@ -83,35 +87,40 @@ def _create_integer_question(post_dict, ddtype):
     min_range_from_post = post_dict.get("range_min")
     max_range = max_range_from_post if not is_empty(max_range_from_post) else None
     min_range = min_range_from_post if not is_empty(min_range_from_post) else None
+    is_default_question = post_dict.get("options").get("defaultQuestion", False)
     range = NumericRangeConstraint(min=min_range, max=max_range)
-    return IntegerField(name=post_dict["title"], code=post_dict["code"].strip(), label="default",
-                        constraints=[range], ddtype=ddtype, instruction=post_dict.get("instruction"),required=post_dict.get("required"))
+    return IntegerField(name=post_dict["name"], code=post_dict["code"].strip(), label=post_dict["title"],
+                        constraints=[range], ddtype=ddtype, instruction=post_dict.get("instruction"),
+                        required=post_dict.get("required"), defaultQuestion=is_default_question)
 
 
 def _create_date_question(post_dict, ddtype):
-    return DateField(name=post_dict["title"], code=post_dict["code"].strip(), label="default",
+    return DateField(name=post_dict["name"], code=post_dict["code"].strip(), label=post_dict["title"],
                      date_format=post_dict.get('date_format'), ddtype=ddtype, instruction=post_dict.get("instruction"),required=post_dict.get("required"), event_time_field_flag=post_dict.get('event_time_field_flag', False))
 
 
 def _create_geo_code_question(post_dict, ddtype):
-    return GeoCodeField(name=post_dict["title"], code=post_dict["code"].strip(), label="default", ddtype=ddtype,
-                        instruction=post_dict.get("instruction"),required=post_dict.get("required"))
+    is_default_question = post_dict.get("options").get("defaultQuestion", False)
+    return GeoCodeField(name=post_dict["name"], code=post_dict["code"].strip(), label=post_dict["title"], ddtype=ddtype,
+                        instruction=post_dict.get("instruction"),required=post_dict.get("required"), defaultQuestion=is_default_question)
 
 
 def _create_select_question(post_dict, single_select_flag, ddtype):
     options = [(choice.get("text"), choice.get("val")) for choice in post_dict["choices"]]
-    return SelectField(name=post_dict["title"], code=post_dict["code"].strip(), label="default",
+    return SelectField(name=post_dict["name"], code=post_dict["code"].strip(), label=post_dict["title"],
                        options=options, single_select_flag=single_select_flag, ddtype=ddtype,
                        instruction=post_dict.get("instruction"),required=post_dict.get("required"))
 
-
 def _create_telephone_number_question(post_dict, ddtype):
-    return TelephoneNumberField(name=post_dict["title"], code=post_dict["code"].strip(),
-                                     label="default", ddtype=ddtype,
+    is_default_question = post_dict.get("options").get("defaultQuestion", False)
+    return TelephoneNumberField(name=post_dict["name"], code=post_dict["code"].strip(),
+                                     label=post_dict["title"], ddtype=ddtype,
                                      instruction=post_dict.get("instruction"), constraints=(
-            create_constraints_for_mobile_number()),required=post_dict.get("required"))
+            create_constraints_for_mobile_number()),required=post_dict.get("required"), defaultQuestion=is_default_question)
 
 
 def _create_location_question(post_dict, ddtype):
-    return HierarchyField(name=post_dict["title"], code=post_dict["code"].strip(),
-                               label="default", ddtype=ddtype, instruction=post_dict.get("instruction"),required=post_dict.get("required"))
+    is_default_question = post_dict.get("options").get("defaultQuestion", False)
+    return HierarchyField(name=post_dict["name"], code=post_dict["code"].strip(),
+                               label=post_dict["title"], ddtype=ddtype, instruction=post_dict.get("instruction"),
+                               required=post_dict.get("required"), defaultQuestion=is_default_question)

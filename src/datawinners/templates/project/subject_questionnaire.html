@@ -54,11 +54,9 @@
                          <a href="questionnaire_wizard.html#" class="delete_link" data-bind="click: function() {checkCodeForm(); if($('#question_form').valid()){ viewModel.removeQuestion(question);} else {viewModel.removeIfQuestionIsSelectedQuestion(question);} }">Delete</a>
                     </div>
                  </li>
-                 <span class="selected_question_arrow"
-                              data-bind="css:{inline:question == viewModel.selectedQuestion()}"></span>
-             </div>
-             {% templatetag openvariable %}/each{% templatetag closevariable %}
-             </ul>
+            </div>
+            {% templatetag openvariable %}/each{% templatetag closevariable %}
+            </ul>
         </div>
     </script>
     <script type="text/javascript" src="/media/javascript/project/subject.js"></script>
