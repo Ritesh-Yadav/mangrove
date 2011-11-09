@@ -24,6 +24,7 @@ from datawinners.accountmanagement.models import Organization, OrganizationSetti
 from datawinners.entity.forms import ReporterRegistrationForm, SubjectForm
 from datawinners.entity.forms import SubjectUploadForm
 from datawinners.entity.views import import_subjects_from_project_wizard
+from datawinners.settings import USE_ORDERED_SMS_PARSER
 from datawinners.project.wizard_view import edit_project, reminder_settings, reminders
 import helper
 from datawinners.project import models, wizard_view
@@ -679,7 +680,7 @@ def subjects(request, project_id=None):
                  'current_language': translation.get_language()},
                                   context_instance=RequestContext(request))
 
-    
+
 def _make_project_context(form_model, project):
     return {'form_model': form_model, 'project': project,
             'project_links': _make_project_links(project,
@@ -752,7 +753,7 @@ def translate_messages(error_dict, fields):
             if type(field) == DateField:
                 answer, format = error.split(' ')[1], field.date_format
                 errors[field.code] = [_("Answer %s for question %s is invalid. Expected date in %s format") % (answer, field.code, format)]
-            
+
     return errors
 
 
@@ -861,6 +862,9 @@ def _get_registration_form(manager, project, project_id, type_of_subject='subjec
 
 def get_example_sms_message(fields, registration_questionnaire):
     example_sms = "%s <answer> .... <answer>" % (registration_questionnaire.form_code)
+    if not USE_ORDERED_SMS_PARSER:
+        example_sms = "%s .%s <answer> .... .%s <answer>" % (
+            registration_questionnaire.form_code, fields[0].code, fields[len(fields) - 1].code)
     return example_sms
 
 
