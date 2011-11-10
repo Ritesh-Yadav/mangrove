@@ -174,24 +174,8 @@ def create_type(request):
         try:
             manager = get_database_manager(request.user)
             define_type(manager, entity_name)
-<<<<<<< HEAD
-
             if request.POST["default_form_model"] == "false":
                 _create_new_reg_form_model(manager,entity_name[0])
-=======
-            form_code = entity_name[0][0:3]
-            i = 1
-            exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-            while exists:
-                form_code += "%s" % i
-                exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-                i += 1
-                if i == 10 :
-                    break
-
-            if request.POST["default_form_model"] == "false":
-                form_model = create_reg_form_model(manager, entity_name[0], form_code, entity_name)
->>>>>>> Adding render all entities
 
             message = _("Entity definition successful")
             success = True
@@ -362,6 +346,33 @@ def _create_new_reg_form_model(manager, entity_name):
 
     return create_reg_form_model(manager, entity_name, form_code, [entity_name])
 
+
+def _get_submissions(request, type):
+    dbm = get_database_manager(request.user)
+    if type != "Registration":
+        submissions = import_module.load_all_subjects_of_type(dbm, type=type)
+    else:
+        submissions = import_module.load_all_subjects(request)
+    return submissions
+
+def _get_fields_name_and_submissions_by_form_code(request, form_code):
+    dbm = get_database_manager(request.user)
+    form_model = get_form_model_by_code(dbm, form_code)
+    fields = form_model.fields
+    if form_model.entity_defaults_to_reporter():
+        fields = project_helper.hide_entity_question(fields)
+
+    data = []
+    for submission in  _get_submissions(request, form_model.entity_type[0]):
+        row = []
+        for field in fields:
+            key = "short_name" if field.name == "short_code" else field.name
+            row.append(submission.get(key,"-"))
+        data.append(row)
+
+    return {"type": form_model.entity_type[0], "table":  {'fields':fields,'data': data}}
+
+
 @login_required(login_url='/login')
 def all_subjects(request):
     dbm = get_database_manager(request.user)
@@ -369,6 +380,7 @@ def all_subjects(request):
     
     form_models = dbm.load_all_rows_in_view("questionnaire")
     registration = {"type": "reg","name": "Registration","table": {"fields":[],"data":[]}}
+    registration = []
     results = []
     entity_types = []
 
@@ -382,7 +394,7 @@ def all_subjects(request):
             if form_model.value["entity_type"][0] == "Registration":
                 registration["table"]["fields"] = form_model.value["json_fields"]
 
-    for subject  in subjects:
+    for subject in subjects:
         if subject["type"] in entity_types:
             key = entity_types.index(subject["type"])
             data = _get_subject_data(results[key]["table"]["fields"], subject)
