@@ -62,6 +62,7 @@
                 </p></div>
                 <div class="clear"></div>
             </div>
+            <div class="error">Don't know the format? Download <a href="/media/files/{% if current_language == 'en' %}DataWinners_ImportSubjects.xls {% else %}DataWinners_ImporterLesSujets.xls{% endif %}">here</a></div>
             <div id='error_table'>
                 <table class="styled_table">
                     <thead>
@@ -75,11 +76,32 @@
                 </table>
             </div>
         </div>
-           {% for entity_type in results %}
 
-                <h3>{% trans entity_type.type %}</h3>
-           <table class="styled_table">
+            <h3>Registration</h3>
+            <table class="styled_table">
                <thead>
+                    <tr>
+                    {% for field in registration.table.fields %}
+                        <th>
+                            {% trans field.label.en %}
+                        </th>
+                    {% endfor %}
+                    </tr>
+               </thead>
+                {%  for row in registration.table.data %}
+                    <tr>
+                        {% for dt in row %}
+                        <td>{{ dt }}</td>
+                        {%  endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+
+            {% for entity_type in results %}
+
+            <h3>{% trans entity_type.type %}</h3>
+            <table class="styled_table">
+                <thead>
                     <tr>
                     {% for field in entity_type.table.fields %}
                         <th>
