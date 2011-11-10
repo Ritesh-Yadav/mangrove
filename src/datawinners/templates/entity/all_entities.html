@@ -1,10 +1,29 @@
 {% extends 'layout_application.html' %}
 {% load i18n %}
-{% block page_title %}{% trans "Subjects" %}{% endblock %}
+{% block page_title %}{% endblock %}
+
+
+{% load dw_tabs %}
+{% block body %}
+
+{{ block.super }}
+{% endblock %}
+
+{% block page_scss %}
+    {{ block.super }}
+    <link href="/media/css/scss/section_dashboard.scss" rel="stylesheet" />
+{% endblock %}
+
+
+{% block page_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="/media/javascript/subjects/index.js"></script>
+    <script type="text/javascript" src="/media/javascript/file_uploader/fileuploader.js"></script>
+{% endblock %}
 
 {% block section_title %}{% trans "Subjects" %}
 <span class="title_links">
-     <a id="register_link" class="float_right add_subject_link" href="{% url datawinners.entity.views.create_subject %}">{% trans "Add a Subject" %}</a><img src="/media/images/help_icon.png" class="help_icon" style="margin-top:-6px;">
+     <a id="register_link" class="float_right add_subject_link" href="{% url datawinners.entity.views.create_subject %}">{% trans "Add a subject" %}</a><img src="/media/images/help_icon.png" class="help_icon" style="margin-top:-6px;">
     <div class="tooltip">
         <p>
             <strong>{% trans "What is this?" %}</strong><br />
@@ -16,31 +35,6 @@
 </span>
 {% endblock %}
 
-{% load dw_tabs %}
-{% block body %}
-    {% activetab "main_nav" "subjects" %}
-    {{ block.super }}
-{% endblock %}
-
-{% block page_css %}
-    {{ block.super }}
-    <link href="/media/javascript/file_uploader/fileuploader.css" rel="stylesheet"/>
-{% endblock %}
-
-{% block page_scss %}
-    {{ block.super }}
-    <link href="/media/css/scss/section_subjects.scss" rel="stylesheet"/>
-    <link href="/media/css/scss/section_all_subjects.scss" rel="stylesheet"/>
-{% endblock %}
-
-
-{% block page_js %}
-    {{ block.super }}
-    <script type="text/javascript" src="/media/javascript/subjects/index.js"></script>
-    <script type="text/javascript" src="/media/javascript/file_uploader/fileuploader.js"></script>
-{% endblock %}
-
-{% load i18n %}
 {% block content %}
     <div>
         {% if messages %}
@@ -125,3 +119,4 @@
         {% endfor %}
    </div>
 {% endblock %}
+

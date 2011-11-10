@@ -324,6 +324,7 @@ def import_subjects_from_project_wizard(request):
     return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                     'failure_imports': failure_imports}))
 
+
 def _get_subject_data(fields, subject):
     data = []
     for field in fields:
@@ -333,6 +334,7 @@ def _get_subject_data(fields, subject):
         data.append(subject.get(field_name, "-"))
     return data
 
+
 def _create_new_reg_form_model(manager, entity_name):
     form_code = entity_name[0:3]
     i = 1
@@ -341,7 +343,6 @@ def _create_new_reg_form_model(manager, entity_name):
         form_code += "%s" % i
         exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
         i += 1
-
     return create_reg_form_model(manager, entity_name, form_code, [entity_name])
 
 def _get_submissions(request, type):
@@ -400,6 +401,5 @@ def all_subjects(request):
         else:
             data = _get_subject_data(registration["table"]["fields"], subject)
             registration["table"]["data"].append(data)
-
     return render_to_response('entity/all_entities.html',
             {'registration': registration, 'results':results})
