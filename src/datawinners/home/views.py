@@ -47,4 +47,3 @@ def ask_us(request):
 
     email.send()
     return redirect(request.POST["redirect_url"])
-
