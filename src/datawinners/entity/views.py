@@ -174,18 +174,9 @@ def create_type(request):
         try:
             manager = get_database_manager(request.user)
             define_type(manager, entity_name)
-            form_code = entity_name[0][0:3]
-            i = 1
-            exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-            while exists:
-                form_code += "%s" % i
-                exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-                i += 1
-                if i == 10 :
-                    break
 
             if request.POST["default_form_model"] == "false":
-                form_model = create_reg_form_model(manager, entity_name[0], form_code, entity_name)
+                _create_new_reg_form_model(manager,entity_name[0])
 
             message = _("Entity definition successful")
             success = True
@@ -346,6 +337,16 @@ def _get_subject_data(fields, subject):
         data.append(subject.get(field_name, "-"))
     return data
 
+def _create_new_reg_form_model(manager, entity_name):
+    form_code = entity_name[0:3]
+    i = 1
+    exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
+    while exists:
+        form_code += "%s" % i
+        exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
+        i += 1
+
+    return create_reg_form_model(manager, entity_name, form_code, [entity_name])
 
 @login_required(login_url='/login')
 def all_subjects(request):
