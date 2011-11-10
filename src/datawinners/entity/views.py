@@ -499,7 +499,6 @@ def _tabulate(entity,fields):
     geocode = entity.geometry.get('coordinates')
     geocode_string = ", ".join([str(i) for i in geocode]) if geocode is not None else "--"
     location = sequence_to_str(entity.location_path, u", ")
-
     tabulated.update({'geocode': geocode_string})
     tabulated.update({'type': ".".join(entity.type_path)})
     tabulated.update({'short_name': entity.short_code})
