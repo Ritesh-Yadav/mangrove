@@ -176,7 +176,6 @@ def create_type(request):
             define_type(manager, entity_name)
             if request.POST["default_form_model"] == "false":
                 _create_new_reg_form_model(manager,entity_name[0])
-
             message = _("Entity definition successful")
             success = True
         except EntityTypeAlreadyDefined:
@@ -325,7 +324,6 @@ def import_subjects_from_project_wizard(request):
     return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                     'failure_imports': failure_imports}))
 
-
 def _get_subject_data(fields, subject):
     data = []
     for field in fields:
@@ -345,7 +343,6 @@ def _create_new_reg_form_model(manager, entity_name):
         i += 1
 
     return create_reg_form_model(manager, entity_name, form_code, [entity_name])
-
 
 def _get_submissions(request, type):
     dbm = get_database_manager(request.user)
@@ -378,7 +375,7 @@ def _get_subject_data(fields, subject):
 def all_subjects(request):
     dbm = get_database_manager(request.user)
     subjects = import_module.load_all_subjects(request)
-    
+
     form_models = dbm.load_all_rows_in_view("questionnaire")
     registration = {"type": "reg","name": "Registration","table": {"fields":[],"data":[]}}
     registration = []
@@ -403,6 +400,6 @@ def all_subjects(request):
         else:
             data = _get_subject_data(registration["table"]["fields"], subject)
             registration["table"]["data"].append(data)
-            
+
     return render_to_response('entity/all_entities.html',
             {'registration': registration, 'results':results})
