@@ -209,7 +209,7 @@ def create_subject(request):
 @login_required(login_url='/login')
 @is_new_user
 @is_datasender
-def all_subjects(request):
+def render_all_entities(request):
     manager = get_database_manager(request.user)
     if request.method == 'POST':
         error_message, failure_imports, success_message, imported_entities = import_module.import_data(request, manager)
@@ -335,50 +335,50 @@ def import_subjects_from_project_wizard(request):
                                     'failure_imports': failure_imports}))
 
 
+def _get_submissions(request, type):
+    dbm = get_database_manager(request.user)
+    if type != "Registration":
+        submissions = import_module.load_all_subjects_of_type(dbm, type=type)
+    else:
+        submissions = import_module.load_all_subjects(request)
+    return submissions
+
+def _get_fields_name_and_submissions_by_form_code(request, form_code):
+    dbm = get_database_manager(request.user)
+    form_model = get_form_model_by_code(dbm, form_code)
+    fields = form_model.fields
+    if form_model.entity_defaults_to_reporter():
+        fields = project_helper.hide_entity_question(fields)
+
+    data = []
+    for submission in  _get_submissions(request, form_model.entity_type[0]):
+        row = []
+        for field in fields:
+            key = "short_name" if field.name == "short_code" else field.name
+            row.append(submission.get(key,"-"))
+        data.append(row)
+
+    return {"type": form_model.entity_type[0], "table":  {'fields':fields,'data': data}}
+
+
+
 @login_required(login_url='/login')
-def render_all_entities(request):
+def all_subjects(request):
     dbm = get_database_manager(request.user)
     form_models = dbm.load_all_rows_in_view("questionnaire")
-    entities = []
+    registration = []
     results = []
 
     for form_model in form_models:
-        if form_model.value["flag_reg"] and form_model.value["entity_type"][0] != "Registration":
+        if form_model.value["flag_reg"]:
             form_code = form_model.value["form_code"]
-            form_model = get_form_model_by_code(dbm, form_code)
-            fields = form_model.fields
-            if form_model.entity_defaults_to_reporter():
-                fields = project_helper.hide_entity_question(fields)
-            
-            submissions = import_module.load_all_subjects_of_type(dbm, type=form_model.entity_type[0])
-            data = []
-            for submission in  submissions:
-                row = []
-                for field in fields:
-                    key = "short_name" if field.name == "short_code" else field.name
-                    row.append(submission.get(key,"-"))
-                data.append(row)
-            key = 0
-            actual = False
-            new_type = False
-            for entity_type_data in results:
-                if entity_type_data["type"] == form_model.entity_type[0]:
-                    actual = entity_type_data
-                    break
-                key += 1
 
-            if not actual:
-                actual = {"type": form_model.entity_type[0], "table":  {}}
-                new_type = True
+            table = _get_fields_name_and_submissions_by_form_code(request, form_code)
 
-            temp = actual["table"]
-            temp.update({'fields':fields,'data': data})
-
-            actual.update({"table": temp })
-            if not new_type:
-                results[key] = actual
+            if form_model.value["entity_type"][0] == "Registration":
+                registration = table
             else:
-                results.append(actual)
-
+                results.append(table)
+        
     return render_to_response('entity/all_entities.html',
-            {'fields': [], 'results':results, 'types': fields, 'entities':entities})
+            {'registration': registration, 'results':results})
