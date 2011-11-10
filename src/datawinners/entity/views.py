@@ -355,6 +355,7 @@ def _get_submissions(request, type):
         submissions = import_module.load_all_subjects(request)
     return submissions
 
+
 def _get_fields_name_and_submissions_by_form_code(request, form_code):
     dbm = get_database_manager(request.user)
     form_model = get_form_model_by_code(dbm, form_code)
@@ -362,16 +363,15 @@ def _get_fields_name_and_submissions_by_form_code(request, form_code):
     if form_model.entity_defaults_to_reporter():
         fields = project_helper.hide_entity_question(fields)
 
+
+def _get_subject_data(fields, subject):
     data = []
-    for submission in  _get_submissions(request, form_model.entity_type[0]):
-        row = []
-        for field in fields:
-            key = "short_name" if field.name == "short_code" else field.name
-            row.append(submission.get(key,"-"))
-        data.append(row)
-
-    return {"type": form_model.entity_type[0], "table":  {'fields':fields,'data': data}}
-
+    for field in fields:
+        field_name = field["name"] if field["name"] != "geo_code" else "geocode"
+        field_name = field_name if field_name != "short_code" else "short_name"
+        field_name = field_name if field_name != "entity_type" else "type"
+        data.append(subject.get(field_name, "-"))
+    return data
 
 @login_required(login_url='/login')
 def all_subjects(request):
@@ -394,7 +394,7 @@ def all_subjects(request):
             if form_model.value["entity_type"][0] == "Registration":
                 registration["table"]["fields"] = form_model.value["json_fields"]
 
-    for subject in subjects:
+    for subject  in subjects:
         if subject["type"] in entity_types:
             key = entity_types.index(subject["type"])
             data = _get_subject_data(results[key]["table"]["fields"], subject)
