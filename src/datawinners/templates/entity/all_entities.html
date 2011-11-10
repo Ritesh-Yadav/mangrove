@@ -76,6 +76,7 @@
                 </table>
             </div>
         </div>
+<<<<<<< HEAD
         <h3>Registration</h3>
         <table class="styled_table">
            <thead>
@@ -104,6 +105,48 @@
                     <th>
                         {% trans field.code %}
                     </th>
+=======
+
+            <h3>Registration</h3>
+            <table class="styled_table">
+               <thead>
+                    <tr>
+                    {% for field in registration.table.fields %}
+                        <th>
+                            {% trans field.label.en %}
+                        </th>
+                    {% endfor %}
+                    </tr>
+               </thead>
+                {%  for row in registration.table.data %}
+                    <tr>
+                        {% for dt in row %}
+                        <td>{{ dt }}</td>
+                        {%  endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+
+            {% for entity_type in results %}
+
+            <h3>{% trans entity_type.type %}</h3>
+            <table class="styled_table">
+                <thead>
+                    <tr>
+                    {% for field in entity_type.table.fields %}
+                        <th>
+                            {% trans field.label.en %}
+                        </th>
+                    {% endfor %}
+                    </tr>
+               </thead>
+                {%  for row in entity_type.table.data %}
+                    <tr>
+                        {% for dt in row %}
+                        <td>{{ dt }}</td>
+                        {%  endfor %}
+                    </tr>
+>>>>>>> Changing all subjects view
                 {% endfor %}
                 </tr>
             </thead>
