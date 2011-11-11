@@ -411,16 +411,6 @@ def _get_response(request, questionnaire_form, entity):
                               {'questionnaire_form': questionnaire_form, 'entity': entity },
                               context_instance=RequestContext(request))
 
-def _create_new_reg_form_model(manager, entity_name):
-    form_code = entity_name[0:3]
-    i = 1
-    exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-    while exists:
-        form_code += "%s" % i
-        exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-        i += 1
-
-    return create_reg_form_model(manager, entity_name, form_code, [entity_name])
 
 def _get_default_response(manager, request, entity_type=''):
     entity_types = _get_entity_types_without_form(manager)
