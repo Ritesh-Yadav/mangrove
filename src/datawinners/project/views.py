@@ -557,7 +557,7 @@ def _get_project_and_project_link(manager, project_id):
 
 
 @login_required(login_url='/login')
-def registered_subjects(request, project_id=None):
+def old_registered_subjects(request, project_id=None):
     manager = get_database_manager(request.user)
     project, project_links = _get_project_and_project_link(manager, project_id)
     all_data = load_all_subjects_of_type(manager, filter_entities=include_of_type, type=project.entity_type)
@@ -897,3 +897,25 @@ def _get_organization_telephone_number(user):
     organization_settings = OrganizationSetting.objects.get(organization=organization)
     return organization_settings.get_organisation_sms_number()
 
+@login_required(login_url='/login')
+def registered_subjects(request, project_id=None):
+    manager = get_database_manager(request.user)
+    project, project_links = _get_project_and_project_link(manager, project_id)
+    fields = _get_fields_by_entity_type(manager, project.entity_type)
+    raw_data = load_all_subjects_of_type(manager, filter_entities=include_of_type, type=project.entity_type)
+    all_data = []
+    for data in raw_data:
+        all_data.append(_get_subject_data(fields, data))
+    return render_to_response('project/dynamic_registered_subjects.html',
+            {'project': project, 'project_links': project_links, 'all_data': all_data, "fields": fields},
+                              context_instance=RequestContext(request))
+
+
+def _get_fields_by_entity_type(dbm, type):
+    rows = dbm.load_all_rows_in_view('questionnaire')
+    for row in rows:
+        if row['value']['flag_reg'] and row['value']['entity_type'][0] == "Registration":
+            form_model_for_reg = row
+        if row['value']['flag_reg'] and row['value']['entity_type'][0] == type:
+            return row["value"]["json_fields"]
+    return form_model_for_reg["value"]["json_fields"]
