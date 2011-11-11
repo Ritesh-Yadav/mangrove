@@ -23,6 +23,4 @@ urlpatterns = patterns('',
     (r'^entity/subject/import/$', import_subjects_from_project_wizard),
     (r'^entity/questionnaire/save$', save_questionnaire),
     (r'^submit$', submit),
-
-    (r'^render/$', render_all_entities),
 )

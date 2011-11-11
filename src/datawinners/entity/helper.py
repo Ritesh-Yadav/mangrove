@@ -1,12 +1,13 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 import re
 from mangrove.errors.MangroveException import NumberNotRegisteredException, DataObjectNotFound
+from mangrove.form_model.form_model import create_constraints_for_mobile_number
 from mangrove.transport.reporter import  find_reporter_entity
 from django.utils.encoding import smart_unicode
 from mangrove.utils.types import is_empty, is_not_empty
 from mangrove.form_model.validation import NumericRangeConstraint, TextLengthConstraint
 from mangrove.datastore.datadict import create_datadict_type, get_datadict_type_by_slug
-from mangrove.form_model.field import TextField, IntegerField, SelectField, DateField, GeoCodeField
+from mangrove.form_model.field import TextField, IntegerField, SelectField, DateField, GeoCodeField, TelephoneNumberField, HierarchyField
 from mangrove.utils.helpers import slugify
 
 def remove_hyphens(telephone_number):
@@ -53,6 +54,10 @@ def create_question(post_dict, dbm):
         return _create_date_question(post_dict, ddtype)
     if post_dict["type"] == "select1":
         return _create_select_question(post_dict, single_select_flag=True, ddtype=ddtype)
+    if post_dict["type"] == "telephone_number":
+        return _create_telephone_number_question(post_dict, ddtype)
+    if post_dict["type"] == "list":
+        return _create_location_question(post_dict, ddtype)
 
 def update_questionnaire_with_questions(form_model, question_set, dbm):
     form_model.delete_all_fields()
@@ -98,3 +103,15 @@ def _create_select_question(post_dict, single_select_flag, ddtype):
     return SelectField(name=post_dict["title"], code=post_dict["code"].strip(), label="default",
                        options=options, single_select_flag=single_select_flag, ddtype=ddtype,
                        instruction=post_dict.get("instruction"),required=post_dict.get("required"))
+
+
+def _create_telephone_number_question(post_dict, ddtype):
+    return TelephoneNumberField(name=post_dict["title"], code=post_dict["code"].strip(),
+                                     label="default", ddtype=ddtype,
+                                     instruction=post_dict.get("instruction"), constraints=(
+            create_constraints_for_mobile_number()),required=post_dict.get("required"))
+
+
+def _create_location_question(post_dict, ddtype):
+    return HierarchyField(name=post_dict["title"], code=post_dict["code"].strip(),
+                               label="default", ddtype=ddtype, instruction=post_dict.get("instruction"),required=post_dict.get("required"))
