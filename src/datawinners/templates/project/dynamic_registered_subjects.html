@@ -1,0 +1,43 @@
+{% extends 'project/tab_navigation.html' %}
+{% load i18n %}
+{% block page_title %} {% trans "Projects - Subjects" %} {% endblock %}
+
+{% load dw_tabs %}
+{% block navigation %}
+    {% activetab "tab_nav" "subjects" %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body %}
+    {% activetab "main_nav" "projects" %}
+    {{ block.super }}
+{% endblock %}
+
+{% block page_scss %}
+    {{ block.super }}
+    {#    <link href="/media/css/scss/section_project_overview.scss" rel="stylesheet" />#}
+{% endblock %}
+{% block content %}
+    {% block secondary_navigation_subjects %}
+        {% activetab "secondary_tab_nav" "subjects" %}
+        {{ block.super }}
+    {% endblock %}
+
+    <table class="styled_table">
+        <thead>
+        {% for field in fields %}
+        <th>{% trans field.label.en %}</th>
+        {% endfor %}
+        </thead>
+        <tbody>
+        {% for row in all_data %}
+            <tr>
+                {% for data in row %}
+                <td>{{ data }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
