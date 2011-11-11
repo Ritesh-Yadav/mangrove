@@ -399,7 +399,6 @@ def all_subjects(request):
 
     form_models = dbm.load_all_rows_in_view("questionnaire")
     registration = {"type": "reg","name": "Registration","table": {"fields":[],"data":[]}}
-    registration = []
     results = []
     entity_types = []
 
