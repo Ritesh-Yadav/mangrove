@@ -29,8 +29,9 @@ class TestCreateProject(BaseTest):
         """
         create_project_page = self.prerequisites_of_create_project()
         create_project_page.create_project_with(VALID_DATA)
+        create_project_page.continue_create_project()
         create_project_page.save_and_create_project_successfully()
-        self.driver.wait_for_page_with_title(3, fetch_(PAGE_TITLE, from_(VALID_DATA)))
+        self.driver.wait_for_page_with_title(5, fetch_(PAGE_TITLE, from_(VALID_DATA)))
         self.assertEqual(self.driver.get_title(),
                                  fetch_(PAGE_TITLE, from_(VALID_DATA)))
 
@@ -41,7 +42,6 @@ class TestCreateProject(BaseTest):
         creation of project
         """
         create_project_page = self.prerequisites_of_create_project()
-        create_project_page.create_project_with(BLANK_FIELDS)
-        create_project_page.save_and_create_project()
+        create_project_page.continue_create_project()
         self.assertEqual(create_project_page.get_error_message(),
                          fetch_(ERROR_MSG, from_(BLANK_FIELDS)))

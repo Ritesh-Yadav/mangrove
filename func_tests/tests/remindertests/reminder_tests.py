@@ -23,7 +23,7 @@ class TestReminderSend(BaseTest):
     def start_create_normal_project(self):
         dashboard_page = self.login_with(TRIAL_CREDENTIALS_VALIDATES)
         create_project_page = dashboard_page.navigate_to_create_project_page()
-        create_project_page.create_project_with(VALID_DATA)
+        create_project_page.create_project_with(VALID_DATA).continue_create_project()
         return create_project_page.save_and_create_project_successfully()
 
 #    @attr("functional_test")

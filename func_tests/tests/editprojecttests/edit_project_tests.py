@@ -34,6 +34,7 @@ class TestEditProject(BaseTest):
         self.assertEquals(light_box.get_title_of_light_box(), fetch_(TITLE, from_(LIGHT_BOX_DATA)))
         self.assertEquals(light_box.get_message_from_light_box(), fetch_(MESSAGE, from_(LIGHT_BOX_DATA)))
         edit_project_page = light_box.continue_change()
+        edit_project_page.continue_create_project()
         create_questionnaire_page = CreateQuestionnairePage(self.driver)
         self.assertEqual(create_questionnaire_page.get_question_link_text(1),
                          fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT))[0])
@@ -57,6 +58,7 @@ class TestEditProject(BaseTest):
         self.assertEquals(light_box.get_title_of_light_box(), fetch_(TITLE, from_(LIGHT_BOX_DATA)))
         self.assertEquals(light_box.get_message_from_light_box(), fetch_(MESSAGE, from_(LIGHT_BOX_DATA)))
         edit_project_page = light_box.continue_change()
+        edit_project_page.continue_create_project()
         create_questionnaire_page = CreateQuestionnairePage(self.driver)
         self.assertEqual(create_questionnaire_page.get_question_link_text(1),
                          fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES))[0])

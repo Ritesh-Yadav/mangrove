@@ -93,6 +93,10 @@ class CreateProjectPage(Page):
         self.driver.find(SAVE_AND_CREATE_BTN).click()
         return self
 
+    def continue_create_project(self):
+        self.driver.find(CONTINUE_BTN).click()
+        return self
+
     def set_subject(self, project_data):
         subject = fetch_(SUBJECT, from_(project_data))
         if len(subject) != 0:

@@ -96,6 +96,7 @@ class TestApplicationEndToEnd(BaseTest):
 
     def create_project(self, create_project_page):
         create_project_page.create_project_with(VALID_DATA_FOR_PROJECT)
+        create_project_page.continue_create_project()
         return CreateQuestionnairePage(self.driver)
 
 #    def create_subject_questionnaire(self, create_subject_questionnaire_page):

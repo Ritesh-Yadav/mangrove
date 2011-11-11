@@ -41,7 +41,7 @@ class TestTrialDataSenders(BaseTest):
     def create_project(self, create_project_page):
         create_project_page.select_report_type(VALID_DATA_FOR_PROJECT)
         self.add_subject_type(VALID_SUBJECT_TYPE2[ENTITY_TYPE])
-        return create_project_page.create_project_with(VALID_DATA_FOR_PROJECT).save_and_create_project_successfully()
+        return create_project_page.create_project_with(VALID_DATA_FOR_PROJECT).continue_create_project().save_and_create_project_successfully()
 
     def add_trial_organization_with_data_sender(self):
         registration_confirmation_page, email = register_and_get_email_for_trial(self.driver)

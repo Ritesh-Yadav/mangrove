@@ -22,6 +22,7 @@ class TestCreateQuestionnaire(BaseTest):
         create_project_page = dashboard_page.navigate_to_create_project_page()
         #Navigating to Create Questionnaire Page by successfully creating a Project
         create_project_page.create_project_with(VALID_DATA2)
+        create_project_page.continue_create_project()
         return CreateQuestionnairePage(self.driver)
 
     @attr('functional_test', 'smoke')
