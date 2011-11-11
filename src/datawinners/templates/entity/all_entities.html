@@ -82,7 +82,7 @@
                 <tr>
                 {% for field in registration.table.fields %}
                     <th>
-                        {% trans field.label.en %}
+                        {% trans field.code %}
                     </th>
                 {% endfor %}
                 </tr>
@@ -103,7 +103,7 @@
                 <tr>
                 {% for field in entity_type.table.fields %}
                     <th>
-                        {% trans field.label.en %}
+                        {% trans field.code %}
                     </th>
                 {% endfor %}
                 </tr>
