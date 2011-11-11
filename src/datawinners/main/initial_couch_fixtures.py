@@ -839,6 +839,7 @@ def load_sms_data_for_cli001(manager):
     message1 = "cli .t clinic  .n  Clinic in Mahajanga .l  Mahajanga .g  -15.6667  46.35  .d This is a Clinic in Mahajanga .m 87654331"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
 
+
     datetime_mocker = DateTimeMocker()
     datetime_mocker.set_date_time_now(FEB)
     # Total number of identical records = 3
