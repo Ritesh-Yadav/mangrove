@@ -9,7 +9,7 @@ from datawinners.entity.views import all_subjects
 from datawinners.entity.views import all_datasenders
 from datawinners.entity.views import import_subjects_from_project_wizard
 from datawinners.entity.views import save_questionnaire
-from datawinners.entity.views import render_all_entities
+from datawinners.entity.views import subject_questionnaire
 
 urlpatterns = patterns('',
     (r'^entity/datasender/create', create_datasender),
@@ -23,4 +23,5 @@ urlpatterns = patterns('',
     (r'^entity/subject/import/$', import_subjects_from_project_wizard),
     (r'^entity/questionnaire/save$', save_questionnaire),
     (r'^submit$', submit),
+    (r'^entity/registration/(?P<entity_type>.+?)/$', subject_questionnaire),
 )
