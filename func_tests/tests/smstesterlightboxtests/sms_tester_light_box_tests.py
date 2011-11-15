@@ -10,7 +10,6 @@ from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.logintests.login_data import VALID_CREDENTIALS
 from tests.smstesterlightboxtests.sms_tester_light_box_data import *
 
-USE_ORDERED_SMS_PARSER = False
 
 class BasePrepare(BaseTest):
     @nottest
@@ -26,7 +25,6 @@ class BasePrepare(BaseTest):
             fetch_(PROJECT_NAME, from_(project_to_open)))
         return project_overview_page.open_sms_tester_light_box()
 
-@skipIf(USE_ORDERED_SMS_PARSER, "USE_ORDERED_SMS_PARSER is set, only ordered sms can be used while this is the case")
 class TestSMSTesterLightBox(BasePrepare):
 
     @attr('functional_test', 'smoke')
@@ -59,7 +57,6 @@ class TestSMSTesterLightBox(BasePrepare):
         sms_tester_page.send_sms_with(SMS_WITH_UNICODE)
         self.assertEqual(sms_tester_page.get_response_message(), fetch_(RESPONSE_MESSAGE, from_(SMS_WITH_UNICODE)))
 
-@skipUnless(USE_ORDERED_SMS_PARSER, "USE_ORDERED_SMS_PARSER is not set, only unordered sms can be used while this is the case")
 class TestOrderedSMSTesterLightBox(BasePrepare):
 
     @attr('functional_test')

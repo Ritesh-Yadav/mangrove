@@ -9,10 +9,6 @@ from tests.smstestertests.sms_tester_data import *
 
 class TestSMSTester(BaseTest):
 
-    @classmethod
-    def setUpClass(cls):
-        USE_ORDERED_SMS_PARSER = True
-
     @attr('functional_test', 'smoke')
     def test_successful_sms_submission(self):
         """
