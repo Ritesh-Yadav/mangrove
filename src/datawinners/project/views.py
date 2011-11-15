@@ -909,8 +909,7 @@ def registered_subjects(request, project_id=None):
     fields = _get_fields_by_entity_type(manager, project.entity_type)
     raw_data = load_all_subjects_of_type(manager, filter_entities=include_of_type, type=project.entity_type)
     all_data = []
-    for data in raw_data:
-        all_data.append(_get_subject_data(fields, data))
+    # for data in raw_data:
     return render_to_response('project/dynamic_registered_subjects.html',
             {'project': project, 'project_links': project_links, 'all_data': all_data, "fields": fields},
                               context_instance=RequestContext(request))
