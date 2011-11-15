@@ -1,0 +1,58 @@
+{% extends 'layout_application.html' %}
+{% load i18n %}
+{% block page_title %}{% trans "Subjects" %}{% endblock %}
+
+{% block section_title %}{% trans "Subjects" %}
+<span class="title_links">
+     <a id="register_link" class="float_right add_subject_link" href="{% url datawinners.entity.views.create_subject %}">{% trans "Add a Subject" %}</a><img src="/media/images/help_icon.png" class="help_icon" style="margin-top:-6px;">
+    <div class="tooltip">
+        <p>
+            <strong>{% trans "What is this?" %}</strong><br />
+            {% trans "Add subjects one-by-one using the online registration form" %}<br /><br />
+            <strong>{% trans "What do I need to do?" %}</strong><br />
+            {% trans 'Click the blue "Add a subject" link and follow the step-by-step instructions' %}
+        </p>
+    </div>
+</span>
+{% endblock %}
+
+{% load dw_tabs %}
+{% block body %}
+    {% activetab "main_nav" "subjects" %}
+    {{ block.super }}
+{% endblock %}
+
+{% load i18n %}
+{% block content %}
+    <div id="questionnaire_preview">
+        <ul class="questionnaire_preview">
+            {% for question in questions %}
+                <li>
+                    <h6><span> .{{ question.code }}</span> {% trans question.description %}</h6>
+                    {% if  question.instruction %}
+                        <p class="instructions italic">
+                            {% trans question.instruction %}
+                        </p>
+                        <input class="displayText" type="text">
+                    {% endif %}
+                    <div class="answer">
+                        {% if question.type == "select1" %}
+                            <ol class="multiple_select">
+                                {% for option in question.constraints %}
+                                    <li><label>{{ option }}</label></li>
+                                {% endfor %}
+                            </ol>
+                        {% endif %}
+                        {% if question.type == "select" %}
+                            <ol class="multiple_select">
+                                {% for option in question.constraints %}
+                                    <li><label>{{ option }}</label></li>
+                                {% endfor %}
+                            </ol>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
