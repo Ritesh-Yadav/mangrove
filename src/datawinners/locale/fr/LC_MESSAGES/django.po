@@ -2717,9 +2717,6 @@ msgstr "Remarque, vos projets dans votre compte d'essai seront toujours accessib
 msgid "upgrade edit note"
 msgstr "Editez cette information en cliquant sur les liens 'Votre profil' et 'Votre compte' en haut de cette page."
 
-
-
-
 msgid "Create questionnaire"
 msgstr "Créer un questionnaire"
 
