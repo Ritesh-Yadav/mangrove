@@ -2335,7 +2335,7 @@ msgid "Error: Invalid Submission. No valid question found. Check the Question Co
 msgstr "Erreur. Trouvez le code questionnaire sur le questionnaire imprimé et envoyez de nouveau le SMS en commençant par ce code questionnaire."
 
 msgid "Error. This project is not yet active. Submissions can be made only for an active project."
-msgstr "Erreur. Ce projet n'est pas encore actif. Les soumissions ne peuvent être effectuées  que pour un projet actif."
+msgstr "Erreur. Ce projet n'est pas encore actif. Les soumissions ne peuvent être effectuées que pour un projet actif."
 
 msgid "Error. Internal error. Please call technical support"
 msgstr "Erreur. Erreur interne. Veuillez contacter le support technique"
@@ -2709,7 +2709,7 @@ msgid "Import A List"
 msgstr "Importer Une Liste"
 
 msgid "upgrade success message"
-msgstr "Félicitations pour être passé à un abonnement mensuel ! Nous vous enverrons un email avec les étapes à suivre prochainement. Veuillez noter  que vous ne pourrez, ni envoyer, ni recevoir des SMS jusqu'à la réception de votre paiement. Si vous ne recevez pas un email de notre part dans les prochaines 24 heures, veuillez vérifier dans votre dossier de SPAM."
+msgstr "Félicitations pour être passé à un abonnement mensuel ! Nous vous enverrons un email avec les étapes à suivre prochainement. Veuillez noter que vous ne pourrez, ni envoyer, ni recevoir des SMS jusqu'à la réception de votre paiement. Si vous ne recevez pas un email de notre part dans les prochaines 24 heures, veuillez vérifier dans votre dossier de SPAM."
 
 msgid "upgrade project note"
 msgstr "Remarque, vos projets dans votre compte d'essai seront toujours accessibles"
@@ -2729,7 +2729,7 @@ msgstr "Enregistrer un Sujet/Envoyeurs de données"
 msgid "Send data using SMS"
 msgstr "Envoyer des données par SMS"
 
-msgid "Send data using  Internet"
+msgid "Send data using Internet"
 msgstr "Envoyer des données par internet"
 
 msgid "Analyze data"
@@ -2766,7 +2766,7 @@ msgstr "Vos Expéditeurs de Données peuvent soumettre des données par SMS ou v
 "<br/>Si certains de vos Expéditeurs de Données ont (ou auront) accès à Internet, nous vous recommandons de laisser la case 'WEB' cochée."
 
 msgid "Error. Incorrect number of answers submitted. Review printed questionnaire and resend SMS."
-msgstr "Erreur. SMS incorrect. Le nombre de données est insuffisant ou en surnombre. Revoyez le questionnaire imprimé et envoyez de nouveau le  SMS."
+msgstr "Erreur. SMS incorrect. Le nombre de données est insuffisant ou en surnombre. Revoyez le questionnaire imprimé et envoyez de nouveau le SMS."
 
 msgid "Privacy Policy"
 msgstr "Politique de Confidentialité"
