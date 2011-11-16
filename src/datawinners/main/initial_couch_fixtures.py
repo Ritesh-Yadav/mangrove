@@ -11,7 +11,7 @@ from datawinners.submission.views import SMS
 from mangrove.datastore.database import get_db_manager
 from mangrove.datastore.datadict import create_datadict_type, get_datadict_type_by_slug, get_or_create_data_dict
 from mangrove.datastore.documents import attributes
-from mangrove.datastore.entity import  create_entity, get_by_short_code
+from mangrove.datastore.entity import create_entity, get_by_short_code
 from pytz import UTC
 from mangrove.datastore.entity_type import define_type
 from mangrove.errors.MangroveException import EntityTypeAlreadyDefined, DataObjectNotFound, DataObjectAlreadyExists
@@ -106,28 +106,11 @@ def load_datadict_types(manager):
 def create_clinic_registration_form(CLINIC_ENTITY_TYPE, manager):
     description_type = get_or_create_data_dict(manager, name='description Type', slug='description',
                                                primitive_type='string')
-<<<<<<< HEAD
     question1 = TextField(name="description", code="d", label="Describe the subject",
                           defaultValue="some default value", language="en", ddtype=description_type,
                           instruction="Describe your subject in more details (optional)", required=False)
     form_model = create_reg_form_model(manager, "Clinic", "cli", CLINIC_ENTITY_TYPE)
     form_model.add_field(question1)
-=======
-    mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
-                                                 primitive_type='string')
-
-    question1 = TextField(name="description", code="d", label="Describe the subject",
-                          defaultValue="some default value", language="en", ddtype=description_type,
-                          instruction="Describe your subject in more details (optional)", required=False)
-    question2 = TelephoneNumberField(name="mobile_number", code="m",
-                                     label="What is the mobile number associated with the subject?",
-                                     defaultValue="some default value", language="en", ddtype=mobile_number_type,
-                                     instruction="Enter the subject's number", constraints=(
-            create_constraints_for_mobile_number()), required=False)
-    form_model = create_reg_form_model(manager, "cli", "cli", CLINIC_ENTITY_TYPE)
-    form_model.add_field(question1)
-    form_model.add_field(question2)
->>>>>>> Adding editable registration form
     form_model.save()
 
 def load_clinic_entities(CLINIC_ENTITY_TYPE, manager):
@@ -300,7 +283,7 @@ def create_clinic_projects(CLINIC_ENTITY_TYPE, manager):
     reminder = Reminder(project_id = project1.id,day=0,reminder_mode=ReminderMode.ON_DEADLINE,organization_id = 'SLX364903',
              message = "Today is the deadline. Please send your data for Clinic Test Project.")
     reminder.save()
-    
+
     reminder = Reminder(project_id = project1.id,day=2,reminder_mode=ReminderMode.AFTER_DEADLINE, organization_id = 'SLX364903',
              message = "2 days are overdue the deadline. Please send your data for Clinic Test Project.")
     reminder.save()
@@ -833,52 +816,28 @@ def load_sms_data_for_cli001(manager):
     TO_NUMBER = '919880734937'
     transport = TransportInfo(SMS, FROM_NUMBER, TO_NUMBER)
 
-    message1 = "cli  .n  Clinic in Analalava  .l  Analalava  .g  -14.6333  47.7667  .d This is a Clinic in Analalava .m 987654321"
-<<<<<<< HEAD
+    message1 = "cli .n Clinic in Analalava .l Analalava .g -14.6333 47.7667 .d This is a Clinic in Analalava .m 987654321"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-    message1 = "cli  .n  Clinic in Andapa  .l  Andapa  .g  -14.65  49.6167  .d This is a Clinic in Andapa  .m 87654322"
+    message1 = "cli .n Clinic in Andapa .l Andapa .g -14.65 49.6167 .d This is a Clinic in Andapa .m 87654322"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-    message1 = "cli  .n  Clinic in Antalaha  .l  Antalaha  .g  -14.8833  50.25  .d This is a Clinic in Antalaha  .m 87654323"
+    message1 = "cli .n Clinic in Antalaha .l Antalaha .g -14.8833 50.25 .d This is a Clinic in Antalaha .m 87654323"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-    message1 = "cli  .n  Clinic in ANALAMANGA  .l  ANALAMANGA  .g  -18.8  47.4833  .d This is a Clinic in Antananarivo  .m 87654324"
+    message1 = "cli .n Clinic in ANALAMANGA .l ANALAMANGA .g -18.8 47.4833 .d This is a Clinic in Antananarivo .m 87654324"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-    message1 = "cli  .n  Clinic in TSIMANARIRAZANA .l  TSIMANARIRAZANA .g  -12.35  49.3  .d This is a Clinic in Diégo–Suarez .m 87654325"
+    message1 = "cli .n Clinic in TSIMANARIRAZANA .l TSIMANARIRAZANA .g -12.35 49.3 .d This is a Clinic in Diégo–Suarez .m 87654325"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-    message1 = "cli  .n  Clinic in Antsirabe  .l  Antsirabe  .g  -19.8167  47.0667  .d This is a Clinic in Antsirabe  .m 87654326"
+    message1 = "cli .n Clinic in Antsirabe .l Antsirabe .g -19.8167 47.0667 .d This is a Clinic in Antsirabe .m 87654326"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-    message1 = "cli  .n  Clinic in Besalampy  .l  Besalampy  .g  -16.75  44.5  .d This is a Clinic in Besalampy  .m 87654327"
+    message1 = "cli .n Clinic in Besalampy .l Besalampy .g -16.75 44.5 .d This is a Clinic in Besalampy .m 87654327"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-    message1 = "cli  .n  clinique à Farafangana  .l  Farafangana  .g  -22.8  47.8333  .d This is a Clinic in Farafangana  .m 87654328"
+    message1 = "cli .n clinique à Farafangana .l Farafangana .g -22.8 47.8333 .d This is a Clinic in Farafangana .m 87654328"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-    message1 = "cli  .n  Clinic in Fianarantsoa I .l  Fianarantsoa I .g  -21.45  47.1 .d  C'est une clinique à Fianarantsoa .m 87654329"
+    message1 = "cli .n Clinic in Fianarantsoa I .l Fianarantsoa I .g -21.45 47.1 .d C'est une clinique à Fianarantsoa .m 87654329"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-    message1 = "cli  .n  Clinic in Sainte Marie  .l  Sainte Marie  .g  -17.0833  49.8167  .d This is a Clinic in Île Sainte–Marie  .m 87654330"
+    message1 = "cli .n Clinic in Sainte Marie .l Sainte Marie .g -17.0833 49.8167 .d This is a Clinic in Île Sainte–Marie .m 87654330"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-    message1 = "cli .t clinic  .n  Clinic in Mahajanga .l  Mahajanga .g  -15.6667  46.35  .d This is a Clinic in Mahajanga .m 87654331"
+    message1 = "cli .t clinic .n Clinic in Mahajanga .l Mahajanga .g -15.6667 46.35 .d This is a Clinic in Mahajanga .m 87654331"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-=======
-    response = sms_player.accept(Request(transportInfo=transport, message=message1))
-    message1 = "cli  .n  Clinic in Andapa  .l  Andapa  .g  -14.65  49.6167  .d This is a Clinic in Andapa  .m 87654322"
-    response = sms_player.accept(Request(transportInfo=transport, message=message1))
-    message1 = "cli  .n  Clinic in Antalaha  .l  Antalaha  .g  -14.8833  50.25  .d This is a Clinic in Antalaha  .m 87654323"
-    response = sms_player.accept(Request(transportInfo=transport, message=message1))
-    message1 = "cli  .n  Clinic in ANALAMANGA  .l  ANALAMANGA  .g  -18.8  47.4833  .d This is a Clinic in Antananarivo  .m 87654324"
-    response = sms_player.accept(Request(transportInfo=transport, message=message1))
-    message1 = "cli  .n  Clinic in TSIMANARIRAZANA .l  TSIMANARIRAZANA .g  -12.35  49.3  .d This is a Clinic in Diégo–Suarez .m 87654325"
-    response = sms_player.accept(Request(transportInfo=transport, message=message1))
-    message1 = "cli  .n  Clinic in Antsirabe  .l  Antsirabe  .g  -19.8167  47.0667  .d This is a Clinic in Antsirabe  .m 87654326"
-    response = sms_player.accept(Request(transportInfo=transport, message=message1))
-    message1 = "cli  .n  Clinic in Besalampy  .l  Besalampy  .g  -16.75  44.5  .d This is a Clinic in Besalampy  .m 87654327"
-    response = sms_player.accept(Request(transportInfo=transport, message=message1))
-    message1 = "cli  .n  clinique à Farafangana  .l  Farafangana  .g  -22.8  47.8333  .d This is a Clinic in Farafangana  .m 87654328"
-    response = sms_player.accept(Request(transportInfo=transport, message=message1))
-    message1 = "cli  .n  Clinic in Fianarantsoa I .l  Fianarantsoa I .g  -21.45  47.1 .d  C'est une clinique à Fianarantsoa .m 87654329"
-    response = sms_player.accept(Request(transportInfo=transport, message=message1))
-    message1 = "cli  .n  Clinic in Sainte Marie  .l  Sainte Marie  .g  -17.0833  49.8167  .d This is a Clinic in Île Sainte–Marie  .m 87654330"
-    response = sms_player.accept(Request(transportInfo=transport, message=message1))
-    message1 = "cli .t clinic  .n  Clinic in Mahajanga .l  Mahajanga .g  -15.6667  46.35  .d This is a Clinic in Mahajanga .m 87654331"
-    response = sms_player.accept(Request(transportInfo=transport, message=message1))
->>>>>>> Adding editable registration form
 
 
     datetime_mocker = DateTimeMocker()
@@ -919,7 +878,7 @@ def load_sms_data_for_cli001(manager):
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = "cli001 .EID cid004 .NA ànnita .FA 30 .RD 07.03.2011 .BG b .SY bbe .GPS 45.233 28.3324"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
-    message1 = "cli001 .EID cid005 .NA Qamanda  .FA 47 .RD 12.03.2011 .BG c .SY bd .GPS 40.2 69.3123"
+    message1 = "cli001 .EID cid005 .NA Qamanda .FA 47 .RD 12.03.2011 .BG c .SY bd .GPS 40.2 69.3123"
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = 'cli001 .EID cid001 .NA Huanda (*_*) .FA 74 .RD 27.03.2011 .BG d .SY be .GPS 38.3452 15.3345'
     response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
@@ -1242,7 +1201,7 @@ def load_data():
     initializer.run(manager)
 
     create_reporter_form_model(manager)
-    
+
     CLINIC_ENTITY_TYPE = [u"clinic"]
     WATER_POINT_ENTITY_TYPE = [u"waterpoint"]
     create_entity_types(manager, [CLINIC_ENTITY_TYPE, WATER_POINT_ENTITY_TYPE])
@@ -1327,7 +1286,7 @@ def load_all_managers():
 
 
 def create_reporter_form_model(manager):
-    form_model  = create_reg_form_model(manager, name="Reporter", form_code="rep", entity_type=["reporter"])
+    form_model = create_reg_form_model(manager, name="Reporter", form_code="rep", entity_type=["reporter"])
     matricule_type = get_or_create_data_dict(manager, name='matricule_name', slug='matricule',
                                                primitive_type='string')
 

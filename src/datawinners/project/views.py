@@ -657,8 +657,10 @@ def subjects(request, project_id=None):
         existing_questions = json.dumps(fields, default=field_to_json)
         project_links = _make_project_links(project, form_model.form_code)
         return render_to_response('project/subject_questionnaire.html',
-                {"existing_questions": repr(existing_questions), 'questionnaire_code': form_model.form_code,
-                 'project': project, 'project_links': project_links},
+                {"existing_questions": repr(existing_questions),
+                 'questionnaire_code': form_model.form_code,
+                 'project': project,
+                 'project_links': project_links},
                                   context_instance=RequestContext(request))
     else:
         reg_form = get_form_model_by_code(manager, REGISTRATION_FORM_CODE)
