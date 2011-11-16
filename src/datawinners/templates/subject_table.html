@@ -10,7 +10,7 @@
         <tbody id='all_data_senders'>
         {% for row in entity.data %}
             <tr>
-                {% for key,col in row.items %}
+                {% for col in row %}
                     <td>{{ col }}</td>
                 {% endfor %}
             </tr>
