@@ -104,7 +104,7 @@ class CreateQuestionnairePage(CreateProjectPage):
         return self
         """
         self.driver.find_text_box(QUESTION_TB).enter_text(fetch_(QUESTION, from_(question_data)))
-        self.driver.find_text_box(CODE_TB).enter_text(fetch_(CODE, from_(question_data)))
+        #self.driver.find_text_box(CODE_TB).enter_text(fetch_(CODE, from_(question_data)))
         return self
 
 
@@ -385,3 +385,6 @@ class CreateQuestionnairePage(CreateProjectPage):
         question[QUESTION] = self.get_question()
         question[CODE] = self.get_question_code()
         return question
+
+    def go_back(self):
+        self.driver.find(BACK_BTN).click()

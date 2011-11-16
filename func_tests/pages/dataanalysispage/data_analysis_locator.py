@@ -19,6 +19,7 @@ BY = "by"
 
 ANALYSIS_LINK = by_css("ul.secondary_tab>li>a:contains('Analysis')")
 ALL_DATA_RECORDS_LINK = by_xpath("//ul[@class='secondary_tab']/li/a[text()='All Data Records']")
+LOADING_GIF = by_css("#h1 .loading")
 
 QUESTION_LABEL_CSS = "table#data_analysis>thead>tr>th:nth-child(%s)"
 DATA_ROW_BY_ENTITY_ID_XPATH = "//table[@id='data_analysis']/tbody/tr/td[text()='%s']"

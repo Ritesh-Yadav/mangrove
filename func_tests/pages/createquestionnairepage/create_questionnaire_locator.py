@@ -49,15 +49,16 @@ MULTIPLE_ANSWER_RB = by_css("input[value='select']")
 
 GEO_RB = by_css("input[value='geocode']")
 CHARACTER_COUNT = by_css("div#char-count")
+BACK_BTN = by_css("input#back_to_project")
 
 PREVIOUS_STEP_LINK = by_xpath("//a[@id='subjects_link' and text()='Subjects']")
 
 # Locators for Question List section of the page
 DEFAULT_QUESTION_LINK = by_xpath(
-    "//div[@class='question_list']/ul/div[1]/li/a[contains(text(),'q1 Which subject are you reporting on?')]")
-QUESTION_LINK_CSS_LOCATOR_PART1 = "div.question_list>ul>div"  # index number to identify question
+    "//div[@class='question_list']/ol/div[1]/li/a[contains(text(),'Which subject are you reporting on?')]")
+QUESTION_LINK_CSS_LOCATOR_PART1 = "div.question_list>ol>div"  # index number to identify question
 QUESTION_LINK_CSS_LOCATOR_PART2 = ">li>a"  # Add text to locate specific question
-QUESTION_DELETE_LINK_CSS_LOCATOR_PART1 = "div.question_list>ul>div>li>a"  # Add text or index number to identify question
+QUESTION_DELETE_LINK_CSS_LOCATOR_PART1 = "div.question_list>ol>div>li>a"  # Add text or index number to identify question
 QUESTION_DELETE_LINK_CSS_LOCATOR_PART1 = "~div>span.delete>a"
 ADD_A_QUESTION_LINK = by_css("div.add_question>a")
 SAVE_CHANGES_BTN = by_css("input#submit-button[value='Next Step: Data Senders']")

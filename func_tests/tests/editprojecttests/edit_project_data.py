@@ -61,7 +61,7 @@ REPORTER_ACTIVITIES_DATA = {PROJECT_NAME: u"reporter activities",
                             #DEVICES: "sms"
                             }
 
-QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES = {QUESTIONS: ["q1 What is the reporting period for the activity?"]}
+QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES = {QUESTIONS: ["What is the reporting period for the activity?"]}
 
 LIGHT_BOX_DATA = {TITLE: "Warning !!",
                   MESSAGE: "Warning: Changing the subject type will remove all questions from your questionnaire as well as all your collected data. Are you sure you want to continue?"}

@@ -40,6 +40,7 @@ class TestEditProject(BaseTest):
                          fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT))[0])
         self.assertEqual(create_questionnaire_page.get_question_link_text(2),
                          fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_WATER_POINT))[1])
+        create_questionnaire_page.go_back()
         self.assertEqual(WATER_POINT_DATA, edit_project_page.get_project_details())
 
     @attr('functional_test', 'smoke')
@@ -62,4 +63,5 @@ class TestEditProject(BaseTest):
         create_questionnaire_page = CreateQuestionnairePage(self.driver)
         self.assertEqual(create_questionnaire_page.get_question_link_text(1),
                          fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA_FOR_REPORTER_ACTIVITIES))[0])
+        create_questionnaire_page.go_back()
         self.assertEqual(REPORTER_ACTIVITIES_DATA, edit_project_page.get_project_details())
