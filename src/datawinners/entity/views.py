@@ -1,6 +1,10 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from collections import defaultdict
 import json
+from django.forms.forms import Form
+from django import forms
+from mangrove.form_model.field import SelectField
+from django.forms.widgets import HiddenInput
 from django.contrib.auth.decorators import login_required
 from django.utils import translation
 from django.contrib.auth.forms import PasswordResetForm
@@ -240,6 +244,8 @@ def all_subjects(request):
                     field_name = 'short_name'
                 elif field['name'] == 'geo_code':
                     field_name = 'geocode'
+                elif field['name'] == 'entity_type':
+                    field_name = 'type'
                 else:
                     field_name = field['name']
                 field_list.append(field_name)
@@ -253,12 +259,12 @@ def all_subjects(request):
         else:
             entity = 'Registration'
         fields = subjects_data[entity]['fields']
-        row = {}
+        row = []
         for i in range(len(fields)):
             if fields[i] in subject:
-                row[fields[i]] = subject[fields[i]]
+                row.append(subject[fields[i]])
             else:
-                row[fields[i]] = ''
+                row.append('')
         subjects_data[entity]['data'].append(row)
 
     if request.method == 'POST':
@@ -402,6 +408,27 @@ def _get_submissions(request, type):
         submissions = import_module.load_all_subjects(request)
     return submissions
 
+def _create_select_field(field, choices):
+    if field.single_select_flag:
+        return forms.ChoiceField(choices=choices, required=field.is_required(), label=field.name, initial=field.value, help_text=field.instruction)
+    return forms.MultipleChoiceField(label=field.name, widget=forms.CheckboxSelectMultiple, choices=choices,
+                                  initial=field.value, required=field.is_required(), help_text=field.instruction)
+
+
+def _get_django_field(field):
+    if isinstance(field, SelectField):
+        return  _create_select_field(field, _create_choices(field))
+    display_field = forms.CharField(label=field.name, initial=field.value, required=field.is_required(), help_text=field.instruction)
+    display_field.widget.attrs["watermark"] = field.get_constraint_text()
+    display_field.widget.attrs['style'] = 'padding-top: 7px;'
+    #    display_field.widget.attrs["watermark"] = "18 - 1"
+    return display_field
+
+def _create_django_form_from_form_model(form_model):
+    properties = {field.code: _get_django_field(field) for field in form_model.fields}
+    properties.update({'form_code': forms.CharField(widget=HiddenInput, initial=form_model.form_code)})
+    return type('QuestionnaireForm', (Form, ), properties)
+
 
 def _get_fields_name_and_submissions_by_form_code(request, form_code):
     dbm = get_database_manager(request.user)
@@ -411,15 +438,54 @@ def _get_fields_name_and_submissions_by_form_code(request, form_code):
         fields = project_helper.hide_entity_question(fields)
 
 
+def _get_response(questionnaire_form, request):
+    return render_to_response('entity/web_questionnaire.html',
+                              {'questionnaire_form': questionnaire_form},
+                              context_instance=RequestContext(request))
+
+
+def _create_request(questionnaire_form, username):
+    return Request(message=questionnaire_form.cleaned_data,
+                   transportInfo=
+                   TransportInfo(transport="web",
+                                 source=username,
+                                 destination=""
+                   ))
+
+
 @login_required(login_url='/login')
 def subject_questionnaire(request, entity_type=None):
     manager = get_database_manager(request.user)
+    form_model = get_form_model_by_entity_type(manager, entity_type)
+    QuestionnaireForm = _create_django_form_from_form_model(form_model)
+
     if request.method == 'GET':
-        form_model = get_form_model_by_entity_type(manager, entity_type)
-        fields = form_model.fields
-        questions = []
-        for field in fields:
-            question = {"description": field.name, "code": field.code, "type": field.type, "instruction": field.instruction}
-            questions.append(question)
-        return render_to_response('entity/questionnaire_preview.html',
-                {"questions": questions, 'questionnaire_code': form_model.form_code}, context_instance=RequestContext(request))
+        questionnaire_form = QuestionnaireForm()
+        return _get_response(questionnaire_form, request)
+
+    if request.method == 'POST':
+        questionnaire_form = QuestionnaireForm(request.POST)
+        if not questionnaire_form.is_valid():
+            return _get_response(questionnaire_form, request)
+
+        success_message = None
+        error_message = None
+        try:
+            response = WebPlayer(manager, get_location_tree()).accept(_create_request(questionnaire_form, request.user.username))
+            if response.success:
+                success_message = _("Successfully submitted")
+                questionnaire_form = QuestionnaireForm()
+            else:
+                questionnaire_form._errors = _to_list(response.errors, form_model.fields)
+                return _get_response(questionnaire_form, request)
+
+        except DataObjectNotFound as exception:
+            message = exception_messages.get(DataObjectNotFound).get(WEB)
+            error_message = _(message) % (form_model.entity_type[0], form_model.entity_type[0])
+        except Exception as exception:
+            logger.exception('Web Submission failure:-')
+            error_message = _(get_exception_message_for(exception=exception, channel=player.Channel.WEB))
+
+        return render_to_response('entity/web_questionnaire.html',
+                {'questionnaire_form': questionnaire_form, 'success_message': success_message, 'error_message': error_message},
+                                  context_instance=RequestContext(request))

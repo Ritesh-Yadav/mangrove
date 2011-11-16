@@ -127,12 +127,12 @@ $(document).ready(function() {
             return;
         }
 
-        if($('#q-type').val() == 'project') {
-            var post_data = {'questionnaire-code':$('#questionnaire-code').val(),'question-set':data,'pid':$('#project-id').val()}
-            var post_url = '/project/questionnaire/save'
-        } else {
+        if($('#q-type').val() == 'subject') {
             var post_data = {'saved-questionnaire-code':$('#saved-questionnaire-code').val(),'questionnaire-code':$('#questionnaire-code').val(),'question-set':data}
             var post_url = '/entity/questionnaire/save'
+        } else {
+            var post_data = {'questionnaire-code':$('#questionnaire-code').val(),'question-set':data,'pid':$('#project-id').val()}
+            var post_url = '/project/questionnaire/save'
         }
         $.post(post_url, post_data,
                 function(response) {
