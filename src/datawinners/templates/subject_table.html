@@ -1,6 +1,6 @@
 {% load i18n %}
 {% for entity_key,entity in all_data.items %}
-    <h3>{{ entity.code }}</h3>
+    <h3>{{ entity.name }}</h3>
     <table class="styled_table">
         <thead>
             {% for col in entity.fields %}

@@ -117,7 +117,7 @@ def create_clinic_registration_form(CLINIC_ENTITY_TYPE, manager):
                                      defaultValue="some default value", language="en", ddtype=mobile_number_type,
                                      instruction="Enter the subject's number", constraints=(
             create_constraints_for_mobile_number()), required=False)
-    form_model = create_reg_form_model(manager, "cli", "cli", CLINIC_ENTITY_TYPE)
+    form_model = create_reg_form_model(manager, "Clinic", "cli", CLINIC_ENTITY_TYPE)
     form_model.add_field(question1)
     form_model.add_field(question2)
     form_model.save()
@@ -827,27 +827,27 @@ def load_sms_data_for_cli001(manager):
     transport = TransportInfo(SMS, FROM_NUMBER, TO_NUMBER)
 
     message1 = "cli  .n  Clinic in Analalava  .l  Analalava  .g  -14.6333  47.7667  .d This is a Clinic in Analalava .m 987654321"
-    response = sms_player.accept(transport, *(SMSParser().parse(message1)))
+    response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = "cli  .n  Clinic in Andapa  .l  Andapa  .g  -14.65  49.6167  .d This is a Clinic in Andapa  .m 87654322"
-    response = sms_player.accept(transport, *(SMSParser().parse(message1)))
+    response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = "cli  .n  Clinic in Antalaha  .l  Antalaha  .g  -14.8833  50.25  .d This is a Clinic in Antalaha  .m 87654323"
-    response = sms_player.accept(transport, *(SMSParser().parse(message1)))
+    response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = "cli  .n  Clinic in ANALAMANGA  .l  ANALAMANGA  .g  -18.8  47.4833  .d This is a Clinic in Antananarivo  .m 87654324"
-    response = sms_player.accept(transport, *(SMSParser().parse(message1)))
+    response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = "cli  .n  Clinic in TSIMANARIRAZANA .l  TSIMANARIRAZANA .g  -12.35  49.3  .d This is a Clinic in Diégo–Suarez .m 87654325"
-    response = sms_player.accept(transport, *(SMSParser().parse(message1)))
+    response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = "cli  .n  Clinic in Antsirabe  .l  Antsirabe  .g  -19.8167  47.0667  .d This is a Clinic in Antsirabe  .m 87654326"
-    response = sms_player.accept(transport, *(SMSParser().parse(message1)))
+    response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = "cli  .n  Clinic in Besalampy  .l  Besalampy  .g  -16.75  44.5  .d This is a Clinic in Besalampy  .m 87654327"
-    response = sms_player.accept(transport, *(SMSParser().parse(message1)))
+    response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = "cli  .n  clinique à Farafangana  .l  Farafangana  .g  -22.8  47.8333  .d This is a Clinic in Farafangana  .m 87654328"
-    response = sms_player.accept(transport, *(SMSParser().parse(message1)))
+    response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = "cli  .n  Clinic in Fianarantsoa I .l  Fianarantsoa I .g  -21.45  47.1 .d  C'est une clinique à Fianarantsoa .m 87654329"
-    response = sms_player.accept(transport, *(SMSParser().parse(message1)))
+    response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = "cli  .n  Clinic in Sainte Marie  .l  Sainte Marie  .g  -17.0833  49.8167  .d This is a Clinic in Île Sainte–Marie  .m 87654330"
-    response = sms_player.accept(transport, *(SMSParser().parse(message1)))
+    response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
     message1 = "cli .t clinic  .n  Clinic in Mahajanga .l  Mahajanga .g  -15.6667  46.35  .d This is a Clinic in Mahajanga .m 87654331"
-    response = sms_player.accept(transport, *(SMSParser().parse(message1)))
+    response = sms_player.accept(transport, *(KeyBasedSMSParser().parse(message1)))
 
     datetime_mocker = DateTimeMocker()
     datetime_mocker.set_date_time_now(FEB)
