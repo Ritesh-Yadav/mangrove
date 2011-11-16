@@ -24,4 +24,5 @@ urlpatterns = patterns('',
     (r'^entity/questionnaire/save$', save_questionnaire),
     (r'^submit$', submit),
     (r'^entity/registration/(?P<entity_type>.+?)/$', subject_questionnaire),
+    (r'^entity/registration/$', subject_questionnaire),
 )

@@ -1,11 +1,18 @@
-{% extends 'layout_application.html' %}
+{% extends 'entity/subjects_navigation.html' %}
 {% load i18n %}
 {% block page_title %}{% trans "Add A Subject" %}{% endblock %}
 {% block section_title %}
     {% trans "Add A Subject" %}
 {% endblock %}
 
+{% load field_tags %}
 {% load dw_tabs %}
+
+{% block navigation %}
+    {% activetab "tab_nav" "default" %}
+    {{ block.super }}
+{% endblock %}
+
 {% block body %}
 {% activetab "main_nav" "subjects" %}
 {{ block.super }}
@@ -34,7 +41,6 @@
 {% endblock %}
 {% block content%}
     <div class="add_entity_form">
-
             {% include 'subject_form.html' %}
     </div>
     {% include "star_indication.html" %}
