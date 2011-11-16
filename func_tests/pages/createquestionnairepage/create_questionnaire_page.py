@@ -1,6 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 
 from framework.utils.data_fetcher import *
+from framework.utils.global_constant import WAIT_FOR_TITLE
 from pages.createdatasenderquestionnairepage.create_data_sender_questionnaire_page import CreateDataSenderQuestionnairePage
 from pages.createquestionnairepage.create_questionnaire_locator import *
 from pages.page import Page
@@ -67,7 +68,7 @@ class CreateQuestionnairePage(CreateProjectPage):
         return self
         """
         self.driver.find(SAVE_CHANGES_BTN).click()
-        self.driver.wait_for_page_with_title(3, "Data Senders")
+        self.driver.wait_for_page_with_title(WAIT_FOR_TITLE, "Data Senders")
         return CreateDataSenderQuestionnairePage(self.driver)
 
     def save_questionnaire(self):

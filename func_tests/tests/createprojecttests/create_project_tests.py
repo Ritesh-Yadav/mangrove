@@ -31,7 +31,7 @@ class TestCreateProject(BaseTest):
         create_project_page.create_project_with(VALID_DATA)
         create_project_page.continue_create_project()
         create_project_page.save_and_create_project_successfully()
-        self.driver.wait_for_page_with_title(5, fetch_(PAGE_TITLE, from_(VALID_DATA)))
+        self.driver.wait_for_page_with_title(15, fetch_(PAGE_TITLE, from_(VALID_DATA)))
         self.assertEqual(self.driver.get_title(),
                                  fetch_(PAGE_TITLE, from_(VALID_DATA)))
 

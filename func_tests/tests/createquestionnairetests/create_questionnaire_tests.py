@@ -2,6 +2,7 @@
 from nose.plugins.attrib import attr
 from framework.base_test import BaseTest
 from framework.utils.data_fetcher import fetch_, from_
+from framework.utils.global_constant import WAIT_FOR_TITLE
 from pages.createquestionnairepage.create_questionnaire_page import CreateQuestionnairePage
 from pages.dashboardpage.dashboard_page import DashboardPage
 from pages.loginpage.login_page import LoginPage
@@ -40,5 +41,5 @@ class TestCreateQuestionnaire(BaseTest):
         self.assertEquals(create_questionnaire_page.get_remaining_character_count(),
                           fetch_(CHARACTER_REMAINING, from_(QUESTIONNAIRE_DATA)))
         create_questionnaire_page.save_and_create_project_successfully()
-        title = self.driver.wait_for_page_with_title(3, fetch_(PAGE_TITLE, from_(VALID_DATA2)))
+        title = self.driver.wait_for_page_with_title( WAIT_FOR_TITLE, fetch_(PAGE_TITLE, from_(VALID_DATA2)))
         self.assertEquals(fetch_(PAGE_TITLE, from_(VALID_DATA2)), title)

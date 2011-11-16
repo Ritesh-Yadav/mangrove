@@ -1,5 +1,6 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 import time
+from framework.utils.global_constant import WAIT_FOR_TITLE
 from pages.reviewpage.review_page import ReviewPage
 from pages.createreminderpage.create_reminder_locator import *
 from pages.page import Page
@@ -16,7 +17,7 @@ class CreateReminderPage(Page):
         Return ReviewPage
         """
         self.driver.find(SAVE_CHANGES_BTN).click()
-        self.driver.wait_for_page_with_title(3, "Review & Test")
+        self.driver.wait_for_page_with_title( WAIT_FOR_TITLE, "Review & Test")
         return ReviewPage(self.driver)
 
     def click_add_reminder(self):
