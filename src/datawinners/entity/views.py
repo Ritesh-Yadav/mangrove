@@ -486,7 +486,6 @@ def _create_subjects_list(manager):
             subject_list.append(subject)
     return subject_list
 
-
 @login_required(login_url='/login')
 def subject_questionnaire(request, entity_type=None):
     manager = get_database_manager(request.user)
