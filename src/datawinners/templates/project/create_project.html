@@ -31,6 +31,9 @@
     <script type="text/javascript" src="/media/javascript/project/questionnaire_wizard_submit_redirect.js"></script>
     <script type="text/javascript" src="/media/javascript/project/new_questionnaire_wizard.js"></script>
     <script type="text/javascript" src="/media/javascript/entity/create_type.js"></script>
+    <script type="text/javascript">
+        var is_edit = {{ is_edit }};
+    </script>
     <script type="text/html" id="choice-template">
         <li>
             <input id="choice_text" name="choice_text" class="required" type="text"
@@ -40,8 +43,8 @@
         </li>
     </script>
     <script type="text/html" id="question-list-template">
-        <div class="question_list">
-            <ul>
+        <div class="question_list" id="que_code">
+            <ol>
                 {% templatetag openvariable %}each(i,question) questions{% templatetag closevariable %}
                 <div data-bind="click: function() { if($('#question_form').valid()) viewModel.changeSelectedQuestion(question); }, css:{question_selected:question == viewModel.selectedQuestion()} ">
                     <li>
@@ -57,7 +60,7 @@
 
                 </div>
                 {% templatetag openvariable %}/each{% templatetag closevariable %}
-            </ul>
+            </ol>
         </div>
     </script>
 {% endblock %}
@@ -119,7 +122,7 @@
                             <strong>{% trans "What do I need to do?" %}</strong><br/>
                             {% trans "r_tooltip_question_code" %}
                         </p></div>
-                        <input id='questionnaire-code' class='required' value="{{ questionnaire_code }}"/>
+                        <input id='questionnaire-code' value="{{ questionnaire_code }}"/>
                         <span id="questionnaire-code-error"></span>
                     </li>
                 </ul>

@@ -1,11 +1,12 @@
 var viewModel =
 {
     questions : ko.observableArray([]),
+    hasAddedNewQuestions : false,
 
     addQuestion : function() {
         var question = new DW.question();
         question.display = ko.dependentObservable(function() {
-            return this.code() + ' ' + this.title();
+            return this.title();
         }, question);
         question.loaded(false);
         var test_code = DW.generateQuestionCode();
@@ -15,10 +16,11 @@ var viewModel =
         viewModel.selectedQuestion.valueHasMutated();
         viewModel.questions.valueHasMutated();
         DW.charCount();
+        viewModel.hasAddedNewQuestions = true;
     },
     loadQuestion: function(question) {
         question.display = ko.dependentObservable(function() {
-            return this.code() + ' ' + this.title();
+            return this.title();
         }, question);
         viewModel.questions.push(question);
         viewModel.questions.valueHasMutated();
@@ -39,6 +41,7 @@ var viewModel =
             DW.current_code -= 1;
         }
         viewModel.changeSelectedQuestion(viewModel.questions()[next_index]);
+        viewModel.hasAddedNewQuestions = true;
     },
     removeIfQuestionIsSelectedQuestion: function(question) {
         if (viewModel.selectedQuestion() == question) {
