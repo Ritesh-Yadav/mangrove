@@ -30,7 +30,7 @@ from datawinners.entity.forms import EntityTypeForm, ReporterRegistrationForm, S
 from mangrove.form_model.form_model import get_form_model_by_code, REGISTRATION_FORM_CODE, MOBILE_NUMBER_FIELD_CODE, GEO_CODE, NAME_FIELD_CODE, LOCATION_TYPE_FIELD_CODE, ENTITY_TYPE_FIELD_CODE, REPORTER, create_reg_form_model, get_form_model_by_entity_type
 from mangrove.transport.player import player
 from datawinners.entity import import_data as import_module
-from mangrove.utils.types import is_empty
+from mangrove.utils.types import is_empty, sequence_to_str
 from datawinners.entity.helper import update_questionnaire_with_questions
 from mangrove.transport.player import player
 from mangrove.transport.player.player import WebPlayer, Request, TransportInfo
@@ -276,6 +276,7 @@ def all_subjects(request):
             subjects_data[entity_name] = {"name": form_model.value['name'],
                                           "code": form_model.value["form_code"], "fields": field_code, "data": []}
 
+
     subjects = import_module.load_all_subjects(request)
     for subject in subjects:
         if subject['type'] in subjects_data:
@@ -365,8 +366,17 @@ def all_datasenders(request):
         all_data_senders = _get_all_datasenders(manager, projects, request.user)
         return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                         'failure_imports': failure_imports, 'all_data': all_data_senders}))
-    all_data_senders = _get_all_datasenders(manager, projects, request.user)
-    return render_to_response('entity/all_datasenders.html', {'all_data': all_data_senders, 'projects':projects, 'grant_web_access':grant_web_access,
+    
+    form_model = manager.load_all_rows_in_view("questionnaire", key="rep")
+
+    fields = _get_cleaned_fields(form_model[0]["value"]["json_fields"])
+    all_data_senders = import_module.load_subject_registration_data(manager, type="reporter", filter_entities=import_module.include_of_type,tabulate_function=_tabulate, fields=fields)
+    
+    data_senders = []
+    for data_sender in all_data_senders:
+        data_senders.append(_get_cleaned_data(fields, data_sender))
+        
+    return render_to_response('entity/all_datasenders.html', {'all_data': data_senders, 'projects':projects, 'fields': fields, 'grant_web_access':grant_web_access,
                                                               'current_language': translation.get_language()},
                               context_instance=RequestContext(request))
 
@@ -461,6 +471,46 @@ def _get_fields_name_and_submissions_by_form_code(request, form_code):
     if form_model.entity_defaults_to_reporter():
         fields = project_helper.hide_entity_question(fields)
 
+def _get_cleaned_fields(fields):
+    field_list = []
+    for field in fields:
+        if field['name'] == 'short_code':
+            field_name = 'short_name'
+        elif field['name'] == 'geo_code':
+            field_name = 'geocode'
+        elif field['name'] == 'entity_type':
+            field_name = 'type'
+        else:
+            field_name = field['name']
+        field_list.append(field_name)
+    return field_list
+
+def _get_cleaned_data(fields, subject):
+    row = {}
+    for i in range(len(fields)):
+        if fields[i] in subject:
+            row.update({fields[i]: subject[fields[i]]})
+        else:
+            row.update({fields[i]:''})
+    row.update({'id': subject.get("id")})
+    return row
+
+def _tabulate(entity,fields):
+    tabulated = {}
+    for field in fields:
+        value = entity.value(field) if entity.value(field) is not None else "-"
+        tabulated.update({field: value})
+
+    geocode = entity.geometry.get('coordinates')
+    geocode_string = ", ".join([str(i) for i in geocode]) if geocode is not None else "--"
+    location = sequence_to_str(entity.location_path, u", ")
+
+    tabulated.update({'geocode': geocode_string})
+    tabulated.update({'type': ".".join(entity.type_path)})
+    tabulated.update({'short_name': entity.short_code})
+    tabulated.update({'location': location})
+    tabulated.update({'id': entity.id})
+    return tabulated
 
 def _get_response(questionnaire_form, subject_list, entity, request):
     return render_to_response('entity/web_questionnaire.html',

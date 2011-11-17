@@ -54,7 +54,7 @@ def _format(value):
     return value if value is not None else "--"
 
 
-def _tabulate_data(entity):
+def _tabulate_data(entity, fields=None):
     id = entity.id
     geocode = entity.geometry.get('coordinates')
     geocode_string = ", ".join([str(i) for i in geocode]) if geocode is not None else "--"
@@ -72,12 +72,15 @@ def _get_entity_type_from_row(row):
     return type
 
 
-def load_subject_registration_data(manager, filter_entities=exclude_of_type,type=REPORTER):
+def load_subject_registration_data(manager,
+                                   filter_entities=exclude_of_type,
+                                   type=REPORTER, tabulate_function=_tabulate_data,
+                                   fields=None):
     entities = get_all_entities(dbm=manager)
     data = []
     for entity in entities:
         if filter_entities(entity,type):
-            data.append(_tabulate_data(entity))
+            data.append(tabulate_function(entity, fields))
     return data
 
 
