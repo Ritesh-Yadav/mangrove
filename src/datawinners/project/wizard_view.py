@@ -17,7 +17,7 @@ from mangrove.datastore.entity_type import get_all_entity_types
 from mangrove.errors.MangroveException import DataObjectAlreadyExists, QuestionCodeAlreadyExistsException, EntityQuestionAlreadyExistsException
 from django.contrib import messages
 from mangrove.form_model.field import field_to_json
-from mangrove.form_model.form_model import  FormModel
+from mangrove.form_model.form_model import FormModel
 from mangrove.utils.types import is_string
 
 def create_questionnaire(post, manager, entity_type, name, language):
@@ -145,9 +145,9 @@ def reminders(request, project_id):
         reminders = Reminder.objects.filter(voided=False, project_id=project_id).order_by('id')
         profile = request.user.get_profile()
         organization = Organization.objects.get(org_id=profile.org_id)
-        from datawinners.project.views import  _format_reminders, create_reminder
+        from datawinners.project.views import _format_reminders, create_reminder
         return render_to_response('project/reminders.html',
-                {'project': project, 
+                {'project': project,
                  'reminders':_format_reminders(reminders, project_id),
                  'in_trial_mode':organization.in_trial_mode,
                  'create_reminder_link' : reverse(create_reminder, args=[project_id]),
@@ -194,7 +194,7 @@ def _reminder_info_about_project(project):
             data['deadline_week'] = deadline_information['deadline_week']
         data['deadline_type'] = deadline_information['deadline_type']
         reminder_before_deadline = Reminder.objects.filter(reminder_mode=ReminderMode.BEFORE_DEADLINE, project_id=project.id)
-        if  reminder_before_deadline.count()>0:
+        if reminder_before_deadline.count()>0:
             data['should_send_reminders_before_deadline'] = True
             data['number_of_days_before_deadline'] = reminder_before_deadline[0].day
             data['reminder_text_before_deadline'] = reminder_before_deadline[0].message

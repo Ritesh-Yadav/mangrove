@@ -1,13 +1,13 @@
 # vim: ai ts=4 sts=4 et sw= encoding=utf-8
 from datetime import timedelta, date
 import couchdb
-from couchdb.mapping import  TextField, ListField, DictField
+from couchdb.mapping import TextField, ListField, DictField
 from django.db.models.fields import IntegerField, CharField, BooleanField
 from django.db.models.fields.related import ForeignKey
 from datawinners.accountmanagement.models import Organization
 from datawinners.entity.import_data import load_all_subjects_of_type
 from datawinners.scheduler.deadline import Deadline, Month, Week
-from mangrove.datastore.database import  DatabaseManager, DataObject
+from mangrove.datastore.database import DatabaseManager, DataObject
 from mangrove.datastore.documents import DocumentBase, TZAwareDateTimeField
 from mangrove.errors.MangroveException import DataObjectAlreadyExists
 from mangrove.form_model.form_model import FormModel
@@ -135,7 +135,7 @@ class ReminderLog(DataObject):
         return self._doc.date
 
     def _format_string_before_saving(self, value):
-        return  (' '.join(value.split('_'))).title()
+        return (' '.join(value.split('_'))).title()
 
 
 class ProjectState(object):
@@ -160,7 +160,7 @@ class Project(DocumentBase):
 
     def __init__(self, id=None, name=None, goals=None, project_type=None, entity_type=None, devices=None,
                  state=ProjectState.INACTIVE, activity_report=None, sender_group=None,language='en'):
-        
+
         assert entity_type is None or is_string(entity_type), "Entity type %s should be a string." % (entity_type,)
         DocumentBase.__init__(self, id=id, document_type='Project')
         self.devices = []
@@ -181,7 +181,7 @@ class Project(DocumentBase):
 
     def is_activity_report(self):
         return self.activity_report == "yes"
-    
+
     def get_data_senders(self, dbm):
         all_data = load_all_subjects_of_type(dbm)
         return [data for data in all_data if data['short_name'] in self.data_senders]
@@ -196,7 +196,7 @@ class Project(DocumentBase):
     def get_data_senders_without_submissions_for(self, deadline_date, dbm):
         data_sender_ids_with_submission = self._get_data_senders_ids_who_made_submission_for(dbm, deadline_date)
         all_data_senders = self.get_data_senders(dbm)
-        data_senders_without_submission = [data_sender for data_sender in all_data_senders  if
+        data_senders_without_submission = [data_sender for data_sender in all_data_senders if
                                            data_sender['short_name'] not in data_sender_ids_with_submission]
         return data_senders_without_submission
 
