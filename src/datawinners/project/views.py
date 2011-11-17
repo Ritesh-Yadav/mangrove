@@ -34,7 +34,7 @@ from mangrove.datastore.entity_type import get_all_entity_types
 from mangrove.errors.MangroveException import QuestionCodeAlreadyExistsException, EntityQuestionAlreadyExistsException, DataObjectAlreadyExists, DataObjectNotFound
 from mangrove.form_model import form_model
 from mangrove.form_model.field import field_to_json, SelectField, TextField, IntegerField, GeoCodeField, DateField
-from mangrove.form_model.form_model import get_form_model_by_code, get_form_model_by_entity_type, FormModel, REGISTRATION_FORM_CODE
+from mangrove.form_model.form_model import get_form_model_by_code, FormModel, REGISTRATION_FORM_CODE
 from mangrove.transport.player import player
 from mangrove.transport.player.player import WebPlayer, Request, TransportInfo
 from mangrove.transport.submissions import Submission, get_submissions, submission_count
