@@ -24,7 +24,6 @@ from datawinners.accountmanagement.models import Organization, OrganizationSetti
 from datawinners.entity.forms import ReporterRegistrationForm, SubjectForm
 from datawinners.entity.forms import SubjectUploadForm
 from datawinners.entity.views import import_subjects_from_project_wizard
-from datawinners.settings import USE_ORDERED_SMS_PARSER
 from datawinners.project.wizard_view import edit_project, reminder_settings, reminders
 import helper
 from datawinners.project import models, wizard_view
@@ -34,7 +33,7 @@ from mangrove.datastore.entity_type import get_all_entity_types
 from mangrove.errors.MangroveException import QuestionCodeAlreadyExistsException, EntityQuestionAlreadyExistsException, DataObjectAlreadyExists, DataObjectNotFound
 from mangrove.form_model import form_model
 from mangrove.form_model.field import field_to_json, SelectField, TextField, IntegerField, GeoCodeField, DateField
-from mangrove.form_model.form_model import get_form_model_by_code, get_form_model_by_entity_type, FormModel, REGISTRATION_FORM_CODE
+from mangrove.form_model.form_model import get_form_model_by_code, FormModel, REGISTRATION_FORM_CODE
 from mangrove.transport.player import player
 from mangrove.transport.player.player import WebPlayer, Request, TransportInfo
 from mangrove.transport.submissions import Submission, get_submissions, submission_count
@@ -85,8 +84,7 @@ def _make_project_links(project,questionnaire_code):
         project_links['registered_subjects_link'] = reverse(registered_subjects, args=[project_id])
         project_links['datasenders_link'] = reverse(datasenders, args=[project_id])
         project_links['registered_datasenders_link'] = reverse(registered_datasenders, args=[project_id])
-        project_links['subject_registration_preview_link'] = reverse(subject_registration_form_preview,
-                                                                     args=[project_id])
+        project_links['subject_registration_preview_link'] = reverse(registration_questionnaire_preview, args=[project_id])
         project_links['sender_registration_preview_link'] = reverse(sender_registration_form_preview, args=[project_id])
         project_links['sent_reminders_link'] = reverse(sent_reminders, args=[project_id])
         project_links['setting_reminders_link'] = reverse(reminder_settings, args=[project_id])
@@ -658,7 +656,6 @@ def subjects(request, project_id=None):
         if form_model.entity_defaults_to_reporter():
             fields = helper.hide_entity_question(form_model.fields)
         existing_questions = json.dumps(fields, default=field_to_json)
-        project_links = _make_project_links(project, form_model.form_code)
         return render_to_response('project/subject_questionnaire.html',
                 {"existing_questions": repr(existing_questions),
                  'questionnaire_code': form_model.form_code,
@@ -843,6 +840,34 @@ def questionnaire_preview(request, project_id=None):
                                   context_instance=RequestContext(request))
 
 
+@login_required(login_url='/login')
+def registration_questionnaire_preview(request, project_id=None):
+    manager = get_database_manager(request.user)
+    project = Project.load(manager.database, project_id)
+    if request.method == 'GET':
+        project_form_model = FormModel.get(manager, project.qid)
+        project_links = _make_project_links(project, project_form_model.form_code)
+        form_model = get_form_model_by_entity_type(manager, project.entity_type)
+        if form_model is None:
+            form_model = get_form_model_by_code(manager, REGISTRATION_FORM_CODE)
+        fields = form_model.fields
+        questions = []
+        for field in fields:
+            question = helper.get_preview_for_field(field)
+            questions.append(question)
+        if(len(fields)>1):
+            example_sms = "%s  <answer 1> ..... <answer %s>" % (
+                form_model.form_code, len(fields))
+        else:
+            example_sms = "%s  <answer 1>" % (
+                form_model.form_code)
+        return render_to_response('project/questionnaire_preview.html',
+                {"questions": questions, 'questionnaire_code': form_model.form_code,
+                 'project': project, 'project_links': project_links,
+                 'example_sms': example_sms, 'org_number': _get_organization_telephone_number(request.user)},
+                                  context_instance=RequestContext(request))
+
+
 def _get_preview_for_field_in_registration_questionnaire(field):
     return {"description": field.label.get('en'), "code": field.code, "type": field.type,
             "constraints": field.instruction, "instruction": field.instruction}
@@ -866,22 +891,6 @@ def get_example_sms_message(fields, registration_questionnaire):
         example_sms = "%s .%s <answer> .... .%s <answer>" % (
             registration_questionnaire.form_code, fields[0].code, fields[len(fields) - 1].code)
     return example_sms
-
-
-@login_required(login_url='/login')
-def subject_registration_form_preview(request, project_id=None):
-    manager = get_database_manager(request.user)
-    project = Project.load(manager.database, project_id)
-    if request.method == "GET":
-        fields, project_links, questions, registration_questionnaire = _get_registration_form(manager,
-                                                                                              project,
-                                                                                              project_id)
-        example_sms = get_example_sms_message(fields, registration_questionnaire)
-        return render_to_response('project/questionnaire_preview.html',
-                {"questions": questions, 'questionnaire_code': registration_questionnaire.form_code,
-                 'project': project, 'project_links': project_links,
-                 'example_sms': example_sms, 'org_number': _get_organization_telephone_number(request.user)},
-                                  context_instance=RequestContext(request))
 
 
 @login_required(login_url='/login')
