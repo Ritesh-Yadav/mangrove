@@ -4,9 +4,9 @@ from django.conf.urls.defaults import patterns, url
 from datawinners.project.views import  save_questionnaire, index, project_overview,\
     project_results, project_data, datasenders, export_data, export_log, activate_project,\
     subjects, registered_subjects, registered_datasenders, questionnaire, questionnaire_preview,\
-    submissions, subject_registration_form_preview, sender_registration_form_preview, web_questionnaire, \
+    submissions, sender_registration_form_preview, web_questionnaire, \
     manage_reminders, disassociate_datasenders, delete_project, undelete_project, create_reminder, get_reminder, \
-    delete_reminder, sent_reminders, broadcast_message, review_and_test
+    delete_reminder, sent_reminders, broadcast_message, review_and_test, registration_questionnaire_preview
 from datawinners.project.wizard_view import create_project, edit_project, reminders, reminder_settings
 
 js_info_dict = {
@@ -20,7 +20,7 @@ urlpatterns = patterns('',
         (r'^project/questionnaire/(?P<project_id>.+?)/$', questionnaire),
         (r'^project/testquestionnaire/(?P<project_id>.+?)/$', web_questionnaire),
         (r'^project/preview/questionnaire/(?P<project_id>.+?)/$', questionnaire_preview),
-        (r'^project/preview/subject_registration_form/preview/(?P<project_id>.+?)/$', subject_registration_form_preview),
+        (r'^project/preview/subject_registration_form/preview/(?P<project_id>.+?)/$', registration_questionnaire_preview),
         (r'^project/preview/sender_registration_form/preview/(?P<project_id>.+?)/$', sender_registration_form_preview),
         (r'^project/wizard/create/$', create_project),
         url(r'^project/wizard/edit/(?P<project_id>.+?)/$', edit_project, name="edit_project"),
