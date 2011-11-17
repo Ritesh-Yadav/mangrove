@@ -557,7 +557,7 @@ def _get_project_and_project_link(manager, project_id):
 
 
 @login_required(login_url='/login')
-def old_registered_subjects(request, project_id=None):
+def registered_subjects(request, project_id=None):
     manager = get_database_manager(request.user)
     project, project_links = _get_project_and_project_link(manager, project_id)
     all_data = load_all_subjects_of_type(manager, filter_entities=include_of_type, type=project.entity_type)
