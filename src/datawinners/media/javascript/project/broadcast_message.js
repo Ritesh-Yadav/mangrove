@@ -70,15 +70,6 @@ DW.broadcast_sms.prototype={
             $(this.smsContentElement).val(this.getSMSContent().substring(0, this.maxSMSChar));
         }
         this.setMessageCount();
-    },
-    getSMSContent:function(){
-        return $(this.smsContentElement).val()
-    },
-    limitCount:function () {
-        if (this.getSMSLength() > this.maxSMSChar){
-            $(this.smsContentElement).val(this.getSMSContent().substring(0, this.maxSMSChar));
-        }
-        this.setMessageCount();
     }
 };
 
@@ -129,7 +120,6 @@ DW.additional_column.prototype={
         this.addRule();
         this.show();
 
-<<<<<<< HEAD
     },
     processUnSelected:function(){
         this.removeRule();
@@ -137,8 +127,6 @@ DW.additional_column.prototype={
         $(this.telephoneNumbersElementId).val("");
         $(this.telephoneNumbersElementId).valid();
 
-=======
->>>>>>> merging broadcast_message.js and broadcast_sms.js into a single file
     }
 };
 
