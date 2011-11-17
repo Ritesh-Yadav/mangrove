@@ -30,7 +30,7 @@ DW.broadcast_sms.prototype={
             wrapper: "div",
             errorPlacement: function(error, element) {
                 error.insertAfter(element);
-                error.addClass('error_arrow');  // add a class to the wrapper
+                error.addClass('error_arrow'); // add a class to the wrapper
             }
         });
 
