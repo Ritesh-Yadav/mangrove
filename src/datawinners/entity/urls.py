@@ -10,6 +10,7 @@ from datawinners.entity.views import all_datasenders
 from datawinners.entity.views import import_subjects_from_project_wizard
 from datawinners.entity.views import save_questionnaire
 from datawinners.entity.views import subject_questionnaire
+from datawinners.entity.views import edit_form_model
 
 urlpatterns = patterns('',
     (r'^entity/datasender/create', create_datasender),
@@ -25,4 +26,6 @@ urlpatterns = patterns('',
     (r'^submit$', submit),
     (r'^entity/registration/(?P<entity_type>.+?)/$', subject_questionnaire),
     (r'^entity/registration/$', subject_questionnaire),
+
+    (r'^entity/form/(?P<form_code>.+?)/$', edit_form_model),
 )
