@@ -259,7 +259,7 @@ def all_subjects(request):
     form_models = manager.load_all_rows_in_view("questionnaire")
     subjects_data = {}
     for form_model in form_models:
-        if form_model.value['flag_reg']:
+        if form_model.value['flag_reg'] and form_model.value['name'] != 'Reporter':
             entity_name = form_model.value["entity_type"][0]
             field_code = []
             for field in form_model.value["json_fields"]:
@@ -275,7 +275,6 @@ def all_subjects(request):
 
             subjects_data[entity_name] = {"name": form_model.value['name'],
                                           "code": form_model.value["form_code"], "fields": field_code, "data": []}
-
 
     subjects = import_module.load_all_subjects(request)
     for subject in subjects:
@@ -530,7 +529,7 @@ def _create_subjects_list(manager):
     form_models = manager.load_all_rows_in_view("questionnaire")
     subject_list = []
     for form_model in form_models:
-        if form_model.value['flag_reg'] and form_model.value['entity_type'][0] != 'Registration':
+        if form_model.value['flag_reg'] and form_model.value['entity_type'][0] != 'Registration' and form_model.value['entity_type'][0] != 'reporter':
             subject = dict(url=reverse(subject_questionnaire, args=[form_model.value['entity_type'][0]]),
                 name=form_model.value['name'], entity_type=form_model.value['entity_type'][0])
             subject_list.append(subject)

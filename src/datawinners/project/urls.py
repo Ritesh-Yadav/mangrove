@@ -9,13 +9,7 @@ from datawinners.project.views import  save_questionnaire, index, project_overvi
     delete_reminder, sent_reminders, broadcast_message, review_and_test, registration_questionnaire_preview
 from datawinners.project.wizard_view import create_project, edit_project, reminders, reminder_settings
 
-js_info_dict = {
-    'domain': 'djangojs',
-    'packages': ('datawinners.project',),
-}
-
 urlpatterns = patterns('',
-        (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
         (r'^project/disassociate/$', disassociate_datasenders),
         (r'^project/questionnaire/(?P<project_id>.+?)/$', questionnaire),
         (r'^project/testquestionnaire/(?P<project_id>.+?)/$', web_questionnaire),
