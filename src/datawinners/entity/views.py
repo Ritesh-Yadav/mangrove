@@ -589,7 +589,6 @@ def edit_form_model(request, form_code=None):
         form_model = get_form_model_by_code(manager, form_code)
         fields = form_model.fields
 
-
     existing_questions = json.dumps(fields, default=field_to_json)
     return render_to_response('entity/edit_form.html',
             {"existing_questions": repr(existing_questions),
