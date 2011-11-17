@@ -12,7 +12,7 @@ from mangrove.datastore.documents import DocumentBase, TZAwareDateTimeField
 from mangrove.errors.MangroveException import DataObjectAlreadyExists
 from mangrove.form_model.form_model import FormModel
 from mangrove.transport.reporter import get_reporters_who_submitted_data_for_frequency_period
-from mangrove.utils.types import  is_string, is_empty
+from mangrove.utils.types import is_string, is_empty
 from django.db import models
 
 
@@ -297,8 +297,8 @@ def get_all_projects(dbm, data_sender_id=None):
 
 def count_projects(dbm, include_voided_projects=True):
     if include_voided_projects:
-        rows =  dbm.load_all_rows_in_view('count_projects', reduce = True, group_level=0)
+        rows = dbm.load_all_rows_in_view('count_projects', reduce = True, group_level=0)
     else:
-        rows =  dbm.load_all_rows_in_view('count_projects', reduce = True, group_level=1, key=False)
+        rows = dbm.load_all_rows_in_view('count_projects', reduce = True, group_level=1, key=False)
 
     return rows[0]['value'] if not is_empty(rows) else 0
