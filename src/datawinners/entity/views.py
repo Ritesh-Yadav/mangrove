@@ -238,7 +238,7 @@ def all_subjects(request):
         error_message, failure_imports, success_message, imported_entities = import_module.import_data(request, manager)
         return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                         'failure_imports': failure_imports, 'all_data': all_data}))
-
+    
     return render_to_response('entity/all_subjects.html', {'all_data': all_data, 'current_language': translation.get_language()},
                                   context_instance=RequestContext(request))
 
@@ -322,11 +322,11 @@ def all_datasenders(request):
         all_data_senders = _get_all_datasenders(manager, projects, request.user)
         return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                         'failure_imports': failure_imports, 'all_data': all_data_senders}))
-
+    
     form_model = manager.load_all_rows_in_view("questionnaire", key="rep")
     fields = _get_field_code(form_model[0]["value"]["json_fields"])
     all_data_senders = import_module.load_subject_registration_data(manager, type="reporter", filter_entities=import_module.include_of_type,tabulate_function=_tabulate, fields=fields)
-
+    
     data_senders = []
     for data_sender in all_data_senders:
         data_senders.append(_get_cleaned_data(fields, data_sender))
@@ -412,16 +412,6 @@ def _get_response(request, questionnaire_form, entity):
                               {'questionnaire_form': questionnaire_form, 'entity': entity },
                               context_instance=RequestContext(request))
 
-def _create_new_reg_form_model(manager, entity_name):
-    form_code = entity_name[0:3]
-    i = 1
-    exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-    while exists:
-        form_code += "%s" % i
-        exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-        i += 1
-
-    return create_reg_form_model(manager, entity_name, form_code, [entity_name])
 
 def _get_default_response(manager, request, entity_type=''):
     entity_types = _get_entity_types_without_form(manager)
@@ -545,7 +535,7 @@ def edit_subject(request, entity_type=None):
 
     if form_model is None:
         return HttpResponseRedirect(reverse(all_subjects))
-
+    
     fields = form_model.fields
     existing_questions = json.dumps(fields, default=field_to_json)
     return render_to_response('entity/edit_form.html',
@@ -581,7 +571,7 @@ def edit_subject(request, entity_type=None):
 
     if form_model is None:
         return HttpResponseRedirect(reverse(all_subjects))
-
+    
     fields = form_model.fields
     existing_questions = json.dumps(fields, default=field_to_json)
     return render_to_response('entity/edit_form.html',
