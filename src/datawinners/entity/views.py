@@ -567,7 +567,6 @@ def create_subject(request, entity_type=None):
                  'success_message': success_message, 'error_message': error_message},
                                   context_instance=RequestContext(request))
 
-
 @login_required(login_url='/login')
 def edit_form_model(request, form_code=None):
     manager = get_database_manager(request.user)
@@ -596,3 +595,19 @@ def _create_new_reg_form_model(manager, entity_name):
     form_code = form_code[0]
     form_code = _check_form_code_exists(manager, form_code)
     return create_reg_form_model(manager, entity_name, form_code, [entity_name])
+
+@login_required(login_url='/login')
+def edit_form_model(request, form_code="reg"):
+    manager = get_database_manager(request.user)
+    form_model = get_form_model_by_code(manager, form_code)
+    if form_model is None:
+        form_model = get_form_model_by_code(manager, 'reg')
+
+    fields = form_model.fields
+
+    existing_questions = json.dumps(fields, default=field_to_json)
+    return render_to_response('entity/edit_form.html',
+            {"existing_questions": repr(existing_questions),
+             'questionnaire_code': form_model.form_code},
+             context_instance=RequestContext(request))
+
