@@ -3,7 +3,7 @@ from collections import defaultdict
 import json
 from django.forms.forms import Form
 from django import forms
-from mangrove.form_model.field import SelectField
+from mangrove.form_model.field import SelectField, field_to_json
 from django.forms.widgets import HiddenInput
 from django.contrib.auth.decorators import login_required
 from django.utils import translation
@@ -579,3 +579,21 @@ def subject_questionnaire(request, entity_type=None):
                 {'questionnaire_form': questionnaire_form, 'success_message': success_message, 'error_message': error_message,
                  'subjects': subject_list},
                                   context_instance=RequestContext(request))
+
+@login_required(login_url='/login')
+def edit_form_model(request, form_code="reg"):
+    manager = get_database_manager(request.user)
+    form_model = get_form_model_by_code(manager, form_code)
+    if form_model is None:
+        form_model = get_form_model_by_code(manager, 'reg')
+
+    fields = form_model.fields
+
+    #if form_model.entity_defaults_to_reporter():
+    #    fields = project_helper.hide_entity_question(form_model.fields)
+
+    existing_questions = json.dumps(fields, default=field_to_json)
+    return render_to_response('entity/edit_form.html',
+            {"existing_questions": repr(existing_questions),
+             'questionnaire_code': form_model.form_code},
+             context_instance=RequestContext(request))
