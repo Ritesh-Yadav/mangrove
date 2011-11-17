@@ -1208,6 +1208,9 @@ def create_clinic_project_for_trial_account(CLINIC_ENTITY_TYPE, manager, trial_o
 def load_data():
     manager = load_manager_for_default_test_account()
     initializer.run(manager)
+
+    create_reporter_form_model(manager)
+    
     CLINIC_ENTITY_TYPE = [u"clinic"]
     WATER_POINT_ENTITY_TYPE = [u"waterpoint"]
     create_entity_types(manager, [CLINIC_ENTITY_TYPE, WATER_POINT_ENTITY_TYPE])
@@ -1256,6 +1259,8 @@ def load_data():
     create_trial_test_organization('chinatwu3@gmail.com','COJ00002', False)
     create_trial_test_organization('chinatwu4@gmail.com','COJ00003', False)
 
+
+
 def create_trial_test_organization(email, org_id, register_a_data_sender, data_types_for_datasender=None):
     manager = get_database_manager(User.objects.get(username=email))
     initializer.run(manager)
@@ -1287,3 +1292,24 @@ def load_all_managers():
         manager = get_db_manager(server=settings.COUCH_DB_SERVER, database=db)
         managers.append(manager)
     return managers
+
+
+def create_reporter_form_model(manager):
+    form_model  = create_reg_form_model(manager, name="Reporter", form_code="rep", entity_type=["reporter"])
+    mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
+                                                 primitive_type='string')
+
+    matricule_type = get_or_create_data_dict(manager, name='matricule_name', slug='matricule',
+                                               primitive_type='string')
+
+    question1 = TelephoneNumberField(name="mobile_number", code="x",
+                                     label="What is the mobile number associated with the subject?",
+                                     defaultValue="some default value", language="en", ddtype=mobile_number_type,
+                                     instruction="Enter the subject's number", constraints=(
+            create_constraints_for_mobile_number()), required=False)
+
+    question2 = TextField(name="matricule", code="m", defaultValue="XXXXX", language="en", ddtype=matricule_type, required=False, label="N˚ Matricule")
+
+    form_model.add_field(question1)
+    form_model.add_field(question2)
+    form_model.save()
