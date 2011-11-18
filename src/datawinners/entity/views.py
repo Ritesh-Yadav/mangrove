@@ -225,11 +225,13 @@ def _get_entity_type_by_registration_type(manager):
 
 
 @login_required(login_url='/login')
-def create_subject(request):
+def create_subject(request, entity_type=""):
     db_manager = get_database_manager(request.user)
     entity_types = _get_entity_type_by_registration_type(db_manager)[0]
     subjectForm = SubjectForm()
-    return render_to_response("entity/create_subject.html", {"post_url": reverse(submit), "entity_types": entity_types, "form": subjectForm},
+    return render_to_response("entity/create_subject.html", {"post_url": reverse(submit),
+                                                        "entity_types": entity_types, "form": subjectForm,
+                                                        "expected_type": entity_type.lower()},
                               context_instance=RequestContext(request))
 
 @csrf_view_exempt
@@ -273,16 +275,21 @@ def all_subjects(request):
                     field_name = field['name']
                 field_code.append(field_name)
 
-            subjects_data[entity_name] = {"name": form_model.value['name'],
+            if entity_name == "Registration":
+                registration_fields = field_code
+            else:
+                subjects_data[entity_name.capitalize()] = {"name": form_model.value['name'],
                                           "code": form_model.value["form_code"], "fields": field_code, "data": []}
 
     subjects = import_module.load_all_subjects(request)
     for subject in subjects:
-        if subject['type'] in subjects_data:
-            entity = subject['type']
+        entity = subject['type'].capitalize()
+        if entity not in subjects_data:
+            fields = registration_fields
+            subjects_data[entity] = dict(data=[], name=entity, code="registration", fields=registration_fields)
         else:
-            entity = 'Registration'
-        fields = subjects_data[entity]['fields']
+            fields = subjects_data[entity]['fields']
+
         row = []
         for i in range(len(fields)):
             if fields[i] in subject:
@@ -296,8 +303,10 @@ def all_subjects(request):
         subjects_data = import_module.load_all_subjects(request)
         return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                         'failure_imports': failure_imports, 'all_data': subjects_data}))
+    
+    sorted_keys = sorted(subjects_data.iterkeys())
 
-    return render_to_response('entity/all_subjects.html', {'all_data': subjects_data, 'current_language': translation.get_language()},
+    return render_to_response('entity/all_subjects.html', {'all_data': subjects_data,'keys':sorted_keys, 'current_language': translation.get_language()},
                                   context_instance=RequestContext(request))
 
 
@@ -511,9 +520,11 @@ def _tabulate(entity,fields):
     tabulated.update({'id': entity.id})
     return tabulated
 
-def _get_response(questionnaire_form, subject_list, entity, request):
+def _get_response(questionnaire_form, subject_list, entity, request, default_type=None):
     return render_to_response('entity/web_questionnaire.html',
-                              {'questionnaire_form': questionnaire_form, 'subjects': subject_list, 'entity': entity},
+                              {'questionnaire_form': questionnaire_form,
+                                'subjects': subject_list, 'entity': entity, "default_type": default_type
+                              },
                               context_instance=RequestContext(request))
 
 
@@ -542,9 +553,10 @@ def subject_questionnaire(request, entity_type=None):
     if len(subject_list) == 0:
         return HttpResponseRedirect(reverse(create_subject))
     else:
-        if entity_type is None:
-            entity_type = subject_list[0]['entity_type']
-        
+        entity_type = entity_type.lower() if entity_type is not None else None
+        if entity_type is None or entity_type not in [ subject["entity_type"] for subject in subject_list]:
+            entity_type = "Registration"
+
     form_model = get_form_model_by_entity_type(manager, entity_type)
     QuestionnaireForm = _create_django_form_from_form_model(form_model)
 
@@ -588,9 +600,6 @@ def edit_form_model(request, form_code="reg"):
         form_model = get_form_model_by_code(manager, 'reg')
 
     fields = form_model.fields
-
-    #if form_model.entity_defaults_to_reporter():
-    #    fields = project_helper.hide_entity_question(form_model.fields)
 
     existing_questions = json.dumps(fields, default=field_to_json)
     return render_to_response('entity/edit_form.html',
