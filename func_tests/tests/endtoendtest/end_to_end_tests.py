@@ -121,7 +121,7 @@ class TestApplicationEndToEnd(BaseTest):
         create_questionnaire_page.create_questionnaire_with(QUESTIONNAIRE_DATA)
         index = 3
         for question in fetch_(QUESTIONS, from_(QUESTIONNAIRE_DATA)):
-            question_link_text = fetch_(CODE, from_(question)) + " " + fetch_(QUESTION, from_(question))
+            question_link_text = fetch_(QUESTION, from_(question))
             self.assertEquals(create_questionnaire_page.get_question_link_text(index), question_link_text)
             index += 1
         self.assertEquals(create_questionnaire_page.get_remaining_character_count(),
@@ -215,10 +215,7 @@ class TestApplicationEndToEnd(BaseTest):
         create_project_page = dashboard_page.navigate_to_create_project_page()
         create_project_page.select_report_type(VALID_DATA_FOR_PROJECT)
         self.add_subject_type(create_project_page, VALID_SUBJECT_TYPE2[ENTITY_TYPE])
-        light_box = LightBox(self.driver)
-        create_project_page = light_box.continue_change()
         self.add_subject_type(create_project_page, VALID_SUBJECT_TYPE1[ENTITY_TYPE])
-        create_project_page = light_box.continue_change()
         create_questionnaire_page = self.create_project(create_project_page)
         project_overview_page = self.create_questionnaire(create_questionnaire_page)
 
@@ -240,6 +237,7 @@ class TestApplicationEndToEnd(BaseTest):
         project_overview_page = all_projects_page.navigate_to_project_overview_page(
             fetch_(PROJECT_NAME, from_(VALID_DATA_FOR_PROJECT)))
         edit_project_page = project_overview_page.navigate_to_edit_project_page()
+        edit_project_page.continue_create_project()
         edit_questionnaire_page = create_questionnaire_page
         self.verify_questionnaire(edit_questionnaire_page)
         self.edit_questionnaire(edit_questionnaire_page)

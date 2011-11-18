@@ -20,7 +20,8 @@ class TestEditQuestionnaire(BaseTest):
         all_project_page = global_navigation.navigate_to_view_all_project_page()
         project_overview_page = all_project_page.navigate_to_project_overview_page(
             fetch_(PROJECT_NAME, from_(VALID_PROJECT_DATA)))
-        project_overview_page.navigate_to_edit_project_page()
+        edit_project_page = project_overview_page.navigate_to_edit_project_page()
+        edit_project_page.continue_create_project()
         return CreateQuestionnairePage(self.driver)
 
     @attr('functional_test', 'smoke')

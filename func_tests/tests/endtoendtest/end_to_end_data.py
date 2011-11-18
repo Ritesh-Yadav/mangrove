@@ -93,7 +93,7 @@ MESSAGE = "message"
 
 RESPONSE_MESSAGE = "message"
 
-SUCCESS_MESSAGE_TEXT = "Thank you Donald Mouse. We received : WID: wat1 q2: 11.10.2011 WL: 98.0 DMY: 12.04.2011 MY: 04.2011 MDY: 04.12.2011 WC: DARK YELLOW WAN: Mr. Tessy WB: Aquificae,Bacteroids GPS: 27.178057,-78.007789"
+SUCCESS_MESSAGE_TEXT = "Thank you Donald Mouse. We received : q1: wat1 q2: 11.10.2011 q3: 98.0 q4: 12.04.2011 q5: 04.2011 q6: 04.12.2011 q7: DARK YELLOW q8: Mr.Tessy q9: Aquificae,Bacteroids q10: 27.178057,-78.007789"
 
 SMS_SUBMISSION = "sms"
 UNIQUE_VALUE = "unique_value"
@@ -159,28 +159,28 @@ VALID_DATA_FOR_DATA_SENDER_QUESTIONNAIRE = {PAGE_TITLE: "Reminders"}
 VALID_DATA_FOR_REMINDER = {PAGE_TITLE: "Review & Test"}
 
 QUESTIONNAIRE_DATA = {QUESTIONNAIRE_CODE: "WPS01", GEN_RANDOM: False,
-                      DEFAULT_QUESTION: {QUESTION: "What are you reporting on?", CODE: "WID"},
-                      QUESTIONS: [{QUESTION: "Water Level", CODE: "WL", TYPE: NUMBER, MIN: "1", MAX: "1000"},
-                              {QUESTION: "Date of report in DD.MM.YYY format", CODE: "DMY", TYPE: DATE,
+                      DEFAULT_QUESTION: {QUESTION: "What are you reporting on?", CODE: "q1"},
+                      QUESTIONS: [{QUESTION: "Water Level", CODE: "q3", TYPE: NUMBER, MIN: "1", MAX: "1000"},
+                              {QUESTION: "Date of report in DD.MM.YYY format", CODE: "q4", TYPE: DATE,
                                DATE_FORMAT: DD_MM_YYYY},
-                              {QUESTION: "Date of report in MM.YYY format", CODE: "MY", TYPE: DATE,
+                              {QUESTION: "Date of report in MM.YYY format", CODE: "q5", TYPE: DATE,
                                DATE_FORMAT: MM_YYYY},
-                              {QUESTION: "Date of report in MM.DD.YYY format", CODE: "MDY", TYPE: DATE,
+                              {QUESTION: "Date of report in MM.DD.YYY format", CODE: "q6", TYPE: DATE,
                                DATE_FORMAT: MM_DD_YYYY},
-                              {QUESTION: "Color of Water", CODE: "WC", TYPE: LIST_OF_CHOICES,
+                              {QUESTION: "Color of Water", CODE: "q7", TYPE: LIST_OF_CHOICES,
                                CHOICE: ["LIGHT RED", "LIGHT YELLOW", "DARK YELLOW"],
                                ALLOWED_CHOICE: ONLY_ONE_ANSWER},
-                              {QUESTION: "Water point admin name", CODE: "WAN", TYPE: WORD, LIMIT: LIMITED, MAX: "10"},
-                              {QUESTION: "Bacterias in water", CODE: "WB", TYPE: LIST_OF_CHOICES,
+                              {QUESTION: "Water point admin name", CODE: "q8", TYPE: WORD, LIMIT: LIMITED, MAX: "10"},
+                              {QUESTION: "Bacterias in water", CODE: "q9", TYPE: LIST_OF_CHOICES,
                                CHOICE: ["Aquificae", "Bacteroids", "Chlorobia"],
                                ALLOWED_CHOICE: MULTIPLE_ANSWERS},
-                              {QUESTION: "Geo points of Well", CODE: "GPS", TYPE: GEO}],
-                      CHARACTER_REMAINING: "127 / 160 characters used",
+                              {QUESTION: "Geo points of Well", CODE: "q10", TYPE: GEO}],
+                      CHARACTER_REMAINING: "123 / 160 characters used",
                       PAGE_TITLE: "Data Senders"}
 
-NEW_QUESTIONNAIRE_DATA = {QUESTIONS: [{QUESTION: "Water Level", CODE: "WL", TYPE: NUMBER, MIN: "100", MAX: "1000"},
-        {QUESTION: "What is water point name?", CODE: "WN", TYPE: WORD, LIMIT: LIMITED, MAX: ""}],
-                          CHARACTER_REMAINING: "132 / 160 characters used",
+NEW_QUESTIONNAIRE_DATA = {QUESTIONS: [{QUESTION: "Water Level", CODE: "q3", TYPE: NUMBER, MIN: "100", MAX: "1000"},
+        {QUESTION: "What is water point name?", CODE: "q11", TYPE: WORD, LIMIT: LIMITED, MAX: ""}],
+                          CHARACTER_REMAINING: "129 / 160 characters used",
                           PAGE_TITLE: "Data Senders"}
 
 VALID_DATA_REVIEW_AND_TEST = {PROJECT_PROFILE: {PROJECT_NAME: "waterpoint morondava",
@@ -198,22 +198,22 @@ VALID_DATA_REVIEW_AND_TEST = {PROJECT_PROFILE: {PROJECT_NAME: "waterpoint morond
 }
 
 VALID_DATA_FOR_SMS_LIGHT_BOX = {
-    SMS: "WPS01 .WID wat1  .q2 11.10.2011 .wl 98 .DMY 12.04.2011 .MY 04.2011 .MDY 04.12.2011  .wc c .WAN Mr. Tessy .wb ab .GPS 27.178057  -78.007789",
-    RESPONSE_MESSAGE: "Thank you TEST. We received : WAN: Mr. Tessy q2: 11.10.2011 WID: wat1 WC: DARK YELLOW WB: Aquificae,Bacteroids WL: 98.0 MDY: 04.12.2011 DMY: 12.04.2011 MY: 04.2011 GPS: 27.178057,-78.007789"}
+    SMS: "WPS01  wat1  11.10.2011  98  12.04.2011  04.2011  04.12.2011   c  Mr.Tessy  ab  27.178057,-78.007789",
+    RESPONSE_MESSAGE: "Thank you TEST. We received : q1: wat1 q2: 11.10.2011 q3: 98.0 q4: 12.04.2011 q5: 04.2011 q6: 04.12.2011 q7: DARK YELLOW q8: Mr.Tessy q9: Aquificae,Bacteroids q10: 27.178057,-78.007789"}
 
 VALID_DATA_FOR_SMS = {SENDER: "1234567890",
                       RECEIVER: "",
-                      SMS: "WPS01 .WID wat1 .q2 11.10.2011 .wl 98 .DMY 12.04.2011 .MY 04.2011 .MDY 04.12.2011  .wc c .WAN Mr. Tessy .wb ab .GPS 27.178057  -78.007789",
+                      SMS: "WPS01 wat1 11.10.2011  98  12.04.2011  04.2011  04.12.2011   c  Mr.Tessy  ab  27.178057,-78.007789",
 SUCCESS_MESSAGE: SUCCESS_MESSAGE_TEXT}
 
-SMS_DATA_LOG = {SMS_SUBMISSION: "True False wat1 11.10.2011 98 12.04.2011 04.2011 04.12.2011 c Mr. Tessy ab 27.178057 -78.007789",
-                UNIQUE_VALUE: "Mr. Tessy"}
+SMS_DATA_LOG = {SMS_SUBMISSION: "True False wat1 11.10.2011 98 12.04.2011 04.2011 04.12.2011 c Mr.Tessy ab 27.178057,-78.007789",
+                UNIQUE_VALUE: "Mr.Tessy"}
 
 NEW_VALID_DATA_FOR_SMS = {SENDER: "1234567890",
                           RECEIVER: "",
-                          SMS: "WPS01 .WID wat1  .q2 12.10.2011 .wl 98 .DMY 12.04.2011 .MY 04.2011 .MDY 04.12.2011  .wc c .WAN Mr. Jessy .wb ab .GPS 27.178057  -78.007789 .WN Water Point 1",
-                          ERROR_MESSAGE: "Error. Incorrect answer for wl. Please resend entire message."}
+                          SMS: "WPS01  wat1  12.10.2011  98  12.04.2011  04.2011  04.12.2011   c  Mr.Jessy  ab  27.178057,-78.007789  Water_Point_1",
+                          ERROR_MESSAGE: "Error. Incorrect answer for q3. Please resend entire message."}
 
 NEW_SMS_DATA_LOG = {
-    SMS_SUBMISSION: "False True wat1 12.10.2011 98 12.04.2011 04.2011 04.12.2011 c Mr. Jessy ab 27.178057 -78.007789 Water Point 1",
-    UNIQUE_VALUE: "Mr. Jessy"}
+    SMS_SUBMISSION: "False True wat1 12.10.2011 98 12.04.2011 04.2011 04.12.2011 c Mr.Jessy ab 27.178057,-78.007789 Water_Point_1",
+    UNIQUE_VALUE: "Mr.Jessy"}

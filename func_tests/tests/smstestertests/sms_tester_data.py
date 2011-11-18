@@ -81,3 +81,37 @@ WITH_INVALID_GEO_CODE_FORMAT = {SENDER: "1234567890",
                                 SMS: 'cli002 .EID cid002 . .NA Mr. De`Melo .FA 58 .RD 17.05.2011 .BG ab .SY ade .GPS 127.178057  -78.007789',
                                 ERROR_MSG: "Error. Incorrect answer for na, bg, gps. Please resend entire message."}
 
+ONLY_QUESTIONNAIRE_CODE = {SENDER: "1234567890",
+                             RECEIVER: "919880734937",
+                             SMS: "cli009",
+                             ERROR_MSG: "Error: SMS Incorrect. Review printed questionnaire and re-send SMS."}
+
+WRONG_NUMBER_OF_ARGS = {SENDER: "1234567890",
+              RECEIVER: "919880734937",
+              SMS: "cli009 cid003  Mr.Tessy  58  17.05.2011  b  ade . 27.178057,-78.007789 a",
+              ERROR_MSG: "Could not parse, Wrong number of answers submitted."}
+
+VALID_DATA_FOR_ORDERED_SMS = {SENDER: "1234567890",
+              RECEIVER: "919880734937",
+              SMS: "cli011  cid003  Mr.Tessy  58  17.05.2011  b  ade  27.178057,-78.007789 b",
+              SUCCESS_MESSAGE: "Thank you Shweta. We received : EID: cid003 NA: Mr. Tessy FA: 58.0 RD: 17.05.2011 BG: O- SY: Rapid weight loss,Memory loss,Neurological disorders GPS: 27.178057,-78.007789"}
+
+EXCEED_NAME_LENGTH_FOR_ORDERED_SMS = {SENDER: "1234567890",
+                      RECEIVER: "919880734937",
+                      SMS: "cli011  CID003  Mr.O'brain  58  17.05.2011  b  ade  27.178057,-78.007789 c",
+                      ERROR_MSG: "Error. Incorrect answer for na. Please resend entire message."}
+
+DOT_IN_THE_BEGINNING_FOR_ORDERED_SMS = {SENDER: "1234567890",
+                         RECEIVER: "919880734937",
+                         SMS: " cli011  cid003  Mr.Tessy  58  17.05.2011  b  ade  27.178057,-78.007789 a",
+                         ERROR_MSG: "Error: SMS Incorrect. Review printed questionnaire and re-send SMS."}
+
+UNREGISTERED_FROM_NUMBER_FOR_ORDERED_SMS = {SENDER: "123445567",
+                            RECEIVER: "919880734937",
+                            SMS: "cli002  CID005 .  Mr.Kessy  58  17.05.2011  b  ade",
+                            ERROR_MSG: "Your telephone number is not yet registered in our system. Please contact your supervisor."}
+
+UNREGISTER_ENTITY_ID = {SENDER: "123445567",
+                            RECEIVER: "919880734937",
+                            SMS: "cli002  cid0090   Mr.Dessy  58   17.05.2011  b  ade    27.178057,-78.007789 a",
+                            ERROR_MSG: "This clinic cid0090 is not registered in our system.Please register this clinic or contact your supervisor."}

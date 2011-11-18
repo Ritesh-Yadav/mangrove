@@ -115,6 +115,7 @@ class DatabaseManager(object):
             cur.execute("delete from accountmanagement_organization where org_id=%s;", (org_id,))
             cur.execute("delete from registration_registrationprofile where user_id=%s;", (user_id,))
             cur.execute("delete from accountmanagement_ngouserprofile where org_id=%s;", (org_id,))
+            cur.execute("delete from accountmanagement_messagetracker where organization_id=%s;", (org_id,))
             cur.execute("delete from accountmanagement_organizationsetting where organization_id=%s;", (org_id,))
             cur.execute("delete from auth_user_groups where user_id=%s;", (user_id,))
             cur.execute("delete from auth_user where id=%s;", (user_id,))
