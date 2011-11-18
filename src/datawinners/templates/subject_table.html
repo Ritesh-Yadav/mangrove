@@ -1,6 +1,12 @@
 {% load i18n %}
-{% for entity_key,entity in all_data.items %}
-    <h3>{{ entity.name }}</h3>
+{% load hash_tag %}
+
+{% for key in keys %}
+    {% with entity=all_data|hash:key %}
+    <h3 class="float_left">{{ entity.name }}</h3>
+    <a class="float_right" href="{% ifequal entity.code "registration" %}{% url datawinners.entity.views.create_subject entity.name %}{% else %}{% url datawinners.entity.views.subject_questionnaire entity.name %}{% endifequal %}">Add a {{ entity.name|lower }}</a>
+    <div class="clear_both"></div>
+    <br/>
     <table class="styled_table">
         <thead>
             {% for col in entity.fields %}
@@ -17,4 +23,5 @@
         {% endfor %}
         </tbody>
     </table>
+    {% endwith %}
 {% endfor %}
