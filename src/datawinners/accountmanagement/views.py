@@ -247,6 +247,6 @@ def upgrade(request):
             _send_upgrade_email(request.user)
             messages.success(request,_("upgrade success message") )
             return HttpResponseRedirect(django_settings.LOGIN_REDIRECT_URL)
-            
+
         return render_to_response("registration/upgrade.html",{'organization' : organization, 'profile' : profile,
                                                                    'form':form}, context_instance=RequestContext(request))
