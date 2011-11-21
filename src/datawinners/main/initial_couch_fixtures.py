@@ -1177,7 +1177,6 @@ def create_clinic_project_for_trial_account(CLINIC_ENTITY_TYPE, manager, trial_o
     )
 
     weekly_reminder_and_deadline = {
-            "reminders_enabled": "True",
             "deadline_week": "5",
             "deadline_type": "Same",
             "has_deadline": True,
