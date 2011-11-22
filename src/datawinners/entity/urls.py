@@ -29,4 +29,5 @@ urlpatterns = patterns('',
     (r'^entity/registration/$', subject_questionnaire),
 
     (r'^entity/form/(?P<form_code>.+?)/$', edit_form_model),
+    (r'^entity/form/$', edit_form_model),
 )
