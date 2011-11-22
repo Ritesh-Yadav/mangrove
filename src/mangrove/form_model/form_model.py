@@ -492,6 +492,13 @@ def create_constraints_for_mobile_number():
 
 
 def _construct_registration_form(manager, name=None, form_code=None, entity_type=None):
+    questions = get_default_questions(manager)
+
+    form_model = FormModel(manager, name=name, form_code=form_code, fields=questions , flag_reg=True, entity_type=entity_type)
+    return form_model
+
+
+def get_default_questions(manager):
     location_type = get_or_create_data_dict(manager, name='Location Type', slug='location', primitive_type='string')
     geo_code_type = get_or_create_data_dict(manager, name='GeoCode Type', slug='geo_code', primitive_type='geocode')
     name_type = get_or_create_data_dict(manager, name='Name', slug='name', primitive_type='string')
@@ -509,6 +516,4 @@ def _construct_registration_form(manager, name=None, form_code=None, entity_type
     question4 = GeoCodeField(name=GEO_CODE_FIELD, code=GEO_CODE, label="What is the subject's GPS co-ordinates?",
                              language="en", ddtype=geo_code_type, instruction="Enter lat and long. Eg 20.6, 47.3", required=False)
 
-    form_model = FormModel(manager, name=name, form_code=form_code, fields=[
-        question1, question2, question3, question4], flag_reg=True, entity_type=entity_type)
-    return form_model
+    return [question1, question2, question3, question4]

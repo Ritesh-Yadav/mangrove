@@ -34,6 +34,7 @@ from mangrove.utils.types import is_empty, sequence_to_str
 from datawinners.entity.helper import update_questionnaire_with_questions
 from mangrove.transport.player import player
 from mangrove.transport.player.player import WebPlayer, Request, TransportInfo
+from mangrove.form_model.form_model import get_default_questions
 import logging
 
 logger = logging.getLogger("django")
@@ -176,6 +177,7 @@ def create_datasender(request):
 def create_type(request):
     success = False
     form = EntityTypeForm(request.POST)
+    response = {}
     if form.is_valid():
         entity_name = form.cleaned_data["entity_type_regex"]
         entity_name = [entity_name.lower()]
@@ -183,25 +185,20 @@ def create_type(request):
             manager = get_database_manager(request.user)
             define_type(manager, entity_name)
             if request.POST["default_form_model"] == "false":
-                _create_new_reg_form_model(manager,entity_name[0])
+                form_model = _create_new_reg_form_model(manager,entity_name[0])
+                response.update({"form_code": form_model.form_code})
             message = _("Entity definition successful")
             success = True
         except EntityTypeAlreadyDefined:
             message = _("%s already registered as a subject type. Please select %s from the drop down menu.") %  (entity_name[0], entity_name[0])
     else:
         message = form.fields['entity_type_regex'].error_messages['invalid']
+    response.update({'success': success, 'message': _(message)})
+    return HttpResponse(json.dumps(response))
 
-    return HttpResponse(json.dumps({'success': success, 'message': _(message)}))
 
 
-def _generate_unique_form_code(entity_name):
-    form_code = entity_name[0][0:3]
-    i = 1
-    exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-    while exists:
-        form_code += "%s" % i
-        exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-        i += 1
+
 
 
 def _get_entity_type_with_editable_registration_form(manager):
@@ -432,16 +429,6 @@ def import_subjects_from_project_wizard(request):
                                     'failure_imports': failure_imports}))
 
 
-def _create_new_reg_form_model(manager, entity_name):
-    form_code = entity_name[0:3]
-    i = 1
-    exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-    while exists:
-        form_code += "%s" % i
-        exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-        i += 1
-    return create_reg_form_model(manager, entity_name, form_code, [entity_name])
-
 def _get_submissions(request, type):
     dbm = get_database_manager(request.user)
     if type != "Registration":
@@ -593,16 +580,28 @@ def subject_questionnaire(request, entity_type=None):
                                   context_instance=RequestContext(request))
 
 @login_required(login_url='/login')
-def edit_form_model(request, form_code="reg"):
+def edit_form_model(request, form_code=None):
     manager = get_database_manager(request.user)
-    form_model = get_form_model_by_code(manager, form_code)
-    if form_model is None:
-        form_model = get_form_model_by_code(manager, 'reg')
+    if form_code is None:
+        fields = get_default_questions(manager)
+        form_code = ""
+    else:
+        form_model = get_form_model_by_code(manager, form_code)
+        fields = form_model.fields
 
-    fields = form_model.fields
 
     existing_questions = json.dumps(fields, default=field_to_json)
     return render_to_response('entity/edit_form.html',
             {"existing_questions": repr(existing_questions),
-             'questionnaire_code': form_model.form_code},
+             'questionnaire_code': form_code},
              context_instance=RequestContext(request))
+
+def _create_new_reg_form_model(manager, entity_name):
+    form_code = entity_name
+    i = 1
+    exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
+    while exists:
+        form_code += "%s" % i
+        exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
+        i += 1
+    return create_reg_form_model(manager, entity_name, form_code, [entity_name])
