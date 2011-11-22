@@ -596,7 +596,7 @@ def edit_form_model(request, form_code=None):
              context_instance=RequestContext(request))
 
 def _create_new_reg_form_model(manager, entity_name):
-    form_code = entity_name
+    form_code = entity_name.split(" ")[0]
     i = 1
     exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
     while exists:
