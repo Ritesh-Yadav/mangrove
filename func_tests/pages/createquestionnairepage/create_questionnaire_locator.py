@@ -30,9 +30,9 @@ WORD_OR_PHRASE_MAX_LENGTH_TB = by_xpath(
     "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddTextLength')]/div/div/span/input[@id='max_length' and not(contains(@style,'none'))]")
 NUMBER_RB = by_css("input[value='integer']")
 NUMBER_MAX_LENGTH_TB = by_xpath(
-    "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddRange')]/div/p/input[@id='range_max']")
+    "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddRange')]/div/div/input[@id='range_max']")
 NUMBER_MIN_LENGTH_TB = by_xpath(
-    "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddRange')]/div/p/input[@id='range_min']")
+    "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddRange')]/div/div/input[@id='range_min']")
 
 DATE_RB = by_css("input[value='date']")
 MONTH_YEAR_RB = by_xpath("//input[@value='mm.yyyy']")
@@ -55,10 +55,10 @@ PREVIOUS_STEP_LINK = by_xpath("//a[@id='subjects_link' and text()='Subjects']")
 
 # Locators for Question List section of the page
 DEFAULT_QUESTION_LINK = by_xpath(
-    "//div[@class='question_list']/ol/div[1]/li/a[contains(text(),'Which subject are you reporting on?')]")
-QUESTION_LINK_CSS_LOCATOR_PART1 = "div.question_list>ol>div"  # index number to identify question
-QUESTION_LINK_CSS_LOCATOR_PART2 = ">li>a"  # Add text to locate specific question
-QUESTION_DELETE_LINK_CSS_LOCATOR_PART1 = "div.question_list>ol>div>li>a"  # Add text or index number to identify question
+    "//div[@class='question_list']/ol/li[1]/a[contains(text(),'Which subject are you reporting on?')]")
+QUESTION_LINK_CSS_LOCATOR_PART1 = "div.question_list>ol>li"  # index number to identify question
+QUESTION_LINK_CSS_LOCATOR_PART2 = ">a"  # Add text to locate specific question
+QUESTION_DELETE_LINK_CSS_LOCATOR_PART1 = "div.question_list>ol>li>a"  # Add text or index number to identify question
 QUESTION_DELETE_LINK_CSS_LOCATOR_PART1 = "~div>span.delete>a"
 ADD_A_QUESTION_LINK = by_css("div.add_question>a")
 SAVE_CHANGES_BTN = by_css("input#submit-button[value='Next Step: Data Senders']")

@@ -22,7 +22,6 @@ class ProjectOverviewPage(Page):
 
     def navigate_to_reminder_page(self):
         self.driver.find(MESSAGES_AND_REMINDERS_TAB).click()
-        AllReminderPage(self.driver).click_schedule_reminder_tab()
         return AllReminderPage(self.driver)
 
     def navigate_to_data_page(self):
