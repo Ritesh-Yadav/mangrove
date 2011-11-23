@@ -71,7 +71,7 @@
                             if (data.success) {
                                 $("#questionnaire-code").val(data.form_code);
                                 $("#saved-questionnaire-code").val(data.form_code);
-                                $("#saved-questionnaire-code, #questionnaire-code, #id_entity_type_text").attr("disabled", "disabled");
+                                $("#saved-questionnaire-code, #id_entity_type_text").attr("disabled", "disabled");
                             }
                             else {
                                 $("#type_message").html(data.message);
