@@ -23,4 +23,4 @@ south
 supervisor
 python-dateutil
 http://github.com/jbalogh/django-nose/tarball/master#egg=django-nose
-
+https://diptanu@github.com/diptanu/django_compressor/tarball/master#egg=django_compressor
