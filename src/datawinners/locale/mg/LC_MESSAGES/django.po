@@ -2225,7 +2225,7 @@ msgstr "L'utilisateur a été ajouté avec succès"
 
 
 msgid "agree-terms"
-msgstr "J'accepte <a href=\"/fr/terms-and-conditions/\" target=\"_blank\"  id=\"link-terms-and-conditions\">les termes et conditions</a> de DataWinners"
+msgstr "J'accepte <a href=\"/fr/terms-and-conditions/\" target=\"_blank\" id=\"link-terms-and-conditions\">les termes et conditions</a> de DataWinners"
 
 msgid "Agree"
 msgstr "Accepter"
@@ -2262,8 +2262,8 @@ msgstr "Tsy misy ny kaodin’ny lisitry ny fanontaniana %s"
 #, python-format
 msgid "Error with Questionnaire code %s. Find the Questionnaire code on the printed questionnaire and resend "
 "SMS starting with this questionnaire code."
-msgstr "Diso ny  kaodin’ny lisitry ny fanontaniana %s. Jereo eo amin’ny lisitry ny fanontaniana ilay izy ary "
-"alefaso indray ny SMS-nao  manomboka amin’io kaody io"
+msgstr "Diso ny kaodin’ny lisitry ny fanontaniana %s. Jereo eo amin’ny lisitry ny fanontaniana ilay izy ary "
+"alefaso indray ny SMS-nao manomboka amin’io kaody io"
 
 #, python-format
 msgid "This %s is not yet registered in the system. Please check the %s’s unique ID number and resubmit."
@@ -2302,7 +2302,7 @@ msgid "Invalid message format."
 msgstr "Tsy manara-penitra ny firafitry ny SMS-nao."
 
 msgid "Error: SMS Incorrect. Review printed questionnaire and re-send SMS."
-msgstr "Diso ny SMS-nao. Avereno jerena ilay lisitry ny fanontaniana ary avereno alefa  indray  ny SMS."
+msgstr "Diso ny SMS-nao. Avereno jerena ilay lisitry ny fanontaniana ary avereno alefa indray ny SMS."
 
 msgid "The system is experiencing a problem right now. Please try again in a few minutes"
 msgstr "Mbola misy olana kely. Avereno indray azafady rehefa afaka minitra vitsy."
@@ -2316,7 +2316,7 @@ msgstr "Diso: Tsy manara-penitra ny firafitry ny SMS-nao. Amarino ao amin'ny lis
 "ary avereno alefa sy SMS-nao"
 
 msgid "Error. This project is not yet active. Submissions can be made only for an active project."
-msgstr "Diso. Tsy mbola misokatra ny momba io tetikasa io.  Izay tetikasa efa voasokatra ihany no azo iasàna."
+msgstr "Diso. Tsy mbola misokatra ny momba io tetikasa io. Izay tetikasa efa voasokatra ihany no azo iasàna."
 
 msgid "Error. Internal error. Please call technical support"
 msgstr "Diso. Misy olana ara teknika. Azafady antsoy fangalana torohevitra"
@@ -2331,105 +2331,8 @@ msgstr ""
 msgid "Which subject are you reporting on?"
 msgstr ""
 
-
-msgid "Create questionnaire"
-msgstr ""
-
-msgid "Register a Subject/Data Sender"
-msgstr ""
-
-msgid "Send data using SMS"
-msgstr ""
-
-msgid "Send data using  Internet"
-msgstr ""
-
-msgid "Analyze data"
-msgstr ""
-
-msgid "My account"
-msgstr ""
-
-msgid "General feedback"
-msgstr ""
-
-msgid "Subscription Inquiry"
-msgstr ""
-
-msgid "Consulting"
-msgstr ""
-
-msgid "Technical Support"
-msgstr ""
-
-msgid "Billing"
-msgstr ""
-
-msgid "Create questionnaire"
-msgstr ""
-
-msgid "Register a Subject/Data Sender"
-msgstr ""
-
-msgid "Send data using SMS"
-msgstr ""
-
-msgid "Send data using  Internet"
-msgstr ""
-
-msgid "Analyze data"
-msgstr ""
-
-msgid "My account"
-msgstr ""
-
-msgid "General feedback"
-msgstr ""
-
-msgid "Subscription Inquiry"
-msgstr ""
-
-msgid "Consulting"
-msgstr ""
-
-msgid "Technical Support"
-msgstr ""
-
-msgid "Billing"
-msgstr ""
-msgid "Create questionnaire"
-msgstr ""
-
-msgid "Register a Subject/Data Sender"
-msgstr ""
-
-msgid "Send data using SMS"
-msgstr ""
-
-msgid "Send data using  Internet"
-msgstr ""
-
-msgid "Analyze data"
-msgstr ""
-
-msgid "My account"
-msgstr ""
-
-msgid "General feedback"
-msgstr ""
-
-msgid "Subscription Inquiry"
-msgstr ""
-
-msgid "Consulting"
-msgstr ""
-
-msgid "Technical Support"
-msgstr ""
-
-msgid "Billing"
-msgstr ""msgid "Error. Incorrect number of answers submitted. Review printed questionnaire and resend SMS."
-msgstr "Diso ny SMS-nao. Tsy ampy na mihoatra ny isan'ny valiny nalefanao. Jereo ilay lisitry ny fanontaniana ary avereno alefa  indray  ny SMS."
+msgid "Error. Incorrect number of answers submitted. Review printed questionnaire and resend SMS."
+msgstr "Diso ny SMS-nao. Tsy ampy na mihoatra ny isan'ny valiny nalefanao. Jereo ilay lisitry ny fanontaniana ary avereno alefa indray ny SMS."
 
 msgid "Privacy Policy"
 msgstr ""
