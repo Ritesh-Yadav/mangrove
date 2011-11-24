@@ -63,8 +63,9 @@
 {% endblock %}
 
 {% block page_scss %}
-    <link href="/media/css/scss/section_questionnaire.scss" rel="stylesheet"/>
-    <link href="/media/css/scss/section_new_create_project.scss" rel="stylesheet"/>
+    {{ block.super }}
+    <link href="/media/css/scss/section_questionnaire.scss" type="text/x-scss" rel="stylesheet"/>
+    <link href="/media/css/scss/section_new_create_project.scss" type="text/x-scss" rel="stylesheet"/>
 {% endblock %}
 
 {% block wizard %}

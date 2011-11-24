@@ -75,3 +75,6 @@ src/datawinners/.sass-cache/
 
 # Emacs files
 .ropeproject
+
+#MEDIA CACHE
+src/datawinners/media/CACHE/

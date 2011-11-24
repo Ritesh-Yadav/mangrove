@@ -12,6 +12,10 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
+if DEBUG:
+    COMPRESS_DEBUG_TOGGLE = "foo"
+
+
 MANAGERS = ADMINS
 
 
@@ -162,7 +166,6 @@ INSTALLED_APPS = (
     'django_nose'
 )
 
-COMPRESS = True
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
