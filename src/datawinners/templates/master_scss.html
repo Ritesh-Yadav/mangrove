@@ -1,2 +1,5 @@
-<link rel="stylesheet" href="/media/css/scss/util.scss" media="screen">
-<link rel="stylesheet" href="/media/css/scss/form.scss" media="screen">
+{% load compress %}
+{% compress css %}
+<link rel="stylesheet" href="/media/css/scss/util.scss" type="text/x-scss" media="screen">
+<link rel="stylesheet" href="/media/css/scss/form.scss" type="text/x-scss" media="screen">
+{% endcompress %}

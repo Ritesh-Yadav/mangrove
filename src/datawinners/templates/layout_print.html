@@ -8,15 +8,9 @@
     {% block page_meta %} {% endblock %}
 
 {#     This block compiles and compress the SCSS to CSS on the fly. #}
-    {% load compress %}
-    {% compress css %}
         {% block page_scss %} {% endblock %}
-    {% endcompress %}
 
-    {% load compress %}
-    {% compress js %}
          {% block page_js %} {% endblock %}
-    {% endcompress %}
 
 </head>
 <body>

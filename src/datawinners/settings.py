@@ -5,10 +5,9 @@ import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+COMPRESS_ENABLED = True
 PROJECT_DIR = os.path.dirname(__file__)
-
 EXPIRED_DAYS_FOR_TRIAL_ACCOUNT = 30
-
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -57,6 +56,11 @@ MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
+COMPRESS_URL = '/media/'
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'sass --scss {infile} {outfile}'),
+)
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -85,6 +89,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -157,17 +162,7 @@ INSTALLED_APPS = (
     'django_nose'
 )
 
-COMPILER_FORMATS = {
-    '.sass': {
-        'binary_path': 'sass',
-        'arguments': '*.sass *.css'
-    },
-    '.scss': {
-        'binary_path': 'sass',
-        'arguments': '*.scss *.css'
-    }
-}
-COMPRESS = False
+COMPRESS = True
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

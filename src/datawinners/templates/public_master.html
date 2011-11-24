@@ -8,20 +8,14 @@
     {% block page_meta %} {% endblock %}
 
 {#     This block compress the CSS on the fly. #}
-    {% load compress %}
-    {% compress css %}
         {% include 'public_css.html' %}
         {% include 'public_scss.html' %}
-    {% endcompress %}
 
 {#     This block compiles and compress the SCSS to CSS on the fly. #}
-    {% load compress %}
-    {% compress css %}
         {% block layout_css %}{% endblock %}
         {% block layout_scss %}{% endblock %}
         {% block page_css %}{% endblock %}
         {% block page_scss %} {% endblock %}
-    {% endcompress %}
 
     <!--[if gte IE 7]>
         <link href="/media/css/plugins/960gd/ie.css" rel="stylesheet" type="text/css" media="screen" />
@@ -30,17 +24,11 @@
         <link href="/media/css/plugins/960gd/ie7.css" rel="stylesheet" type="text/css" media="screen" />
     <![endif]-->
 
-    {% load compress %}
-    {% compress js %}
          {% include 'public_javascript.html' %}
-    {% endcompress %}
 
     {% block uncompress %}{% endblock %}
 
-    {% load compress %}
-    {% compress js %}
          {% block page_js %} {% endblock %}
-    {% endcompress %}
 
 </head>
 <body>
