@@ -1,17 +1,16 @@
-{% extends 'entity/subjects_navigation.html' %}
+{% extends 'layout_application.html' %}
 {% load i18n %}
 {% block page_title %}{% trans "Add A Subject" %}{% endblock %}
 {% block section_title %}
-    {% trans "Add A Subject" %}
+    {% ifequal expected_type '' %}
+        {% trans "Add A Subject" %}
+    {% else %}
+        Add a {{ expected_type }}
+    {% endifequal %}
 {% endblock %}
 
 {% load field_tags %}
 {% load dw_tabs %}
-
-{% block navigation %}
-    {% activetab "tab_nav" "default" %}
-    {{ block.super }}
-{% endblock %}
 
 {% block body %}
 {% activetab "main_nav" "subjects" %}

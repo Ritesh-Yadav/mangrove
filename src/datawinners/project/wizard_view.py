@@ -25,7 +25,7 @@ def create_questionnaire(post, manager, entity_type, name, language):
     questionnaire_code = post['questionnaire-code'].lower()
     json_string = post['question-set']
     question_set = json.loads(json_string)
-    form_model = FormModel(manager, entity_type=entity_type, name=name, type='survey', state=post['project_state'], fields=[], form_code=questionnaire_code, language=language)
+    form_model = FormModel(manager, entity_type=entity_type, name=name, type='survey', state=post['project_state'], fields=[], form_code=questionnaire_code, flag_reg=False, language=language)
     form_model.activeLanguages = [language]
     return helper.update_questionnaire_with_questions(form_model, question_set, manager)
 
