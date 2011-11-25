@@ -1,27 +1,33 @@
 {% load i18n %}
-{% load hash_tag %}
 
-{% for key in keys %}
-    {% with entity=all_data|hash:key %}
-    <h3 class="float_left">{{ entity.name }}</h3>
-    <a class="float_right" href="{% ifequal entity.code "registration" %}{% url datawinners.entity.views.create_subject entity.name %}{% else %}{% url datawinners.entity.views.subject_questionnaire entity.name %}{% endifequal %}">Add a {{ entity.name|lower }}</a>
-    <div class="clear_both"></div>
-    <br/>
-    <table class="styled_table">
-        <thead>
-            {% for col in entity.fields %}
-                <th>{{ col }}</th>
-            {% endfor %}
-        </thead>
-        <tbody id='all_data_senders'>
-        {% for row in entity.data %}
-            <tr>
-                {% for col in row %}
-                    <td>{{ col }}</td>
+<div id="all_subjects">
+{% for subject in all_data %}
+    <div class="list_header">
+        <span class="header">{{ subject.name|capfirst }}</span>
+        <span class="success_error">{{ subject.data|length }} registered subjects</span>
+    </div>
+    <div>
+        <a href="{{ subject.create_link }}" class="register_subject">add a {{ subject.name }} &raquo;</a>
+        {% if subject.data|length > 0 %}
+            <table class="styled_table">
+                <thead>
+                    {% for title in subject.fields %}
+                        <th>{{ title }}</th>
+                    {% endfor %}
+                </thead>
+                <tbody id='all_data_senders'>
+                {% for row in subject.data %}
+                    <tr>
+                        {% for col in row %}
+                            <td>{{ col }}</td>
+                        {% endfor %}
+                    </tr>
                 {% endfor %}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% endwith %}
+                </tbody>
+            </table>
+        {% else %}
+            <strong>"No subjects registered for this type"</strong><br/>
+        {% endif %}
+    </div>
 {% endfor %}
+</div>
