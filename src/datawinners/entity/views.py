@@ -197,40 +197,6 @@ def create_type(request):
     return HttpResponse(json.dumps(response))
 
 
-
-
-
-
-def _get_entity_type_with_editable_registration_form(manager):
-    form_models = manager.load_all_rows_in_view("questionnaire")
-    entity_list = []
-    for form_model in form_models:
-        if form_model.value['flag_reg']:
-            entity_list.append(form_model.value["entity_type"])
-    return entity_list
-
-
-def _get_entity_type_by_registration_type(manager):
-    entity_types = get_all_entity_types(manager)
-    project_helper.remove_reporter(entity_types)
-    editable_entity_list = _get_entity_type_with_editable_registration_form(manager)
-    default_entity_list = []
-    for entity_type in entity_types:
-        if entity_type not in editable_entity_list:
-            default_entity_list.append(entity_type)
-    return (default_entity_list, editable_entity_list)
-
-
-@login_required(login_url='/login')
-def create_subject(request, entity_type=""):
-    db_manager = get_database_manager(request.user)
-    entity_types = _get_entity_type_by_registration_type(db_manager)[0]
-    subjectForm = SubjectForm()
-    return render_to_response("entity/create_subject.html", {"post_url": reverse(submit),
-                                                        "entity_types": entity_types, "form": subjectForm,
-                                                        "expected_type": entity_type.lower()},
-                              context_instance=RequestContext(request))
-
 @csrf_view_exempt
 @csrf_response_exempt
 @login_required(login_url='/login')
@@ -248,6 +214,62 @@ def render_all_entities(request):
     return render_to_response('entity/all_subjects.html', {'all_data': subjects_data, 'current_language': translation.get_language()},
                                   context_instance=RequestContext(request))
 
+
+def _get_field_code(fields):
+    codes = []
+    for field in fields:
+        if field['name'] == 'short_code':
+            field_name = 'short_name'
+        elif field['name'] == 'geo_code':
+            field_name = 'geocode'
+        elif field['name'] == 'entity_type':
+            field_name = 'type'
+        else:
+            field_name = field['name']
+        codes.append(field_name)
+    return codes
+
+
+def _get_entity_types(manager):
+    entity_types = get_all_entity_types(manager)
+    entity_list = [entity[0] for entity in entity_types if entity[0] != 'reporter']
+    entity_list.sort()
+    return entity_list
+
+
+def _get_entity_types_with_form(manager):
+    form_models = manager.load_all_rows_in_view("questionnaire")
+    entity_list = []
+    for form_model in form_models:
+        entity = form_model.value['entity_type'][0]
+        if form_model.value['flag_reg'] and entity != 'reporter':
+            entity_list.append(entity)
+
+    entity_list.sort()
+    return entity_list
+
+
+def _get_entity_types_without_form(manager):
+    entity_types = _get_entity_types(manager)
+    entity_types =  set(entity_types)
+    entity_with_form = _get_entity_types_with_form(manager)
+    entity_with_form = set(entity_with_form)
+    entity_without_form = set.difference(entity_types, entity_with_form)
+    entity_without_form = list(entity_without_form)
+
+    entity_without_form.sort()
+    return entity_without_form
+
+
+def _get_registration_form_models(manager):
+    subjects = {}
+    form_models = manager.load_all_rows_in_view('questionnaire')
+    for form_model in form_models:
+        if form_model.value['flag_reg'] and form_model.value['name'] != 'Reporter':
+            subjects[form_model.value['entity_type'][0]] = form_model
+    return subjects
+
+
 @csrf_view_exempt
 @csrf_response_exempt
 @login_required(login_url='/login')
@@ -255,55 +277,48 @@ def render_all_entities(request):
 @is_datasender
 def all_subjects(request):
     manager = get_database_manager(request.user)
-    form_models = manager.load_all_rows_in_view("questionnaire")
-    subjects_data = {}
-    for form_model in form_models:
-        if form_model.value['flag_reg'] and form_model.value['name'] != 'Reporter':
-            entity_name = form_model.value["entity_type"][0]
-            field_code = []
-            for field in form_model.value["json_fields"]:
-                if field['name'] == 'short_code':
-                    field_name = 'short_name'
-                elif field['name'] == 'geo_code':
-                    field_name = 'geocode'
-                elif field['name'] == 'entity_type':
-                    field_name = 'type'
-                else:
-                    field_name = field['name']
-                field_code.append(field_name)
+    entity_types_names = _get_entity_types(manager)
+    subjects = _get_registration_form_models(manager)
 
-            if entity_name == "Registration":
-                registration_fields = field_code
-            else:
-                subjects_data[entity_name.capitalize()] = {"name": form_model.value['name'],
-                                          "code": form_model.value["form_code"], "fields": field_code, "data": []}
-
-    subjects = import_module.load_all_subjects(request)
-    for subject in subjects:
-        entity = subject['type'].capitalize()
-        if entity not in subjects_data:
-            fields = registration_fields
-            subjects_data[entity] = dict(data=[], name=entity, code="registration", fields=registration_fields)
+    subjects_list = {}
+    for entity in entity_types_names:
+        if entity in subjects.keys():
+            form_model = subjects[entity]
         else:
-            fields = subjects_data[entity]['fields']
+            form_model = subjects['Registration']
+        create_link = reverse(create_subject, args=[entity])
 
-        row = []
-        for i in range(len(fields)):
-            if fields[i] in subject:
-                row.append(subject[fields[i]])
-            else:
-                row.append('')
-        subjects_data[entity]['data'].append(row)
+        subjects_list[entity] = dict(
+            name = entity,
+            code = form_model.value["form_code"],
+            fields = _get_field_code(form_model.value['json_fields']),
+            data = [],
+            create_link = create_link
+        )
+
+    registered_subjects = import_module.load_all_subjects(request)
+    for subject in registered_subjects:
+        entity = subject['type']
+        if entity in subjects_list.keys():
+            fields = subjects_list[entity]['fields']
+            row = []
+            for i in range(len(fields)):
+                if fields[i] in subject:
+                    row.append(subject[fields[i]])
+                else:
+                    row.append('')
+
+            subjects_list[entity]['data'].append(row)
+
+    all_data = [subjects_list[entity] for entity in entity_types_names]
 
     if request.method == 'POST':
         error_message, failure_imports, success_message, imported_entities = import_module.import_data(request, manager)
         subjects_data = import_module.load_all_subjects(request)
         return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
-                                        'failure_imports': failure_imports, 'all_data': subjects_data}))
+                                        'failure_imports': failure_imports, 'all_data': all_data}))
     
-    sorted_keys = sorted(subjects_data.iterkeys())
-
-    return render_to_response('entity/all_subjects.html', {'all_data': subjects_data,'keys':sorted_keys, 'current_language': translation.get_language()},
+    return render_to_response('entity/all_subjects.html', {'all_data': all_data, 'current_language': translation.get_language()},
                                   context_instance=RequestContext(request))
 
 
@@ -374,7 +389,7 @@ def all_datasenders(request):
     
     form_model = manager.load_all_rows_in_view("questionnaire", key="rep")
 
-    fields = _get_cleaned_fields(form_model[0]["value"]["json_fields"])
+    fields = _get_field_code(form_model[0]["value"]["json_fields"])
     all_data_senders = import_module.load_subject_registration_data(manager, type="reporter", filter_entities=import_module.include_of_type,tabulate_function=_tabulate, fields=fields)
     
     data_senders = []
@@ -450,35 +465,13 @@ def _get_django_field(field):
     display_field = forms.CharField(label=field.name, initial=field.value, required=field.is_required(), help_text=field.instruction)
     display_field.widget.attrs["watermark"] = field.get_constraint_text()
     display_field.widget.attrs['style'] = 'padding-top: 7px;'
-    #    display_field.widget.attrs["watermark"] = "18 - 1"
     return display_field
 
-def _create_django_form_from_form_model(form_model):
+def _create_django_form(form_model):
     properties = {field.code: _get_django_field(field) for field in form_model.fields}
     properties.update({'form_code': forms.CharField(widget=HiddenInput, initial=form_model.form_code)})
     return type('QuestionnaireForm', (Form, ), properties)
 
-
-def _get_fields_name_and_submissions_by_form_code(request, form_code):
-    dbm = get_database_manager(request.user)
-    form_model = get_form_model_by_code(dbm, form_code)
-    fields = form_model.fields
-    if form_model.entity_defaults_to_reporter():
-        fields = project_helper.hide_entity_question(fields)
-
-def _get_cleaned_fields(fields):
-    field_list = []
-    for field in fields:
-        if field['name'] == 'short_code':
-            field_name = 'short_name'
-        elif field['name'] == 'geo_code':
-            field_name = 'geocode'
-        elif field['name'] == 'entity_type':
-            field_name = 'type'
-        else:
-            field_name = field['name']
-        field_list.append(field_name)
-    return field_list
 
 def _get_cleaned_data(fields, subject):
     row = {}
@@ -507,11 +500,19 @@ def _tabulate(entity,fields):
     tabulated.update({'id': entity.id})
     return tabulated
 
-def _get_response(questionnaire_form, subject_list, entity, request, default_type=None):
-    return render_to_response('entity/web_questionnaire.html',
-                              {'questionnaire_form': questionnaire_form,
-                                'subjects': subject_list, 'entity': entity, "default_type": default_type
-                              },
+
+def _get_response(request, questionnaire_form, entity):
+    return render_to_response('entity/create_subject_with_form.html',
+                              {'questionnaire_form': questionnaire_form, 'entity': entity },
+                              context_instance=RequestContext(request))
+
+
+def _get_default_response(manager, request, entity_type=''):
+    entity_types = _get_entity_types_without_form(manager)
+    subjectForm = SubjectForm()
+    return render_to_response("entity/create_subject.html", {"post_url": reverse(submit),
+                                                        "entity_types": entity_types, "form": subjectForm,
+                                                        "expected_type": entity_type.lower()},
                               context_instance=RequestContext(request))
 
 
@@ -523,38 +524,26 @@ def _create_request(questionnaire_form, username):
                                  destination=""
                    ))
 
-def _create_subjects_list(manager):
-    form_models = manager.load_all_rows_in_view("questionnaire")
-    subject_list = []
-    for form_model in form_models:
-        if form_model.value['flag_reg'] and form_model.value['entity_type'][0] != 'Registration' and form_model.value['entity_type'][0] != 'reporter':
-            subject = dict(url=reverse(subject_questionnaire, args=[form_model.value['entity_type'][0]]),
-                name=form_model.value['name'], entity_type=form_model.value['entity_type'][0])
-            subject_list.append(subject)
-    return subject_list
 
 @login_required(login_url='/login')
-def subject_questionnaire(request, entity_type=None):
+def create_subject(request, entity_type=None):
     manager = get_database_manager(request.user)
-    subject_list = _create_subjects_list(manager)
-    if len(subject_list) == 0:
-        return HttpResponseRedirect(reverse(create_subject))
+    if entity_type is not None:
+        form_model = get_form_model_by_entity_type(manager, entity_type.lower())
+        if form_model is None:
+            return _get_default_response(manager, request, entity_type)
     else:
-        entity_type = entity_type.lower() if entity_type is not None else None
-        if entity_type is None or entity_type not in [ subject["entity_type"] for subject in subject_list]:
-            entity_type = "Registration"
+        return _get_default_response(manager, request)
 
-    form_model = get_form_model_by_entity_type(manager, entity_type)
-    QuestionnaireForm = _create_django_form_from_form_model(form_model)
-
+    QuestionnaireForm = _create_django_form(form_model)
     if request.method == 'GET':
         questionnaire_form = QuestionnaireForm()
-        return _get_response(questionnaire_form, subject_list, entity_type, request)
+        return _get_response(request, questionnaire_form, entity_type)
 
     if request.method == 'POST':
         questionnaire_form = QuestionnaireForm(request.POST)
         if not questionnaire_form.is_valid():
-            return _get_response(questionnaire_form, subject_list, entity_type, request)
+            return _get_response(questionnaire_form, entity_type, request)
 
         success_message = None
         error_message = None
@@ -565,7 +554,7 @@ def subject_questionnaire(request, entity_type=None):
                 questionnaire_form = QuestionnaireForm()
             else:
                 questionnaire_form._errors = _to_list(response.errors, form_model.fields)
-                return _get_response(questionnaire_form, subject_list, entity_type, request)
+                return _get_response(questionnaire_form, entity_type, request)
 
         except DataObjectNotFound as exception:
             message = exception_messages.get(DataObjectNotFound).get(WEB)
@@ -574,10 +563,11 @@ def subject_questionnaire(request, entity_type=None):
             logger.exception('Web Submission failure:-')
             error_message = _(get_exception_message_for(exception=exception, channel=player.Channel.WEB))
 
-        return render_to_response('entity/web_questionnaire.html',
-                {'questionnaire_form': questionnaire_form, 'success_message': success_message, 'error_message': error_message,
-                 'subjects': subject_list},
+        return render_to_response('entity/create_subject_with_form.html',
+                {'questionnaire_form': questionnaire_form, 'entity': entity_type,
+                 'success_message': success_message, 'error_message': error_message},
                                   context_instance=RequestContext(request))
+
 
 @login_required(login_url='/login')
 def edit_form_model(request, form_code=None):
@@ -594,12 +584,16 @@ def edit_form_model(request, form_code=None):
              'questionnaire_code': form_code},
              context_instance=RequestContext(request))
 
+def _check_form_code_exists(manager, name, num=''):
+    form_code = "%s%s" % (name, num)
+    rows = manager.load_all_rows_in_view("questionnaire", key=form_code)
+    if len(rows) > 0:
+        num = 1 if num == '' else num + 1
+        form_code = _check_form_code_exists(manager, name, num)
+    return form_code
+
 def _create_new_reg_form_model(manager, entity_name):
-    form_code = entity_name.split(" ")[0]
-    i = 1
-    exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-    while exists:
-        form_code += "%s" % i
-        exists = manager.load_all_rows_in_view("questionnaire", key=form_code)
-        i += 1
+    form_code = entity_name.split()
+    form_code = form_code[0]
+    form_code = _check_form_code_exists(manager, form_code)
     return create_reg_form_model(manager, entity_name, form_code, [entity_name])
