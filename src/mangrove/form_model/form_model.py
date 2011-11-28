@@ -27,6 +27,8 @@ GEO_CODE_FIELD = "geo_code"
 
 NAME_FIELD = "name"
 NAME_FIELD_CODE = "n"
+FIRSTNAME_FIELD = "firstname"
+FIRSTNAME_FIELD_CODE = "f"
 SHORT_CODE_FIELD = "short_code"
 SHORT_CODE = "s"
 DESCRIPTION_FIELD = "description"
@@ -443,8 +445,6 @@ def create_default_reg_form_model(manager):
 
 def _create_default_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     entity_id_type = get_or_create_data_dict(manager, name='Entity Id Type', slug='entity_id', primitive_type='string')
-    mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
-                                                 primitive_type='string')
     description_type = get_or_create_data_dict(manager, name='description Type', slug='description',
                                                primitive_type='string')
     question1 = HierarchyField(name=ENTITY_TYPE_FIELD_NAME, code=ENTITY_TYPE_FIELD_CODE,
@@ -453,16 +453,10 @@ def _create_default_reg_form_model(manager, name=None, form_code=None, entity_ty
     question2 = TextField(name=DESCRIPTION_FIELD, code=DESCRIPTION_FIELD_CODE, label="Describe the subject",
                           defaultValue="some default value", language="en", ddtype=description_type,
                           instruction="Describe your subject in more details (optional)", required=False)
-    question3 = TelephoneNumberField(name=MOBILE_NUMBER_FIELD, code=MOBILE_NUMBER_FIELD_CODE,
-                                     label="What is the mobile number associated with the subject?",
-                                     defaultValue="some default value", language="en", ddtype=mobile_number_type,
-                                     instruction="Enter the subject's number", constraints=(
-            create_constraints_for_mobile_number()), required=False)
 
     form_model = _construct_registration_form(manager, "reg", REGISTRATION_FORM_CODE, ["Registration"])
     form_model.add_field(question1)
     form_model.add_field(question2)
-    form_model.add_field(question3)
     return form_model
 
 
@@ -496,8 +490,10 @@ def get_default_questions(manager):
     location_type = get_or_create_data_dict(manager, name='Location Type', slug='location', primitive_type='string')
     geo_code_type = get_or_create_data_dict(manager, name='GeoCode Type', slug='geo_code', primitive_type='geocode')
     name_type = get_or_create_data_dict(manager, name='Name', slug='name', primitive_type='string')
+    mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
+                                                 primitive_type='string')
 
-    question1 = TextField(name=NAME_FIELD, code=NAME_FIELD_CODE, label="What is the subject's name?",
+    question1 = TextField(name=NAME_FIELD, code=NAME_FIELD_CODE, label="What is the subject's lastname?",
                           defaultValue="some default value", language="en", ddtype=name_type,
                           instruction="Enter a subject name")
     question2 = TextField(name=SHORT_CODE_FIELD, code=SHORT_CODE, label="What is the subject's Unique ID Number",
@@ -509,5 +505,10 @@ def get_default_questions(manager):
                                language="en", ddtype=location_type, instruction="Enter a region, district, or commune", required=False)
     question4 = GeoCodeField(name=GEO_CODE_FIELD, code=GEO_CODE, label="What is the subject's GPS co-ordinates?",
                              language="en", ddtype=geo_code_type, instruction="Enter lat and long. Eg 20.6, 47.3", required=False)
+    question5 = TelephoneNumberField(name=MOBILE_NUMBER_FIELD, code=MOBILE_NUMBER_FIELD_CODE,
+                                     label="What is the mobile number associated with the subject?",
+                                     defaultValue="some default value", language="en", ddtype=mobile_number_type,
+                                     instruction="Enter the subject's number", constraints=(
+            create_constraints_for_mobile_number()), required=False)
 
-    return [question1, question2, question3, question4]
+    return [question1, question2, question3, question4, question5]
