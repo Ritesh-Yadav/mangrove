@@ -1,7 +1,9 @@
 {% extends 'layout_application.html' %}
 {% load i18n %}
-
 {% block page_title %}{% trans "Subject - Questionnaire" %} {% endblock %}
+{% block section_title %}
+    {{ entity_type|capfirst }} subject
+{% endblock %}
 
 {% load dw_tabs %}
 
@@ -72,7 +74,7 @@
     {% block messages %}
       <div id="message-label" class="message-box none">
       </div>
-  {% endblock %}
+    {% endblock %}
     <div id="questionnaire">
         <form id="question_form">
             {% csrf_token %}
@@ -80,7 +82,7 @@
                 <ul class="questionnaire_code">
                     {% ifequal questionnaire_code "" %}
                     <li>
-                        <label class="grid_7">{% trans "Add a new subject type" %}:</label>
+                        <label class="grid_5">{% trans "Add a new subject type" %}:</label>
                         <input type="text" maxlength="20" name="entity_type_regex" id="id_entity_type_text">
                     </li>
                     {% endifequal %}
