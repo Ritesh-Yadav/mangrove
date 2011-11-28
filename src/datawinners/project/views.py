@@ -651,6 +651,10 @@ def subjects(request, project_id=None):
     manager = get_database_manager(request.user)
     project, project_links = _get_project_and_project_link(manager, project_id)
     form_model = get_form_model_by_entity_type(manager, project.entity_type)
+
+    if form_model is None:
+        form_model = get_form_model_by_code(manager, "reg")
+        
     if form_model is not None:
         fields = form_model.fields
         if form_model.entity_defaults_to_reporter():
