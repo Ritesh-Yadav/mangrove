@@ -123,5 +123,10 @@ var viewModel =
     },
     isTypeEnabled: function(){
         return viewModel.isEnabled() && !viewModel.selectedQuestion().event_time_field_flag();
+    },
+    checkCodeForm: function(){
+        if($("#saved-questionnaire-code").val() == "reg"){
+            $("#saved-questionnaire-code").val('');
+        }
     }
 };
