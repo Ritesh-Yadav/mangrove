@@ -136,8 +136,7 @@ def save_questionnaire(request):
     if request.method == 'POST':
         questionnaire_code = request.POST['saved-questionnaire-code']
         if questionnaire_code == "":
-            project = Project.load(manager.database, request.POST["pid"])
-            form_model = _create_new_reg_form_model(manager, project.entity_type)
+            form_model = _create_new_reg_form_model(manager, request.POST["entity-type"])
             questionnaire_code = form_model.form_code
         else:
             form_model = get_form_model_by_code(manager, questionnaire_code)
@@ -287,13 +286,15 @@ def all_subjects(request):
         else:
             form_model = subjects['Registration']
         create_link = reverse(create_subject, args=[entity])
+        edit_link = reverse(edit_subject, args=[entity])
 
         subjects_list[entity] = dict(
             name = entity,
             code = form_model.value["form_code"],
             fields = _get_field_code(form_model.value['json_fields']),
             data = [],
-            create_link = create_link
+            create_link = create_link,
+            edit_link = edit_link
         )
 
     registered_subjects = import_module.load_all_subjects(request)
@@ -568,20 +569,6 @@ def create_subject(request, entity_type=None):
                  'success_message': success_message, 'error_message': error_message},
                                   context_instance=RequestContext(request))
 
-@login_required(login_url='/login')
-def edit_form_model(request, form_code=None):
-    manager = get_database_manager(request.user)
-    if form_code is None:
-        fields = get_default_questions(manager)
-        form_code = ""
-    else:
-        form_model = get_form_model_by_code(manager, form_code)
-        fields = form_model.fields
-    existing_questions = json.dumps(fields, default=field_to_json)
-    return render_to_response('entity/edit_form.html',
-            {"existing_questions": repr(existing_questions),
-             'questionnaire_code': form_code},
-             context_instance=RequestContext(request))
 
 def _check_form_code_exists(manager, name, num=''):
     form_code = "%s%s" % (name, num)
@@ -598,17 +585,24 @@ def _create_new_reg_form_model(manager, entity_name):
     return create_reg_form_model(manager, entity_name, form_code, [entity_name])
 
 @login_required(login_url='/login')
-def edit_form_model(request, form_code="reg"):
+def edit_subject(request, entity_type=None):
     manager = get_database_manager(request.user)
-    form_model = get_form_model_by_code(manager, form_code)
+    form_model = None
+    if entity_type is not None:
+        form_model = get_form_model_by_entity_type(manager, entity_type.lower())
+        if form_model is None:
+            entity_list = _get_entity_types_without_form(manager)
+            if entity_type in entity_list:
+                form_model = get_form_model_by_code(manager, 'reg')
+
     if form_model is None:
-        form_model = get_form_model_by_code(manager, 'reg')
-
+        return HttpResponseRedirect(reverse(all_subjects))
+    
     fields = form_model.fields
-
     existing_questions = json.dumps(fields, default=field_to_json)
     return render_to_response('entity/edit_form.html',
-            {"existing_questions": repr(existing_questions),
-             'questionnaire_code': form_model.form_code},
+            {'existing_questions': repr(existing_questions),
+             'questionnaire_code': form_model.form_code,
+             'entity_type': entity_type},
              context_instance=RequestContext(request))
 

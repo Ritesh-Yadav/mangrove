@@ -50,7 +50,7 @@
                  <li>
                     <a href="questionnaire_wizard.html#" data-bind="text: question.display"></a>
                      <div data-bind="visible: question.canBeDeleted()" class="question_delete_link delete">
-                         <a href="questionnaire_wizard.html#" class="delete_link" data-bind="click: function() {if($('#question_form').valid()){ viewModel.removeQuestion(question);} else {viewModel.removeIfQuestionIsSelectedQuestion(question);} }">Delete</a>
+                         <a href="questionnaire_wizard.html#" class="delete_link" data-bind="click: function() {checkCodeForm(); if($('#question_form').valid()){ viewModel.removeQuestion(question);} else {viewModel.removeIfQuestionIsSelectedQuestion(question);} }">Delete</a>
                     </div>
                  </li>
                  <span class="selected_question_arrow"
@@ -87,6 +87,7 @@
                     <li>
                         <label class="grid_7">{% trans "Questionnaire Code :" %}</label>
                         <input id='q-type' type='hidden' value="subject" class='required'/>
+                        <input id='entity-type' type='hidden' value="{{ entity_type }}" name="entity-type"/>
                         <input type="hidden" id='saved-questionnaire-code' value="{{ questionnaire_code }}"/>
                         <input id='questionnaire-code' class='required' value="{{ questionnaire_code }}"/>
                         <span id="questionnaire-code-error"></span>
@@ -99,7 +100,7 @@
                             <div data-bind="template: 'question-list-template_new'" ></div>
                             <div class="add_question">
                                 <a class="add_link" href="questionnaire.html#"
-                                   data-bind="click: function() { if($('#question_form').valid()) viewModel.addQuestion();}">
+                                   data-bind="click: function() { checkCodeForm(); if($('#question_form').valid()) viewModel.addQuestion();}">
                                     {% trans "Add another Question" %}</a>
                             </div>
                         </div>

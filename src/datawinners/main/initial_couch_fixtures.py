@@ -106,20 +106,12 @@ def load_datadict_types(manager):
 def create_clinic_registration_form(CLINIC_ENTITY_TYPE, manager):
     description_type = get_or_create_data_dict(manager, name='description Type', slug='description',
                                                primitive_type='string')
-    mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
-                                                 primitive_type='string')
 
     question1 = TextField(name="description", code="d", label="Describe the subject",
                           defaultValue="some default value", language="en", ddtype=description_type,
                           instruction="Describe your subject in more details (optional)", required=False)
-    question2 = TelephoneNumberField(name="mobile_number", code="m",
-                                     label="What is the mobile number associated with the subject?",
-                                     defaultValue="some default value", language="en", ddtype=mobile_number_type,
-                                     instruction="Enter the subject's number", constraints=(
-            create_constraints_for_mobile_number()), required=False)
     form_model = create_reg_form_model(manager, "Clinic", "cli", CLINIC_ENTITY_TYPE)
     form_model.add_field(question1)
-    form_model.add_field(question2)
     form_model.save()
 
 def load_clinic_entities(CLINIC_ENTITY_TYPE, manager):
@@ -1295,20 +1287,10 @@ def load_all_managers():
 
 def create_reporter_form_model(manager):
     form_model  = create_reg_form_model(manager, name="Reporter", form_code="rep", entity_type=["reporter"])
-    mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
-                                                 primitive_type='string')
-
     matricule_type = get_or_create_data_dict(manager, name='matricule_name', slug='matricule',
                                                primitive_type='string')
 
-    question1 = TelephoneNumberField(name="mobile_number", code="x",
-                                     label="What is the mobile number associated with the subject?",
-                                     defaultValue="some default value", language="en", ddtype=mobile_number_type,
-                                     instruction="Enter the subject's number", constraints=(
-            create_constraints_for_mobile_number()), required=False)
-
-    question2 = TextField(name="matricule", code="m", defaultValue="XXXXX", language="en", ddtype=matricule_type, required=False, label="N˚ Matricule")
+    question1 = TextField(name="matricule", code="mt", defaultValue="XXXXX", language="en", ddtype=matricule_type, required=False, label="N˚ Matricule")
 
     form_model.add_field(question1)
-    form_model.add_field(question2)
     form_model.save()
