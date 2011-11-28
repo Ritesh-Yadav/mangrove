@@ -135,9 +135,14 @@ def save_questionnaire(request):
     manager = get_database_manager(request.user)
     if request.method == 'POST':
         questionnaire_code = request.POST['saved-questionnaire-code']
+        if questionnaire_code == "":
+            project = Project.load(manager.database, request.POST["pid"])
+            form_model = _create_new_reg_form_model(manager, project.entity_type)
+            questionnaire_code = form_model.form_code
+        else:
+            form_model = get_form_model_by_code(manager, questionnaire_code)
         json_string = request.POST['question-set']
         question_set = json.loads(json_string)
-        form_model = get_form_model_by_code(manager, questionnaire_code)
         try:
             form_model = update_questionnaire_with_questions(form_model, question_set, manager)
         except QuestionCodeAlreadyExistsException as e:
@@ -151,9 +156,10 @@ def save_questionnaire(request):
                 if e.message.find("Form") >= 0:
                     return HttpResponseServerError("Questionnaire with this code already exists")
                 return HttpResponseServerError(e.message)
-            form_model.form_code = request.POST['questionnaire-code'].lower()
+            if request.POST['questionnaire-code'] != 'reg':
+                form_model.form_code = request.POST['questionnaire-code'].lower()
             form_model.save()
-            return HttpResponse(json.dumps({"response": "ok"}))
+            return HttpResponse(json.dumps({"response": "ok", 'form_code': form_model.form_code}))
 
 @login_required(login_url='/login')
 def create_datasender(request):
@@ -177,25 +183,19 @@ def create_datasender(request):
 def create_type(request):
     success = False
     form = EntityTypeForm(request.POST)
-    response = {}
     if form.is_valid():
         entity_name = form.cleaned_data["entity_type_regex"]
         entity_name = [entity_name.lower()]
         try:
             manager = get_database_manager(request.user)
             define_type(manager, entity_name)
-            if request.POST["default_form_model"] == "false":
-                form_model = _create_new_reg_form_model(manager,entity_name[0])
-                response.update({"form_code": form_model.form_code})
             message = _("Entity definition successful")
             success = True
         except EntityTypeAlreadyDefined:
             message = _("%s already registered as a subject type. Please select %s from the drop down menu.") %  (entity_name[0], entity_name[0])
     else:
         message = form.fields['entity_type_regex'].error_messages['invalid']
-    response.update({'success': success, 'message': _(message)})
-    return HttpResponse(json.dumps(response))
-
+    return HttpResponse(json.dumps({'success': success, 'message': _(message)}))
 
 @csrf_view_exempt
 @csrf_response_exempt

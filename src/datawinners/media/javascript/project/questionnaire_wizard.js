@@ -128,7 +128,7 @@ $(document).ready(function() {
         }
 
         if($('#q-type').val() == 'subject') {
-            var post_data = {'saved-questionnaire-code':$('#saved-questionnaire-code').val(),'questionnaire-code':$('#questionnaire-code').val(),'question-set':data}
+            var post_data = {'saved-questionnaire-code':$('#saved-questionnaire-code').val(),'questionnaire-code':$('#questionnaire-code').val(),'question-set':data,'pid':$('#project-id').val()}
             var post_url = '/entity/questionnaire/save'
         } else {
             var post_data = {'questionnaire-code':$('#questionnaire-code').val(),'question-set':data,'pid':$('#project-id').val()}
@@ -140,6 +140,12 @@ $(document).ready(function() {
                     $("#message-label").removeClass("message-box");
                     $("#message-label").addClass("success-message-box");
                     $("#message-label").show().html("<label class='success'>" + gettext("The question has been saved.") + "</label");
+                    var json_response = JSON.parse(response);
+                    if(typeof json_response.form_code !='undefined'){
+                        $('#questionnaire-code').val(json_response.form_code);
+                        $('#saved-questionnaire-code').val(json_response.form_code);
+                    }
+
                     hide_message();
                     redirect();
                 }).error(function(e) {
