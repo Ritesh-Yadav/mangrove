@@ -7,6 +7,7 @@ from tests.logintests.login_data import TRIAL_CREDENTIALS_VALIDATES, VALID_CREDE
 from nose.plugins.attrib import attr
 from framework.utils.couch_http_wrapper import CouchHttpWrapper
 import json
+from nose.plugins.skip import SkipTest
 
 
 # add data sender to trial account
@@ -22,6 +23,7 @@ import json
 
 class TestDataSenderAssociationWithTrialAccount(BaseTest):
 
+    @SkipTest
     @attr('functional_test', 'smoke')
     def test_SMS_sent_by_data_sender_registered_for_trial_and_paid_orgs_to_trial_org_is_saved_in_trial_org(self):
         self.send_sms(VALID_DATA)

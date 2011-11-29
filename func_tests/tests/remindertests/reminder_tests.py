@@ -6,6 +6,7 @@ from testdata.test_data import DATA_WINNER_LOGIN_PAGE
 from tests.createprojecttests.create_project_data import VALID_DATA
 from tests.logintests.login_data import TRIAL_CREDENTIALS_VALIDATES
 from tests.remindertests.reminder_data import WARNING_MESSAGE, REMINDER_NOT_WORK_FOR_TRIAL_MSG
+from nose.plugins.skip import SkipTest
 
 class TestReminderSend(BaseTest):
     def login_with(self, account):
@@ -38,6 +39,7 @@ class TestReminderSend(BaseTest):
         project_overview_page = light_box.activate_project()
         return project_overview_page.navigate_to_reminder_page()
 
+    @SkipTest
     @attr("functional_test")
     def test_trial_account_should_see_reminder_not_work_message_at_reminder_tab_in_active_project(self):
         project_overview_page = self.start_create_normal_project()
@@ -45,6 +47,7 @@ class TestReminderSend(BaseTest):
         message = self.driver.find(REMINDER_NOT_WORK_FOR_TRIAL_MSG).text
         self.assertEqual(WARNING_MESSAGE, message)
 
+    @SkipTest
     @attr("functional_test")
     def test_trial_account_should_see_reminder_not_work_message_at_sent_tab_in_active_project(self):
         project_overview_page = self.start_create_normal_project()
