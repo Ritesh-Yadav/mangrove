@@ -89,7 +89,7 @@ ONLY_QUESTIONNAIRE_CODE = {SENDER: "1234567890",
 WRONG_NUMBER_OF_ARGS = {SENDER: "1234567890",
               RECEIVER: "919880734937",
               SMS: "cli009 cid003  Mr.Tessy  58  17.05.2011  b  ade . 27.178057,-78.007789 a",
-              ERROR_MSG: "Could not parse, Wrong number of answers submitted."}
+              ERROR_MSG: "Error. Incorrect number of answers submitted. Review printed questionnaire and resend SMS."}
 
 VALID_DATA_FOR_ORDERED_SMS = {SENDER: "1234567890",
               RECEIVER: "919880734937",
