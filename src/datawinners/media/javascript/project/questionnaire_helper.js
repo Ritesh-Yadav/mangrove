@@ -119,7 +119,7 @@ DW.question.prototype = {
             owner:this
     });
         this.canBeDeleted = function() {
-            return (!this.is_entity_question());
+            return (!this.is_entity_question() && !this.options.defaultQuestion);
         };
         this.isenabled = function(){
           return !this.loaded();
