@@ -184,7 +184,7 @@ class Project(DocumentBase):
 
     def get_data_senders(self, dbm):
         all_data = load_all_subjects_of_type(dbm)
-        return [data for data in all_data if data['short_name'] in self.data_senders]
+        return [data for data in all_data if data['short_code'] in self.data_senders]
 
     def _get_data_senders_ids_who_made_submission_for(self, dbm, deadline_date):
         start_date, end_date = self.deadline().get_applicable_frequency_period_for(deadline_date)
