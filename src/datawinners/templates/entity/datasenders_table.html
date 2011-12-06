@@ -1,5 +1,4 @@
 {% load i18n %}
-{% load hash_tag %}
 <table id='subject_table' class="styled_table">
     <thead>
     <th></th>
@@ -12,7 +11,7 @@
         <tr>
             <td><input type="checkbox" id="{{ row.id }}" value="{{ row.short_name }}"/></td>
             {% for field in fields %}
-            <td>{{ row|hash:field }}</td>
+            <td>{{ field }}</td>
             {% endfor %}
         </tr>
     {% endfor %}
