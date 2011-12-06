@@ -163,20 +163,27 @@ def _get_registration_form_models(manager):
 def _get_field_infos(fields):
     names = []
     labels = []
-    for field in fields:
+    short_code_position = 0
+    short_codes = []
+    for key,field in enumerate(fields):
         names.append(field['name'])
         labels.append(field['label']['en'])
-    return names, labels
+        short_codes.append(field["code"])
+        if field['name'] == 'short_code':
+            short_code_position = key
+    return names, labels, short_code_position, short_codes
 
 
 def _get_subject_type_infos(entity, form_model):
-    names, labels = _get_field_infos(form_model.value['json_fields'])
+    names, labels, short_code_position, short_codes = _get_field_infos(form_model.value['json_fields'])
 
     subject = dict(entity = entity,
         code = form_model.value["form_code"],
         names = names,
         labels = labels,
+        short_codes = short_codes,
         data = [],
+        short_code_position = short_code_position
     )
     return subject
 
@@ -189,7 +196,7 @@ def _get_field_value(key, value):
         value = _format(value)
     return value
 
-def load_all_subjects(request):
+def load_all_subjects(request, type=None, short_codes=[]):
     manager = get_database_manager(request.user)
     entity_types_names = _get_entity_types(manager)
     subjects = _get_registration_form_models(manager)
@@ -204,18 +211,20 @@ def load_all_subjects(request):
 
     entities = get_all_entities(dbm=manager)
     for entity in entities:
-        if exclude_of_type(entity, REPORTER):
+        if(type is None and exclude_of_type(entity, REPORTER)) or (type is not None and include_of_type(entity, type)):
             entity_type = entity.type_string
             if entity_type in subjects_list.keys():
                 names = subjects_list[entity_type]['names']
-                row = []
-                for i in range(len(names)):
-                    if names[i] in entity.data.keys():
-                        row.append(_get_field_value(names[i], entity.value(names[i])))
-                    else:
-                        row.append('--')
+                i = subjects_list[entity_type]['short_code_position']
+                short_code = _get_field_value(names[i], entity.value(names[i]))
+                if type is None or ( short_code in short_codes):
+                    row = [short_code]
+                    for i in range(len(names)):
+                        if names[i] in entity.data.keys():
+                            row.append(_get_field_value(names[i], entity.value(names[i])))
+                        else:
+                            row.append('--')
+                    subjects_list[entity_type]['data'].append(row)
 
-                subjects_list[entity_type]['data'].append(row)
-
-    data = [subjects_list[entity] for entity in entity_types_names]
+    data = [subjects_list[entity] for entity in entity_types_names if( type is None or type == entity)]
     return data
