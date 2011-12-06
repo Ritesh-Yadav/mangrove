@@ -32,7 +32,7 @@ class TestImportData(TestCase):
         self.assertEqual(4, len(subjects))
 
         self.assertEqual(subjects[0]['name'], 'clinic0')
-        self.assertEqual(subjects[0]['geocode'], '1.0, 1.0')
+        self.assertEqual(subjects[0]['geo_code'], '1.0, 1.0')
         self.assertEqual(subjects[0]['mobile_number'], '--')
 
         self.assertEqual(subjects[1]['name'], 'clinic1')
@@ -42,7 +42,7 @@ class TestImportData(TestCase):
         self.assertEqual(subjects[2]['mobile_number'], '12332114')
 
         self.assertEqual(subjects[3]['name'], 'clinic3')
-        self.assertEqual(subjects[3]['geocode'], '--')
+        self.assertEqual(subjects[3]['geo_code'], '--')
         self.assertEqual(subjects[3]['location'], 'pune')
         self.assertEqual(subjects[3]['description'], 'this is a clinic')
 
