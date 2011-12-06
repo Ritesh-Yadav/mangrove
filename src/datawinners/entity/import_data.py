@@ -11,6 +11,7 @@ from mangrove.transport.player.parser import CsvParser, XlsParser
 from mangrove.transport.player.player import FilePlayer, Channel
 from mangrove.utils.types import sequence_to_str
 from django.utils.translation import ugettext as _, ugettext_lazy
+from mangrove.datastore.entity_type import get_all_entity_types
 
 def tabulate_failures(rows):
     tabulated_data = []
@@ -62,7 +63,7 @@ def _tabulate_data(entity, fields=None):
     name = _format(entity.value(NAME_FIELD))
     mobile_number = _format(entity.value(MOBILE_NUMBER_FIELD))
     description = _format(entity.value(DESCRIPTION_FIELD))
-    return dict(id=id, name=name, short_name=entity.short_code, type=".".join(entity.type_path), geocode=geocode_string,
+    return dict(id=id, name=name, short_code=entity.short_code, entity_type=".".join(entity.type_path), geo_code=geocode_string,
                 location=location,
                 description=description, mobile_number=mobile_number)
 
@@ -82,11 +83,6 @@ def load_subject_registration_data(manager,
         if filter_entities(entity,type):
             data.append(tabulate_function(entity, fields))
     return data
-
-
-def load_all_subjects(request):
-    manager = get_database_manager(request.user)
-    return load_subject_registration_data(manager)
 
 
 def load_all_subjects_of_type(manager, filter_entities=include_of_type,type=REPORTER):
@@ -148,3 +144,78 @@ def import_data(request, manager):
         if settings.DEBUG:
             raise
     return error_message, failure_imports, response_message, imported_entities
+
+def _get_entity_types(manager):
+    entity_types = get_all_entity_types(manager)
+    entity_list = [entity[0] for entity in entity_types if entity[0] != 'reporter']
+    entity_list.sort()
+    return entity_list
+
+def _get_registration_form_models(manager):
+    subjects = {}
+    form_models = manager.load_all_rows_in_view('questionnaire')
+    for form_model in form_models:
+        if form_model.value['flag_reg'] and form_model.value['name'] != 'Reporter':
+            subjects[form_model.value['entity_type'][0]] = form_model
+    return subjects
+
+
+def _get_field_infos(fields):
+    names = []
+    labels = []
+    for field in fields:
+        names.append(field['name'])
+        labels.append(field['label']['en'])
+    return names, labels
+
+
+def _get_subject_type_infos(entity, form_model):
+    names, labels = _get_field_infos(form_model.value['json_fields'])
+
+    subject = dict(entity = entity,
+        code = form_model.value["form_code"],
+        names = names,
+        labels = labels,
+        data = [],
+    )
+    return subject
+
+def _get_field_value(key, value):
+    if key == 'geo_code':
+        value = ", ".join([str(i) for i in value]) if value is not None else "--"
+    elif key == 'location' or key == 'entity_type':
+        value = _format(sequence_to_str(value, u", "))
+    else:
+        value = _format(value)
+    return value
+
+def load_all_subjects(request):
+    manager = get_database_manager(request.user)
+    entity_types_names = _get_entity_types(manager)
+    subjects = _get_registration_form_models(manager)
+
+    subjects_list = {}
+    for entity in entity_types_names:
+        if entity in subjects.keys():
+            form_model = subjects[entity]
+        else:
+            form_model = subjects['Registration']
+        subjects_list[entity] = _get_subject_type_infos(entity, form_model)
+
+    entities = get_all_entities(dbm=manager)
+    for entity in entities:
+        if exclude_of_type(entity, REPORTER):
+            entity_type = entity.type_string
+            if entity_type in subjects_list.keys():
+                names = subjects_list[entity_type]['names']
+                row = []
+                for i in range(len(names)):
+                    if names[i] in entity.data.keys():
+                        row.append(_get_field_value(names[i], entity.value(names[i])))
+                    else:
+                        row.append('--')
+
+                subjects_list[entity_type]['data'].append(row)
+
+    data = [subjects_list[entity] for entity in entity_types_names]
+    return data
