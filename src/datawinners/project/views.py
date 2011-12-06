@@ -80,9 +80,9 @@ def _make_project_links(project,questionnaire_code):
         project_links['finish_link'] = reverse(review_and_test, args=[project_id])
         project_links['reminders_link'] = reverse(reminder_settings, args=[project_id])
 
-        project_links['subjects_link'] = reverse(subjects, args=[project_id])
+        project_links['subjects_link'] = reverse(entities, args=['subjects', project_id])
         project_links['registered_subjects_link'] = reverse(registered_subjects, args=[project_id])
-        project_links['datasenders_link'] = reverse(datasenders, args=[project_id])
+        project_links['datasenders_link'] = reverse(entities, args=['datasenders', project_id])
         project_links['registered_datasenders_link'] = reverse(registered_datasenders, args=[project_id])
         project_links['subject_registration_preview_link'] = reverse(registration_questionnaire_preview, args=[project_id])
         project_links['sender_registration_preview_link'] = reverse(sender_registration_form_preview, args=[project_id])
@@ -629,25 +629,32 @@ def questionnaire(request, project_id=None):
                                   context_instance=RequestContext(request))
 
 @login_required(login_url='/login')
-def subjects(request, project_id=None):
+def entities(request, project_id=None, type='subjects'):
     manager = get_database_manager(request.user)
     project, project_links = _get_project_and_project_link(manager, project_id)
-    reg_form = get_form_model_by_entity_type(manager, project.entity_type)
 
-    if reg_form is None:
-        reg_form = get_form_model_by_code(manager, REGISTRATION_FORM_CODE)
-    
-    fields = reg_form.fields
-    if reg_form.entity_defaults_to_reporter():
-        fields = helper.hide_entity_question(reg_form.fields)
-    existing_questions = json.dumps(fields, default=field_to_json)
-    return render_to_response('project/subject_questionnaire.html',
-            {"existing_questions": repr(existing_questions),
-             'questionnaire_code': reg_form.form_code,
-             'project': project,
-             'entity_type': project.entity_type,
-             'project_links': project_links},
-                              context_instance=RequestContext(request))
+    if type != 'datasenders':
+        form_model = get_form_model_by_entity_type(manager, project.entity_type)
+    else:
+        form_model = get_form_model_by_code(manager, "rep")
+
+    if form_model is None:
+        form_model = get_form_model_by_code(manager, REGISTRATION_FORM_CODE)
+
+    if form_model is not None:
+        fields = form_model.fields
+        if form_model.entity_defaults_to_reporter():
+            fields = helper.hide_entity_question(form_model.fields)
+        existing_questions = json.dumps(fields, default=field_to_json)
+        return render_to_response('project/subject_questionnaire.html',
+                {"existing_questions": repr(existing_questions),
+                 'questionnaire_code': form_model.form_code,
+                 'project': project,
+                 'type': type,
+                 'entity_type': project.entity_type,
+                 'project_links': project_links},
+                                  context_instance=RequestContext(request))
+
 
 def _make_project_context(form_model, project):
     return {'form_model': form_model, 'project': project,
@@ -898,7 +905,6 @@ def registered_subjects(request, project_id=None):
     return render_to_response('project/dynamic_registered_subjects.html',
             {'project': project, 'project_links': project_links, 'all_data': all_data, "fields": fields},
                               context_instance=RequestContext(request))
-
 
 def _get_fields_by_entity_type(dbm, type):
     rows = dbm.load_all_rows_in_view('questionnaire')
