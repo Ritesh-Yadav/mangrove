@@ -38,6 +38,7 @@ class TestField(unittest.TestCase):
             "type": "text",
             "required":True,
             "ddtype": self.DDTYPE_JSON,
+            "defaultQuestion": False
             }
         field = TextField(name="field1_Name", code="Q1", label="What is your name",
                           defaultValue="some default value", constraints=[TextLengthConstraint(1, 20)], language="eng",
@@ -54,6 +55,7 @@ class TestField(unittest.TestCase):
             "type": "list",
             "required":True,
             "ddtype": self.DDTYPE_JSON,
+            "defaultQuestion": False
             }
         field = HierarchyField(name="loc", code="Q1", label="What is your location", language="eng",
                                ddtype=self.ddtype, instruction="Answer is list")
@@ -69,7 +71,8 @@ class TestField(unittest.TestCase):
             "ddtype": self.DDTYPE_JSON,
             "type": "integer",
             "required":True,
-            "instruction": "test_instruction"
+            "instruction": "test_instruction",
+            "defaultQuestion": False
         }
         field = IntegerField(name="Age", code="Q2", label="What is your age",
                              language="eng", ddtype=self.ddtype, instruction="test_instruction")
@@ -84,7 +87,8 @@ class TestField(unittest.TestCase):
             "ddtype": self.DDTYPE_JSON,
             "type": "integer",
             "required":False,
-            "instruction": "test_instruction"
+            "instruction": "test_instruction",
+            "defaultQuestion": False
         }
         field = IntegerField(name="Age", code="Q2", label="What is your age",
                              language="eng", ddtype=self.ddtype, instruction="test_instruction", required=False)
@@ -100,7 +104,8 @@ class TestField(unittest.TestCase):
             "ddtype": self.DDTYPE_JSON,
             "type": "integer",
             "required":True,
-            "instruction": "test_instruction"
+            "instruction": "test_instruction",
+            "defaultQuestion": False
         }
         field = IntegerField(name="Age", code="Q2", label="What is your age",
                              language="eng", constraints=[NumericRangeConstraint(min=15, max=120)], ddtype=self.ddtype,
@@ -118,7 +123,8 @@ class TestField(unittest.TestCase):
             "ddtype": self.DDTYPE_JSON,
             "type": "select1",
             "required":True,
-            "instruction": None
+            "instruction": None,
+            "defaultQuestion": False
         }
         field = SelectField(name="color", code="Q3", label="What is your favorite color",
                             language="eng", options=[("RED", 1), ("YELLOW", 2), ('green', 3)], ddtype=self.ddtype)
@@ -135,7 +141,8 @@ class TestField(unittest.TestCase):
             "ddtype": self.DDTYPE_JSON,
             "type": "select",
             "required":True,
-            "instruction": "test_instruction"
+            "instruction": "test_instruction",
+            "defaultQuestion": False
         }
         field = SelectField(name="color", code="Q3", label="What is your favorite color",
                             language="en", options=[("RED", 1), ("YELLOW", 2), ('green')], single_select_flag=False,
@@ -153,7 +160,8 @@ class TestField(unittest.TestCase):
             "instruction": "test_instruction",
             "ddtype": self.DDTYPE_JSON,
             "required":True,
-            "type": "text"
+            "type": "text",
+            "defaultQuestion": False
         }
         field = TextField(name="field1_Name", code="Q1", label="What is your name",
                           defaultValue="some default value", ddtype=self.ddtype, instruction="test_instruction")
@@ -171,6 +179,7 @@ class TestField(unittest.TestCase):
             "type": "text",
             "required":True,
             "instruction": "test_instruction",
+            "defaultQuestion": False
             }
         field = TextField(name="field1_Name", code="Q1", label="What is your name",
                           defaultValue="some default value", ddtype=self.ddtype, instruction="test_instruction")
@@ -189,7 +198,8 @@ class TestField(unittest.TestCase):
             "ddtype": self.DDTYPE_JSON,
             "entity_question_flag": True,
             "required":True,
-            "instruction": "test_instruction"
+            "instruction": "test_instruction",
+            "defaultQuestion": False
         }
         field = TextField(name="field1_Name", code="Q1", label="What is your name",
                           entity_question_flag=True, ddtype=self.ddtype, instruction="test_instruction")
@@ -446,7 +456,8 @@ class TestField(unittest.TestCase):
             "ddtype": self.DDTYPE_JSON,
             "entity_question_flag": True,
             "required":True,
-            "instruction": None
+            "instruction": None,
+            "defaultQuestion": False
         }
         field = TextField(name="field1_Name", code="Q1", label="What is your name",
                           entity_question_flag=True, ddtype=self.ddtype)
@@ -464,7 +475,7 @@ class TestField(unittest.TestCase):
             "label": {"en": "What type?"},
             "required":True,
             "instruction": "test",
-
+            "defaultQuestion": False
             }
         field = SelectField(name="type", code="T", label="What type?",
                             options=[{"text": {"fr": "lake", "en": "Lake"}}, {"text": {"fr": "dam", "en": "Dam"}}],
@@ -482,7 +493,8 @@ class TestField(unittest.TestCase):
             "type": "geocode",
             "ddtype": self.DDTYPE_JSON,
             "required":True,
-            "instruction": "test_instruction"
+            "instruction": "test_instruction",
+            "defaultQuestion": False
         }
         field = GeoCodeField(name="field1_Loc", code="Q1", label="Where do you stay?", ddtype=self.ddtype,
                              language="en", instruction="test_instruction", )
@@ -519,7 +531,7 @@ class TestField(unittest.TestCase):
     def test_should_convert_field_without_constraints_to_json(self):
         field = TextField(name="Test", code="AA", label="test", ddtype=self.ddtype)
         expected_json = {"code": "AA", "name": "Test", "defaultValue": "", "instruction": None, "label": {"en": "test"}
-            , "ddtype": {"test": "test"}, "type": "text","required":True}
+            , "ddtype": {"test": "test"}, "type": "text","required":True, "defaultQuestion": False}
         self.assertEqual(expected_json, field_to_json(field))
 
     def test_should_convert_field_with_constraints_to_json(self):
@@ -527,14 +539,14 @@ class TestField(unittest.TestCase):
         field = TextField(name="test", code='MC', label='question', ddtype=self.ddtype, constraints=constraints)
         expected_json = {"code": "MC", "name": "test", "defaultValue": "", "instruction": None,
                          "label": {"en": "question"}, "ddtype": {"test": "test"}, "type": "text",
-                         "length": {'max': 12, 'min': 10}, "regex": "^[A-Za-z0-9]+$","required":True}
+                         "length": {'max': 12, 'min': 10}, "regex": "^[A-Za-z0-9]+$","required":True, "defaultQuestion": False}
 
         self.assertEqual(expected_json, field_to_json(field))
 
     def test_should_convert_field_with_apostrophe_to_json(self):
         field = TextField(name="Test's", code="AA", label="test", ddtype=self.ddtype)
         expected_json = {"code": "AA", "name": "Test\'s", "defaultValue": "", "instruction": None,
-                         "label": {"en": "test"}, "ddtype": {"test": "test"}, "type": "text","required":True}
+                         "label": {"en": "test"}, "ddtype": {"test": "test"}, "type": "text","required":True, "defaultQuestion": False}
         self.assertEqual(expected_json, field_to_json(field))
 
     def test_should_create_text_field_with_multiple_constraints(self):
@@ -570,7 +582,8 @@ class TestField(unittest.TestCase):
             "instruction": "",
             "constraints": [('length', {'max': 15}), ('regex', '^[0-9]+$')],
             'defaultValue': '',
-            "required":True
+            "required":True,
+            "defaultQuestion": False
         }
         self.assertEqual(expected_json, field._to_json())
 
@@ -692,6 +705,7 @@ class TestField(unittest.TestCase):
             "date_format": "%m.%d.%Y",
             "ddtype": self.DDTYPE_JSON,
             "required": True,
-            'event_time_field_flag': True
+            'event_time_field_flag': True,
+            "defaultQuestion": False
             }
         self.assertEqual(expected_json, field._to_json())
