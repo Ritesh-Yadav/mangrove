@@ -197,7 +197,7 @@ class Project(DocumentBase):
         data_sender_ids_with_submission = self._get_data_senders_ids_who_made_submission_for(dbm, deadline_date)
         all_data_senders = self.get_data_senders(dbm)
         data_senders_without_submission = [data_sender for data_sender in all_data_senders if
-                                           data_sender['short_name'] not in data_sender_ids_with_submission]
+                                           data_sender['short_code'] not in data_sender_ids_with_submission]
         return data_senders_without_submission
 
     def deadline(self):
