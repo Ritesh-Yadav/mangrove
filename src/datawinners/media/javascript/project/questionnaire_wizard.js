@@ -92,14 +92,38 @@ $(document).ready(function() {
          $("#questionnaire_code_change").dialog("close");
     });
 
-    function hide_message() {
+    function hide_message(){
         $('#message-label').delay(5000).fadeOut();
     }
 
-    $("#submit-button").click(function() {
 
+    $("#warning-questionnaire-edition").dialog({
+        autoOpen: false,
+        modal: true,
+        title: gettext('Questionnaire processing...'),
+        zIndex:200,
+        width: 1000,
+        beforeClose: function() {
+            $('#web_user_error').hide();
+        }
+    });
+
+    $("#submit-button").click(function(){
+        if($("#warning-questionnaire-edition").length){
+            $("#warning-questionnaire-edition").dialog("open");
+        }else
+            process_questionnaire_edition();
+        return false;
+    });
+
+    $("#confirm-link").click(function(){
+        $("#warning-questionnaire-edition").dialog("close");
+        process_questionnaire_edition();
+    })
+
+    function process_questionnaire_edition(){
         var data = JSON.stringify(ko.toJS(viewModel.questions()), null, 2);
-        if ($.trim($("#questionnaire-code").val()) == "") {
+        if ($.trim($("#questionnaire-code").val()) == ""){
             $("#questionnaire-code-error").html("<label class='error_message'> "+gettext("The Questionnaire code is required")+".</label>");
             return;
         }
@@ -151,7 +175,7 @@ $(document).ready(function() {
                     $("#message-label").show().html("<label class='error_message'>" + e.responseText + "</label>");
                 });
         return false;
-    });
+    };
 
     $('input[name=type]:radio').change(
             function() {
