@@ -3,18 +3,18 @@
 <div id="all_subjects">
 {% for subject in all_data %}
     <div class="list_header">
-        <span class="header">{{ subject.name|capfirst }}</span>
+        <span class="header">{{ subject.entity|capfirst }}</span>
         <span class="success_error">{{ subject.data|length }} registered subjects</span>
     </div>
     <div>
         <div align="right">
-            <a href="{{ subject.edit_link }}">edit {{ subject.name }}</a>&nbsp;|&nbsp;
-            <a href="{{ subject.create_link }}">add a {{ subject.name }}</a>
+            <a href="{% url datawinners.entity.views.edit_subject subject.entity %}">edit {{ subject.entity }} registration form</a>&nbsp;|&nbsp;
+            <a href="{% url datawinners.entity.views.create_subject subject.entity %}">add a {{ subject.entity }}</a>
         </div>
         {% if subject.data|length > 0 %}
             <table class="styled_table">
                 <thead>
-                    {% for title in subject.fields %}
+                    {% for title in subject.labels %}
                         <th>{{ title }}</th>
                     {% endfor %}
                 </thead>

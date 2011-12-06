@@ -128,9 +128,15 @@ $(document).ready(function() {
             return;
         }
 
-        var post_data = {'questionnaire-code':$('#questionnaire-code').val(),'question-set':data,'pid':$('#project-id').val()};
+        if($('#q-type').val() == 'subject') {
+            var post_data = {'saved-questionnaire-code':$('#saved-questionnaire-code').val(),'questionnaire-code':$('#questionnaire-code').val(),'question-set':data,'entity-type':$('#entity-type').val()}
+            var post_url = '/entity/questionnaire/save'
+        } else {
+            var post_data = {'questionnaire-code':$('#questionnaire-code').val(),'question-set':data,'pid':$('#project-id').val()}
+            var post_url = '/project/questionnaire/save'
+        }
 
-        $.post('/project/questionnaire/save', post_data,
+        $.post(post_url, post_data,
                 function(response) {
                     $("#message-label").removeClass("none");
                     $("#message-label").removeClass("message-box");
