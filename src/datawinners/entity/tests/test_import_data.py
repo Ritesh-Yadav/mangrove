@@ -28,7 +28,7 @@ class TestImportData(TestCase):
     def test_should_load_all_subjects(self):
         self._register_entities()
 
-        subjects, fields, labels = load_all_subjects_of_type(self.dbm, filter_entities=include_of_type, form_code='reg', type='clinic')
+        subjects, fields, labels = load_all_subjects_of_type(self.dbm, filter_entities=include_of_type, type='clinic')
         subjects = [data['cols'] for data in subjects]
 
         self.assertEqual(4, len(subjects))

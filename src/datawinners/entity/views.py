@@ -3,6 +3,7 @@ from collections import defaultdict
 import json
 from django.forms.forms import Form
 from django import forms
+from datawinners.entity.import_data import load_all_subjects_of_type
 from mangrove.form_model.field import SelectField, field_to_json
 from django.forms.widgets import HiddenInput
 from django.contrib.auth.decorators import login_required
@@ -20,7 +21,7 @@ from datawinners.accountmanagement.models import NGOUserProfile, DataSenderOnTri
 from datawinners.accountmanagement.views import is_datasender, is_new_user
 from datawinners.entity import helper
 from datawinners.location.LocationTree import get_location_tree
-from datawinners.main.utils import get_database_manager
+from datawinners.main.utils import get_database_manager, include_of_type
 from datawinners.messageprovider.message_handler import get_success_msg_for_registration_using, get_submission_error_message_for, get_exception_message_for
 from datawinners.project.models import Project
 from mangrove.datastore.entity_type import define_type, get_all_entity_types
