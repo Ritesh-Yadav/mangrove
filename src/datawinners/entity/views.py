@@ -323,14 +323,10 @@ def all_datasenders(request):
         return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                         'failure_imports': failure_imports, 'all_data': all_data_senders}))
 
-    form_model = manager.load_all_rows_in_view("questionnaire", key="rep")
-    fields = _get_field_code(form_model[0]["value"]["json_fields"])
-    all_data_senders = import_module.load_subject_registration_data(manager, type="reporter", filter_entities=import_module.include_of_type,tabulate_function=_tabulate, fields=fields)
+    data_senders, fields, labels = import_module.load_subject_registration_data(manager,
+        type="reporter", filter_entities=import_module.include_of_type)
 
-    data_senders = []
-    for data_sender in all_data_senders:
-        data_senders.append(_get_cleaned_data(fields, data_sender))
-    return render_to_response('entity/all_datasenders.html', {'all_data': data_senders, 'projects':projects, 'fields': fields, 'grant_web_access':grant_web_access,
+    return render_to_response('entity/all_datasenders.html', {'all_data': data_senders, 'labels': labels, 'fields': fields, 'projects':projects, 'grant_web_access':grant_web_access,
                                                               'current_language': translation.get_language()},
                               context_instance=RequestContext(request))
 
@@ -398,9 +394,9 @@ def _tabulate(entity, fields=None):
     geocode = entity.geometry.get('coordinates')
     geocode_string = ", ".join([str(i) for i in geocode]) if geocode is not None else "--"
     location = sequence_to_str(entity.location_path, u", ")
-    tabulated.update({'geocode': geocode_string})
-    tabulated.update({'type': ".".join(entity.type_path)})
-    tabulated.update({'short_name': entity.short_code})
+    tabulated.update({'geo_code': geocode_string})
+    tabulated.update({'entity_type': ".".join(entity.type_path)})
+    tabulated.update({'short_code': entity.short_code})
     tabulated.update({'location': location})
     tabulated.update({'id': entity.id})
     return tabulated
@@ -520,28 +516,6 @@ def create_subject(request, entity_type=None):
                  'success_message': success_message, 'error_message': error_message},
                                   context_instance=RequestContext(request))
 
-
-@login_required(login_url='/login')
-def edit_subject(request, entity_type=None):
-    manager = get_database_manager(request.user)
-    form_model = None
-    if entity_type is not None:
-        form_model = get_form_model_by_entity_type(manager, entity_type.lower())
-        if form_model is None:
-            entity_list = _get_entity_types_without_form(manager)
-            if entity_type in entity_list:
-                form_model = get_form_model_by_code(manager, 'reg')
-
-    if form_model is None:
-        return HttpResponseRedirect(reverse(all_subjects))
-
-    fields = form_model.fields
-    existing_questions = json.dumps(fields, default=field_to_json)
-    return render_to_response('entity/edit_form.html',
-            {'existing_questions': repr(existing_questions),
-             'questionnaire_code': form_model.form_code,
-             'entity_type': entity_type},
-             context_instance=RequestContext(request))
 
 def _check_form_code_exists(manager, name, num=''):
     form_code = "%s%s" % (name, num)

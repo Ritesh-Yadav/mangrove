@@ -99,7 +99,7 @@ class Player(object):
             raise
 
     def _update_submission_with_short_code_if_activity_report(self, reporter_entity, values):
-        if self.form.entity_defaults_to_reporter():
+        if self.form.entity_defaults_to_reporter() and reporter_entity is not None:
             self._set_entity_short_code(reporter_entity.short_code, values)
 
     def _update_submission_with_short_code_if_not_submitted(self, reporter_entity, form, values):
