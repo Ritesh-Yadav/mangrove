@@ -570,9 +570,10 @@ def create_entity_type(request):
 @login_required(login_url='/login')
 def export_subject(request):
     subject = request.POST.get("entity_type")
-    all_data = import_module.load_all_subjects(request, type=subject, short_codes=request.POST.getlist("checked"))
+    all_data = import_module.load_all_subjects(request)
     response = HttpResponse(mimetype="application/ms-excel")
     response['Content-Disposition'] = 'attachment; filename="%s.xls"' % (subject)
+
     header = all_data[0].get("short_codes")
     header.insert(0, "form_code")
     form_code = all_data[0].get("code")

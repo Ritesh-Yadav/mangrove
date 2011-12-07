@@ -202,8 +202,8 @@ def _get_field_default_value(key, entity):
         value = entity.geometry.get('coordinates')
         value = ", ".join([str(i) for i in value]) if value is not None else "--"
     elif key == 'location':
-        value = entity.location_path
-        value = _format(sequence_to_str(value, u", ")) if value is not None else "--"
+        value = sequence_to_str(entity.location_path, u", ")
+        value = _format(value) if value is not None else "--"
     elif key == 'short_code':
         value = entity.short_code
     else:
@@ -228,15 +228,7 @@ def load_all_subjects(request):
         if exclude_of_type(entity, REPORTER):
             entity_type = entity.type_string
             if entity_type in subjects_list.keys():
-                names = subjects_list[entity_type]['names']
-                row = []
-                for i in range(len(names)):
-                    if names[i] in entity.data.keys():
-                        row.append(_get_field_value(names[i], entity))
-                    else:
-                        row.append('--')
-
-                subjects_list[entity_type]['data'].append(row)
+                subjects_list[entity_type]['data'].append(_tabulate_data(entity, subjects_list[entity_type]['names']))
 
     data = [subjects_list[entity] for entity in entity_types_names]
     return data

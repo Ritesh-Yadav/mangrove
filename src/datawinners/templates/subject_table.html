@@ -1,6 +1,13 @@
 {% load i18n %}
 
 <div id="all_subjects">
+    <form method="post" action="{% url datawinners.entity.views.export_subject %}" id="subject-export-form">
+        <input type="hidden" name="entity_type" id="type_to_export"/>
+        {% csrf_token %}
+        <div id="checked_subjects">
+
+        </div>
+    </form>
 {% for subject in all_data %}
     <div class="list_header">
         <span class="header">{{ subject.entity|capfirst }}</span>
@@ -8,12 +15,14 @@
     </div>
     <div>
         <div align="right">
+            <a href="javascript:void(0);" id="export-{{ subject.entity }}" class="export-entity-link">{% trans "Export" %} {{ subject.entity }}</a>&nbsp;|&nbsp;
             <a href="{% url datawinners.entity.views.edit_subject subject.entity %}">edit {{ subject.entity }} registration form</a>&nbsp;|&nbsp;
-            <a href="{% url datawinners.entity.views.create_subject subject.entity %}">add a {{ subject.entity }}</a>
+            <a href="{% url datawinners.entity.views.create_subject subject.entity %}">{% trans "add a new" %} {{ subject.entity }}</a>
         </div>
         {% if subject.data|length > 0 %}
-            <table class="styled_table">
+            <table class="styled_table" id="{{ subject.entity }}-table">
                 <thead>
+                    <th>&nbsp;</th>
                     {% for title in subject.labels %}
                         <th>{{ title }}</th>
                     {% endfor %}
@@ -21,7 +30,8 @@
                 <tbody id='all_data_senders'>
                 {% for row in subject.data %}
                     <tr>
-                        {% for col in row %}
+                        <td><input type="checkbox" id="{{ row.id }}" value="{{ row.short_code }}" name="checked"/></td>
+                        {% for col in row.cols %}
                             <td>{{ col }}</td>
                         {% endfor %}
                     </tr>

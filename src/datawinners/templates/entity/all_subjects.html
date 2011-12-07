@@ -24,16 +24,7 @@
     {{ block.super }}
     <script type="text/javascript" src="/media/javascript/subjects/index.js"></script>
     <script type="text/javascript" src="/media/javascript/file_uploader/fileuploader.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $( "#all_subjects" ).accordion({
-                header: '.list_header',
-                autoHeight: false,
-                collapsible: true,
-                active:100
-            });
-        })
-    </script>
+    <script type="text/javascript" src="/media/javascript/entity/all_subjects.js"></script>
 {% endblock %}
 
 {% block section_title %}{% trans "Subjects" %}

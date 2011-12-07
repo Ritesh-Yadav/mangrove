@@ -3,7 +3,7 @@ from django.conf.urls.defaults import patterns, url
 
 from datawinners.project.views import  save_questionnaire, index, project_overview,\
     project_results, project_data, datasenders, export_data, export_log, activate_project,\
-    subjects, registered_subjects, registered_datasenders, questionnaire, questionnaire_preview,\
+    entities, registered_subjects, registered_datasenders, questionnaire, questionnaire_preview,\
     submissions, sender_registration_form_preview, web_questionnaire, \
     manage_reminders, disassociate_datasenders, delete_project, undelete_project, create_reminder, get_reminder, \
     delete_reminder, sent_reminders, broadcast_message, review_and_test, registration_questionnaire_preview
@@ -23,9 +23,7 @@ urlpatterns = patterns('',
         url(r'^project/overview/(?P<project_id>.+?)/$', project_overview, name="project-overview"),
         (r'^project/(?P<project_id>.+?)/results/(?P<questionnaire_code>.+?)/$', project_results),
         (r'^project/(?P<project_id>.+?)/data/(?P<questionnaire_code>.+?)/$', project_data),
-        (r'^project/subjects/(?P<project_id>.+?)/$', subjects),
         (r'^project/registered_subjects/(?P<project_id>.+?)/$', registered_subjects),
-        (r'^project/datasenders/(?P<project_id>.+?)/$', datasenders),
         (r'^project/registered_datasenders/(?P<project_id>.+?)/$', registered_datasenders),
         (r'^project/create_reminder/(?P<project_id>.+?)/$', create_reminder),
         (r'^project/get_reminder/(?P<project_id>.+?)/$', get_reminder),
@@ -41,5 +39,6 @@ urlpatterns = patterns('',
         (r'^project/delete/(?P<project_id>.+?)/$', delete_project),
         (r'^project/undelete/(?P<project_id>.+?)/$', undelete_project),
         (r'^project/datarecords/filter$', submissions),
-        (r'^project/finish/(?P<project_id>.+?)/$', review_and_test)
+        (r'^project/finish/(?P<project_id>.+?)/$', review_and_test),
+        (r'^project/(?P<type>.+?)/(?P<project_id>.+?)/$', entities),
 )

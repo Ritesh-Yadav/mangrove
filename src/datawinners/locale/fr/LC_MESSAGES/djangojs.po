@@ -309,7 +309,7 @@ msgstr "Le questionnaire comporte une erreur"
 
 #: media/javascript/project/questionnaire_wizard.js:134
 msgid "The question has been saved."
-msgstr "Vous devez enregistrer le questionnaire."
+msgstr "Le questionnaire a été enregistré."
 
 #: media/javascript/project/questionnaire_wizard.js:158
 msgid "default"
