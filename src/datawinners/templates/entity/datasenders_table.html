@@ -1,19 +1,23 @@
 {% load i18n %}
-<table id='subject_table' class="styled_table">
-    <thead>
-    <th></th>
-    {% for field in fields %}
-    <th>{% trans field %}</th>
-    {% endfor %}
-    </thead>
-    <tbody id='all_data_senders'>
-    {% for row in all_data %}
-        <tr>
-            <td><input type="checkbox" id="{{ row.id }}" value="{{ row.short_name }}"/></td>
-            {% for field in fields %}
-            <td>{{ field }}</td>
+{% if all_data|length > 0 %}
+    <table id='subject_table' class="styled_table">
+        <thead>
+            <th>ID</th>
+            {% for title in labels %}
+                <th>{{ title }}</th>
             {% endfor %}
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody id='all_data_senders'>
+        {% for row in all_data %}
+            <tr>
+                <td><input type="checkbox" id="{{ row.id }}" value="{{ row.short_code }}"/></td>
+                {% for col in row.cols %}
+                    <td>{{ col }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <strong>"No datasenders registered"</strong><br/>
+{% endif %}

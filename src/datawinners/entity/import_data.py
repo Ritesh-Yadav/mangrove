@@ -6,7 +6,7 @@ from datawinners.main.utils import get_database_manager, include_of_type, exclud
 from datawinners.entity.entity_exceptions import InvalidFileFormatException
 from mangrove.datastore.entity import get_all_entities
 from mangrove.errors.MangroveException import CSVParserInvalidHeaderFormatException, XlsParserInvalidHeaderFormatException
-from mangrove.form_model.form_model import NAME_FIELD, MOBILE_NUMBER_FIELD, DESCRIPTION_FIELD, REPORTER
+from mangrove.form_model.form_model import NAME_FIELD, MOBILE_NUMBER_FIELD, DESCRIPTION_FIELD, REPORTER, get_form_model_by_entity_type
 from mangrove.transport.player.parser import CsvParser, XlsParser
 from mangrove.transport.player.player import FilePlayer, Channel
 from mangrove.utils.types import sequence_to_str
@@ -55,17 +55,14 @@ def _format(value):
     return value if value is not None else "--"
 
 
-def _tabulate_data(entity, fields=None):
-    id = entity.id
-    geocode = entity.geometry.get('coordinates')
-    geocode_string = ", ".join([str(i) for i in geocode]) if geocode is not None else "--"
-    location = _format(sequence_to_str(entity.location_path, u", "))
-    name = _format(entity.value(NAME_FIELD))
-    mobile_number = _format(entity.value(MOBILE_NUMBER_FIELD))
-    description = _format(entity.value(DESCRIPTION_FIELD))
-    return dict(id=id, name=name, short_code=entity.short_code, entity_type=".".join(entity.type_path), geo_code=geocode_string,
-                location=location,
-                description=description, mobile_number=mobile_number)
+def _tabulate_data(entity, fields):
+    data = {'id': entity.id, 'short_code': entity.short_code, 'cols': []}
+    for i in range(len(fields)):
+        if fields[i] in entity.data.keys():
+            data['cols'].append(_get_field_value(fields[i], entity))
+        else:
+            data['cols'].append(_get_field_default_value(fields[i], entity))
+    return data
 
 
 def _get_entity_type_from_row(row):
@@ -75,18 +72,19 @@ def _get_entity_type_from_row(row):
 
 def load_subject_registration_data(manager,
                                    filter_entities=exclude_of_type,
-                                   type=REPORTER, tabulate_function=_tabulate_data,
-                                   fields=None):
+                                   type=REPORTER, tabulate_function=_tabulate_data):
+    form_model = manager.load_all_rows_in_view("questionnaire", key='rep')
+    fields, labels = _get_field_infos(form_model[0].value['json_fields'])
     entities = get_all_entities(dbm=manager)
     data = []
     for entity in entities:
-        if filter_entities(entity,type):
+        if filter_entities(entity, type):
             data.append(tabulate_function(entity, fields))
-    return data
+    return data, fields, labels
 
 
-def load_all_subjects_of_type(manager, filter_entities=include_of_type,type=REPORTER):
-    return load_subject_registration_data(manager, filter_entities,type)
+def load_all_subjects_of_type(manager, filter_entities=include_of_type, type=REPORTER, fields=None):
+    return load_subject_registration_data(manager, filter_entities, type)
 
 
 def _handle_uploaded_file(file_name, file, manager):
@@ -169,7 +167,7 @@ def _get_field_infos(fields):
     return names, labels
 
 
-def _get_subject_type_infos(entity, form_model):
+def _get_entity_type_infos(entity, form_model):
     names, labels = _get_field_infos(form_model.value['json_fields'])
 
     subject = dict(entity = entity,
@@ -180,13 +178,36 @@ def _get_subject_type_infos(entity, form_model):
     )
     return subject
 
-def _get_field_value(key, value):
+def _get_field_value(key, entity):
+    value = entity.value(key)
     if key == 'geo_code':
-        value = ", ".join([str(i) for i in value]) if value is not None else "--"
-    elif key == 'location' or key == 'entity_type':
+        if value is None:
+            value = entity.geometry.get('coordinates')
+            value = ", ".join([str(i) for i in value]) if value is not None else "--"
+        else:
+            value = ", ".join([str(i) for i in value])
+    elif key == 'location':
+        if value is None:
+            value = _format(sequence_to_str(entity.location_path, u", ")) if value is not None else "--"
+        else:
+            value = _format(sequence_to_str(value, u", "))
+    elif key == 'entity_type':
         value = _format(sequence_to_str(value, u", "))
     else:
         value = _format(value)
+    return value
+
+def _get_field_default_value(key, entity):
+    if key == 'geo_code':
+        value = entity.geometry.get('coordinates')
+        value = ", ".join([str(i) for i in value]) if value is not None else "--"
+    elif key == 'location':
+        value = entity.location_path
+        value = _format(sequence_to_str(value, u", ")) if value is not None else "--"
+    elif key == 'short_code':
+        value = entity.short_code
+    else:
+        value = "--"
     return value
 
 def load_all_subjects(request):
@@ -200,7 +221,7 @@ def load_all_subjects(request):
             form_model = subjects[entity]
         else:
             form_model = subjects['Registration']
-        subjects_list[entity] = _get_subject_type_infos(entity, form_model)
+        subjects_list[entity] = _get_entity_type_infos(entity, form_model)
 
     entities = get_all_entities(dbm=manager)
     for entity in entities:
@@ -211,7 +232,7 @@ def load_all_subjects(request):
                 row = []
                 for i in range(len(names)):
                     if names[i] in entity.data.keys():
-                        row.append(_get_field_value(names[i], entity.value(names[i])))
+                        row.append(_get_field_value(names[i], entity))
                     else:
                         row.append('--')
 
