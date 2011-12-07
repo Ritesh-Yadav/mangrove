@@ -557,23 +557,13 @@ def _get_project_and_project_link(manager, project_id):
 
 
 @login_required(login_url='/login')
-def registered_subjects(request, project_id=None):
-    manager = get_database_manager(request.user)
-    project, project_links = _get_project_and_project_link(manager, project_id)
-    all_data = load_all_subjects_of_type(manager, filter_entities=include_of_type, type=project.entity_type)
-    return render_to_response('project/registered_subjects.html',
-            {'project': project, 'project_links': project_links, 'all_data': all_data},
-                              context_instance=RequestContext(request))
-
-
-@login_required(login_url='/login')
 def registered_datasenders(request, project_id=None):
     manager = get_database_manager(request.user)
     project, project_links = _get_project_and_project_link(manager, project_id)
+    all_data, labels = helper.get_project_data_senders(manager, project)
     return render_to_response('project/registered_datasenders.html',
-            {'project': project, 'project_links': project_links, 'all_data': (
-            helper.get_project_data_senders(manager, project))},
-                              context_instance=RequestContext(request))
+            {'project': project, 'project_links': project_links, 'all_data': all_data,
+            'labels': labels}, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/login')
@@ -897,13 +887,10 @@ def _get_organization_telephone_number(user):
 def registered_subjects(request, project_id=None):
     manager = get_database_manager(request.user)
     project, project_links = _get_project_and_project_link(manager, project_id)
-    fields = _get_fields_by_entity_type(manager, project.entity_type)
-    raw_data = load_all_subjects_of_type(manager, filter_entities=include_of_type, type=project.entity_type)
-    all_data = []
-    for data in raw_data:
-        all_data.append(_get_subject_data(fields, data))
-    return render_to_response('project/dynamic_registered_subjects.html',
-            {'project': project, 'project_links': project_links, 'all_data': all_data, "fields": fields},
+    all_data, fields, labels = load_all_subjects_of_type(manager, filter_entities=include_of_type, type=project.entity_type)
+    #all_data = [data['cols'] for data in all_data]
+    return render_to_response('project/registered_subjects.html',
+            {'project': project, 'project_links': project_links, 'all_data': all_data, "labels": labels},
                               context_instance=RequestContext(request))
 
 def _get_fields_by_entity_type(dbm, type):

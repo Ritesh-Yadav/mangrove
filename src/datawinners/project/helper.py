@@ -282,8 +282,9 @@ def _add_to_dict(dict, post_dict,key):
         dict[key] = post_dict.get(key)
 
 def get_project_data_senders(manager, project):
-    all_data = load_all_subjects_of_type(manager)
-    return [data for data in all_data if data['short_code'] in project.data_senders]
+    all_data, fields, labels = load_all_subjects_of_type(manager)
+    all_data = [data for data in all_data if data['short_code'] in project.data_senders]
+    return all_data, labels
 
 def delete_project(manager, project, void = True):
     project_id, qid = project.id, project.qid

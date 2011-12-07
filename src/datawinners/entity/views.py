@@ -3,6 +3,7 @@ from collections import defaultdict
 import json
 from django.forms.forms import Form
 from django import forms
+from datawinners.entity.import_data import load_all_subjects_of_type
 from mangrove.form_model.field import SelectField, field_to_json
 from django.forms.widgets import HiddenInput
 from django.contrib.auth.decorators import login_required
@@ -20,7 +21,7 @@ from datawinners.accountmanagement.models import NGOUserProfile, DataSenderOnTri
 from datawinners.accountmanagement.views import is_datasender, is_new_user
 from datawinners.entity import helper
 from datawinners.location.LocationTree import get_location_tree
-from datawinners.main.utils import get_database_manager
+from datawinners.main.utils import get_database_manager, include_of_type
 from datawinners.messageprovider.message_handler import get_success_msg_for_registration_using, get_submission_error_message_for, get_exception_message_for
 from datawinners.project.models import Project
 from mangrove.datastore.entity_type import define_type, get_all_entity_types
@@ -323,9 +324,7 @@ def all_datasenders(request):
         return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                         'failure_imports': failure_imports, 'all_data': all_data_senders}))
 
-    data_senders, fields, labels = import_module.load_subject_registration_data(manager,
-        type="reporter", filter_entities=import_module.include_of_type)
-
+    data_senders, fields, labels = import_module.load_all_subjects_of_type(manager)
     return render_to_response('entity/all_datasenders.html', {'all_data': data_senders, 'labels': labels, 'fields': fields, 'projects':projects, 'grant_web_access':grant_web_access,
                                                               'current_language': translation.get_language()},
                               context_instance=RequestContext(request))
@@ -383,24 +382,6 @@ def _get_cleaned_data(fields, subject):
             row.update({fields[i]:''})
     row.update({'id': subject.get("id")})
     return row
-
-def _tabulate(entity, fields=None):
-    tabulated = {}
-    if fields is not None:
-        for field in fields:
-            value = entity.value(field) if entity.value(field) is not None else "-"
-            tabulated.update({field: value})
-
-    geocode = entity.geometry.get('coordinates')
-    geocode_string = ", ".join([str(i) for i in geocode]) if geocode is not None else "--"
-    location = sequence_to_str(entity.location_path, u", ")
-    tabulated.update({'geo_code': geocode_string})
-    tabulated.update({'entity_type': ".".join(entity.type_path)})
-    tabulated.update({'short_code': entity.short_code})
-    tabulated.update({'location': location})
-    tabulated.update({'id': entity.id})
-    return tabulated
-
 
 def _get_response(request, questionnaire_form, entity):
     return render_to_response('entity/create_subject_with_form.html',
@@ -569,18 +550,18 @@ def create_entity_type(request):
 
 @login_required(login_url='/login')
 def export_subject(request):
-    subject = request.POST.get("entity_type")
-    all_data = import_module.load_all_subjects(request, type=subject, short_codes=request.POST.getlist("checked"))
-    response = HttpResponse(mimetype="application/ms-excel")
-    response['Content-Disposition'] = 'attachment; filename="%s.xls"' % (subject)
-    header = all_data[0].get("short_codes")
-    header.insert(0, "form_code")
-    form_code = all_data[0].get("code")
-    raw_data = [header]
-    for data in all_data[0].get("data"):
-        row = data[1:]
-        row.insert(0, form_code)
-        raw_data.append(row)
-    wb = get_excel_sheet(raw_data, subject)
+    entity_type = request.POST["entity_type"]
+    entity_list = request.POST.getlist("checked")
+    manager = get_database_manager(request.user)
+    all_data, fields, labels = load_all_subjects_of_type(manager, filter_entities=include_of_type, type=entity_type)
+
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="%s.xls"' % (entity_type,)
+
+    raw_data = [labels]
+    for data in all_data:
+        if data['short_code'] in entity_list:
+            raw_data.append(data['cols'])
+    wb = get_excel_sheet(raw_data, entity_type)
     wb.save(response)
     return response
