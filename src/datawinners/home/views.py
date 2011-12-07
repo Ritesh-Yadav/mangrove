@@ -36,7 +36,7 @@ def ask_us(request):
     body = _("From")+": "+from_email+"\n"+\
            _("Category")+": "+request.POST["category"]+"\n\n"+\
            request.POST["message"]
-    
+
     to = request.POST["to"]+"@datawinners.com"
     email = EmailMessage(subject, body, from_email=from_email, to=[to])
     if request.FILES.has_key("attachement"):

@@ -466,28 +466,6 @@ def create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     form_model.save()
     return form_model
 
-def _create_default_reg_form_model(manager, name=None, form_code=None, entity_type=None):
-    entity_id_type = get_or_create_data_dict(manager, name='Entity Id Type', slug='entity_id', primitive_type='string')
-    description_type = get_or_create_data_dict(manager, name='description Type', slug='description',
-                                               primitive_type='string')
-    question1 = HierarchyField(name=ENTITY_TYPE_FIELD_NAME, code=ENTITY_TYPE_FIELD_CODE,
-                               label="What is associated subject type?",
-                               language="en", ddtype=entity_id_type, instruction="Enter a type for the subject")
-    question2 = TextField(name=DESCRIPTION_FIELD, code=DESCRIPTION_FIELD_CODE, label="Describe the subject",
-                          defaultValue="some default value", language="en", ddtype=description_type,
-                          instruction="Describe your subject in more details (optional)", required=False)
-
-    form_model = _construct_registration_form(manager, "reg", REGISTRATION_FORM_CODE, ["Registration"])
-    form_model.add_field(question1)
-    form_model.add_field(question2)
-    return form_model
-
-
-def create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
-    form_model = _construct_registration_form(manager, name, form_code, entity_type)
-    form_model.save()
-    return form_model
-
 def _create_reg_form_model(manager, name=None, form_code=None, entity_type=None):
     form_model = _construct_registration_form(manager, name, form_code, entity_type)
     return form_model

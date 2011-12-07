@@ -30,8 +30,9 @@
                 <tbody id='all_data_senders'>
                 {% for row in subject.data %}
                     <tr>
-                        {% for col in row %}
-                            <td>{% if forloop.counter0 == 0 %}<input type="checkbox" value="{{ col }}" name="checked"/>{% else %}{{ col }}{% endif %}</td>
+                        <td><input type="checkbox" id="{{ row.id }}" value="{{ row.short_code }}" name="checked"/></td>
+                        {% for col in row.cols %}
+                            <td>{{ col }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
