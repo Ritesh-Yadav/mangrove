@@ -564,7 +564,7 @@ def export_subject(request):
     entity_list = request.POST.getlist("checked")
     manager = get_database_manager(request.user)
     all_data, fields, labels = load_all_subjects_of_type(manager, filter_entities=include_of_type, type=entity_type)
-
+    
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="%s.xls"' % (entity_type,)
 
