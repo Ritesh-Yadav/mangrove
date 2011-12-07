@@ -16,8 +16,8 @@
     <div>
         <div align="right">
             <a href="javascript:void(0);" id="export-{{ subject.entity }}" class="export-entity-link">{% trans "Export" %} {{ subject.entity }}</a>&nbsp;|&nbsp;
-            <a href="{% url datawinners.entity.views.edit_subject subject.entity %}">edit {{ subject.entity }} registration form</a>&nbsp;|&nbsp;
-            <a href="{% url datawinners.entity.views.create_subject subject.entity %}">{% trans "add a new" %} {{ subject.entity }}</a>
+            <a href="{% url datawinners.entity.views.edit_subject subject.entity %}">Edit {{ subject.entity }} registration form</a>&nbsp;|&nbsp;
+            <a href="{% url datawinners.entity.views.create_subject subject.entity %}">{% trans "Add a new" %} {{ subject.entity }}</a>
         </div>
         {% if subject.data|length > 0 %}
             <table class="styled_table" id="{{ subject.entity }}-table">

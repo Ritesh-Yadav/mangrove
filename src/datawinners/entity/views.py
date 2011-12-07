@@ -3,6 +3,7 @@ from collections import defaultdict
 import json
 from django.forms.forms import Form
 from django import forms
+from datawinners.entity.import_data import load_all_subjects_of_type
 from mangrove.form_model.field import SelectField, field_to_json
 from django.forms.widgets import HiddenInput
 from django.contrib.auth.decorators import login_required
@@ -20,7 +21,7 @@ from datawinners.accountmanagement.models import NGOUserProfile, DataSenderOnTri
 from datawinners.accountmanagement.views import is_datasender, is_new_user
 from datawinners.entity import helper
 from datawinners.location.LocationTree import get_location_tree
-from datawinners.main.utils import get_database_manager
+from datawinners.main.utils import get_database_manager, include_of_type
 from datawinners.messageprovider.message_handler import get_success_msg_for_registration_using, get_submission_error_message_for, get_exception_message_for
 from datawinners.project.models import Project
 from mangrove.datastore.entity_type import define_type, get_all_entity_types
@@ -549,16 +550,18 @@ def create_entity_type(request):
 
 @login_required(login_url='/login')
 def export_subject(request):
-    subject = request.POST.get("entity_type")
-    all_data = import_module.load_all_subjects(request)
-    response = HttpResponse(mimetype="application/ms-excel")
-    response['Content-Disposition'] = 'attachment; filename="%s.xls"' % (subject)
+    entity_type = request.POST["entity_type"]
+    entity_list = request.POST.getlist("checked")
+    manager = get_database_manager(request.user)
+    all_data, fields, labels = load_all_subjects_of_type(manager, filter_entities=include_of_type, type=entity_type)
+    
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="%s.xls"' % (entity_type,)
 
-    raw_data = []
-    for data in all_data[0].get("data"):
-        row = data[1:]
-        row.insert(0, form_code)
-        raw_data.append(row)
-    wb = get_excel_sheet(raw_data, subject)
+    raw_data = [labels]
+    for data in all_data:
+        if data['short_code'] in entity_list:
+            raw_data.append(data['cols'])
+    wb = get_excel_sheet(raw_data, entity_type)
     wb.save(response)
     return response
