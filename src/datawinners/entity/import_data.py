@@ -8,7 +8,7 @@ from mangrove.datastore.entity import get_all_entities
 from mangrove.datastore.entity_type import get_all_entity_types
 from mangrove.errors.MangroveException import MangroveException, DataObjectAlreadyExists, MultipleReportersForANumberException
 from mangrove.errors.MangroveException import CSVParserInvalidHeaderFormatException, XlsParserInvalidHeaderFormatException
-from mangrove.form_model.form_model import REPORTER, REPORTER_FORM_CODE
+from mangrove.form_model.form_model import REPORTER, REPORTER_FORM_CODE, get_form_model_by_entity_type
 from mangrove.transport.player.parser import CsvParser, XlsParser
 from mangrove.transport.player.player import Channel, Player, TransportInfo, Response
 from mangrove.utils.types import sequence_to_str
@@ -124,9 +124,9 @@ def _get_entity_type_from_row(row):
 
 def load_subject_registration_data(manager,
                                    filter_entities=exclude_of_type,
-                                   type=REPORTER, form_code=REPORTER_FORM_CODE, tabulate_function=_tabulate_data):
-    
-    form_model = manager.load_all_rows_in_view("questionnaire", key=form_code)
+                                   type=REPORTER, tabulate_function=_tabulate_data):
+    form_model = get_form_model_by_entity_type(manager, type.lower())
+    form_model = manager.load_all_rows_in_view("questionnaire", key=form_model.form_code)
     fields, labels = _get_field_infos(form_model[0].value['json_fields'])
     entities = get_all_entities(dbm=manager)
     data = []
@@ -136,8 +136,8 @@ def load_subject_registration_data(manager,
     return data, fields, labels
 
 
-def load_all_subjects_of_type(manager, filter_entities=include_of_type, type=REPORTER, form_code=REPORTER_FORM_CODE):
-    return load_subject_registration_data(manager, filter_entities, type, form_code)
+def load_all_subjects_of_type(manager, filter_entities=include_of_type, type=REPORTER):
+    return load_subject_registration_data(manager, filter_entities, type)
 
 
 def _handle_uploaded_file(file_name, file, manager):
