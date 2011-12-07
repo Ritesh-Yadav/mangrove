@@ -1,8 +1,9 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 
 from django.test import TestCase
-from datawinners.entity.import_data import load_subject_registration_data
+from datawinners.entity.import_data import load_subject_registration_data, load_all_subjects_of_type
 from datawinners.location.LocationTree import get_location_tree
+from datawinners.main.utils import include_of_type
 from mangrove import initializer
 from mangrove.datastore.database import get_db_manager, _delete_db_and_remove_db_manager
 from mangrove.datastore.datadict import DataDictType
@@ -27,24 +28,25 @@ class TestImportData(TestCase):
     def test_should_load_all_subjects(self):
         self._register_entities()
 
-        subjects = load_subject_registration_data(self.dbm)
+        subjects, fields, labels = load_all_subjects_of_type(self.dbm, filter_entities=include_of_type, form_code='reg', type='clinic')
+        subjects = [data['cols'] for data in subjects]
 
         self.assertEqual(4, len(subjects))
 
-        self.assertEqual(subjects[0]['name'], 'clinic0')
-        self.assertEqual(subjects[0]['geo_code'], '1.0, 1.0')
-        self.assertEqual(subjects[0]['mobile_number'], '--')
+        self.assertEqual(subjects[0][0], 'clinic0')
+        self.assertEqual(subjects[0][3], '1.0, 1.0')
+        self.assertEqual(subjects[0][4], '--')
 
-        self.assertEqual(subjects[1]['name'], 'clinic1')
-        self.assertEqual(subjects[1]['mobile_number'], '--')
+        self.assertEqual(subjects[1][0], 'clinic1')
+        self.assertEqual(subjects[1][4], '--')
 
-        self.assertEqual(subjects[2]['name'], 'clinic2')
-        self.assertEqual(subjects[2]['mobile_number'], '12332114')
+        self.assertEqual(subjects[2][0], 'clinic2')
+        self.assertEqual(subjects[2][4], '12332114')
 
-        self.assertEqual(subjects[3]['name'], 'clinic3')
-        self.assertEqual(subjects[3]['geo_code'], '--')
-        self.assertEqual(subjects[3]['location'], 'pune')
-        self.assertEqual(subjects[3]['description'], 'this is a clinic')
+        self.assertEqual(subjects[3][0], 'clinic3')
+        self.assertEqual(subjects[3][3], '--')
+        self.assertEqual(subjects[3][2], 'pune')
+        self.assertEqual(subjects[3][6], 'this is a clinic')
 
 
     def _create_entities(self):

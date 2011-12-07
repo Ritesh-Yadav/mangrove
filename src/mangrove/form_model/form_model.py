@@ -36,6 +36,7 @@ DESCRIPTION_FIELD_CODE = "d"
 MOBILE_NUMBER_FIELD = "mobile_number"
 MOBILE_NUMBER_FIELD_CODE = "m"
 REPORTER = "reporter"
+REPORTER_FORM_CODE = "rep"
 
 def get_form_model_by_code(dbm, code):
     assert isinstance(dbm, DatabaseManager)

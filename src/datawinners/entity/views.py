@@ -323,9 +323,7 @@ def all_datasenders(request):
         return HttpResponse(json.dumps({'success': error_message is None and is_empty(failure_imports), 'message': success_message, 'error_message': error_message,
                                         'failure_imports': failure_imports, 'all_data': all_data_senders}))
 
-    data_senders, fields, labels = import_module.load_subject_registration_data(manager,
-        type="reporter", filter_entities=import_module.include_of_type)
-
+    data_senders, fields, labels = import_module.load_all_subjects_of_type(manager)
     return render_to_response('entity/all_datasenders.html', {'all_data': data_senders, 'labels': labels, 'fields': fields, 'projects':projects, 'grant_web_access':grant_web_access,
                                                               'current_language': translation.get_language()},
                               context_instance=RequestContext(request))
@@ -383,24 +381,6 @@ def _get_cleaned_data(fields, subject):
             row.update({fields[i]:''})
     row.update({'id': subject.get("id")})
     return row
-
-def _tabulate(entity, fields=None):
-    tabulated = {}
-    if fields is not None:
-        for field in fields:
-            value = entity.value(field) if entity.value(field) is not None else "-"
-            tabulated.update({field: value})
-
-    geocode = entity.geometry.get('coordinates')
-    geocode_string = ", ".join([str(i) for i in geocode]) if geocode is not None else "--"
-    location = sequence_to_str(entity.location_path, u", ")
-    tabulated.update({'geo_code': geocode_string})
-    tabulated.update({'entity_type': ".".join(entity.type_path)})
-    tabulated.update({'short_code': entity.short_code})
-    tabulated.update({'location': location})
-    tabulated.update({'id': entity.id})
-    return tabulated
-
 
 def _get_response(request, questionnaire_form, entity):
     return render_to_response('entity/create_subject_with_form.html',
@@ -574,10 +554,7 @@ def export_subject(request):
     response = HttpResponse(mimetype="application/ms-excel")
     response['Content-Disposition'] = 'attachment; filename="%s.xls"' % (subject)
 
-    header = all_data[0].get("short_codes")
-    header.insert(0, "form_code")
-    form_code = all_data[0].get("code")
-    raw_data = [header]
+    raw_data = []
     for data in all_data[0].get("data"):
         row = data[1:]
         row.insert(0, form_code)
