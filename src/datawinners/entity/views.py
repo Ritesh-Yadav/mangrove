@@ -214,7 +214,6 @@ def _get_entity_types_with_form(manager):
     entity_list.sort()
     return entity_list
 
-
 def _get_entity_types_without_form(manager):
     entity_types = _get_entity_types(manager)
     entity_types = set(entity_types)
@@ -222,7 +221,6 @@ def _get_entity_types_without_form(manager):
     entity_with_form = set(entity_with_form)
     entity_without_form = set.difference(entity_types, entity_with_form)
     entity_without_form = list(entity_without_form)
-
     entity_without_form.sort()
     return entity_without_form
 

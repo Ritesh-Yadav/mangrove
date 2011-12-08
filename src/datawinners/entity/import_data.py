@@ -64,6 +64,7 @@ class FilePlayer(Player):
         return responses
 
 #TODO This method is a proof that Exceptions needs to be handled by the client application
+
 def tabulate_failures(rows):
     tabulated_data = []
     for row in rows:

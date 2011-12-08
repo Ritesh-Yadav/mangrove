@@ -644,7 +644,6 @@ def entities(request, project_id=None, type='subjects'):
                  'project_links': project_links},
                                   context_instance=RequestContext(request))
 
-
 @login_required(login_url='/login')
 def subjects(request, project_id=None):
     manager = get_database_manager(request.user)
@@ -676,7 +675,6 @@ def subjects(request, project_id=None):
                  'post_url': reverse(import_subjects_from_project_wizard),
                  'current_language': translation.get_language()},
                                   context_instance=RequestContext(request))
-
 
 def _make_project_context(form_model, project):
     return {'form_model': form_model, 'project': project,
