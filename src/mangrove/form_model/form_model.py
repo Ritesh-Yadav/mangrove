@@ -12,7 +12,7 @@ from mangrove.form_model.field import TextField, GeoCodeField, HierarchyField, T
 from mangrove.form_model.validation import TextLengthConstraint, RegexConstraint
 from mangrove.form_model.validators import MandatoryValidator
 from mangrove.utils.geo_utils import convert_to_geometry
-from mangrove.utils.types import is_sequence, is_string, is_empty, is_not_empty
+from mangrove.utils.types import is_sequence, is_string, is_empty, is_not_empty, sequence_to_str
 from mangrove.form_model import field
 
 ARPT_SHORT_CODE = "dummy"
@@ -486,26 +486,28 @@ def _construct_registration_form(manager, name=None, form_code=None, entity_type
     mobile_number_type = get_or_create_data_dict(manager, name='Mobile Number Type', slug='mobile_number',
                                                  primitive_type='string')
 
-    question1 = TextField(name=NAME_FIELD, code=NAME_FIELD_CODE, label="What is the %s's lastname?" % type,
+    entity_name = sequence_to_str(entity_type, u", ")
+
+    question1 = TextField(name=NAME_FIELD, code=NAME_FIELD_CODE, label="What is the %s's lastname?" % entity_name,
                           defaultValue="some default value", language="en", ddtype=name_type,
-                          instruction="Enter a %s name" % type, defaultQuestion=True)
-    question2 = TextField(name=SHORT_CODE_FIELD, code=SHORT_CODE, label="What is the %s's Unique ID Number" % type,
+                          instruction="Enter a %s name" % entity_name, defaultQuestion=True)
+    question2 = TextField(name=SHORT_CODE_FIELD, code=SHORT_CODE, label="What is the %s's Unique ID Number" % entity_name,
                           defaultValue="some default value", language="en", ddtype=name_type,
                           instruction="Enter an id, or allow us to generate it",
                           entity_question_flag=True,
                           constraints=[TextLengthConstraint(max=12)], required=False, defaultQuestion=True)
     question3 = HierarchyField(name=LOCATION_TYPE_FIELD_NAME, code=LOCATION_TYPE_FIELD_CODE,
-                               label="What is the %s's location?" % type,
+                               label="What is the %s's location?" % entity_name,
                                language="en", ddtype=location_type, instruction="Enter a region, district, or commune",
                                required=False, defaultQuestion=True)
-    question4 = GeoCodeField(name=GEO_CODE_FIELD, code=GEO_CODE, label="What is the %s's GPS co-ordinates?" % type,
+    question4 = GeoCodeField(name=GEO_CODE_FIELD, code=GEO_CODE, label="What is the %s's GPS co-ordinates?" % entity_name,
                              defaultQuestion=True, language="en", ddtype=geo_code_type,
                              instruction="Enter lat and long. Eg 20.6, 47.3", required=False)
     question5 = TelephoneNumberField(name=MOBILE_NUMBER_FIELD, code=MOBILE_NUMBER_FIELD_CODE,
                                      label="What is the mobile number associated with the subject?",
                                      defaultValue="some default value", language="en", ddtype=mobile_number_type,
                                      defaultQuestion=True,
-                                    instruction="Enter the %s's number" % type, constraints=(
+                                    instruction="Enter the %s's number" % entity_name, constraints=(
             create_constraints_for_mobile_number()), required=False)
     questions = [question1, question2, question3, question4, question5]
     if entity_type == REPORTER:

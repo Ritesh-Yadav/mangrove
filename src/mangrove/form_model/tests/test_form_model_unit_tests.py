@@ -42,7 +42,7 @@ class TestFormModel(unittest.TestCase):
         self.assertEqual(REGISTRATION_FORM_CODE, form.form_code)
 
     def test_should_create_registration_form_model(self):
-        form = _create_reg_form_model(self.dbm, "cli", "cli", ["clinic"])
+        form = create_reg_form_model(self.dbm, "cli", "cli", ["clinic"])
         self.assertEqual(5, len(form.fields))
         self.assertEqual("cli", form.form_code)
 

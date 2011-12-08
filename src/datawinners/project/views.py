@@ -845,9 +845,8 @@ def registration_questionnaire_preview(request, project_id=None):
     manager = get_database_manager(request.user)
     project, project_links = _get_project_and_project_link(manager, project_id)
     if request.method == 'GET':
-        form_model = get_form_model_by_entity_type(manager, project.entity_type)
-        if form_model is None:
-            form_model = get_form_model_by_code(manager, REGISTRATION_FORM_CODE)
+        form_code = _get_form_code_by_entity_type(manager, project.entity_type)
+        form_model = get_form_model_by_code(manager, form_code)
         fields = form_model.fields
         questions = []
         for field in fields:
@@ -872,7 +871,8 @@ def _get_preview_for_field_in_registration_questionnaire(field):
 
 
 def _get_registration_form(manager, project, project_id, type_of_subject='subject'):
-    registration_questionnaire = form_model.get_form_model_by_code(manager, REGISTRATION_FORM_CODE)
+    form_code = _get_form_code_by_entity_type(manager, type_of_subject)
+    registration_questionnaire = form_model.get_form_model_by_code(manager, form_code)
     fields = registration_questionnaire.fields
     project_links = _make_project_links(project, registration_questionnaire.form_code)
     questions = []
@@ -897,14 +897,18 @@ def sender_registration_form_preview(request, project_id=None):
     project = Project.load(manager.database, project_id)
     if request.method == "GET":
         fields, project_links, questions, registration_questionnaire = _get_registration_form(manager,
-                                                                                                             project,
-                                                                                                             project_id,
-                                                                                                             type_of_subject='Data sender')
+                                                                                                     project,
+                                                                                                     project_id,
+                                                                                                     type_of_subject='reporter')
         example_sms = "%s .%s <%s> .... .%s <%s>" % (
             registration_questionnaire.form_code, fields[0].code, _('answer'), fields[len(fields) - 1].code, _('answer'))
-        datasender_questions = _get_questions_for_datasenders_registration_for_print_preview(questions)
+        #datasender_questions = _get_questions_for_datasenders_registration_for_print_preview(questions)
+        questions = []
+        for field in fields:
+            question = helper.get_preview_for_field(field)
+            questions.append(question)
         return render_to_response('project/questionnaire_preview.html',
-                {"questions": datasender_questions, 'questionnaire_code': registration_questionnaire.form_code,
+                {"questions": questions, 'questionnaire_code': registration_questionnaire.form_code,
                 'project': project, 'project_links': project_links,
                  'example_sms': example_sms, 'org_number': _get_organization_telephone_number(request.user)},
                                   context_instance=RequestContext(request))
@@ -932,3 +936,11 @@ def _get_fields_by_entity_type(dbm, type):
         if row['value']['flag_reg'] and row['value']['entity_type'][0] == type:
             return row["value"]["json_fields"]
     return form_model_for_reg["value"]["json_fields"]
+
+def _get_form_code_by_entity_type(manager, entity_type):
+    form_model = get_form_model_by_entity_type(manager, entity_type)
+    if form_model is not None:
+        form_code = form_model.form_code
+    else:
+        form_code = REGISTRATION_FORM_CODE
+    return form_code

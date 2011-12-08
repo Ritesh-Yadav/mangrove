@@ -1287,10 +1287,4 @@ def load_all_managers():
 
 def create_reporter_form_model(manager):
     form_model = create_reg_form_model(manager, name="Reporter", form_code="rep", entity_type=["reporter"])
-    matricule_type = get_or_create_data_dict(manager, name='matricule_name', slug='matricule',
-                                               primitive_type='string')
-
-    question1 = TextField(name="matricule", code="mt", defaultValue="XXXXX", language="en", ddtype=matricule_type, required=False, label="N˚ Matricule")
-
-    form_model.add_field(question1)
     form_model.save()

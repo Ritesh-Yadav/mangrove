@@ -13,7 +13,7 @@
                     <input id='q-type' type='hidden' value="subject" />
                     <input id='entity-type' type='hidden' value="{{ entity_type }}" name="entity-type"/>
                     <input type="hidden" id='saved-questionnaire-code' value="{{ questionnaire_code }}"/>
-                    <input id='questionnaire-code' class='required' value="{{ questionnaire_code }}"/>
+                    <input id='questionnaire-code' class='required' value="{{ questionnaire_code }}" {% ifequal type 'datasenders' %}readonly="readonly"{% endifequal %}/>
                     <img src="/media/images/help_icon.png" class="help_icon" style="margin-top:-6px;">
                     <div class="tooltip"><p>
                         <strong>{% trans "What is this?" %}</strong><br />

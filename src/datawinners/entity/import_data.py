@@ -5,6 +5,7 @@ from datawinners.location.LocationTree import get_location_tree
 from datawinners.main.utils import get_database_manager, include_of_type, exclude_of_type
 from datawinners.entity.entity_exceptions import InvalidFileFormatException
 from mangrove.datastore.entity import get_all_entities
+from mangrove.datastore.entity_type import get_all_entity_types
 from mangrove.errors.MangroveException import MangroveException, DataObjectAlreadyExists, MultipleReportersForANumberException
 from mangrove.errors.MangroveException import CSVParserInvalidHeaderFormatException, XlsParserInvalidHeaderFormatException
 from mangrove.form_model.form_model import REPORTER, REPORTER_FORM_CODE, get_form_model_by_entity_type
@@ -123,8 +124,11 @@ def _get_entity_type_from_row(row):
 def load_subject_registration_data(manager,
                                    filter_entities=exclude_of_type,
                                    type=REPORTER, tabulate_function=_tabulate_data):
+    form_code = "reg"
     form_model = get_form_model_by_entity_type(manager, type.lower())
-    form_model = manager.load_all_rows_in_view("questionnaire", key=form_model.form_code)
+    if form_model is not None:
+        form_code = form_model.form_code
+    form_model = manager.load_all_rows_in_view("questionnaire", key=form_code)
     fields, labels = _get_field_infos(form_model[0].value['json_fields'])
     entities = get_all_entities(dbm=manager)
     data = []
@@ -238,7 +242,8 @@ def _get_field_value(key, entity):
             value = ", ".join([str(i) for i in value])
     elif key == 'location':
         if value is None:
-            value = _format(sequence_to_str(entity.location_path, u", ")) if value is not None else "--"
+            value = entity.location_path
+            value = _format(sequence_to_str(value, u", "))
         else:
             value = _format(sequence_to_str(value, u", "))
     elif key == 'entity_type':

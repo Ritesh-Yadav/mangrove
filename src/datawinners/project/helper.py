@@ -273,7 +273,7 @@ def remove_reporter(entity_type_list):
 
 
 def get_preview_for_field(field):
-    return {"description": field.name, "code": field.code, "type": field.type,
+    return {"description": field.label['en'], "code": field.code, "type": field.type,
             "constraints": field.get_constraint_text(), "instruction": field.instruction}
 
 
