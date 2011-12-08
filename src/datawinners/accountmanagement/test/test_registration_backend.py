@@ -31,15 +31,15 @@ class TestRegistrationBackend(unittest.TestCase):
 
     def test_creation_of_trial_organization(self):
         org = self.backend.create_respective_organization(self.TRIAL_ORGANIZATION_PARAMS)
-        self.assertTrue(org.in_trial_mode, 'is not in trial mode')
+        self.assertTrue(org.settings.in_trial_mode, 'is not in trial mode')
 
     def test_creation_of_subscribed_organization(self):
         org = self.backend.create_respective_organization(self.SUBSCRIBED_ORGANIZATION_PARAMS)
-        self.assertFalse(org.in_trial_mode, 'is in trial mode')
+        self.assertFalse(org.settings.in_trial_mode, 'is in trial mode')
 
     def test_sms_number_for_new_subscribed_organisation_is_left_unset(self):
         organization = self.backend.create_respective_organization(self.SUBSCRIBED_ORGANIZATION_PARAMS)
-        self.assertIsNone(organization.organization_setting.sms_tel_number)
+        self.assertIsNone(organization.settings.sms_tel_number)
 
     def test_email_for_new_subscribed_organization_does_not_contain_universal_phone_number(self):
         self._stub_code_for_email_content_test(trial_mode = False)
@@ -68,7 +68,7 @@ class TestRegistrationBackend(unittest.TestCase):
         self.backend._create_payment_details = Mock(return_value=payment_details)
         self.backend._create_user = Mock(return_value=user)
         self.backend.create_respective_organization = Mock(return_value=organization)
-        organization.in_trial_mode = kwargs.get('trial_mode') or False
+        organization.settings.in_trial_mode = kwargs.get('trial_mode') or False
         signals.user_registered.send = Mock()
 
     def _get_email_contents(self, user):

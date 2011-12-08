@@ -23,6 +23,7 @@ def create_organization(org_details):
                             org_id=OrganizationIdCreator().generateId())
 
     organization.settings =_configure_organization_settings(organization.name, organization.org_id)
+    organization.save()
     return organization
 
 def create_trial_organization(org_details):
@@ -30,10 +31,10 @@ def create_trial_organization(org_details):
                             sector=org_details.get('organization_sector'),
                             city=org_details.get('organization_city'),
                             country=org_details.get('organization_country'),
-                            org_id=OrganizationIdCreator().generateId(),
-                            in_trial_mode = True)
+                            org_id=OrganizationIdCreator().generateId())
     
-    organization.settings = _configure_organization_settings(organization.name, organization.org_id)
+    organization.settings = _configure_organization_settings(organization.name, organization.org_id, True)
+    organization.save()
     return organization
 
 class SMSC(models.Model):
@@ -45,7 +46,7 @@ class SMSC(models.Model):
 class OrgSettings(models.Model):
     in_trial_mode = models.BooleanField(default=False)
     active_date = models.DateTimeField(blank=True, null=True)
-    is_deactivate_email_sent = models.BooleanField(False)
+    is_deactivate_email_sent = models.BooleanField(default=False)
     document_store = models.TextField()
     sms_tel_number = models.TextField(unique=True, null=True)
     smsc = models.ForeignKey(SMSC, null=True,
@@ -71,7 +72,7 @@ class Organization(models.Model):
     office_phone = models.TextField(blank=True)
     website = models.TextField(blank=True)
     org_id = models.TextField(primary_key=True)
-    settings = models.ForeignKey(OrgSettings, null=True)
+    settings = models.ForeignKey(OrgSettings, null=True, unique=True)
 
     def is_expired(self, current_time = None):
         if not self.settings.in_trial_mode or self.settings.active_date is None:
@@ -141,7 +142,9 @@ class MessageTracker(models.Model):
         self.organization.name, self.incoming_sms_count, self.outgoing_sms_count)
 
 
-def _configure_organization_settings(name, org_id):
+def _configure_organization_settings(name, org_id, in_trial_mode=False):
     organization_setting = OrgSettings()
     organization_setting.document_store = slugify("%s_%s_%s" % ("HNI", name, org_id))
+    organization_setting.in_trial_mode = in_trial_mode
+    organization_setting.save()
     return organization_setting

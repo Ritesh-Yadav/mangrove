@@ -8,37 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'OrgSettings'
-        db.create_table('accountmanagement_orgsettings', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('in_trial_mode', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('active_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('is_deactivate_email_sent', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('document_store', self.gf('django.db.models.fields.TextField')()),
-            ('sms_tel_number', self.gf('django.db.models.fields.TextField')(unique=True, null=True)),
-            ('smsc', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accountmanagement.SMSC'], null=True, blank=True)),
-        ))
-        db.send_create_signal('accountmanagement', ['OrgSettings'])
-
-        # Adding field 'Organization.settings'
-        db.add_column('accountmanagement_organization', 'settings', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accountmanagement.OrgSettings'], null=True), keep_default=False)
-
-        settings = orm.OrganizationSetting.objects.all()
-        for setting in settings:
-            organization = setting.organization
-            new_setting = orm.OrgSettings(in_trial_mode=organization.in_trial_mode, active_date=organization.active_date,
-                                         is_deactivate_email_sent=organization.is_deactivate_email_sent, document_store=setting.document_store,
-                                         sms_tel_number=setting.sms_tel_number, smsc=setting.smsc)
-            new_setting.save()
+        # Adding unique constraint on 'Organization', fields ['settings']
+        db.create_unique('accountmanagement_organization', ['settings_id'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'OrgSettings'
-        db.delete_table('accountmanagement_orgsettings')
-
-        # Deleting field 'Organization.settings'
-        db.delete_column('accountmanagement_organization', 'settings_id')
+        # Removing unique constraint on 'Organization', fields ['settings']
+        db.delete_unique('accountmanagement_organization', ['settings_id'])
 
 
     models = {
@@ -68,29 +45,18 @@ class Migration(SchemaMigration):
         },
         'accountmanagement.organization': {
             'Meta': {'object_name': 'Organization'},
-            'active_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'address': ('django.db.models.fields.TextField', [], {}),
             'addressline2': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'city': ('django.db.models.fields.TextField', [], {}),
             'country': ('django.db.models.fields.TextField', [], {}),
-            'in_trial_mode': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_deactivate_email_sent': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'name': ('django.db.models.fields.TextField', [], {}),
             'office_phone': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'org_id': ('django.db.models.fields.TextField', [], {'primary_key': 'True'}),
             'sector': ('django.db.models.fields.TextField', [], {}),
-            'settings': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accountmanagement.OrgSettings']", 'null': 'True'}),
+            'settings': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accountmanagement.OrgSettings']", 'unique': 'True', 'null': 'True'}),
             'state': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'website': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'zipcode': ('django.db.models.fields.TextField', [], {})
-        },
-        'accountmanagement.organizationsetting': {
-            'Meta': {'object_name': 'OrganizationSetting'},
-            'document_store': ('django.db.models.fields.TextField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'organization': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accountmanagement.Organization']", 'unique': 'True'}),
-            'sms_tel_number': ('django.db.models.fields.TextField', [], {'unique': 'True', 'null': 'True'}),
-            'smsc': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accountmanagement.SMSC']", 'null': 'True', 'blank': 'True'})
         },
         'accountmanagement.orgsettings': {
             'Meta': {'object_name': 'OrgSettings'},

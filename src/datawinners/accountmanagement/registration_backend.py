@@ -8,7 +8,7 @@ from django.contrib.auth.models import Group
 from registration import signals
 from registration.forms import RegistrationForm
 from registration.models import RegistrationProfile
-from datawinners.accountmanagement.models import Organization, PaymentDetails
+from datawinners.accountmanagement.models import Organization, PaymentDetails, create_organization, create_trial_organization
 from django.template.loader import render_to_string
 
 class RegistrationBackend(object):
@@ -105,18 +105,16 @@ class RegistrationBackend(object):
 
 
         organization = self.create_respective_organization(kwargs)
-        organization.save()
-        organization.organization_setting.save()
 
         new_user = self._create_user(site, kwargs)
 
 
-        if organization.in_trial_mode == False:
+        if not organization.settings.in_trial_mode:
             payment_details = self._create_payment_details(organization,kwargs)
             payment_details.save()
 
         extra_context = {
-            'phone_number': "You can also send your data via sms to " + settings.TRIAL_ACCOUNT_PHONE_NUMBER + "."} if organization.in_trial_mode else {}
+            'phone_number': "You can also send your data via sms to " + settings.TRIAL_ACCOUNT_PHONE_NUMBER + "."} if organization.settings.in_trial_mode else {}
         self._send_activation_email(new_user, site, extra_context)
         new_user.save()
 
@@ -134,9 +132,9 @@ class RegistrationBackend(object):
 
     def create_respective_organization(self, kwargs):
         if self.is_subscription_registration(kwargs):
-            organization = Organization.create_organization(kwargs)
+            organization = create_organization(kwargs)
         else:
-            organization = Organization.create_trial_organization(kwargs)
+            organization = create_trial_organization(kwargs)
         return organization
 
     def post_registration_redirect(self, request, user):

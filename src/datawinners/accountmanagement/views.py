@@ -108,7 +108,7 @@ def is_trial(f):
         user = args[0].user
         profile = user.get_profile()
         organization = Organization.objects.get(org_id = profile.org_id)
-        if not organization.in_trial_mode:
+        if not organization.settings.in_trial_mode:
             return HttpResponseRedirect(django_settings.HOME_PAGE)
         return f(*args, **kw)
 
@@ -231,7 +231,7 @@ def upgrade(request):
     if request.method == 'POST':
         form = UpgradeForm(request.POST)
         if form.is_valid():
-            organization.in_trial_mode = False
+            organization.settings.in_trial_mode = False
             organization.save()
 
             invoice_period = form.cleaned_data['invoice_period']

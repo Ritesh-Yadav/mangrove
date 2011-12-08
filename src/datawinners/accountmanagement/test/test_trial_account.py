@@ -3,30 +3,28 @@ from django.test.client import RequestFactory
 from django.utils import unittest
 from mock import Mock
 from datawinners.accountmanagement.views import is_expired
-from datawinners.accountmanagement.models import Organization
+from datawinners.accountmanagement.models import Organization, create_trial_organization
 from datawinners.accountmanagement.organization_id_creator import OrganizationIdCreator
 from datetime import datetime
 
 class TestTrialAccount(unittest.TestCase):
     def create_organization(self, active_date=None):
-        organization = Organization(name='twu',
-                                    sector='Gaoxin',
-                                    address='xian',
-                                    city='Xian',
-                                    state='ShanXi',
-                                    country='CHN',
-                                    zipcode='730000',
-                                    office_phone='12345678911',
-                                    website='http://google.com',
-                                    active_date=active_date,
-                                    org_id=OrganizationIdCreator().generateId()
-        )
-        organization.in_trial_mode=True
+        organization = create_trial_organization(dict(organization_name='twu',
+                                    organization_sector='Gaoxin',
+                                    organization_address='xian',
+                                    organization_city='Xian',
+                                    organization_state='ShanXi',
+                                    organization_country='CHN',
+                                    organization_zipcode='730000',
+                                    organization_office_phone='12345678911',
+                                    organization_website='http://google.com'))
+        organization.settings.active_date=active_date
+        organization.settings.save()
         return organization
 
     def test_organization_active_date_should_be_null_when_created(self):
         organization = self.create_organization()
-        self.assertIsNone(organization.active_date)
+        self.assertIsNone(organization.settings.active_date)
 
     def test_organization_is_not_expired_when_activate_date_is_null(self):
         org = self.create_organization()

@@ -1,7 +1,7 @@
 # vim: ai ts=4 sts=4 et sw=4 encoding=utf-8
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
-from datawinners.accountmanagement.models import SMSC, PaymentDetails, MessageTracker, OrgSettings
+from datawinners.accountmanagement.models import SMSC, MessageTracker, OrgSettings
 from mangrove.utils.types import is_empty
 
 #class OrgSettingAdmin(admin.ModelAdmin):
@@ -50,7 +50,7 @@ class MessageTrackerAdmin(admin.ModelAdmin):
     def total_messages(self, obj):
         return obj.incoming_sms_count + obj.outgoing_sms_count
 
-admin.site.register(OrgSettings, OrganizationSettingAdmin)
+admin.site.register(OrgSettings)
 admin.site.unregister(Group)
 admin.site.unregister(User)
 admin.site.register(SMSC)
