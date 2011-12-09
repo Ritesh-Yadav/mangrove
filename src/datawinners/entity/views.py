@@ -51,7 +51,7 @@ def _process_form(dbm, form, org_id):
             return message
 
         organization = Organization.objects.get(org_id=org_id)
-        if organization.in_trial_mode:
+        if organization.settings.in_trial_mode:
             if DataSenderOnTrialAccount.objects.filter(mobile_number=telephone_number).exists():
                 form._errors['telephone_number'] = form.error_class([(u"Sorry, this number has already been used for a different DataWinners trial account.")])
                 return message

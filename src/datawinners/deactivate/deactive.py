@@ -16,7 +16,8 @@ def send_deactivate_email():
 
         result = create_email(account_creator).send()
         if result:
-            organization.is_deactivate_email_sent = True
+            organization.settings.is_deactivate_email_sent = True
+            organization.settings.save()
             organization.save()
 
 def get_creator(organization):
@@ -27,10 +28,10 @@ def get_creator(organization):
 
 def get_expired_trial_organizations_without_deactivate_email_sent():
     organization_list=[]
-    trial_organizations = Organization.objects.filter(in_trial_mode=True)
+    trial_organizations = Organization.objects.filter(settings__in_trial_mode=True)
 
     for organization in trial_organizations:
-        if organization.is_expired() and not organization.is_deactivate_email_sent:
+        if organization.is_expired() and not organization.settings.is_deactivate_email_sent:
             organization_list.append(organization)
 
     return organization_list

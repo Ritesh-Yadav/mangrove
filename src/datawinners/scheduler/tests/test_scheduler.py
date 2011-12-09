@@ -1,5 +1,5 @@
 from datetime import date
-from datawinners.accountmanagement.models import Organization
+from datawinners.accountmanagement.models import create_trial_organization
 from django.utils import unittest
 from mock import Mock,patch
 from datawinners.project.models import  Reminder, Project, RemindTo
@@ -105,7 +105,7 @@ class TestScheduler(unittest.TestCase):
                                  'organization_city': 'xian',
                                  'organization_country': 'china',
                                  }
-        self.organization = Organization.create_trial_organization(TRIAL_ORGANIZATION_PARAMS)
+        self.organization = create_trial_organization(TRIAL_ORGANIZATION_PARAMS)
         self.organization.save()
         organizations = _get_paid_organization()
         self.assertNotIn(self.organization,organizations)

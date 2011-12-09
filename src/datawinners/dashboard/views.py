@@ -86,7 +86,7 @@ def dashboard(request):
         project_list.append(project)
 
     return render_to_response('dashboard/home.html',
-            {"projects": project_list, 'trial_account': organization.in_trial_mode}, context_instance=RequestContext(request))
+            {"projects": project_list, 'trial_account': organization.settings.in_trial_mode}, context_instance=RequestContext(request))
 
 
 @login_required(login_url='/login')

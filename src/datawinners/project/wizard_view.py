@@ -149,7 +149,7 @@ def reminders(request, project_id):
         return render_to_response('project/reminders.html',
                 {'project': project, 
                  'reminders':_format_reminders(reminders, project_id),
-                 'in_trial_mode':organization.in_trial_mode,
+                 'in_trial_mode':organization.settings.in_trial_mode,
                  'create_reminder_link' : reverse(create_reminder, args=[project_id]),
                  'project_links': project_links},
                                   context_instance=RequestContext(request))
@@ -165,7 +165,7 @@ def reminder_settings(request, project_id):
     project_links = _make_project_links(project, questionnaire.form_code)
     org_id = (NGOUserProfile.objects.get(user=request.user)).org_id
     organization = Organization.objects.get(org_id=org_id)
-    html = 'project/reminders_trial.html' if organization.in_trial_mode else 'project/reminder_settings.html'
+    html = 'project/reminders_trial.html' if organization.settings.in_trial_mode else 'project/reminder_settings.html'
     if request.method == 'GET':
         form = ReminderForm(data=(_reminder_info_about_project(project)))
         return render_to_response(html,

@@ -19,7 +19,7 @@ def send_reminders():
     send_reminders_scheduled_on(date(now.year, now.month, now.day),SMSClient())
 
 def _get_paid_organization():
-    return Organization.objects.filter(in_trial_mode=False)
+    return Organization.objects.filter(settings__in_trial_mode=False)
 
 def send_reminders_scheduled_on(on_date,sms_client):
     """

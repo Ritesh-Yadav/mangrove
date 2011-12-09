@@ -44,7 +44,7 @@ def get_organization_settings_for(data_sender_phone_no, org_tel_number, user=Non
                     organization_settings = organization.settings
                 else:
                     record = DataSenderOnTrialAccount.objects.get(mobile_number=data_sender_phone_no)
-                    organization_settings = record.organization
+                    organization_settings = record.organization.settings
             except ObjectDoesNotExist:
                 raise NumberNotRegisteredException(data_sender_phone_no)
         else:
