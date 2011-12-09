@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     (r'^entity/subject/import/$', import_subjects_from_project_wizard),
     (r'^entity/subject/edit/(?P<entity_type>.+?)/$', edit_subject),
     (r'^entity/subject/edit/$', edit_subject),
-    (r'^entity/subject/export/', export_subject)
+    (r'^entity/subject/export/', export_subject),
     (r'^entity/subjects/$', all_subjects),
     (r'^entity/entity-type/create', create_entity_type),
     (r'^entity/type/create', create_type),
