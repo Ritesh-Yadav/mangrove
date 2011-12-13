@@ -4,6 +4,7 @@ from framework.base_test import BaseTest
 from pages.loginpage.login_page import LoginPage
 from tests.websubmissiontests.web_submission_data import *
 from tests.logintests.login_data import VALID_CREDENTIALS, TRIAL_CREDENTIALS_VALIDATES
+from nose.plugins.skip import SkipTest
 
 class TestWebSubmission(BaseTest):
     dashboard_page = None
@@ -32,6 +33,7 @@ class TestWebSubmission(BaseTest):
         web_submission_page = self.submit_web_submission(11, VALID_CREDENTIALS)
         self.assertEqual(web_submission_page.get_errors(),[])
 
+    @SkipTest
     @attr('functional_test')
     def test_trial_account_submission_without_limit(self):
         web_submission_page = self.submit_web_submission(11, TRIAL_CREDENTIALS_VALIDATES)
