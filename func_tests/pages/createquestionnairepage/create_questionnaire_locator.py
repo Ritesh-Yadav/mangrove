@@ -27,7 +27,7 @@ NO_CHARACTER_LIMIT_RB = by_xpath(
 CHARACTER_LIMIT_RB = by_xpath(
     "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddTextLength')]/div/div/input[@value='length_limited']")
 WORD_OR_PHRASE_MAX_LENGTH_TB = by_xpath(
-    "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddTextLength')]/div/div/span/input[@id='max_length' and not(contains(@style,'none'))]")
+    "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddTextLength')]//../input[@id='max_length' and not(contains(@style,'none'))]")
 NUMBER_RB = by_css("input[value='integer']")
 NUMBER_MAX_LENGTH_TB = by_xpath(
     "//li[not(contains(@style,'none')) and contains(@data-bind,'showAddRange')]/div/div/input[@id='range_max']")
@@ -55,7 +55,7 @@ PREVIOUS_STEP_LINK = by_xpath("//a[@id='subjects_link' and text()='Subjects']")
 
 # Locators for Question List section of the page
 DEFAULT_QUESTION_LINK = by_xpath(
-    "//div[@class='question_list']/ol/li[1]/a[contains(text(),'Which subject are you reporting on?')]")
+    "//div[@class='question_list']/ol/li[1]/a[1]")
 QUESTION_LINK_CSS_LOCATOR_PART1 = "div.question_list>ol>li"  # index number to identify question
 QUESTION_LINK_CSS_LOCATOR_PART2 = ">a"  # Add text to locate specific question
 QUESTION_DELETE_LINK_CSS_LOCATOR_PART1 = "div.question_list>ol>li>a"  # Add text or index number to identify question

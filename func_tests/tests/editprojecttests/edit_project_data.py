@@ -43,7 +43,7 @@ WATER_POINT_DATA = {PROJECT_NAME: u"water point morondova",
                     #DEVICES: "sms"
                     }
 
-QUESTIONNAIRE_DATA_FOR_WATER_POINT = {QUESTIONS: ["Which subject are you reporting on?", "What is the reporting period for the activity?"]}
+QUESTIONNAIRE_DATA_FOR_WATER_POINT = {QUESTIONS: ["Which waterpoint are you reporting on?", "What is the reporting period for the activity?"]}
 
 VALID_DATA2 = {PROJECT_NAME: u"clinic4 test project",
                PROJECT_BACKGROUND: u"This project is for automation",
